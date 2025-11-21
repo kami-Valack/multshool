@@ -1,0 +1,88 @@
+### MS Users API - Testes
+### Use a extensão REST Client do VS Code ou similar
+
+@baseUrl = http://localhost:8000/api
+@token = seu_access_token_aqui
+@refreshToken = seu_refresh_token_aqui
+
+### 1. Health Check
+GET {{baseUrl}}/health
+
+### 2. Registrar Usuário
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "password": "senha123456"
+}
+
+### 3. Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao@example.com",
+  "password": "senha123456"
+}
+
+### 4. Verificar Email (use o token recebido no registro)
+POST {{baseUrl}}/auth/verify-email
+Content-Type: application/json
+
+{
+  "token": "token_de_verificacao_aqui"
+}
+
+### 5. Login após verificação
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao@example.com",
+  "password": "senha123456"
+}
+
+### 6. Obter Perfil (requer autenticação)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### 7. Refresh Token
+POST {{baseUrl}}/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### 8. Solicitar Reset de Senha
+POST {{baseUrl}}/auth/password-reset/request
+Content-Type: application/json
+
+{
+  "email": "joao@example.com"
+}
+
+### 9. Resetar Senha (use o token recebido por email)
+POST {{baseUrl}}/auth/password-reset/reset
+Content-Type: application/json
+
+{
+  "email": "joao@example.com",
+  "token": "token_de_reset_aqui",
+  "newPassword": "novaSenha123456"
+}
+
+### 10. Logout
+POST {{baseUrl}}/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### 11. Logout de Todos os Dispositivos (requer autenticação)
+POST {{baseUrl}}/auth/logout-all
+Authorization: Bearer {{token}}
+

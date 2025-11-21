@@ -1,0 +1,59 @@
+[
+  {
+    "description": "Exemplo de evento para verificação de conta",
+    "event": {
+      "type": "verificacao de conta",
+      "to": "usuario@example.com",
+      "data": {
+        "nome": "João Silva",
+        "linkVerificacao": "https://example.com/verify?token=abc123xyz",
+        "tempoExpiracao": "24 horas"
+      },
+      "metadata": {
+        "userId": "123"
+      }
+    }
+  },
+  {
+    "description": "Exemplo de evento para notificação",
+    "event": {
+      "type": "notificacao",
+      "to": "usuario@example.com",
+      "data": {
+        "nome": "Maria Santos",
+        "mensagem": "Sua solicitação foi processada com sucesso!",
+        "assunto": "Solicitação Processada",
+        "link": "https://example.com/detalhes"
+      }
+    }
+  },
+  {
+    "description": "Exemplo de evento para notificação de pagamento",
+    "event": {
+      "type": "notificacao de pagamento",
+      "to": "usuario@example.com",
+      "data": {
+        "nome": "Pedro Oliveira",
+        "status": "Aprovado",
+        "corStatus": "#27ae60",
+        "valor": "150.00",
+        "data": "15/12/2024",
+        "numeroTransacao": "TXN-123456",
+        "linkDetalhes": "https://example.com/pagamento/123456"
+      }
+    }
+  },
+  {
+    "description": "Exemplo de evento para recuperação de senha",
+    "event": {
+      "type": "recuperacao de senha",
+      "to": "usuario@example.com",
+      "data": {
+        "nome": "Ana Costa",
+        "linkRecuperacao": "https://example.com/reset-password?token=xyz789abc",
+        "tempoExpiracao": "1 hora"
+      }
+    }
+  }
+]
+

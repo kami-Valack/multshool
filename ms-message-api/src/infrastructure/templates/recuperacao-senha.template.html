@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação de Senha</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background-color: #f4f4f4; padding: 20px; border-radius: 5px;">
+        <h1 style="color: #2c3e50;">Recuperação de Senha</h1>
+        <p>Olá {{nome}},</p>
+        <p>Recebemos uma solicitação para redefinir a senha da sua conta.</p>
+        <p>Clique no botão abaixo para criar uma nova senha:</p>
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{{linkRecuperacao}}" style="background-color: #e74c3c; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Redefinir Senha</a>
+        </div>
+        <p>Ou copie e cole o seguinte link no seu navegador:</p>
+        <p style="word-break: break-all; color: #e74c3c;">{{linkRecuperacao}}</p>
+        <p><strong>Importante:</strong> Este link expira em {{tempoExpiracao}}.</p>
+        <p>Se você não solicitou a recuperação de senha, por favor ignore este email. Sua senha permanecerá inalterada.</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="font-size: 12px; color: #999;">Este é um email automático, por favor não responda.</p>
+    </div>
+</body>
+</html>
+

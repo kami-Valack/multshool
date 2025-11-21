@@ -1,0 +1,20 @@
+{
+    "estudante": {
+        "id": "c7776301-6adb-4067-b548-d5fdc878e56e",
+        "student_id": "ST2025000002",
+        "email": "estudante.teste.20251110174302@example.com",
+        "password": "senha123456",
+        "name": "Estudante Teste 20251110174302",
+        "role": "student",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNzYyNzk2NTgzLCJleHAiOjE3NjI4MDAxODMsIm5iZiI6MTc2Mjc5NjU4MywianRpIjoicVVWV1pCamdZTzl5YzQ2cCIsInN1YiI6ImM3Nzc2MzAxLTZhZGItNDA2Ny1iNTQ4LWQ1ZmRjODc4ZTU2ZSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJlbWFpbCI6ImVzdHVkYW50ZS50ZXN0ZS4yMDI1MTExMDE3NDMwMkBleGFtcGxlLmNvbSIsInN0dWRlbnRfaWQiOiJTVDIwMjUwMDAwMDIiLCJyb2xlIjoic3R1ZGVudCJ9.HXSqBWvyXykDUdRbJEUIsIIQTjPlkurFOnu7X9Ob2wc"
+    },
+    "escola": {
+        "id": "cf36a053-c69c-4390-9a52-347c6b522758",
+        "email": "escola.teste.20251110174302@example.com",
+        "password": "senha123456",
+        "name": "Escola Teste 20251110174302",
+        "role": "school",
+        "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNzYyNzk2NTg0LCJleHAiOjE3NjI4MDAxODQsIm5iZiI6MTc2Mjc5NjU4NCwianRpIjoiRDE4azRqTU1UZnd6Sm5kWSIsInN1YiI6ImNmMzZhMDUzLWM2OWMtNDM5MC05YTUyLTM0N2M2YjUyMjc1OCIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJlbWFpbCI6ImVzY29sYS50ZXN0ZS4yMDI1MTExMDE3NDMwMkBleGFtcGxlLmNvbSIsInN0dWRlbnRfaWQiOm51bGwsInJvbGUiOiJzY2hvb2wifQ.txJB-a9ASB37vu8JIIJbR2n67C9Hos2JJAe5CQb7F04"
+    },
+    "criado_em": "2025-11-10 17:43:04"
+}

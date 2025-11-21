@@ -1,0 +1,1685 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "MS School API",
+        "description": "API para gerenciamento de escolas - Sistema Multishol. Use o token JWT obtido no ms-users-api-laravel para autenticação. Apenas usuários com role 'school' podem acessar.",
+        "contact": {
+            "email": "suporte@multishol.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8003",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/api/admin/schools": {
+            "get": {
+                "tags": [
+                    "Admin Schools"
+                ],
+                "summary": "Listar todas as escolas",
+                "description": "Retorna lista de todas as escolas com seus status",
+                "operationId": "listSchools",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status (pending, approved, rejected)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved",
+                                "rejected"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de escolas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "schools": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Escola Exemplo"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "escola@example.com"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "pending"
+                                                    },
+                                                    "email_verified": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "approved_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "nullable": true
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "apiSecret": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/schools/{id}": {
+            "get": {
+                "tags": [
+                    "Admin Schools"
+                ],
+                "summary": "Obter detalhes de uma escola",
+                "description": "Retorna os detalhes completos de uma escola",
+                "operationId": "getSchool",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes da escola"
+                    },
+                    "404": {
+                        "description": "Escola não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "apiSecret": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/schools/{id}/courses": {
+            "get": {
+                "tags": [
+                    "Admin Schools"
+                ],
+                "summary": "Listar cursos de uma escola",
+                "description": "Retorna todos os cursos de uma escola específica",
+                "operationId": "getSchoolCourses",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de cursos"
+                    }
+                },
+                "security": [
+                    {
+                        "apiSecret": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/schools/{id}/approve": {
+            "post": {
+                "tags": [
+                    "Admin Schools"
+                ],
+                "summary": "Aprovar uma escola",
+                "description": "Aprova uma escola, permitindo que ela acesse o sistema",
+                "operationId": "approveSchool",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Escola aprovada com sucesso"
+                    },
+                    "404": {
+                        "description": "Escola não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "apiSecret": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/schools/{id}/reject": {
+            "post": {
+                "tags": [
+                    "Admin Schools"
+                ],
+                "summary": "Rejeitar uma escola",
+                "description": "Rejeita uma escola, impedindo que ela acesse o sistema",
+                "operationId": "rejectSchool",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "reason": {
+                                        "type": "string",
+                                        "example": "Documentação incompleta"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Escola rejeitada com sucesso"
+                    },
+                    "404": {
+                        "description": "Escola não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "apiSecret": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{courseId}/admission-exams": {
+            "get": {
+                "tags": [
+                    "Admission Exams"
+                ],
+                "summary": "Listar exames de admissão de um curso",
+                "description": "Retorna todos os exames de admissão de um curso específico",
+                "operationId": "listAdmissionExams",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status (scheduled, marked)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "scheduled",
+                                "marked"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de exames de admissão"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Admission Exams"
+                ],
+                "summary": "Criar novo exame de admissão",
+                "description": "Cria um novo exame de admissão para um curso",
+                "operationId": "createAdmissionExam",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Exame de Admissão 2025"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Exame para ingresso no curso"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "scheduled",
+                                            "marked"
+                                        ],
+                                        "example": "scheduled"
+                                    },
+                                    "exam_date": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-02-15T10:00:00Z"
+                                    },
+                                    "registration_deadline": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2025-02-10T23:59:59Z"
+                                    },
+                                    "max_candidates": {
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "exam_fee": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 50
+                                    },
+                                    "instructions": {
+                                        "type": "string",
+                                        "example": "Instruções para o exame"
+                                    },
+                                    "exam_link": {
+                                        "description": "Link do exame (Google Forms, etc.)",
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "https://docs.google.com/forms/d/..."
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Exame criado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{courseId}/admission-exams/{examId}": {
+            "get": {
+                "tags": [
+                    "Admission Exams"
+                ],
+                "summary": "Obter detalhes de um exame",
+                "description": "Retorna os detalhes de um exame de admissão específico",
+                "operationId": "getAdmissionExam",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "examId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do exame"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Admission Exams"
+                ],
+                "summary": "Atualizar exame de admissão",
+                "description": "Atualiza um exame de admissão existente",
+                "operationId": "updateAdmissionExam",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "examId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "scheduled",
+                                            "marked"
+                                        ]
+                                    },
+                                    "exam_date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "registration_deadline": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Exame atualizado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Admission Exams"
+                ],
+                "summary": "Deletar exame de admissão",
+                "description": "Desativa um exame de admissão",
+                "operationId": "deleteAdmissionExam",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "examId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Exame desativado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{courseId}/admission-exams/{examId}/registrations": {
+            "get": {
+                "tags": [
+                    "Admission Exams"
+                ],
+                "summary": "Listar inscrições em um exame",
+                "description": "Retorna todas as inscrições de um exame de admissão",
+                "operationId": "listExamRegistrations",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "examId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "registered",
+                                "completed",
+                                "passed",
+                                "failed"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de inscrições"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses": {
+            "get": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Listar cursos da escola",
+                "description": "Retorna todos os cursos da escola autenticada",
+                "operationId": "listCourses",
+                "parameters": [
+                    {
+                        "name": "is_active",
+                        "in": "query",
+                        "description": "Filtrar por status ativo",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de cursos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "courses": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Criar novo curso",
+                "description": "Cria um novo curso para a escola autenticada",
+                "operationId": "createCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Engenharia de Software"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Curso completo de engenharia"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "ES001"
+                                    },
+                                    "duration_months": {
+                                        "type": "integer",
+                                        "example": 48
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 500
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Curso criado com sucesso"
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{id}": {
+            "get": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Obter detalhes de um curso",
+                "description": "Retorna os detalhes de um curso específico",
+                "operationId": "getCourse",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do curso"
+                    },
+                    "404": {
+                        "description": "Curso não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Atualizar curso",
+                "description": "Atualiza um curso existente",
+                "operationId": "updateCourse",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "code": {
+                                        "type": "string"
+                                    },
+                                    "duration_months": {
+                                        "type": "integer"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Curso atualizado com sucesso"
+                    },
+                    "404": {
+                        "description": "Curso não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Deletar curso",
+                "description": "Deleta um curso (soft delete ou desativa)",
+                "operationId": "deleteCourse",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Curso deletado com sucesso"
+                    },
+                    "404": {
+                        "description": "Curso não encontrado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{id}/upload-image": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Upload de imagem do curso",
+                "description": "Faz upload da imagem do curso",
+                "operationId": "uploadCourseImage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Imagem enviada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{courseId}/subjects": {
+            "get": {
+                "tags": [
+                    "Course Subjects"
+                ],
+                "summary": "Listar cadeiras de um curso",
+                "description": "Retorna todas as cadeiras/disciplinas de um curso",
+                "operationId": "listCourseSubjects",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "semester",
+                        "in": "query",
+                        "description": "Filtrar por semestre",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "trimester",
+                        "in": "query",
+                        "description": "Filtrar por trimestre",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de cadeiras"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Course Subjects"
+                ],
+                "summary": "Criar nova cadeira",
+                "description": "Cria uma nova cadeira/disciplina para um curso",
+                "operationId": "createCourseSubject",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Programação I"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Introdução à programação"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "example": "PROG101"
+                                    },
+                                    "semester": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "trimester": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "credits": {
+                                        "type": "integer",
+                                        "example": 4
+                                    },
+                                    "hours": {
+                                        "type": "integer",
+                                        "example": 60
+                                    },
+                                    "is_optional": {
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "order": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cadeira criada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{courseId}/subjects/{subjectId}": {
+            "put": {
+                "tags": [
+                    "Course Subjects"
+                ],
+                "summary": "Atualizar cadeira",
+                "description": "Atualiza uma cadeira existente",
+                "operationId": "updateCourseSubject",
+                "responses": {
+                    "200": {
+                        "description": "Cadeira atualizada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Course Subjects"
+                ],
+                "summary": "Deletar cadeira",
+                "description": "Deleta uma cadeira",
+                "operationId": "deleteCourseSubject",
+                "responses": {
+                    "200": {
+                        "description": "Cadeira deletada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/courses/{courseId}/enrollments": {
+            "get": {
+                "tags": [
+                    "Enrollment Management"
+                ],
+                "summary": "Listar matrículas de um curso",
+                "description": "Retorna todas as matrículas de um curso da escola autenticada",
+                "operationId": "listCourseEnrollments",
+                "parameters": [
+                    {
+                        "name": "courseId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved",
+                                "rejected"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de matrículas"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/enrollments/{enrollmentId}/approve": {
+            "post": {
+                "tags": [
+                    "Enrollment Management"
+                ],
+                "summary": "Aprovar matrícula",
+                "description": "Aprova uma matrícula pendente",
+                "operationId": "approveEnrollment",
+                "parameters": [
+                    {
+                        "name": "enrollmentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Matrícula aprovada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/enrollments/{enrollmentId}/reject": {
+            "post": {
+                "tags": [
+                    "Enrollment Management"
+                ],
+                "summary": "Rejeitar matrícula",
+                "description": "Rejeita uma matrícula pendente",
+                "operationId": "rejectEnrollment",
+                "parameters": [
+                    {
+                        "name": "enrollmentId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "reason": {
+                                        "type": "string",
+                                        "example": "Não atende aos requisitos"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Matrícula rejeitada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/exam-registrations/{registrationId}/approve": {
+            "post": {
+                "tags": [
+                    "Enrollment Management"
+                ],
+                "summary": "Aprovar candidato que passou no exame",
+                "description": "Marca um candidato como aprovado no exame e aprova automaticamente a matrícula",
+                "operationId": "approveExamCandidate",
+                "parameters": [
+                    {
+                        "name": "registrationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "score": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 85.5
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Excelente desempenho"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Candidato aprovado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/exam-registrations/{registrationId}/reject": {
+            "post": {
+                "tags": [
+                    "Enrollment Management"
+                ],
+                "summary": "Rejeitar candidato que não passou no exame",
+                "description": "Marca um candidato como reprovado no exame",
+                "operationId": "rejectExamCandidate",
+                "parameters": [
+                    {
+                        "name": "registrationId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "score": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 45
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Nota abaixo do mínimo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Candidato reprovado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/health": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Health Check",
+                "description": "Verifica se a API está funcionando",
+                "operationId": "healthCheck",
+                "responses": {
+                    "200": {
+                        "description": "API está funcionando",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "service": {
+                                            "type": "string",
+                                            "example": "ms-school-api"
+                                        },
+                                        "timestamp": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Obter perfil da escola autenticada",
+                "description": "Retorna os dados da escola autenticada",
+                "operationId": "getProfile",
+                "responses": {
+                    "200": {
+                        "description": "Perfil da escola",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "escola@example.com"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Escola Exemplo"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "school"
+                                                },
+                                                "email_verified": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "is_active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token não fornecido ou inválido"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado - apenas escolas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Acesso negado. Apenas escolas podem acessar este serviço."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile/check-completion": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Verificar status de completude do perfil",
+                "description": "Verifica se o perfil da escola está completo e retorna os campos faltantes",
+                "operationId": "checkProfileCompletion",
+                "responses": {
+                    "200": {
+                        "description": "Status do perfil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "is_complete": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "missing_fields": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "completion_percentage": {
+                                            "type": "integer",
+                                            "example": 60
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile": {
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Atualizar perfil da escola",
+                "description": "Atualiza os dados do perfil da escola autenticada",
+                "operationId": "updateProfile",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Universidade Exemplo"
+                                    },
+                                    "acronym": {
+                                        "type": "string",
+                                        "example": "UEX"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Descrição da instituição"
+                                    },
+                                    "founded_year": {
+                                        "type": "integer",
+                                        "example": 1990
+                                    },
+                                    "location_map_url": {
+                                        "type": "string",
+                                        "example": "https://maps.google.com/..."
+                                    },
+                                    "total_students": {
+                                        "type": "integer",
+                                        "example": 5000
+                                    },
+                                    "phone_number": {
+                                        "type": "string",
+                                        "example": "+244 923 456 789"
+                                    },
+                                    "contact_emails": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "contato@example.com",
+                                            "info@example.com"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Perfil atualizado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile/upload-logo": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Upload do logotipo da instituição",
+                "description": "Faz upload do logotipo da instituição",
+                "operationId": "uploadLogo",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "logo": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logotipo enviado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile/upload-photos": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Upload de fotografias da instituição",
+                "description": "Faz upload de até 2 fotografias da instituição",
+                "operationId": "uploadPhotos",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "photos[]": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fotografias enviadas com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/profile/upload-video": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Upload de vídeo de apresentação",
+                "description": "Faz upload do vídeo de apresentação da instituição",
+                "operationId": "uploadVideo",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "video": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vídeo enviado com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Use o token JWT obtido no login do ms-users-api-laravel. Exemplo: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            },
+            "apiSecret": {
+                "type": "apiKey",
+                "description": "API Secret para comunicação entre serviços (ms-admin-system -> ms-shocoll-api)",
+                "name": "X-API-Secret",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Admin Schools",
+            "description": "Endpoints administrativos para gerenciamento de escolas (requer API Secret)"
+        },
+        {
+            "name": "Admission Exams",
+            "description": "Endpoints para gerenciamento de exames de admissão"
+        },
+        {
+            "name": "Health",
+            "description": "Endpoints de verificação de saúde da API"
+        },
+        {
+            "name": "Profile",
+            "description": "Endpoints relacionados ao perfil da escola"
+        },
+        {
+            "name": "Courses",
+            "description": "Endpoints para gerenciamento de cursos"
+        },
+        {
+            "name": "Course Subjects",
+            "description": "Endpoints para gerenciamento de cadeiras/disciplinas dos cursos"
+        },
+        {
+            "name": "Enrollment Management",
+            "description": "Endpoints para escolas gerenciarem matrículas"
+        }
+    ]
+}

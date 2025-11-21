@@ -1,0 +1,6 @@
+verificacao de conta
+
+notificacao
+notificacao de pagamento
+
+recuperacao de senha

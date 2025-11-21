@@ -1,0 +1,801 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "MS Users API",
+        "description": "API de Autenticação e Gerenciamento de Usuários - Sistema Multishol. Gerencia autenticação JWT, registro de estudantes e escolas, verificação de email e recuperação de senha.",
+        "contact": {
+            "email": "suporte@multishol.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Registrar novo estudante",
+                "description": "Cria uma nova conta de estudante. Um email de verificação será enviado.",
+                "operationId": "register",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nome completo do estudante",
+                                        "type": "string",
+                                        "example": "João Silva"
+                                    },
+                                    "email": {
+                                        "description": "Email do estudante",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Senha (mínimo 8 caracteres)",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário criado com sucesso"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                },
+                                                "student_id": {
+                                                    "type": "string",
+                                                    "example": "ST2025000001"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "joao@example.com"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "João Silva"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "student"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de validação ou email já em uso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email já está em uso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register-school": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Registrar nova escola",
+                "description": "Cria uma nova conta de escola. Um email de verificação será enviado. Após verificação, a escola precisa ser aprovada por um administrador.",
+                "operationId": "registerSchool",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nome da escola",
+                                        "type": "string",
+                                        "example": "Escola Exemplo"
+                                    },
+                                    "email": {
+                                        "description": "Email da escola",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "escola@example.com"
+                                    },
+                                    "password": {
+                                        "description": "Senha (mínimo 8 caracteres)",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Escola cadastrada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Escola cadastrada com sucesso. Verifique seu email para ativar a conta."
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "school"
+                                                },
+                                                "email_verified": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Erro de validação ou email já em uso"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Fazer login",
+                "description": "Autentica um usuário e retorna tokens JWT. Pode usar email ou student_id para login.",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "Email ou Student ID",
+                                        "type": "string",
+                                        "example": "joao@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "senha123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "accessToken": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                        },
+                                        "refreshToken": {
+                                            "type": "string",
+                                            "example": "a792c6874040f28f19fec6227feba2ca..."
+                                        },
+                                        "expiresIn": {
+                                            "description": "Tempo de expiração em segundos (15 minutos)",
+                                            "type": "integer",
+                                            "example": 900
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "student_id": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "student",
+                                                        "school"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas ou email não verificado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email não verificado. Por favor, verifique seu email antes de fazer login."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh-token": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Renovar token de acesso",
+                "description": "Renova o access token usando o refresh token. O refresh token antigo é revogado e um novo é gerado.",
+                "operationId": "refreshToken",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "refreshToken"
+                                ],
+                                "properties": {
+                                    "refreshToken": {
+                                        "type": "string",
+                                        "example": "a792c6874040f28f19fec6227feba2ca..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Token renovado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "accessToken": {
+                                            "type": "string"
+                                        },
+                                        "refreshToken": {
+                                            "type": "string"
+                                        },
+                                        "expiresIn": {
+                                            "type": "integer",
+                                            "example": 900
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Token inválido ou expirado"
+                    }
+                }
+            }
+        },
+        "/api/auth/verify-email": {
+            "post": {
+                "tags": [
+                    "Email Verification"
+                ],
+                "summary": "Verificar email",
+                "description": "Verifica o email do usuário usando o token enviado por email. Após verificação, eventos são emitidos via RabbitMQ.",
+                "operationId": "verifyEmail",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "description": "Token de verificação recebido por email",
+                                        "type": "string",
+                                        "example": "abc123def456..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email verificado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email verificado com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Token inválido, expirado ou já utilizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token expirado ou já utilizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/password-reset/request": {
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Solicitar reset de senha",
+                "description": "Solicita um token para reset de senha. Um email será enviado com o token (válido por 1 hora).",
+                "operationId": "forgotPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Email enviado (mesmo se o email não existir, por segurança)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Se o email existir, um link de recuperação foi enviado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/password-reset/reset": {
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Resetar senha",
+                "description": "Reseta a senha usando o token recebido por email. Todos os refresh tokens são revogados.",
+                "operationId": "resetPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "token",
+                                    "newPassword"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "joao@example.com"
+                                    },
+                                    "token": {
+                                        "description": "Token recebido por email (NÃO o hash do banco)",
+                                        "type": "string",
+                                        "example": "abc123def456..."
+                                    },
+                                    "newPassword": {
+                                        "description": "Nova senha (mínimo 8 caracteres)",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "novaSenha123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Senha alterada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Senha alterada com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Token inválido ou expirado"
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Fazer logout",
+                "description": "Revoga o refresh token fornecido. Não requer autenticação.",
+                "operationId": "logout",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "refreshToken"
+                                ],
+                                "properties": {
+                                    "refreshToken": {
+                                        "type": "string",
+                                        "example": "a792c6874040f28f19fec6227feba2ca..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logout realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout realizado com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout-all": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Fazer logout de todos os dispositivos",
+                "description": "Revoga todos os refresh tokens do usuário autenticado, fazendo logout de todos os dispositivos.",
+                "operationId": "logoutAll",
+                "responses": {
+                    "200": {
+                        "description": "Logout realizado em todos os dispositivos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout realizado em todos os dispositivos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Obter perfil do usuário autenticado",
+                "description": "Retorna os dados do usuário autenticado",
+                "operationId": "me",
+                "responses": {
+                    "200": {
+                        "description": "Perfil do usuário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "joao@example.com"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "João Silva"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "student",
+                                                        "school"
+                                                    ]
+                                                },
+                                                "email_verified": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "is_active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Usuário não autenticado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Token JWT obtido no login. Use no formato: Bearer {token}"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Endpoints de autenticação (login, registro, logout)"
+        },
+        {
+            "name": "Email Verification",
+            "description": "Endpoints para verificação de email"
+        },
+        {
+            "name": "Password Reset",
+            "description": "Endpoints para recuperação de senha"
+        },
+        {
+            "name": "Profile",
+            "description": "Endpoints relacionados ao perfil do usuário autenticado"
+        }
+    ],
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ]
+}

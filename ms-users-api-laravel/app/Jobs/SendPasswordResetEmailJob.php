@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Models\User;
+use App\Services\RabbitMQEmailService;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+
+class SendPasswordResetEmailJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public $timeout = 120;
+    public $tries = 3;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(
+        public User $user,
+        public string $token
+    ) {}
+
+    /**
+     * Execute the job.
+     */
+    public function handle(RabbitMQEmailService $emailService): void
+    {
+        try {
+            if (!$this->user || !$this->user->email) {
+                Log::warning('User email not found for password reset email', [
+                    'user_id' => $this->user?->id
+                ]);
+                return;
+            }
+
+            $resetUrl = config('app.frontend_url', 'http://localhost:3001') . 
+                       '/reset-password?token=' . $this->token . 
+                       '&email=' . urlencode($this->user->email);
+
+            $emailService->sendEmailEvent(
+                'recuperacao de senha',
+                $this->user->email,
+                [
+                    'nome' => $this->user->name,
+                    'linkReset' => $resetUrl,
+                    'token' => $this->token,
+                    'tempoExpiracao' => '60 minutos',
+                ],
+                [
+                    'userId' => $this->user->id,
+                ]
+            );
+
+            Log::info('Password reset email event sent successfully', [
+                'user_id' => $this->user->id,
+                'email' => $this->user->email
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to send password reset email event', [
+                'user_id' => $this->user->id,
+                'email' => $this->user->email,
+                'error' => $e->getMessage()
+            ]);
+            
+            throw $e;
+        }
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('Password reset email job failed', [
+            'user_id' => $this->user->id,
+            'email' => $this->user->email,
+            'error' => $exception->getMessage()
+        ]);
+    }
+}
+

@@ -1,0 +1,62 @@
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Arquivos de ambiente
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# IDEs
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.cache
+.phpunit.result.cache
+.phpunit.cache
+
+# Arquivos de teste
+coverage/
+.phpunit.cache/
+
+# Arquivos de build
+node_modules/
+/public/build
+/public/hot
+
+# Arquivos de storage (exceto .gitignore)
+/storage/*.key
+/storage/pail
+/storage/app/public/*
+!/storage/app/public/.gitignore
+
+# Vendor (dependências)
+/vendor
+
+# Arquivos específicos do projeto
+*.pdf
+video.mp4
+email.txt
+*.pyc
+__pycache__/
+
+# Scripts de teste temporários
+testar_*.php
+criar_contas_e_obter_tokens.py
+start_*.py
+

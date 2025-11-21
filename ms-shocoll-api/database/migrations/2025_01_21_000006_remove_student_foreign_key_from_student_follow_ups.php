@@ -1,0 +1,48 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('student_follow_ups', function (Blueprint $table) {
+            // Remover a foreign key constraint de student_id
+            // Alunos não são replicados para ms-shocoll-api, então não podemos ter FK
+            try {
+                $table->dropForeign(['student_id']);
+            } catch (\Exception $e) {
+                // Tentar com nome explícito da constraint
+                try {
+                    $table->dropForeign('student_follow_ups_student_id_foreign');
+                } catch (\Exception $e2) {
+                    // Se ainda falhar, usar SQL direto
+                    try {
+                        \DB::statement('ALTER TABLE student_follow_ups DROP FOREIGN KEY student_follow_ups_student_id_foreign');
+                    } catch (\Exception $e3) {
+                        // Se a constraint não existir, não há problema
+                    }
+                }
+            }
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('student_follow_ups', function (Blueprint $table) {
+            // Re-adicionar a foreign key (não será executado se alunos não existirem)
+            // Esta operação pode falhar se alunos não existirem no banco
+            try {
+                $table->foreign('student_id')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
+            } catch (\Exception $e) {
+                // Ignorar erro se a constraint não puder ser criada
+            }
+        });
+    }
+};
+

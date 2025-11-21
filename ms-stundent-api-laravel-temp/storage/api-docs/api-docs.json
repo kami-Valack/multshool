@@ -1,0 +1,579 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "MS Student API",
+        "description": "API para gerenciamento de estudantes - Sistema Multishol. Use o token JWT obtido no ms-users-api-laravel para autenticação.",
+        "contact": {
+            "email": "suporte@multishol.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8001",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/api/enrollments": {
+            "get": {
+                "tags": [
+                    "Enrollments"
+                ],
+                "summary": "Listar matrículas do estudante",
+                "description": "Retorna todas as matrículas do estudante autenticado",
+                "operationId": "listEnrollments",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status (pending, approved, rejected)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved",
+                                "rejected"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de matrículas"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Enrollments"
+                ],
+                "summary": "Matricular-se em um curso",
+                "description": "Cria uma nova matrícula para o estudante autenticado",
+                "operationId": "createEnrollment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "uuid"
+                                    },
+                                    "admission_exam_id": {
+                                        "description": "ID do exame de admissão (opcional)",
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "uuid"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Matrícula criada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/exam-registrations": {
+            "get": {
+                "tags": [
+                    "Exam Registrations"
+                ],
+                "summary": "Listar inscrições em exames do estudante",
+                "description": "Retorna todas as inscrições em exames do estudante autenticado",
+                "operationId": "listExamRegistrations",
+                "responses": {
+                    "200": {
+                        "description": "Lista de inscrições em exames"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Exam Registrations"
+                ],
+                "summary": "Inscrever-se em um exame de admissão",
+                "description": "Cria uma nova inscrição em exame para o estudante autenticado",
+                "operationId": "createExamRegistration",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "admission_exam_id"
+                                ],
+                                "properties": {
+                                    "admission_exam_id": {
+                                        "type": "string",
+                                        "format": "uuid",
+                                        "example": "uuid"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Inscrição criada com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/institutions": {
+            "get": {
+                "tags": [
+                    "Institutions"
+                ],
+                "summary": "Listar instituições de ensino",
+                "description": "Retorna lista de instituições aprovadas, com opção de filtrar por tipo (superior ou médio)",
+                "operationId": "listInstitutions",
+                "parameters": [
+                    {
+                        "name": "institution_type",
+                        "in": "query",
+                        "description": "Filtrar por tipo de instituição (superior, medio)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "superior",
+                                "medio"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "include_courses",
+                        "in": "query",
+                        "description": "Incluir cursos das instituições",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de instituições",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "institutions": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao buscar instituições"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/institutions/{id}": {
+            "get": {
+                "tags": [
+                    "Institutions"
+                ],
+                "summary": "Obter detalhes de uma instituição",
+                "description": "Retorna os detalhes completos de uma instituição, incluindo cursos e exames de admissão",
+                "operationId": "getInstitution",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "include_courses",
+                        "in": "query",
+                        "description": "Incluir cursos da instituição",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes da instituição"
+                    },
+                    "404": {
+                        "description": "Instituição não encontrada"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/documents/upload": {
+            "post": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Upload de documentos do estudante (primeiro acesso)",
+                "description": "Faz upload dos documentos obrigatórios: BI, Foto Tipo Passe e Habilitação Literária",
+                "operationId": "uploadDocuments",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "bi",
+                                    "foto_tipo",
+                                    "habilitacao_literaria"
+                                ],
+                                "properties": {
+                                    "bi": {
+                                        "description": "Bilhete de Identidade (PDF, JPG, JPEG, PNG - máx. 5MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "foto_tipo": {
+                                        "description": "Foto Tipo Passe (JPG, JPEG, PNG - máx. 2MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "habilitacao_literaria": {
+                                        "description": "Habilitação Literária (PDF, JPG, JPEG, PNG - máx. 5MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Documentos enviados com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Documentos enviados com sucesso."
+                                        },
+                                        "documents": {
+                                            "properties": {
+                                                "bi": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "example": "uuid"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "foto_tipo": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "example": "uuid"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "habilitacao_literaria": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string",
+                                                            "example": "uuid"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Documentos já foram enviados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Documentos já foram enviados. Use a rota de atualização para substituir documentos."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token não fornecido ou inválido"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Erro de validação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "O documento BI é obrigatório."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/documents": {
+            "get": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Listar documentos do estudante",
+                "description": "Retorna todos os documentos enviados pelo estudante autenticado",
+                "operationId": "listDocuments",
+                "responses": {
+                    "200": {
+                        "description": "Lista de documentos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "documents": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "type": {
+                                                        "type": "string",
+                                                        "example": "bi"
+                                                    },
+                                                    "file_name": {
+                                                        "type": "string",
+                                                        "example": "bi.pdf"
+                                                    },
+                                                    "uploaded_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "file_url": {
+                                                        "type": "string",
+                                                        "example": "http://localhost:8001/storage/documents/user-id/file.pdf"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/documents/check-first-access": {
+            "get": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Verificar primeiro acesso",
+                "description": "Verifica se o estudante precisa fazer upload de documentos (primeiro acesso)",
+                "operationId": "checkFirstAccess",
+                "responses": {
+                    "200": {
+                        "description": "Status do primeiro acesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "first_access": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "has_all_documents": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "missing_documents": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "bi"
+                                            }
+                                        },
+                                        "documents_count": {
+                                            "type": "integer",
+                                            "example": 0
+                                        },
+                                        "required_count": {
+                                            "type": "integer",
+                                            "example": 3
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Use o token JWT obtido no login do ms-users-api-laravel. Exemplo: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Enrollments",
+            "description": "Endpoints para matrículas de estudantes em cursos"
+        },
+        {
+            "name": "Exam Registrations",
+            "description": "Endpoints para inscrições de estudantes em exames de admissão"
+        },
+        {
+            "name": "Institutions",
+            "description": "Endpoints para listar instituições de ensino"
+        },
+        {
+            "name": "Documents",
+            "description": "Endpoints para gerenciamento de documentos do estudante"
+        }
+    ]
+}

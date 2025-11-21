@@ -1,0 +1,812 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "MS Admin API",
+        "description": "API para sistema administrativo - Sistema Multishol. Use o token JWT obtido no ms-users-api-laravel para autenticação. Apenas usuários com role 'admin' ou 'super_admin' podem acessar.",
+        "contact": {
+            "email": "suporte@multishol.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8002",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login de administrador",
+                "description": "Faz login no sistema administrativo usando email e senha locais",
+                "operationId": "login",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "accessToken": {
+                                            "type": "string",
+                                            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                                        },
+                                        "expiresIn": {
+                                            "type": "integer",
+                                            "example": 3600
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "admin"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Administrador"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "super_admin"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Credenciais inválidas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Registrar novo administrador",
+                "description": "Registra um novo administrador. Apenas super_admin pode registrar novos admins.",
+                "operationId": "registerAdmin",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirmation",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Novo Admin"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "novo@admin.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "senha123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "senha123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "admin",
+                                            "super_admin"
+                                        ],
+                                        "example": "admin"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Administrador criado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Administrador criado com sucesso"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "novo@admin.com"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Novo Admin"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "admin"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado - apenas super_admin",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Apenas super_admin pode registrar novos administradores"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "description": "Faz logout do sistema administrativo",
+                "operationId": "logout",
+                "responses": {
+                    "200": {
+                        "description": "Logout realizado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logout realizado com sucesso"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/schools": {
+            "get": {
+                "tags": [
+                    "Schools"
+                ],
+                "summary": "Listar todas as escolas",
+                "description": "Retorna lista de todas as escolas com seus status (pending, approved, rejected)",
+                "operationId": "listSchools",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por status (pending, approved, rejected)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "approved",
+                                "rejected"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de escolas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "schools": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "format": "uuid",
+                                                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Escola Exemplo"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "escola@example.com"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "pending",
+                                                            "approved",
+                                                            "rejected"
+                                                        ],
+                                                        "example": "pending"
+                                                    },
+                                                    "email_verified": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "is_active": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "rejection_reason": {
+                                                        "type": "string",
+                                                        "example": null,
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2025-11-10T12:00:00Z"
+                                                    },
+                                                    "approved_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": null,
+                                                        "nullable": true
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "total": {
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao conectar com o serviço de escolas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao conectar com o serviço de escolas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autenticado"
+                    },
+                    "403": {
+                        "description": "Acesso negado - apenas administradores"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/schools/{id}": {
+            "get": {
+                "tags": [
+                    "Schools"
+                ],
+                "summary": "Obter detalhes de uma escola",
+                "description": "Retorna os detalhes completos de uma escola",
+                "operationId": "getSchool",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes da escola",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "school": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Escola Exemplo"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "escola@example.com"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "pending",
+                                                        "approved",
+                                                        "rejected"
+                                                    ],
+                                                    "example": "pending"
+                                                },
+                                                "email_verified": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "is_active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "rejection_reason": {
+                                                    "type": "string",
+                                                    "example": null,
+                                                    "nullable": true
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-11-10T12:00:00Z"
+                                                },
+                                                "approved_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": null,
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Escola não encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Escola não encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao conectar com o serviço de escolas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao conectar com o serviço de escolas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/schools/{id}/approve": {
+            "post": {
+                "tags": [
+                    "Schools"
+                ],
+                "summary": "Aprovar uma escola",
+                "description": "Aprova uma escola, permitindo que ela acesse o sistema",
+                "operationId": "approveSchool",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Escola aprovada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Escola aprovada com sucesso"
+                                        },
+                                        "school": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Escola Exemplo"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "escola@example.com"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "approved"
+                                                },
+                                                "approved_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2025-11-10T12:00:00Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Escola não encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Escola não encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao conectar com o serviço de escolas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao conectar com o serviço de escolas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/schools/{id}/reject": {
+            "post": {
+                "tags": [
+                    "Schools"
+                ],
+                "summary": "Rejeitar uma escola",
+                "description": "Rejeita uma escola, impedindo que ela acesse o sistema",
+                "operationId": "rejectSchool",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "reason": {
+                                        "type": "string",
+                                        "example": "Documentação incompleta"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Escola rejeitada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Escola rejeitada com sucesso"
+                                        },
+                                        "school": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Escola Exemplo"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "escola@example.com"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "rejected"
+                                                },
+                                                "rejection_reason": {
+                                                    "type": "string",
+                                                    "example": "Documentação incompleta",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Escola não encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Escola não encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro ao conectar com o serviço de escolas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erro ao conectar com o serviço de escolas"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Use o token JWT obtido no login do sistema admin (POST /api/auth/login). Exemplo: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Endpoints de autenticação do sistema admin"
+        },
+        {
+            "name": "Schools",
+            "description": "Gerenciamento de escolas (aprovação/rejeição)"
+        }
+    ]
+}

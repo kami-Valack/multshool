@@ -1,0 +1,123 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+class AuthenticateApi
+{
+    /**
+     * Handle an incoming request.
+     */
+    public function handle(Request $request, Closure $next, string ...$guards): Response
+    {
+        try {
+            // Verificar se o token está presente
+            $token = $request->bearerToken();
+            if (!$token) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token não fornecido. Use: Authorization: Bearer <token>',
+                ], 401);
+            }
+
+            // Validar o token e obter o payload
+            try {
+                $payload = \PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth::setToken($token)->getPayload();
+                $userId = $payload->get('sub');
+            } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token expirado',
+                ], 401);
+            } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token inválido: ' . $e->getMessage(),
+                    'debug' => [
+                        'hint' => 'Verifique se o JWT_SECRET é o mesmo nos dois serviços',
+                        'token_length' => strlen($token),
+                    ],
+                ], 401);
+            } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Erro ao processar token: ' . $e->getMessage(),
+                ], 401);
+            }
+
+            // Buscar o usuário no banco pelo ID do token
+            $user = \App\Models\User::find($userId);
+            
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Usuário não encontrado no banco local',
+                    'debug' => [
+                        'user_id_from_token' => $userId,
+                        'hint' => 'O usuário precisa ser replicado via RabbitMQ consumer ou criado manualmente',
+                    ],
+                ], 401);
+            }
+
+            // Verificar se o usuário está ativo
+            if (!$user->is_active) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Conta desativada',
+                ], 403);
+            }
+
+            // Verificar se o usuário tem role school
+            if ($user->role !== 'school') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Acesso negado. Apenas escolas podem acessar este serviço.',
+                ], 403);
+            }
+            
+            // Verificar se a escola está aprovada
+            if (!$user->isApproved()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Acesso negado. Sua escola ainda não foi aprovada. Aguarde a aprovação do administrador.',
+                    'school_status' => $user->status,
+                ], 403);
+            }
+
+            // Injetar o usuário na request para que $request->user() funcione
+            $request->setUserResolver(function () use ($user) {
+                return $user;
+            });
+
+            // Também definir no Auth para compatibilidade
+            Auth::guard('api')->setUser($user);
+
+            return $next($request);
+        } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token expirado',
+            ], 401);
+        } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token inválido',
+            ], 401);
+        } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao processar token: ' . $e->getMessage(),
+            ], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro de autenticação: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+}
+
