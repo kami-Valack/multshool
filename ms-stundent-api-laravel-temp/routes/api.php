@@ -40,6 +40,13 @@ Route::get('/health', function () {
     ]);
 });
 
+// Public routes - Instituições (não requerem autenticação)
+Route::get('/institutions', [\App\Http\Controllers\InstitutionController::class, 'index']);
+Route::get('/institutions/{id}', [\App\Http\Controllers\InstitutionController::class, 'show']);
+
+// Public routes - Cursos (não requerem autenticação)
+Route::get('/courses/{id}', [\App\Http\Controllers\CourseController::class, 'show']);
+
 // Protected routes (require JWT authentication)
 Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function () {
     /**
@@ -106,10 +113,6 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
         Route::post('/upload', [\App\Http\Controllers\StudentDocumentController::class, 'upload']);
         Route::get('/', [\App\Http\Controllers\StudentDocumentController::class, 'index']);
     });
-
-    // Instituições
-    Route::get('/institutions', [\App\Http\Controllers\InstitutionController::class, 'index']);
-    Route::get('/institutions/{id}', [\App\Http\Controllers\InstitutionController::class, 'show']);
     
     // Matrículas
     Route::apiResource('enrollments', \App\Http\Controllers\EnrollmentController::class)->only(['index', 'store']);

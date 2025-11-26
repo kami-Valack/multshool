@@ -22,7 +22,6 @@ class InstitutionController extends Controller
      *     description="Retorna lista de instituições aprovadas, com opção de filtrar por tipo (superior ou médio)",
      *     operationId="listInstitutions",
      *     tags={"Institutions"},
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="institution_type",
      *         in="query",
@@ -136,7 +135,6 @@ class InstitutionController extends Controller
      *     description="Retorna os detalhes completos de uma instituição, incluindo cursos e exames de admissão",
      *     operationId="getInstitution",
      *     tags={"Institutions"},
-     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
