@@ -1,0 +1,12 @@
+{
+  "/admin/academica/candidaturas/page": "app/admin/academica/candidaturas/page.js",
+  "/admin/academica/cursos/page": "app/admin/academica/cursos/page.js",
+  "/admin/academica/horarios/page": "app/admin/academica/horarios/page.js",
+  "/admin/academica/matriculas/page": "app/admin/academica/matriculas/page.js",
+  "/admin/academica/turmas/page": "app/admin/academica/turmas/page.js",
+  "/admin/docentes/gerir/page": "app/admin/docentes/gerir/page.js",
+  "/admin/docentes/relatorios/page": "app/admin/docentes/relatorios/page.js",
+  "/admin/docentes/turmas/page": "app/admin/docentes/turmas/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/page": "app/page.js"
+}
