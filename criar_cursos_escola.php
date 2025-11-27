@@ -223,6 +223,152 @@ $cursosEnsinoSuperior = [
     ],
 ];
 
+// Função para criar exame de admissão para um curso
+function criarExameAdmissao($schoolApiUrl, $courseId, $courseName, $headers) {
+    $examDate = date('Y-m-d\TH:i:s', strtotime('+30 days'));
+    $registrationDeadline = date('Y-m-d\TH:i:s', strtotime('+25 days'));
+    
+    $examData = [
+        'name' => "Exame de Admissão - {$courseName}",
+        'description' => "Exame de admissão para o curso de {$courseName}",
+        'status' => 'scheduled',
+        'exam_date' => $examDate,
+        'registration_deadline' => $registrationDeadline,
+        'max_candidates' => 100,
+        'exam_fee' => 5000.00,
+        'instructions' => "Compareça no local indicado com 30 minutos de antecedência. Traga documento de identificação.",
+        'is_active' => true,
+    ];
+    
+    $response = makeRequest(
+        "{$schoolApiUrl}/courses/{$courseId}/admission-exams",
+        'POST',
+        $examData,
+        $headers
+    );
+    
+    if ($response['code'] === 201 || $response['code'] === 200) {
+        $exam = isset($response['data']['exam']) ? $response['data']['exam'] : $response['data'];
+        $examId = isset($exam['id']) ? $exam['id'] : 'N/A';
+        printSuccess("  ✓ Exame de admissão criado (ID: {$examId})");
+        return $exam;
+    } else {
+        printError("  ✗ Erro ao criar exame de admissão");
+        if (isset($response['data']['message'])) {
+            printError("    Mensagem: " . $response['data']['message']);
+        }
+        return null;
+    }
+}
+
+// Função para criar disciplinas para um curso
+function criarDisciplinas($schoolApiUrl, $courseId, $courseName, $educationLevel, $classLevel, $headers) {
+    $subjects = [];
+    
+    if ($educationLevel === 'medio') {
+        // Disciplinas para ensino médio (organizadas por trimestre)
+        $subjects = [
+            // 1º Trimestre
+            ['name' => 'Matemática', 'code' => 'MAT-1', 'description' => 'Fundamentos de matemática', 'trimester' => 1, 'hours' => 120, 'credits' => 4, 'order' => 1],
+            ['name' => 'Português', 'code' => 'POR-1', 'description' => 'Língua portuguesa e literatura', 'trimester' => 1, 'hours' => 100, 'credits' => 3, 'order' => 2],
+            ['name' => 'Física', 'code' => 'FIS-1', 'description' => 'Fundamentos de física', 'trimester' => 1, 'hours' => 80, 'credits' => 3, 'order' => 3],
+            ['name' => 'Química', 'code' => 'QUI-1', 'description' => 'Fundamentos de química', 'trimester' => 1, 'hours' => 80, 'credits' => 3, 'order' => 4],
+            ['name' => 'História', 'code' => 'HIS-1', 'description' => 'História de Angola e do mundo', 'trimester' => 1, 'hours' => 60, 'credits' => 2, 'order' => 5],
+            ['name' => 'Geografia', 'code' => 'GEO-1', 'description' => 'Geografia física e humana', 'trimester' => 1, 'hours' => 60, 'credits' => 2, 'order' => 6],
+            
+            // 2º Trimestre
+            ['name' => 'Matemática', 'code' => 'MAT-2', 'description' => 'Álgebra e geometria', 'trimester' => 2, 'hours' => 120, 'credits' => 4, 'order' => 7],
+            ['name' => 'Português', 'code' => 'POR-2', 'description' => 'Gramática e redação', 'trimester' => 2, 'hours' => 100, 'credits' => 3, 'order' => 8],
+            ['name' => 'Física', 'code' => 'FIS-2', 'description' => 'Mecânica e termodinâmica', 'trimester' => 2, 'hours' => 80, 'credits' => 3, 'order' => 9],
+            ['name' => 'Química', 'code' => 'QUI-2', 'description' => 'Química orgânica e inorgânica', 'trimester' => 2, 'hours' => 80, 'credits' => 3, 'order' => 10],
+            ['name' => 'Biologia', 'code' => 'BIO-2', 'description' => 'Fundamentos de biologia', 'trimester' => 2, 'hours' => 60, 'credits' => 2, 'order' => 11],
+            ['name' => 'Educação Física', 'code' => 'EDF-2', 'description' => 'Atividades físicas e desportivas', 'trimester' => 2, 'hours' => 40, 'credits' => 1, 'order' => 12],
+            
+            // 3º Trimestre
+            ['name' => 'Matemática', 'code' => 'MAT-3', 'description' => 'Cálculo e estatística', 'trimester' => 3, 'hours' => 120, 'credits' => 4, 'order' => 13],
+            ['name' => 'Português', 'code' => 'POR-3', 'description' => 'Literatura e análise textual', 'trimester' => 3, 'hours' => 100, 'credits' => 3, 'order' => 14],
+            ['name' => 'Física', 'code' => 'FIS-3', 'description' => 'Eletricidade e magnetismo', 'trimester' => 3, 'hours' => 80, 'credits' => 3, 'order' => 15],
+            ['name' => 'Química', 'code' => 'QUI-3', 'description' => 'Química analítica', 'trimester' => 3, 'hours' => 80, 'credits' => 3, 'order' => 16],
+            ['name' => 'Inglês', 'code' => 'ING-3', 'description' => 'Língua inglesa', 'trimester' => 3, 'hours' => 60, 'credits' => 2, 'order' => 17],
+            ['name' => 'Educação Moral e Cívica', 'code' => 'EMC-3', 'description' => 'Valores cívicos e morais', 'trimester' => 3, 'hours' => 40, 'credits' => 1, 'order' => 18],
+        ];
+        
+        // Adicionar disciplinas específicas do curso
+        if (stripos($courseName, 'Informática') !== false) {
+            $subjects[] = ['name' => 'Programação', 'code' => 'PROG-1', 'description' => 'Introdução à programação', 'trimester' => 1, 'hours' => 100, 'credits' => 4, 'order' => 19];
+            $subjects[] = ['name' => 'Redes de Computadores', 'code' => 'RED-2', 'description' => 'Fundamentos de redes', 'trimester' => 2, 'hours' => 80, 'credits' => 3, 'order' => 20];
+            $subjects[] = ['name' => 'Sistemas Operativos', 'code' => 'SO-3', 'description' => 'Windows e Linux', 'trimester' => 3, 'hours' => 80, 'credits' => 3, 'order' => 21];
+        } elseif (stripos($courseName, 'Electrotecnia') !== false) {
+            $subjects[] = ['name' => 'Instalações Elétricas', 'code' => 'IEL-1', 'description' => 'Instalações residenciais e industriais', 'trimester' => 1, 'hours' => 100, 'credits' => 4, 'order' => 19];
+            $subjects[] = ['name' => 'Eletrónica', 'code' => 'ELE-2', 'description' => 'Componentes e circuitos eletrónicos', 'trimester' => 2, 'hours' => 80, 'credits' => 3, 'order' => 20];
+            $subjects[] = ['name' => 'Automação', 'code' => 'AUT-3', 'description' => 'Sistemas automatizados', 'trimester' => 3, 'hours' => 80, 'credits' => 3, 'order' => 21];
+        } elseif (stripos($courseName, 'Mecânica') !== false) {
+            $subjects[] = ['name' => 'Mecânica Automóvel', 'code' => 'MEC-A-1', 'description' => 'Motores e sistemas automóveis', 'trimester' => 1, 'hours' => 100, 'credits' => 4, 'order' => 19];
+            $subjects[] = ['name' => 'Desenho Técnico', 'code' => 'DT-2', 'description' => 'Desenho técnico mecânico', 'trimester' => 2, 'hours' => 80, 'credits' => 3, 'order' => 20];
+            $subjects[] = ['name' => 'Soldadura', 'code' => 'SOLD-3', 'description' => 'Técnicas de soldadura', 'trimester' => 3, 'hours' => 80, 'credits' => 3, 'order' => 21];
+        } elseif (stripos($courseName, 'Construção') !== false) {
+            $subjects[] = ['name' => 'Desenho de Obras', 'code' => 'DO-1', 'description' => 'Projetos de construção', 'trimester' => 1, 'hours' => 100, 'credits' => 4, 'order' => 19];
+            $subjects[] = ['name' => 'Materiais de Construção', 'code' => 'MC-2', 'description' => 'Materiais e técnicas', 'trimester' => 2, 'hours' => 80, 'credits' => 3, 'order' => 20];
+            $subjects[] = ['name' => 'Topografia', 'code' => 'TOP-3', 'description' => 'Levantamento topográfico', 'trimester' => 3, 'hours' => 80, 'credits' => 3, 'order' => 21];
+        }
+    } else {
+        // Disciplinas para ensino superior (organizadas por semestre)
+        $subjects = [
+            // 1º Semestre - 1º Ano
+            ['name' => 'Matemática I', 'code' => 'MAT101', 'description' => 'Cálculo diferencial e integral', 'semester' => 1, 'hours' => 90, 'credits' => 6, 'order' => 1],
+            ['name' => 'Álgebra Linear', 'code' => 'ALG101', 'description' => 'Vetores, matrizes e sistemas lineares', 'semester' => 1, 'hours' => 60, 'credits' => 4, 'order' => 2],
+            ['name' => 'Programação I', 'code' => 'PROG101', 'description' => 'Fundamentos de programação', 'semester' => 1, 'hours' => 90, 'credits' => 6, 'order' => 3],
+            ['name' => 'Arquitetura de Computadores', 'code' => 'ARQ101', 'description' => 'Hardware e organização de computadores', 'semester' => 1, 'hours' => 60, 'credits' => 4, 'order' => 4],
+            ['name' => 'Inglês Técnico', 'code' => 'ING101', 'description' => 'Inglês para tecnologia', 'semester' => 1, 'hours' => 45, 'credits' => 3, 'order' => 5],
+            ['name' => 'Metodologia de Investigação', 'code' => 'MET101', 'description' => 'Métodos científicos', 'semester' => 1, 'hours' => 30, 'credits' => 2, 'order' => 6],
+            
+            // 2º Semestre - 1º Ano
+            ['name' => 'Matemática II', 'code' => 'MAT102', 'description' => 'Cálculo multivariável', 'semester' => 2, 'hours' => 90, 'credits' => 6, 'order' => 7],
+            ['name' => 'Programação II', 'code' => 'PROG102', 'description' => 'Programação orientada a objetos', 'semester' => 2, 'hours' => 90, 'credits' => 6, 'order' => 8],
+            ['name' => 'Estruturas de Dados', 'code' => 'ED102', 'description' => 'Algoritmos e estruturas', 'semester' => 2, 'hours' => 75, 'credits' => 5, 'order' => 9],
+            ['name' => 'Bases de Dados', 'code' => 'BD102', 'description' => 'Modelação e SQL', 'semester' => 2, 'hours' => 75, 'credits' => 5, 'order' => 10],
+            ['name' => 'Sistemas Operativos', 'code' => 'SO102', 'description' => 'Linux e Windows Server', 'semester' => 2, 'hours' => 60, 'credits' => 4, 'order' => 11],
+            ['name' => 'Comunicação e Expressão', 'code' => 'COM102', 'description' => 'Português técnico', 'semester' => 2, 'hours' => 30, 'credits' => 2, 'order' => 12],
+        ];
+        
+        // Adicionar disciplinas específicas do curso
+        if (stripos($courseName, 'Informática') !== false) {
+            $subjects[] = ['name' => 'Redes de Computadores I', 'code' => 'RED201', 'description' => 'Fundamentos de redes', 'semester' => 1, 'hours' => 60, 'credits' => 4, 'order' => 13];
+            $subjects[] = ['name' => 'Engenharia de Software', 'code' => 'ES202', 'description' => 'Metodologias de desenvolvimento', 'semester' => 2, 'hours' => 75, 'credits' => 5, 'order' => 14];
+        } elseif (stripos($courseName, 'Gestão') !== false) {
+            $subjects[] = ['name' => 'Introdução à Gestão', 'code' => 'GEST101', 'description' => 'Fundamentos de gestão', 'semester' => 1, 'hours' => 60, 'credits' => 4, 'order' => 13];
+            $subjects[] = ['name' => 'Contabilidade Geral', 'code' => 'CONT102', 'description' => 'Princípios contabilísticos', 'semester' => 2, 'hours' => 75, 'credits' => 5, 'order' => 14];
+            $subjects[] = ['name' => 'Economia', 'code' => 'ECO102', 'description' => 'Micro e macroeconomia', 'semester' => 2, 'hours' => 60, 'credits' => 4, 'order' => 15];
+        }
+    }
+    
+    $subjectsCreated = 0;
+    $subjectsError = 0;
+    
+    foreach ($subjects as $subject) {
+        $response = makeRequest(
+            "{$schoolApiUrl}/courses/{$courseId}/subjects",
+            'POST',
+            $subject,
+            $headers
+        );
+        
+        if ($response['code'] === 201 || $response['code'] === 200) {
+            $subjectsCreated++;
+        } else {
+            $subjectsError++;
+            printError("    ✗ Erro ao criar disciplina: {$subject['name']}");
+        }
+    }
+    
+    printSuccess("  ✓ Disciplinas criadas: {$subjectsCreated}/" . count($subjects));
+    if ($subjectsError > 0) {
+        printWarning("  ⚠ Disciplinas com erro: {$subjectsError}");
+    }
+    
+    return ['created' => $subjectsCreated, 'errors' => $subjectsError, 'total' => count($subjects)];
+}
+
 $cursosCriados = [];
 $cursosErro = [];
 
@@ -257,6 +403,13 @@ foreach ($cursosEnsinoMedio as $index => $curso) {
                 printInfo("  - Duração: {$duration} meses");
                 printInfo("  - Classe: {$formattedClass}");
             }
+            
+            // Criar exame de admissão
+            criarExameAdmissao($schoolApiUrl, $courseId, $courseName, $headers);
+            
+            // Criar disciplinas
+            criarDisciplinas($schoolApiUrl, $courseId, $courseName, 'medio', $curso['class_level'], $headers);
+            
             $cursosCriados[] = $course;
         } else {
             printSuccess("Curso criado: {$curso['name']}");
@@ -309,6 +462,13 @@ foreach ($cursosEnsinoSuperior as $index => $curso) {
                 printInfo("  - Duração: {$duration} meses");
                 printInfo("  - Ano: {$formattedYear}");
             }
+            
+            // Criar exame de admissão
+            criarExameAdmissao($schoolApiUrl, $courseId, $courseName, $headers);
+            
+            // Criar disciplinas
+            criarDisciplinas($schoolApiUrl, $courseId, $courseName, 'superior', $curso['year_level'], $headers);
+            
             $cursosCriados[] = $course;
         } else {
             printSuccess("Curso criado: {$curso['name']}");

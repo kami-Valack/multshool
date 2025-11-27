@@ -120,13 +120,11 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
     // Inscrições em Exames
     Route::apiResource('exam-registrations', \App\Http\Controllers\ExamRegistrationController::class)->only(['index', 'store']);
 
+    // Propinas/Fees
+    Route::get('/fees', [\App\Http\Controllers\FeeController::class, 'index']);
+
     // TODO: Adicionar rotas para:
     // - GET /api/grades
-    // - GET /api/enrollments
-    // - POST /api/enrollments
-    // - GET /api/registrations
-    // - POST /api/registrations
-    // - GET /api/fees
     // - GET /api/scholarships
     // - POST /api/scholarships
 });
@@ -134,5 +132,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
 // API Secret routes (for inter-service communication)
 Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('student')->group(function () {
     Route::get('/{studentId}/grades', [\App\Http\Controllers\StudentGradeController::class, 'getGradesByStudentId']);
+    Route::get('/{studentId}/fees', [\App\Http\Controllers\FeeController::class, 'getByStudentId']);
+    Route::post('/{studentId}/fees/bulk', [\App\Http\Controllers\FeeController::class, 'bulkCreate']);
 });
 

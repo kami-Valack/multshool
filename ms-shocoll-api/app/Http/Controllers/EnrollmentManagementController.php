@@ -6,6 +6,8 @@ use App\Models\Course;
 use App\Models\Enrollment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -110,7 +112,24 @@ class EnrollmentManagementController extends Controller
             ], 400);
         }
         
+        Log::info('Aprovando matrícula', [
+            'enrollment_id' => $enrollmentId,
+            'student_id' => $enrollment->student_id,
+            'course_id' => $enrollment->course_id,
+        ]);
+        
         $enrollment->approve();
+        
+        Log::info('Matrícula aprovada, iniciando criação de propinas', [
+            'enrollment_id' => $enrollment->id,
+        ]);
+        
+        // Criar propinas automaticamente quando a matrícula é aprovada
+        $this->createFeesForEnrollment($enrollment);
+        
+        Log::info('Processo de criação de propinas concluído', [
+            'enrollment_id' => $enrollment->id,
+        ]);
         
         return response()->json([
             'status' => 'success',
@@ -251,6 +270,9 @@ class EnrollmentManagementController extends Controller
             ]);
         }
         
+        // Criar propinas automaticamente quando a matrícula é aprovada
+        $this->createFeesForEnrollment($enrollment);
+        
         return response()->json([
             'status' => 'success',
             'message' => 'Candidato aprovado no exame e matrícula aprovada automaticamente',
@@ -320,6 +342,170 @@ class EnrollmentManagementController extends Controller
             'message' => 'Candidato reprovado no exame',
             'registration' => $registration->load(['admissionExam.course']),
         ]);
+    }
+
+    /**
+     * Criar propinas automaticamente para uma matrícula aprovada
+     */
+    private function createFeesForEnrollment(Enrollment $enrollment): void
+    {
+        Log::info('createFeesForEnrollment chamado', [
+            'enrollment_id' => $enrollment->id,
+            'student_id' => $enrollment->student_id,
+        ]);
+        
+        try {
+            // Carregar o curso com os dados necessários
+            $enrollment->load('course');
+            $course = $enrollment->course;
+            
+            Log::info('Curso carregado', [
+                'enrollment_id' => $enrollment->id,
+                'course_id' => $course ? $course->id : 'null',
+                'course_name' => $course ? $course->name : 'null',
+            ]);
+            
+            if (!$course) {
+                Log::warning('Curso não encontrado para criar propinas', [
+                    'enrollment_id' => $enrollment->id,
+                ]);
+                return;
+            }
+            
+            // Verificar se o curso tem duração e propina mensal
+            $durationMonths = $course->duration_months ?? 0;
+            $monthlyTuition = $course->monthly_tuition ?? 0;
+            
+            if ($durationMonths <= 0 || $monthlyTuition <= 0) {
+                Log::warning('Curso sem duração ou propina mensal válida', [
+                    'enrollment_id' => $enrollment->id,
+                    'course_id' => $course->id,
+                    'duration_months' => $durationMonths,
+                    'monthly_tuition' => $monthlyTuition,
+                ]);
+                return;
+            }
+            
+            // Verificar se já existem propinas para esta matrícula
+            $studentApiUrl = config('services.student_api.url', env('STUDENT_API_URL', 'http://localhost:8001/api'));
+            // O API Secret deve ser o mesmo que está configurado no ms-stundent-api-laravel-temp (.env: API_SECRET)
+            // O middleware AuthenticateApiSecret espera o valor de API_SECRET
+            $apiSecret = config('services.student_api.secret', env('STUDENT_API_SECRET', ''));
+            
+            if (empty($apiSecret)) {
+                Log::error('API Secret não configurado! Verifique STUDENT_API_SECRET ou API_SECRET no .env', [
+                    'enrollment_id' => $enrollment->id,
+                ]);
+                return;
+            }
+            
+            Log::info('Configuração da API de estudantes', [
+                'enrollment_id' => $enrollment->id,
+                'student_api_url' => $studentApiUrl,
+                'api_secret_set' => !empty($apiSecret),
+                'api_secret_length' => strlen($apiSecret),
+            ]);
+            
+            // Buscar propinas existentes
+            $existingFeesResponse = Http::withHeaders([
+                'X-API-Secret' => $apiSecret,
+            ])->get("{$studentApiUrl}/student/{$enrollment->student_id}/fees", [
+                'enrollment_id' => $enrollment->id,
+            ]);
+            
+            if ($existingFeesResponse->successful()) {
+                $existingFees = $existingFeesResponse->json('fees', []);
+                if (count($existingFees) > 0) {
+                    Log::info('Propinas já existem para esta matrícula', [
+                        'enrollment_id' => $enrollment->id,
+                        'existing_fees_count' => count($existingFees),
+                    ]);
+                    return;
+                }
+            } else {
+                Log::warning('Erro ao verificar propinas existentes', [
+                    'enrollment_id' => $enrollment->id,
+                    'status' => $existingFeesResponse->status(),
+                    'body' => $existingFeesResponse->body(),
+                ]);
+            }
+            
+            // Criar propinas para cada mês do curso
+            $fees = [];
+            $startDate = now(); // Data de início (data de aprovação)
+            
+            // Array de nomes de meses em português
+            $monthNames = [
+                1 => 'Janeiro', 2 => 'Fevereiro', 3 => 'Março', 4 => 'Abril',
+                5 => 'Maio', 6 => 'Junho', 7 => 'Julho', 8 => 'Agosto',
+                9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro'
+            ];
+            
+            for ($month = 1; $month <= $durationMonths; $month++) {
+                // Calcular data de vencimento (primeiro dia do mês seguinte)
+                $dueDate = $startDate->copy()->addMonths($month)->startOfMonth();
+                
+                // Nome do mês em português
+                $monthNumber = (int) $dueDate->format('n');
+                $monthName = $monthNames[$monthNumber] ?? $dueDate->format('F');
+                $year = $dueDate->year;
+                
+                $fees[] = [
+                    'student_id' => $enrollment->student_id,
+                    'enrollment_id' => $enrollment->id,
+                    'amount' => $monthlyTuition,
+                    'due_date' => $dueDate->format('Y-m-d'),
+                    'status' => 'pending',
+                    'description' => "Propina de {$monthName} de {$year} - {$course->name}",
+                ];
+            }
+            
+            // Log antes de criar propinas
+            Log::info('Tentando criar propinas', [
+                'enrollment_id' => $enrollment->id,
+                'student_id' => $enrollment->student_id,
+                'student_api_url' => $studentApiUrl,
+                'fees_count' => count($fees),
+                'duration_months' => $durationMonths,
+                'monthly_tuition' => $monthlyTuition,
+            ]);
+            
+            // Enviar propinas para a API de estudantes
+            $createFeesResponse = Http::withHeaders([
+                'X-API-Secret' => $apiSecret,
+                'Content-Type' => 'application/json',
+            ])->post("{$studentApiUrl}/student/{$enrollment->student_id}/fees/bulk", [
+                'fees' => $fees,
+            ]);
+            
+            if ($createFeesResponse->successful()) {
+                $responseData = $createFeesResponse->json();
+                Log::info('Propinas criadas com sucesso', [
+                    'enrollment_id' => $enrollment->id,
+                    'fees_count' => count($fees),
+                    'response' => $responseData,
+                ]);
+            } else {
+                $errorBody = $createFeesResponse->body();
+                $errorJson = json_decode($errorBody, true);
+                Log::error('Erro ao criar propinas', [
+                    'enrollment_id' => $enrollment->id,
+                    'student_id' => $enrollment->student_id,
+                    'status' => $createFeesResponse->status(),
+                    'body' => $errorBody,
+                    'error_message' => $errorJson['message'] ?? 'N/A',
+                    'url' => "{$studentApiUrl}/student/{$enrollment->student_id}/fees/bulk",
+                    'api_secret_set' => !empty($apiSecret),
+                    'api_secret_preview' => !empty($apiSecret) ? substr($apiSecret, 0, 10) . '...' : 'vazio',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('Exceção ao criar propinas', [
+                'enrollment_id' => $enrollment->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
     }
 }
 

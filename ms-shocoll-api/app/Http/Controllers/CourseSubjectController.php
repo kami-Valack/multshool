@@ -74,6 +74,32 @@ class CourseSubjectController extends Controller
     }
 
     /**
+     * Método público para buscar disciplinas (usado pela API de estudantes)
+     * Não requer autenticação, apenas API Secret
+     */
+    public function indexPublic(Request $request, string $courseId): JsonResponse
+    {
+        $course = Course::findOrFail($courseId);
+        
+        $query = CourseSubject::where('course_id', $courseId);
+        
+        if ($request->has('semester')) {
+            $query->where('semester', $request->semester);
+        }
+        
+        if ($request->has('trimester')) {
+            $query->where('trimester', $request->trimester);
+        }
+        
+        $subjects = $query->orderBy('order')->get();
+        
+        return response()->json([
+            'status' => 'success',
+            'subjects' => $subjects,
+        ]);
+    }
+
+    /**
      * @OA\Post(
      *     path="/api/courses/{courseId}/subjects",
      *     summary="Criar nova cadeira",

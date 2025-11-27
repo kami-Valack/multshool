@@ -35,4 +35,14 @@ return [
         ],
     ],
 
+    'student_api' => [
+        'url' => env('STUDENT_API_URL', 'http://localhost:8001/api'),
+        'secret' => env('STUDENT_API_SECRET', env('API_SECRET', '')),
+    ],
+
+    'school_api' => [
+        'url' => env('SCHOOL_API_URL', 'http://localhost:8003/api'),
+        'secret' => env('SCHOOL_API_SECRET', env('API_SECRET', '')),
+    ],
+
 ];

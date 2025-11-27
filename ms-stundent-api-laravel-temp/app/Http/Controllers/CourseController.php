@@ -82,16 +82,24 @@ class CourseController extends Controller
             // Buscar disciplinas se solicitado
             if ($request->boolean('include_subjects', false)) {
                 try {
+                    // Buscar disciplinas pela rota admin (pública com API Secret)
                     $subjectsResponse = Http::withHeaders([
                         'X-API-Secret' => $apiSecret,
-                    ])->get($schoolApiUrl . '/courses/' . $id . '/subjects');
+                    ])->get($schoolApiUrl . '/admin/courses/' . $id . '/subjects');
 
                     if ($subjectsResponse->successful()) {
                         $subjectsData = $subjectsResponse->json();
-                        $course['subjects'] = $subjectsData['subjects'] ?? [];
+                        $course['subjects'] = $subjectsData['subjects'] ?? $subjectsData['data'] ?? [];
+                    } else {
+                        Log::warning('Erro ao buscar disciplinas do curso', [
+                            'course_id' => $id,
+                            'status' => $subjectsResponse->status(),
+                            'body' => $subjectsResponse->body(),
+                        ]);
+                        $course['subjects'] = [];
                     }
                 } catch (\Exception $e) {
-                    Log::warning('Erro ao buscar disciplinas do curso', [
+                    Log::warning('Exceção ao buscar disciplinas do curso', [
                         'course_id' => $id,
                         'error' => $e->getMessage(),
                     ]);

@@ -11,7 +11,9 @@ class Fee extends Model
     const STATUS_OVERDUE = 'overdue';
 
     protected $fillable = [
+        'id',
         'student_id',
+        'enrollment_id',
         'amount',
         'due_date',
         'status',

@@ -30,6 +30,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('
     // Admin routes for courses and exams
     Route::get('/courses/{id}', [\App\Http\Controllers\CourseController::class, 'show']);
     Route::get('/courses/{id}/admission-exams', [\App\Http\Controllers\AdmissionExamController::class, 'index']);
+    Route::get('/courses/{id}/subjects', [\App\Http\Controllers\CourseSubjectController::class, 'indexPublic']);
 });
 
 // Protected routes (require JWT authentication and school role and approved status)

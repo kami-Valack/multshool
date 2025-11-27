@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('fees', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('student_id');
+            $table->uuid('enrollment_id')->nullable();
             $table->decimal('amount', 10, 2);
             $table->date('due_date');
             $table->enum('status', ['pending', 'paid', 'overdue'])->default('pending');
@@ -19,6 +20,7 @@ return new class extends Migration
 
             $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
             $table->index('student_id');
+            $table->index('enrollment_id');
             $table->index('due_date');
         });
     }
