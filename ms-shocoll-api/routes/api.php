@@ -66,6 +66,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
     });
     
     Route::prefix('enrollments')->group(function () {
+        Route::put('/{enrollmentId}', [\App\Http\Controllers\EnrollmentManagementController::class, 'update']);
         Route::post('/{enrollmentId}/approve', [\App\Http\Controllers\EnrollmentManagementController::class, 'approve']);
         Route::post('/{enrollmentId}/reject', [\App\Http\Controllers\EnrollmentManagementController::class, 'reject']);
     });

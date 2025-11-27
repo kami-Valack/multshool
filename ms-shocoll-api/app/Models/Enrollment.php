@@ -20,6 +20,8 @@ class Enrollment extends Model
         'student_id',
         'student_email',
         'student_name',
+        'class',
+        'student_phone',
         'status',
         'admission_exam_id',
         'exam_passed',

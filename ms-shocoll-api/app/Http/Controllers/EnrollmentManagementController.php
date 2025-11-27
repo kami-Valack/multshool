@@ -52,7 +52,7 @@ class EnrollmentManagementController extends Controller
         $course = Course::where('school_id', $school->id)->findOrFail($courseId);
         
         $query = Enrollment::where('course_id', $course->id)
-            ->with('admissionExam');
+            ->with(['course', 'admissionExam']);
         
         if ($request->has('status')) {
             $query->where('status', $request->status);
@@ -186,6 +186,83 @@ class EnrollmentManagementController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Matrícula rejeitada com sucesso',
+            'enrollment' => $enrollment->load(['course', 'admissionExam']),
+        ]);
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/enrollments/{enrollmentId}",
+     *     summary="Atualizar dados da matrícula",
+     *     description="Atualiza dados faltantes da matrícula como turma, telefone, etc.",
+     *     operationId="updateEnrollment",
+     *     tags={"Enrollment Management"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="enrollmentId",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="string", format="uuid")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="class", type="string", example="EI-3A", description="Turma do estudante"),
+     *             @OA\Property(property="student_phone", type="string", example="+244 923 456 789", description="Telefone do estudante"),
+     *             @OA\Property(property="student_name", type="string", example="Nome Completo", description="Nome do estudante"),
+     *             @OA\Property(property="student_email", type="string", example="estudante@email.com", description="Email do estudante")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Matrícula atualizada com sucesso"
+     *     )
+     * )
+     */
+    public function update(Request $request, string $enrollmentId): JsonResponse
+    {
+        $school = $request->user();
+        
+        $enrollment = Enrollment::with('course')
+            ->whereHas('course', function ($query) use ($school) {
+                $query->where('school_id', $school->id);
+            })
+            ->findOrFail($enrollmentId);
+        
+        $validator = Validator::make($request->all(), [
+            'class' => 'nullable|string|max:50',
+            'student_phone' => 'nullable|string|max:20',
+            'student_name' => 'nullable|string|max:255',
+            'student_email' => 'nullable|email|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        
+        // Atualiza apenas os campos fornecidos
+        if ($request->has('class')) {
+            $enrollment->class = $request->input('class');
+        }
+        if ($request->has('student_phone')) {
+            $enrollment->student_phone = $request->input('student_phone');
+        }
+        if ($request->has('student_name')) {
+            $enrollment->student_name = $request->input('student_name');
+        }
+        if ($request->has('student_email')) {
+            $enrollment->student_email = $request->input('student_email');
+        }
+        
+        $enrollment->save();
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Matrícula atualizada com sucesso',
             'enrollment' => $enrollment->load(['course', 'admissionExam']),
         ]);
     }
