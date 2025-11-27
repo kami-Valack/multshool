@@ -77,12 +77,28 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
         Route::post('/{registrationId}/reject', [\App\Http\Controllers\EnrollmentManagementController::class, 'rejectExamCandidate']);
     });
     
+    // Gerenciamento de Professores
+    Route::apiResource('teachers', \App\Http\Controllers\TeacherManagementController::class);
+    
     // Gerenciamento de Vínculos Professor-Aluno
     Route::prefix('teachers')->group(function () {
         Route::post('/{teacherId}/students/{studentId}', [\App\Http\Controllers\SchoolTeacherStudentController::class, 'link']);
         Route::get('/{teacherId}/students', [\App\Http\Controllers\SchoolTeacherStudentController::class, 'listStudents']);
         Route::delete('/{teacherId}/students/{studentId}', [\App\Http\Controllers\SchoolTeacherStudentController::class, 'unlink']);
     });
+    
+    // Gerenciamento de Atribuições de Professores a Turmas
+    Route::prefix('teacher-assignments')->group(function () {
+        Route::get('/', [\App\Http\Controllers\TeacherClassAssignmentController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\TeacherClassAssignmentController::class, 'store']);
+        Route::post('/bulk', [\App\Http\Controllers\TeacherClassAssignmentController::class, 'bulkStore']);
+        Route::get('/{id}', [\App\Http\Controllers\TeacherClassAssignmentController::class, 'show']);
+        Route::put('/{id}', [\App\Http\Controllers\TeacherClassAssignmentController::class, 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\TeacherClassAssignmentController::class, 'destroy']);
+    });
+    
+    // Gerenciamento de Turmas (Classes)
+    Route::apiResource('classes', \App\Http\Controllers\ClassController::class);
     
     Route::prefix('students')->group(function () {
         Route::get('/{studentId}/teachers', [\App\Http\Controllers\SchoolTeacherStudentController::class, 'listTeachers']);

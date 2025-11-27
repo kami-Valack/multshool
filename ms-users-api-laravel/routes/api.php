@@ -57,3 +57,9 @@ Route::middleware('auth:api')->group(function () {
 // Logout (usa refresh token, não precisa de auth)
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
+// Admin routes (require API Secret)
+// Estas rotas são usadas por outros microserviços (ms-shocoll-api) para gerenciar professores
+Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('admin')->group(function () {
+    Route::apiResource('teachers', \App\Http\Controllers\Admin\TeacherController::class);
+});
+

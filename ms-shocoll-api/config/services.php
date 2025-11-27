@@ -45,4 +45,9 @@ return [
         'secret' => env('SCHOOL_API_SECRET', env('API_SECRET', '')),
     ],
 
+    'users_api' => [
+        'url' => env('USERS_API_URL', 'http://localhost:8000/api'),
+        'secret' => env('USERS_API_SECRET', env('API_SECRET', '')),
+    ],
+
 ];
