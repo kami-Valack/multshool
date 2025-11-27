@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('fees', function (Blueprint $table) {
-            $table->uuid('enrollment_id')->nullable()->after('student_id');
-            $table->index('enrollment_id');
-        });
+        // A coluna enrollment_id já existe na migration create_fees_table
+        // Esta migration é apenas para garantir compatibilidade
+        // Se a coluna já existe, não faz nada
+        if (!Schema::hasColumn('fees', 'enrollment_id')) {
+            Schema::table('fees', function (Blueprint $table) {
+                $table->uuid('enrollment_id')->nullable()->after('student_id');
+                $table->index('enrollment_id');
+            });
+        }
     }
 
     /**
@@ -22,9 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('fees', function (Blueprint $table) {
-            $table->dropIndex(['enrollment_id']);
-            $table->dropColumn('enrollment_id');
-        });
+        // Não remover a coluna se ela foi criada na migration original
+        // Apenas remover se foi criada por esta migration
+        // Como a coluna já existe na migration original, não fazemos nada aqui
     }
 };
