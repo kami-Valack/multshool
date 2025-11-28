@@ -222,13 +222,13 @@ def start_api(api_config):
         # Iniciar servidor
         try:
             server_process = subprocess.Popen(
-                ["php", "artisan", "serve", f"--port={api_config['port']}"],
+                ["php", "artisan", "serve", "--host=0.0.0.0", f"--port={api_config['port']}"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True
             )
             processes.append(("server", server_process))
-            print(f"[OK] {api_config['name']} - Servidor iniciado na porta {api_config['port']}")
+            print(f"[OK] {api_config['name']} - Servidor iniciado em 0.0.0.0:{api_config['port']} (acesso externo habilitado)")
             
             # Se precisa de consumer, iniciar também
             if api_config["consumer"]:
@@ -535,10 +535,10 @@ def main():
     print()
     
     if all_processes:
-        print("APIs Rodando:")
+        print("APIs Rodando (acessíveis externamente em 0.0.0.0):")
         for api in APIS:
             if api['name'] in all_processes:
-                print(f"  ✓ {api['name']} - http://localhost:{api['port']}")
+                print(f"  ✓ {api['name']} - http://0.0.0.0:{api['port']} (também http://localhost:{api['port']})")
         print()
     
     if frontend_processes:
