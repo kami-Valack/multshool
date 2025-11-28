@@ -11,6 +11,7 @@ import os
 import time
 import platform
 import shutil
+import socket
 from pathlib import Path
 
 # Configuração das APIs
@@ -136,6 +137,74 @@ def run_migrations(api_config):
     finally:
         os.chdir(original_dir)
 
+def check_rabbitmq_connection(host='localhost', port=5672, timeout=3):
+    """Verifica se o RabbitMQ está acessível"""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(timeout)
+        result = sock.connect_ex((host, port))
+        sock.close()
+        return result == 0
+    except Exception:
+        return False
+
+def check_docker_rabbitmq_container():
+    """Verifica se o container do RabbitMQ está rodando"""
+    try:
+        result = subprocess.run(
+            ["docker", "ps", "-a", "--filter", "name=rabbitmq", "--format", "{{.Names}}|{{.Status}}"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=10
+        )
+        
+        if result.returncode == 0 and result.stdout.strip():
+            lines = result.stdout.strip().split('\n')
+            for line in lines:
+                if 'rabbitmq' in line.lower():
+                    parts = line.split('|')
+                    if len(parts) >= 2:
+                        container_name = parts[0]
+                        status = parts[1]
+                        if 'Up' in status:
+                            return True, container_name, "running"
+                        else:
+                            return False, container_name, status
+        return None, None, None
+    except FileNotFoundError:
+        return None, None, "docker_not_found"
+    except Exception as e:
+        return None, None, f"error: {str(e)}"
+
+def start_docker_rabbitmq_container(container_name="video-processing-rabbitmq"):
+    """Tenta iniciar o container do RabbitMQ"""
+    try:
+        print(f"[INFO] Tentando iniciar o container RabbitMQ: {container_name}...")
+        result = subprocess.run(
+            ["docker", "start", container_name],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=30
+        )
+        
+        if result.returncode == 0:
+            print(f"[OK] Container RabbitMQ iniciado: {container_name}")
+            # Aguardar alguns segundos para o RabbitMQ inicializar
+            print("[INFO] Aguardando RabbitMQ inicializar...")
+            time.sleep(5)
+            return True
+        else:
+            print(f"[ERRO] Falha ao iniciar container: {result.stderr}")
+            return False
+    except FileNotFoundError:
+        print("[ERRO] Docker não encontrado. Instale o Docker ou inicie o RabbitMQ manualmente.")
+        return False
+    except Exception as e:
+        print(f"[ERRO] Erro ao iniciar container: {e}")
+        return False
+
 def start_api(api_config):
     """Inicia uma API"""
     project_dir = Path(__file__).parent / api_config["dir"]
@@ -164,14 +233,24 @@ def start_api(api_config):
             # Se precisa de consumer, iniciar também
             if api_config["consumer"]:
                 time.sleep(1)  # Aguardar servidor iniciar
-                consumer_process = subprocess.Popen(
-                    ["php", "artisan", "rabbitmq:consume-user-events"],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True
-                )
-                processes.append(("consumer", consumer_process))
-                print(f"[OK] {api_config['name']} - Consumer iniciado")
+                
+                # Verificar se RabbitMQ está acessível
+                rabbitmq_host = os.getenv('RABBITMQ_HOST', 'localhost')
+                rabbitmq_port = int(os.getenv('RABBITMQ_PORT', '5672'))
+                
+                if not check_rabbitmq_connection(rabbitmq_host, rabbitmq_port):
+                    print(f"[AVISO] {api_config['name']} - RabbitMQ não está acessível em {rabbitmq_host}:{rabbitmq_port}")
+                    print(f"[AVISO] {api_config['name']} - Consumer não será iniciado. Verifique se o RabbitMQ está rodando.")
+                else:
+                    print(f"[INFO] {api_config['name']} - RabbitMQ acessível, iniciando consumer...")
+                    consumer_process = subprocess.Popen(
+                        ["php", "artisan", "rabbitmq:consume-user-events"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        text=True
+                    )
+                    processes.append(("consumer", consumer_process))
+                    print(f"[OK] {api_config['name']} - Consumer iniciado")
             
             return processes
             
@@ -265,6 +344,47 @@ def main():
     print("=" * 60)
     print()
     
+    # Verificar se algum serviço precisa de RabbitMQ
+    needs_rabbitmq = any(api["consumer"] for api in APIS)
+    if needs_rabbitmq:
+        rabbitmq_host = os.getenv('RABBITMQ_HOST', 'localhost')
+        rabbitmq_port = int(os.getenv('RABBITMQ_PORT', '5672'))
+        print(f"[INFO] Verificando conexão com RabbitMQ em {rabbitmq_host}:{rabbitmq_port}...")
+        
+        # Primeiro verificar se está acessível
+        if not check_rabbitmq_connection(rabbitmq_host, rabbitmq_port):
+            print(f"[AVISO] RabbitMQ não está acessível em {rabbitmq_host}:{rabbitmq_port}")
+            
+            # Verificar se há container Docker do RabbitMQ
+            container_status, container_name, status_info = check_docker_rabbitmq_container()
+            
+            if container_name:
+                if status_info == "running":
+                    print(f"[INFO] Container {container_name} está rodando, mas não está acessível na porta {rabbitmq_port}")
+                else:
+                    print(f"[INFO] Container {container_name} encontrado, mas está {status_info}")
+                    print(f"[INFO] Tentando iniciar o container...")
+                    if start_docker_rabbitmq_container(container_name):
+                        # Verificar novamente após iniciar
+                        time.sleep(2)
+                        if check_rabbitmq_connection(rabbitmq_host, rabbitmq_port):
+                            print(f"[OK] RabbitMQ está acessível após iniciar o container")
+                        else:
+                            print(f"[AVISO] Container iniciado, mas RabbitMQ ainda não está acessível. Aguarde alguns segundos.")
+                    else:
+                        print(f"[AVISO] Não foi possível iniciar o container automaticamente.")
+                        print(f"[AVISO] Inicie manualmente com: docker start {container_name}")
+                        print(f"[AVISO] Ou use: docker-compose up -d rabbitmq")
+            else:
+                if status_info == "docker_not_found":
+                    print(f"[AVISO] Docker não encontrado. Instale o Docker ou inicie o RabbitMQ manualmente.")
+                else:
+                    print(f"[AVISO] Container RabbitMQ não encontrado.")
+                    print(f"[AVISO] Inicie o RabbitMQ com: docker-compose up -d rabbitmq")
+        else:
+            print(f"[OK] RabbitMQ está acessível")
+        print()
+    
     # 1. Limpar cache de todas as APIs
     print("[ETAPA 1/4] Limpando cache dos serviços...")
     print()
@@ -336,14 +456,46 @@ def main():
     print()
     
     # Aguardar e monitorar processos
+    consumer_errors_shown = set()  # Para evitar mostrar o mesmo erro múltiplas vezes
     try:
         while True:
-            time.sleep(1)
+            time.sleep(2)  # Verificar a cada 2 segundos
             # Verificar se algum processo morreu
             for api_name, processes in all_processes.items():
                 for proc_type, proc in processes:
                     if proc.poll() is not None:
-                        print(f"[AVISO] {api_name} - {proc_type} parou (código: {proc.returncode})")
+                        returncode = proc.returncode
+                        error_key = f"{api_name}_{proc_type}"
+                        
+                        if error_key not in consumer_errors_shown:
+                            consumer_errors_shown.add(error_key)
+                            print(f"[AVISO] {api_name} - {proc_type} parou (código: {returncode})")
+                            
+                            # Se for consumer, tentar obter mais informações do erro
+                            if proc_type == "consumer" and returncode != 0:
+                                try:
+                                    # Tentar ler stderr (pode estar vazio se já foi lido)
+                                    stderr_output = ""
+                                    if proc.stderr:
+                                        try:
+                                            stderr_output = proc.stderr.read(500)  # Ler até 500 chars
+                                        except:
+                                            pass
+                                    
+                                    if stderr_output:
+                                        print(f"[ERRO] {api_name} - Consumer stderr: {stderr_output[:300]}")
+                                    
+                                    # Verificar se RabbitMQ ainda está acessível
+                                    rabbitmq_host = os.getenv('RABBITMQ_HOST', 'localhost')
+                                    rabbitmq_port = int(os.getenv('RABBITMQ_PORT', '5672'))
+                                    if not check_rabbitmq_connection(rabbitmq_host, rabbitmq_port):
+                                        print(f"[ERRO] {api_name} - RabbitMQ não está acessível em {rabbitmq_host}:{rabbitmq_port}")
+                                        print(f"[INFO] {api_name} - Verifique se o RabbitMQ está rodando: docker-compose up -d rabbitmq")
+                                    else:
+                                        print(f"[INFO] {api_name} - RabbitMQ está acessível, mas o consumer falhou")
+                                        print(f"[INFO] {api_name} - Verifique as configurações do RabbitMQ no .env")
+                                except Exception as e:
+                                    print(f"[AVISO] {api_name} - Não foi possível obter detalhes do erro: {e}")
             
             for frontend_name, proc in frontend_processes.items():
                 if proc.poll() is not None:
