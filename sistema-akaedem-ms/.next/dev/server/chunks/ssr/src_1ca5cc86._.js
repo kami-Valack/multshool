@@ -5356,12 +5356,14 @@ function Academica() {
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
                                         open: !!detailsDialog,
-                                        onOpenChange: async ()=>{
-                                            if (detailsDialog?.curso) {
+                                        onOpenChange: async (open)=>{
+                                            if (!open) {
+                                                setDetailsDialog(null);
+                                            } else if (detailsDialog?.curso) {
+                                                // Carregar disciplinas e estudantes quando o dialog abrir
                                                 await loadCourseSubjects(detailsDialog.curso);
                                                 await loadCourseEnrollments(detailsDialog.curso);
                                             }
-                                            setDetailsDialog(null);
                                         },
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogContent"], {
                                             className: "max-w-4xl max-h-[80vh] overflow-y-auto",
@@ -5376,7 +5378,7 @@ function Academica() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 978,
+                                                            lineNumber: 980,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -5387,13 +5389,13 @@ function Academica() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 981,
+                                                            lineNumber: 983,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                    lineNumber: 977,
+                                                    lineNumber: 979,
                                                     columnNumber: 19
                                                 }, this),
                                                 detailsDialog && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5407,12 +5409,12 @@ function Academica() {
                                                                         children: "Informações Gerais"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 990,
+                                                                        lineNumber: 992,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 989,
+                                                                    lineNumber: 991,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -5425,7 +5427,7 @@ function Academica() {
                                                                                     children: "Semestre"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 996,
+                                                                                    lineNumber: 998,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5436,13 +5438,13 @@ function Academica() {
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 997,
+                                                                                    lineNumber: 999,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                            lineNumber: 995,
+                                                                            lineNumber: 997,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5452,7 +5454,7 @@ function Academica() {
                                                                                     children: "Estado"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 1002,
+                                                                                    lineNumber: 1004,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -5461,13 +5463,13 @@ function Academica() {
                                                                                     children: detailsDialog.estado
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 1003,
+                                                                                    lineNumber: 1005,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                            lineNumber: 1001,
+                                                                            lineNumber: 1003,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5477,7 +5479,7 @@ function Academica() {
                                                                                     children: "Nº de Estudantes"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 1015,
+                                                                                    lineNumber: 1017,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5485,13 +5487,13 @@ function Academica() {
                                                                                     children: detailsDialog.estudantes.length
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 1018,
+                                                                                    lineNumber: 1020,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                            lineNumber: 1014,
+                                                                            lineNumber: 1016,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5501,7 +5503,7 @@ function Academica() {
                                                                                     children: "Nº de Docentes"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 1023,
+                                                                                    lineNumber: 1025,
                                                                                     columnNumber: 29
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5509,25 +5511,25 @@ function Academica() {
                                                                                     children: detailsDialog.docentes.length
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 1026,
+                                                                                    lineNumber: 1028,
                                                                                     columnNumber: 29
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                            lineNumber: 1022,
+                                                                            lineNumber: 1024,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 994,
+                                                                    lineNumber: 996,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 988,
+                                                            lineNumber: 990,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -5538,25 +5540,26 @@ function Academica() {
                                                                         children: "Disciplinas"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 1035,
+                                                                        lineNumber: 1037,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 1034,
+                                                                    lineNumber: 1036,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
                                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "flex flex-wrap gap-2",
                                                                         children: detailsDialog.disciplinas.length > 0 ? detailsDialog.disciplinas.map((discId)=>{
-                                                                            const disc = disciplinas.find((d)=>d.id === discId);
+                                                                            const courseId = detailsDialog.curso;
+                                                                            const disc = subjectsMap[courseId]?.find((d)=>d.id === discId);
                                                                             return disc ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
                                                                                 variant: "outline",
                                                                                 children: disc.nome
                                                                             }, discId, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                lineNumber: 1045,
+                                                                                lineNumber: 1048,
                                                                                 columnNumber: 35
                                                                             }, this) : null;
                                                                         }) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5564,23 +5567,23 @@ function Academica() {
                                                                             children: "Nenhuma disciplina atribuída"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                            lineNumber: 1051,
+                                                                            lineNumber: 1054,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 1038,
+                                                                        lineNumber: 1040,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 1037,
+                                                                    lineNumber: 1039,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 1033,
+                                                            lineNumber: 1035,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -5591,12 +5594,12 @@ function Academica() {
                                                                         children: "Docentes Atribuídos"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 1061,
+                                                                        lineNumber: 1064,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 1060,
+                                                                    lineNumber: 1063,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -5609,43 +5612,43 @@ function Academica() {
                                                                                         className: "h-4 w-4 text-gray-500"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                        lineNumber: 1073,
+                                                                                        lineNumber: 1076,
                                                                                         columnNumber: 35
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                         children: nome
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                        lineNumber: 1074,
+                                                                                        lineNumber: 1077,
                                                                                         columnNumber: 35
                                                                                     }, this)
                                                                                 ]
                                                                             }, idx, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                lineNumber: 1069,
+                                                                                lineNumber: 1072,
                                                                                 columnNumber: 33
                                                                             }, this)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                             className: "text-gray-500 text-sm",
                                                                             children: "Nenhum docente atribuído"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                            lineNumber: 1078,
+                                                                            lineNumber: 1081,
                                                                             columnNumber: 31
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 1066,
+                                                                        lineNumber: 1069,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 1065,
+                                                                    lineNumber: 1068,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 1059,
+                                                            lineNumber: 1062,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -5656,12 +5659,12 @@ function Academica() {
                                                                         children: "Lista de Estudantes"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 1088,
+                                                                        lineNumber: 1091,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 1087,
+                                                                    lineNumber: 1090,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -5674,32 +5677,32 @@ function Academica() {
                                                                                             children: "Número"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                            lineNumber: 1097,
+                                                                                            lineNumber: 1100,
                                                                                             columnNumber: 35
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableHead"], {
                                                                                             children: "Nome"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                            lineNumber: 1098,
+                                                                                            lineNumber: 1101,
                                                                                             columnNumber: 35
                                                                                         }, this),
                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableHead"], {
                                                                                             children: "Email"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                            lineNumber: 1099,
+                                                                                            lineNumber: 1102,
                                                                                             columnNumber: 35
                                                                                         }, this)
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                    lineNumber: 1096,
+                                                                                    lineNumber: 1099,
                                                                                     columnNumber: 33
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                lineNumber: 1095,
+                                                                                lineNumber: 1098,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableBody"], {
@@ -5712,69 +5715,69 @@ function Academica() {
                                                                                                 children: estudante.numero
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                                lineNumber: 1110,
+                                                                                                lineNumber: 1113,
                                                                                                 columnNumber: 39
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
                                                                                                 children: estudante.nome
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                                lineNumber: 1111,
+                                                                                                lineNumber: 1114,
                                                                                                 columnNumber: 39
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$table$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TableCell"], {
                                                                                                 children: estudante.email
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                                lineNumber: 1112,
+                                                                                                lineNumber: 1115,
                                                                                                 columnNumber: 39
                                                                                             }, this)
                                                                                         ]
                                                                                     }, estudante.id, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                        lineNumber: 1109,
+                                                                                        lineNumber: 1112,
                                                                                         columnNumber: 37
                                                                                     }, this) : null;
                                                                                 })
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                                lineNumber: 1102,
+                                                                                lineNumber: 1105,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 1094,
+                                                                        lineNumber: 1097,
                                                                         columnNumber: 29
                                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                                         className: "text-gray-500 text-sm",
                                                                         children: "Nenhum estudante matriculado"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                        lineNumber: 1119,
+                                                                        lineNumber: 1122,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                                    lineNumber: 1092,
+                                                                    lineNumber: 1095,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 1086,
+                                                            lineNumber: 1089,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                    lineNumber: 987,
+                                                    lineNumber: 989,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                            lineNumber: 976,
+                                            lineNumber: 978,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
@@ -5793,20 +5796,20 @@ function Academica() {
                                                             children: "Confirmar Exclusão"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 1136,
+                                                            lineNumber: 1139,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogDescription"], {
                                                             children: "Tem certeza que deseja excluir esta turma? Esta ação não pode ser desfeita."
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 1137,
+                                                            lineNumber: 1140,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                    lineNumber: 1135,
+                                                    lineNumber: 1138,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogFooter"], {
@@ -5815,7 +5818,7 @@ function Academica() {
                                                             children: "Cancelar"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 1143,
+                                                            lineNumber: 1146,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDialogAction"], {
@@ -5824,24 +5827,24 @@ function Academica() {
                                                             children: "Excluir"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                            lineNumber: 1144,
+                                                            lineNumber: 1147,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                                    lineNumber: 1142,
+                                                    lineNumber: 1145,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                            lineNumber: 1134,
+                                            lineNumber: 1137,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/academica/turmas/page.tsx",
-                                        lineNumber: 1130,
+                                        lineNumber: 1133,
                                         columnNumber: 15
                                     }, this)
                                 ]

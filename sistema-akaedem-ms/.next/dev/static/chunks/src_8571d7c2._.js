@@ -3959,7 +3959,11 @@ class CourseService {
    */ async getCourseSubjects(courseId) {
         const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["schoolApiClient"].get(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$config$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_ENDPOINTS"].COURSES.SUBJECTS(courseId));
         if (response.status === 'success' && response.data) {
-            return response.data;
+            const data = response.data;
+            // A API retorna { status: 'success', subjects: [...] }
+            // O client.ts já envolve em { status: 'success', data: {...} }
+            const subjects = data.subjects || data || [];
+            return Array.isArray(subjects) ? subjects : [];
         }
         throw new Error(response.message || 'Erro ao listar disciplinas');
     }

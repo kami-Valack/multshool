@@ -965,12 +965,14 @@ export default function Academica() {
 
               <Dialog
                 open={!!detailsDialog}
-                onOpenChange={async () => {
-                  if (detailsDialog?.curso) {
+                onOpenChange={async (open) => {
+                  if (!open) {
+                    setDetailsDialog(null);
+                  } else if (detailsDialog?.curso) {
+                    // Carregar disciplinas e estudantes quando o dialog abrir
                     await loadCourseSubjects(detailsDialog.curso);
                     await loadCourseEnrollments(detailsDialog.curso);
                   }
-                  setDetailsDialog(null);
                 }}
               >
                 <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
@@ -1038,7 +1040,8 @@ export default function Academica() {
                           <div className="flex flex-wrap gap-2">
                             {detailsDialog.disciplinas.length > 0 ? (
                               detailsDialog.disciplinas.map((discId) => {
-                                const disc = disciplinas.find(
+                                const courseId = detailsDialog.curso;
+                                const disc = subjectsMap[courseId]?.find(
                                   (d) => d.id === discId
                                 );
                                 return disc ? (
