@@ -320,18 +320,21 @@ def start_frontend(frontend_config):
             env = os.environ.copy()
             env['PORT'] = str(port)
             
+            # Next.js aceita a porta via variável de ambiente PORT
+            # Também podemos passar via argumento, mas a variável de ambiente é mais confiável
             if use_shell:
                 # No Windows com shell=True, usar string
-                # PowerShell: $env:PORT=3000; npm run dev -- -p 3000
-                # CMD: set PORT=3000 && npm run dev -- -p 3000
+                # Usar apenas variável de ambiente PORT (mais confiável)
                 if 'powershell' in os.environ.get('SHELL', '').lower() or 'powershell' in os.environ.get('PSModulePath', ''):
-                    cmd = f"$env:PORT='{port}'; {' '.join(npm_cmd)} run dev -- -p {port}"
+                    # PowerShell
+                    cmd = f"$env:PORT='{port}'; {' '.join(npm_cmd)} run dev"
                 else:
-                    cmd = f"set PORT={port} && {' '.join(npm_cmd)} run dev -- -p {port}"
+                    # CMD
+                    cmd = f"set PORT={port} && {' '.join(npm_cmd)} run dev"
             else:
                 # No Linux/Mac, usar lista com variável de ambiente
-                # Next.js aceita -p ou --port
-                cmd = npm_cmd + ["run", "dev", "--", "-p", str(port)]
+                # Usar apenas variável de ambiente PORT (mais confiável)
+                cmd = npm_cmd + ["run", "dev"]
             
             print(f"[INFO] {frontend_config['name']} - Iniciando na porta {port}...")
             
@@ -353,6 +356,21 @@ def start_frontend(frontend_config):
                     shell=False,
                     env=env
                 )
+            
+            # Aguardar um pouco e verificar se o processo ainda está rodando
+            time.sleep(2)
+            if frontend_process.poll() is not None:
+                # Processo já terminou, tentar ler o erro
+                try:
+                    stderr_output = frontend_process.stderr.read(1000) if frontend_process.stderr else ""
+                    stdout_output = frontend_process.stdout.read(1000) if frontend_process.stdout else ""
+                    error_msg = stderr_output or stdout_output or "Sem mensagem de erro disponível"
+                    print(f"[ERRO] {frontend_config['name']} - Frontend falhou imediatamente:")
+                    print(f"[ERRO] {error_msg[:500]}")
+                    return None
+                except:
+                    print(f"[ERRO] {frontend_config['name']} - Frontend falhou imediatamente (código: {frontend_process.returncode})")
+                    return None
             
             print(f"[OK] {frontend_config['name']} - Frontend iniciado na porta {port}")
             return frontend_process
@@ -527,7 +545,27 @@ def main():
             
             for frontend_name, proc in frontend_processes.items():
                 if proc.poll() is not None:
-                    print(f"[AVISO] {frontend_name} - Frontend parou (código: {proc.returncode})")
+                    returncode = proc.returncode
+                    print(f"[AVISO] {frontend_name} - Frontend parou (código: {returncode})")
+                    
+                    # Tentar obter mais informações do erro
+                    try:
+                        if proc.stderr:
+                            try:
+                                stderr_output = proc.stderr.read(1000)
+                                if stderr_output:
+                                    print(f"[ERRO] {frontend_name} - Erro: {stderr_output[:500]}")
+                            except:
+                                pass
+                        if proc.stdout:
+                            try:
+                                stdout_output = proc.stdout.read(1000)
+                                if stdout_output and "error" in stdout_output.lower():
+                                    print(f"[ERRO] {frontend_name} - Output: {stdout_output[:500]}")
+                            except:
+                                pass
+                    except Exception as e:
+                        print(f"[AVISO] {frontend_name} - Não foi possível obter detalhes do erro: {e}")
                     
     except KeyboardInterrupt:
         print()
