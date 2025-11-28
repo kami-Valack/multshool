@@ -290,6 +290,42 @@ def find_npm():
     
     return None
 
+def check_node_version(min_version="20.9.0"):
+    """Verifica a versão do Node.js e retorna (sucesso, versão_atual, mensagem)"""
+    try:
+        result = subprocess.run(
+            ["node", "--version"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=5
+        )
+        
+        if result.returncode != 0:
+            return False, None, "Node.js não encontrado"
+        
+        version_str = result.stdout.strip().replace('v', '')
+        version_parts = version_str.split('.')
+        
+        min_parts = min_version.split('.')
+        
+        # Comparar versões
+        for i in range(max(len(version_parts), len(min_parts))):
+            v_part = int(version_parts[i]) if i < len(version_parts) else 0
+            m_part = int(min_parts[i]) if i < len(min_parts) else 0
+            
+            if v_part > m_part:
+                return True, version_str, None
+            elif v_part < m_part:
+                return False, version_str, f"Node.js {version_str} é menor que {min_version}"
+        
+        return True, version_str, None
+        
+    except FileNotFoundError:
+        return False, None, "Node.js não encontrado no sistema"
+    except Exception as e:
+        return False, None, f"Erro ao verificar versão do Node.js: {e}"
+
 def start_frontend(frontend_config):
     """Inicia um frontend em uma porta específica"""
     project_dir = Path(__file__).parent / frontend_config["dir"]
@@ -297,6 +333,22 @@ def start_frontend(frontend_config):
     if not project_dir.exists():
         print(f"[ERRO] Diretório não encontrado: {project_dir}")
         return None
+    
+    # Verificar versão do Node.js (especialmente para Next.js 16+)
+    # Sistema Akaedem MS usa Next.js 16 que requer Node.js >= 20.9.0
+    min_node_version = "20.9.0" if "akaedem" in frontend_config["dir"].lower() else "18.0.0"
+    node_ok, node_version, node_error = check_node_version(min_node_version)
+    
+    if not node_ok:
+        print(f"[ERRO] {frontend_config['name']} - {node_error}")
+        if node_version:
+            print(f"[INFO] Versão atual do Node.js: {node_version}")
+        print(f"[INFO] Versão mínima requerida: {min_node_version}")
+        print(f"[INFO] Atualize o Node.js ou use nvm para gerenciar versões")
+        return None
+    
+    if node_version:
+        print(f"[INFO] {frontend_config['name']} - Node.js {node_version} (OK)")
     
     # Encontrar o comando npm
     npm_cmd = find_npm()
@@ -546,26 +598,30 @@ def main():
             for frontend_name, proc in frontend_processes.items():
                 if proc.poll() is not None:
                     returncode = proc.returncode
-                    print(f"[AVISO] {frontend_name} - Frontend parou (código: {returncode})")
+                    error_key = f"frontend_{frontend_name}"
                     
-                    # Tentar obter mais informações do erro
-                    try:
-                        if proc.stderr:
-                            try:
-                                stderr_output = proc.stderr.read(1000)
-                                if stderr_output:
-                                    print(f"[ERRO] {frontend_name} - Erro: {stderr_output[:500]}")
-                            except:
-                                pass
-                        if proc.stdout:
-                            try:
-                                stdout_output = proc.stdout.read(1000)
-                                if stdout_output and "error" in stdout_output.lower():
-                                    print(f"[ERRO] {frontend_name} - Output: {stdout_output[:500]}")
-                            except:
-                                pass
-                    except Exception as e:
-                        print(f"[AVISO] {frontend_name} - Não foi possível obter detalhes do erro: {e}")
+                    if error_key not in consumer_errors_shown:
+                        consumer_errors_shown.add(error_key)
+                        print(f"[AVISO] {frontend_name} - Frontend parou (código: {returncode})")
+                        
+                        # Tentar obter mais informações do erro
+                        try:
+                            if proc.stderr:
+                                try:
+                                    stderr_output = proc.stderr.read(1000)
+                                    if stderr_output:
+                                        print(f"[ERRO] {frontend_name} - Erro: {stderr_output[:500]}")
+                                except:
+                                    pass
+                            if proc.stdout:
+                                try:
+                                    stdout_output = proc.stdout.read(1000)
+                                    if stdout_output and "error" in stdout_output.lower():
+                                        print(f"[ERRO] {frontend_name} - Output: {stdout_output[:500]}")
+                                except:
+                                    pass
+                        except Exception as e:
+                            print(f"[AVISO] {frontend_name} - Não foi possível obter detalhes do erro: {e}")
                     
     except KeyboardInterrupt:
         print()
