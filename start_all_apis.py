@@ -291,7 +291,7 @@ def find_npm():
     return None
 
 def start_frontend(frontend_config):
-    """Inicia um frontend"""
+    """Inicia um frontend em uma porta específica"""
     project_dir = Path(__file__).parent / frontend_config["dir"]
     
     if not project_dir.exists():
@@ -312,21 +312,49 @@ def start_frontend(frontend_config):
             # No Windows, usar shell=True pode ajudar
             use_shell = platform.system() == "Windows"
             
+            # Criar comando com porta específica
+            # Next.js aceita -p ou --port para especificar a porta
+            port = frontend_config['port']
+            
+            # Criar ambiente com variável PORT
+            env = os.environ.copy()
+            env['PORT'] = str(port)
+            
             if use_shell:
                 # No Windows com shell=True, usar string
-                cmd = " ".join(npm_cmd + ["run", "dev"])
+                # PowerShell: $env:PORT=3000; npm run dev -- -p 3000
+                # CMD: set PORT=3000 && npm run dev -- -p 3000
+                if 'powershell' in os.environ.get('SHELL', '').lower() or 'powershell' in os.environ.get('PSModulePath', ''):
+                    cmd = f"$env:PORT='{port}'; {' '.join(npm_cmd)} run dev -- -p {port}"
+                else:
+                    cmd = f"set PORT={port} && {' '.join(npm_cmd)} run dev -- -p {port}"
             else:
-                # No Linux/Mac, usar lista
-                cmd = npm_cmd + ["run", "dev"]
+                # No Linux/Mac, usar lista com variável de ambiente
+                # Next.js aceita -p ou --port
+                cmd = npm_cmd + ["run", "dev", "--", "-p", str(port)]
             
-            frontend_process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                shell=use_shell
-            )
-            print(f"[OK] {frontend_config['name']} - Frontend iniciado (porta {frontend_config['port']})")
+            print(f"[INFO] {frontend_config['name']} - Iniciando na porta {port}...")
+            
+            if use_shell:
+                frontend_process = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    shell=True,
+                    env=env
+                )
+            else:
+                frontend_process = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    shell=False,
+                    env=env
+                )
+            
+            print(f"[OK] {frontend_config['name']} - Frontend iniciado na porta {port}")
             return frontend_process
             
         except FileNotFoundError:
