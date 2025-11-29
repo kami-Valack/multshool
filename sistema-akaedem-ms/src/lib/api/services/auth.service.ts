@@ -62,19 +62,34 @@ class AuthService {
     if (response.status === 'success' && response.data) {
       const authData = response.data as any;
       
+      console.log('AuthService.login - Dados recebidos:', {
+        hasAccessToken: !!authData.accessToken,
+        hasUser: !!authData.user,
+        hasProfile: !!authData.profile,
+        profile: authData.profile,
+        userRole: authData.user?.role
+      });
+      
       // Salva tokens no localStorage
       if (typeof window !== 'undefined') {
         localStorage.setItem('auth_token', authData.accessToken);
         localStorage.setItem('refresh_token', authData.refreshToken);
       }
       
-      return {
+      const result = {
         accessToken: authData.accessToken,
         refreshToken: authData.refreshToken,
         expiresIn: authData.expiresIn,
         user: authData.user,
         profile: authData.profile, // Incluir informações de perfil se disponível
       };
+      
+      console.log('AuthService.login - Retornando:', {
+        hasProfile: !!result.profile,
+        profile: result.profile
+      });
+      
+      return result;
     }
 
     throw new Error(response.message || 'Erro ao fazer login');

@@ -369,27 +369,46 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login, isAuthenticated, user, profileComplete } = useAuth();
+  const { login, isAuthenticated, user, profileComplete, loading: authLoading } = useAuth();
 
   // Redireciona se já estiver autenticado
   React.useEffect(() => {
+    console.log('useEffect redirecionamento:', { 
+      isAuthenticated, 
+      user: user?.role, 
+      profileComplete,
+      loading: false
+    });
+    
+    // Não redirecionar se ainda estiver carregando (auth ou form)
+    if (authLoading || loading) {
+      return;
+    }
+    
     if (isAuthenticated && user) {
       // Se for escola, verificar perfil antes de redirecionar
       if (user.role === 'school') {
         // Se profileComplete ainda não foi verificado (null), aguardar
         if (profileComplete === null) {
+          console.log('Aguardando verificação de perfil... (profileComplete é null)');
           return; // Aguardar verificação
         }
         // Se perfil não estiver completo, redirecionar para completar perfil
         if (profileComplete === false) {
+          console.log('Perfil incompleto, redirecionando para /admin/completar-perfil');
           router.push("/admin/completar-perfil");
           return;
         }
+        // Se chegou aqui, perfil está completo
+        console.log('Perfil completo, redirecionando para /admin');
+        router.push("/admin");
+        return;
       }
-      // Se perfil completo ou não é escola, ir para admin
+      // Se não é escola, ir direto para admin
+      console.log('Não é escola, redirecionando para /admin');
       router.push("/admin");
     }
-  }, [isAuthenticated, user, profileComplete, router]);
+  }, [isAuthenticated, user, profileComplete, router, loading]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -404,11 +423,9 @@ export default function Home() {
       await login({ email, password });
       toast.success("Login realizado com sucesso!");
       
-      // Aguardar um pouco para o contexto atualizar
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Redirecionar baseado no perfil (o useEffect também vai verificar, mas fazemos aqui também para garantir)
+      // Aguardar um pouco para o contexto atualizar o estado
       // O redirecionamento será feito pelo useEffect acima baseado no profileComplete
+      // Não redirecionar aqui, deixar o useEffect fazer isso
     } catch (error: any) {
       toast.error(error.message || "Erro ao fazer login. Verifique suas credenciais.");
     } finally {

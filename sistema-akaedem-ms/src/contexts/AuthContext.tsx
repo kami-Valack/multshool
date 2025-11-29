@@ -102,15 +102,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (credentials: LoginCredentials) => {
     try {
+      console.log('AuthContext.login - Iniciando login...');
       const response = await authService.login(credentials);
+      console.log('AuthContext.login - Resposta do login:', { 
+        hasProfile: !!response.profile, 
+        profile: response.profile 
+      });
+      
       const userData = await authService.getMe();
+      console.log('AuthContext.login - Dados do usuário:', { role: userData.role });
       setUser(userData);
       
       // Se for escola, usar informações de perfil da resposta do login
       if (userData.role === 'school') {
+        console.log('AuthContext.login - É escola, verificando perfil...');
+        
         // Se a resposta do login já contém informações de perfil, usar diretamente
         if (response.profile) {
           const profileInfo = response.profile;
+          console.log('AuthContext.login - Perfil recebido da API:', profileInfo);
+          console.log('AuthContext.login - is_complete:', profileInfo.is_complete);
           setProfileComplete(profileInfo.is_complete);
           setProfileStatus({
             is_complete: profileInfo.is_complete,
@@ -118,14 +129,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             completion_percentage: profileInfo.completion_percentage || 0,
             message: profileInfo.message || 'Perfil incompleto',
           });
+          console.log('AuthContext.login - profileComplete setado para:', profileInfo.is_complete);
         } else {
           // Se não tiver na resposta, verificar manualmente (fallback)
+          console.log('AuthContext.login - Perfil não veio na resposta, verificando manualmente...');
           await checkProfileCompletion(userData);
         }
       } else {
+        console.log('AuthContext.login - Não é escola, setando profileComplete = true');
         setProfileComplete(true); // Não é escola, não precisa verificar
       }
     } catch (error: any) {
+      console.error('AuthContext.login - Erro no login:', error);
       throw error;
     }
   };
