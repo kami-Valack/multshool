@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { authService, User, LoginCredentials, ProfileInfo } from '@/lib/api/services/auth.service';
 import { profileService, ProfileCompletionStatus } from '@/lib/api/services/profile.service';
 
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /**
    * Verifica se o perfil está completo (apenas para escolas)
    */
-  const checkProfileCompletion = async (userToCheck?: User | null) => {
+  const checkProfileCompletion = useCallback(async (userToCheck?: User | null) => {
     try {
       const userToVerify = userToCheck || user;
       
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setProfileComplete(false);
       }
     }
-  };
+  }, [user]);
 
   const login = async (credentials: LoginCredentials) => {
     try {

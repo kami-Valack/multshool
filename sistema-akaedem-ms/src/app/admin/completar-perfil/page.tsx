@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { profileService } from '@/lib/api/services/profile.service';
@@ -39,40 +39,79 @@ export default function CompletarPerfilPage() {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
-  // Verificar perfil ao carregar
+  // Flag para evitar recarregar dados múltiplas vezes
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  // Verificar perfil ao carregar (apenas uma vez)
   useEffect(() => {
+    // Evitar executar múltiplas vezes
+    if (dataLoaded || !user) {
+      return;
+    }
+
+    let isMounted = true; // Flag para verificar se o componente ainda está montado
+
     const checkProfile = async () => {
       try {
         await checkProfileCompletion();
-        // Carregar dados existentes do perfil
-        if (user) {
+        // Carregar dados existentes do perfil apenas se ainda não foram carregados
+        if (isMounted && !dataLoaded) {
           try {
             const profile = await profileService.getProfile();
-            setFormData({
-              name: profile.name || '',
-              acronym: profile.acronym || '',
-              description: profile.description || '',
-              founded_year: profile.founded_year?.toString() || '',
-              location_map_url: profile.location_map_url || '',
-              phone_number: profile.phone_number || '',
-              contact_emails: profile.contact_emails && profile.contact_emails.length > 0 
-                ? profile.contact_emails 
-                : [''],
-            });
-            
-            // Carregar previews de arquivos existentes
-            if (profile.logo_path) setLogoPreview(profile.logo_path);
-            if (profile.photos && profile.photos.length > 0) setPhotoPreviews(profile.photos);
-            if (profile.presentation_video_path) setVideoPreview(profile.presentation_video_path);
+            // Só atualizar se os dados ainda não foram carregados E o componente ainda estiver montado
+            if (isMounted) {
+              setFormData(prev => {
+                // NUNCA sobrescrever se o usuário já digitou algo
+                // Verificar se algum campo já foi preenchido pelo usuário
+                const hasUserData = prev.name.trim() || prev.acronym.trim() || prev.description.trim() || 
+                                   prev.founded_year.trim() || prev.location_map_url.trim() || 
+                                   prev.phone_number.trim() || (prev.contact_emails && prev.contact_emails.some((e: string) => e.trim() !== ''));
+                
+                if (hasUserData) {
+                  console.log('FormData já tem dados do usuário, não sobrescrevendo');
+                  return prev;
+                }
+                
+                // Caso contrário, carregar do perfil apenas na primeira vez
+                console.log('Carregando dados do perfil pela primeira vez');
+                return {
+                  name: profile.name || '',
+                  acronym: profile.acronym || '',
+                  description: profile.description || '',
+                  founded_year: profile.founded_year?.toString() || '',
+                  location_map_url: profile.location_map_url || '',
+                  phone_number: profile.phone_number || '',
+                  contact_emails: profile.contact_emails && profile.contact_emails.length > 0 
+                    ? profile.contact_emails 
+                    : [''],
+                };
+              });
+              
+              // Carregar previews de arquivos existentes apenas se ainda não foram carregados
+              if (profile.logo_path && !logoPreview) setLogoPreview(profile.logo_path);
+              if (profile.photos && profile.photos.length > 0 && photoPreviews.length === 0) {
+                setPhotoPreviews(profile.photos);
+              }
+              if (profile.presentation_video_path && !videoPreview) {
+                setVideoPreview(profile.presentation_video_path);
+              }
+              
+              setDataLoaded(true);
+            }
           } catch (error) {
             console.error('Erro ao carregar perfil:', error);
             // Continuar mesmo se não conseguir carregar dados existentes
+            if (isMounted) {
+              setDataLoaded(true);
+            }
           }
         }
       } catch (error) {
         console.error('Erro ao verificar perfil:', error);
       } finally {
-        setChecking(false);
+        if (isMounted) {
+          setChecking(false);
+        }
       }
     };
 
@@ -80,21 +119,37 @@ export default function CompletarPerfilPage() {
       checkProfile();
     } else {
       setChecking(false);
+      setDataLoaded(true);
     }
-  }, [user, checkProfileCompletion]);
+
+    // Cleanup: marcar como desmontado se o componente for desmontado
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]); // Executar apenas quando user.id mudar (ou seja, quando o usuário fizer login)
 
   // Se não for escola ou perfil já estiver completo, redirecionar
   useEffect(() => {
+    if (!checking && !dataLoaded) {
+      return; // Aguardar dados serem carregados
+    }
+    
     if (!checking && user?.role !== 'school') {
       router.push('/admin');
     } else if (!checking && profileStatus?.is_complete) {
       router.push('/admin');
     }
-  }, [checking, user, profileStatus, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checking, dataLoaded, user?.role, profileStatus?.is_complete]); // Dependências específicas
 
-  const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  const handleInputChange = React.useCallback((field: string, value: any) => {
+    setFormData(prev => {
+      // Garantir que não estamos resetando acidentalmente
+      const newData = { ...prev, [field]: value };
+      return newData;
+    });
+  }, []);
 
   const handleContactEmailChange = (index: number, value: string) => {
     const newEmails = [...formData.contact_emails];
@@ -261,8 +316,8 @@ export default function CompletarPerfilPage() {
   return (
     <ProtectedRoute requireCompleteProfile={false}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
-        <div className="max-w-4xl mx-auto">
-          <Card>
+        <div className="max-w-4xl mx-auto" key="profile-form-container">
+          <Card key="profile-card">
             <CardHeader>
               <CardTitle className="text-2xl font-bold">
                 Completar Perfil da Instituição
@@ -298,12 +353,13 @@ export default function CompletarPerfilPage() {
                 </Alert>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form key="profile-form" onSubmit={handleSubmit} className="space-y-6">
                 {/* Nome completo */}
                 <div>
                   <Label htmlFor="name">Nome Completo da Instituição *</Label>
                   <Input
                     id="name"
+                    key="input-name"
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     required
