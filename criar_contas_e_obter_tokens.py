@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 
 # Configuração das APIs
-USERS_API_URL = "http://localhost:8000/api"
+USERS_API_URL = "http://ec2-54-164-91-182.compute-1.amazonaws.com/:8000/api"
 
 # Cores para output
 class Colors:

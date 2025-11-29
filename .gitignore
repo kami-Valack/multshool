@@ -28,7 +28,7 @@ logs/
 *.cache
 .phpunit.result.cache
 .phpunit.cache
-
+.env
 # Arquivos de teste
 coverage/
 .phpunit.cache/

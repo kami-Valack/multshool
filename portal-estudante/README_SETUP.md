@@ -94,20 +94,20 @@ yarn dev
 pnpm dev
 ```
 
-O projeto será iniciado em: **http://localhost:3000**
+O projeto será iniciado em: **http://localhost:3001**
 
 ### 7. Acessar a aplicação
 
 Abra seu navegador e acesse:
 ```
-http://localhost:3000
+http://localhost:3001
 ```
 
 ## 🧪 Testar a Integração
 
 ### 1. Testar Login
 
-1. Acesse: `http://localhost:3000/login`
+1. Acesse: `http://localhost:3001/login`
 2. Use credenciais válidas:
    - **Email ou Student ID**: (ex: `student@example.com` ou `ST2025000001`)
    - **Senha**: (sua senha)
@@ -122,7 +122,7 @@ Após fazer login, você deve ver:
 
 ### 3. Verificar Perfil
 
-Acesse: `http://localhost:3000/estudante/perfil`
+Acesse: `http://localhost:3001/estudante/perfil`
 
 Você deve ver:
 - Seus dados pessoais
@@ -158,7 +158,7 @@ Você deve ver:
 
 **Solução:**
 1. Verifique se as APIs permitem requisições do front-end
-2. Configure CORS nas APIs Laravel para aceitar `http://localhost:3000`
+2. Configure CORS nas APIs Laravel para aceitar `http://localhost:3001`
 
 ### Página em branco após login
 

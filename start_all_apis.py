@@ -47,12 +47,12 @@ FRONTENDS = [
     {
         "name": "Portal Estudante",
         "dir": "portal-estudante",
-        "port": 3000
+        "port": 3001
     },
     {
         "name": "Sistema Akaedem MS",
         "dir": "sistema-akaedem-ms",
-        "port": 3001
+        "port": 3000
     }
 ]
 
@@ -133,6 +133,47 @@ def run_migrations(api_config):
         return False
     except Exception as e:
         print(f"[ERRO] {api_config['name']} - Erro ao executar migrations: {e}")
+        return False
+    finally:
+        os.chdir(original_dir)
+
+def generate_key(api_config):
+    """Gera a chave de aplicação de uma API Laravel"""
+    project_dir = Path(__file__).parent / api_config["dir"]
+    
+    if not project_dir.exists():
+        return False
+    
+    original_dir = os.getcwd()
+    try:
+        os.chdir(project_dir)
+        
+        print(f"[INFO] {api_config['name']} - Gerando chave de aplicação...")
+        
+        result = subprocess.run(
+            ["php", "artisan", "key:generate", "--force"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=30
+        )
+        
+        if result.returncode == 0:
+            print(f"[OK] {api_config['name']} - Chave gerada")
+            return True
+        else:
+            # Se a chave já existe, não é um erro crítico
+            if "already exists" in result.stderr.lower() or "key already exists" in result.stderr.lower():
+                print(f"[INFO] {api_config['name']} - Chave já existe")
+                return True
+            print(f"[AVISO] {api_config['name']} - Aviso ao gerar chave: {result.stderr}")
+            return False
+        
+    except subprocess.TimeoutExpired:
+        print(f"[ERRO] {api_config['name']} - Timeout ao gerar chave")
+        return False
+    except Exception as e:
+        print(f"[ERRO] {api_config['name']} - Erro ao gerar chave: {e}")
         return False
     finally:
         os.chdir(original_dir)
@@ -368,25 +409,27 @@ def start_frontend(frontend_config):
             # Next.js aceita -p ou --port para especificar a porta
             port = frontend_config['port']
             
-            # Criar ambiente com variável PORT
+            # Criar ambiente sem PORT para evitar conflitos
+            # Vamos usar apenas o argumento -p que tem prioridade
             env = os.environ.copy()
-            env['PORT'] = str(port)
+            # Não definir PORT aqui, vamos usar apenas -p
             
-            # Next.js aceita a porta via variável de ambiente PORT
-            # Também podemos passar via argumento, mas a variável de ambiente é mais confiável
+            # Passar a porta explicitamente via argumento -p para garantir que seja respeitada
+            # Isso sobrescreve qualquer configuração no package.json e variáveis de ambiente
             if use_shell:
                 # No Windows com shell=True, usar string
-                # Usar apenas variável de ambiente PORT (mais confiável)
                 if 'powershell' in os.environ.get('SHELL', '').lower() or 'powershell' in os.environ.get('PSModulePath', ''):
-                    # PowerShell
-                    cmd = f"$env:PORT='{port}'; {' '.join(npm_cmd)} run dev"
+                    # PowerShell - passar porta via argumento -p
+                    # Usar -- para passar argumentos para next dev
+                    cmd = f"{' '.join(npm_cmd)} run dev -- -p {port}"
                 else:
-                    # CMD
-                    cmd = f"set PORT={port} && {' '.join(npm_cmd)} run dev"
+                    # CMD - passar porta via argumento -p
+                    # Usar -- para passar argumentos para next dev
+                    cmd = f"{' '.join(npm_cmd)} run dev -- -p {port}"
             else:
-                # No Linux/Mac, usar lista com variável de ambiente
-                # Usar apenas variável de ambiente PORT (mais confiável)
-                cmd = npm_cmd + ["run", "dev"]
+                # No Linux/Mac, passar porta via argumento -p
+                # Usar -- para passar argumentos para o script next dev
+                cmd = npm_cmd + ["run", "dev", "--", "-p", str(port)]
             
             print(f"[INFO] {frontend_config['name']} - Iniciando na porta {port}...")
             
@@ -484,23 +527,31 @@ def main():
         print()
     
     # 1. Limpar cache de todas as APIs
-    print("[ETAPA 1/4] Limpando cache dos serviços...")
+    print("[ETAPA 1/5] Limpando cache dos serviços...")
     print()
     for api in APIS:
         clear_cache(api)
         time.sleep(0.5)
     print()
     
-    # 2. Executar migrations
-    print("[ETAPA 2/4] Executando migrations...")
+    # 2. Gerar chaves de aplicação
+    print("[ETAPA 2/5] Gerando chaves de aplicação...")
+    print()
+    for api in APIS:
+        generate_key(api)
+        time.sleep(0.5)
+    print()
+    
+    # 3. Executar migrations
+    print("[ETAPA 3/5] Executando migrations...")
     print()
     for api in APIS:
         run_migrations(api)
         time.sleep(0.5)
     print()
     
-    # 3. Iniciar APIs
-    print("[ETAPA 3/4] Iniciando APIs...")
+    # 4. Iniciar APIs
+    print("[ETAPA 4/5] Iniciando APIs...")
     print()
     all_processes = {}
     
@@ -512,8 +563,8 @@ def main():
         time.sleep(1)  # Pequeno delay entre iniciações
         print()
     
-    # 4. Iniciar Frontends
-    print("[ETAPA 4/4] Iniciando Frontends...")
+    # 5. Iniciar Frontends
+    print("[ETAPA 5/5] Iniciando Frontends...")
     print()
     frontend_processes = {}
     

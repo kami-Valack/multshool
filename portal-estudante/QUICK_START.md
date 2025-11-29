@@ -25,7 +25,7 @@ npm run dev
 
 ### 3. Acessar
 
-Abra no navegador: **http://localhost:3000**
+Abra no navegador: **http://localhost:3001**
 
 ## ⚠️ Antes de Começar
 
@@ -36,7 +36,7 @@ Certifique-se de que as APIs estão rodando:
 
 ## 🧪 Teste Rápido
 
-1. Acesse: `http://localhost:3000/login`
+1. Acesse: `http://localhost:3001/login`
 2. Faça login com suas credenciais
 3. Você será redirecionado para o dashboard
 

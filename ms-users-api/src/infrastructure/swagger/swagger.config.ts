@@ -38,6 +38,10 @@ const swaggerDefinition: SwaggerDefinition = {
       url: 'http://localhost:3000',
       description: 'Servidor de desenvolvimento',
     },
+    {
+      url: 'http://ec2-54-164-91-182.compute-1.amazonaws.com',
+      description: 'Servidor VPS (Produção)',
+    },
   ],
   components: {
     securitySchemes: {
