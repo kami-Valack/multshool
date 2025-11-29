@@ -22,7 +22,7 @@ namespace App\Http\Controllers;
  * )
  *
  * @OA\Server(
- *     url="http://ec2-54-164-91-182.compute-1.amazonaws.com",
+ *     url="http://ec2-54-164-91-182.compute-1.amazonaws.com:8000",
  *     description="Servidor VPS (Produção)"
  * )
  *
