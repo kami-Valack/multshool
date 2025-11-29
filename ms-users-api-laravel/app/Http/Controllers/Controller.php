@@ -21,6 +21,11 @@ namespace App\Http\Controllers;
  *     description="Servidor Local"
  * )
  *
+ * @OA\Server(
+ *     url="http://ec2-54-164-91-182.compute-1.amazonaws.com",
+ *     description="Servidor VPS (Produção)"
+ * )
+ *
  * @OA\Tag(
  *     name="Health",
  *     description="Endpoints de verificação de saúde da API"
