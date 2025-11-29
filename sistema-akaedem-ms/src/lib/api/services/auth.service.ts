@@ -13,6 +13,13 @@ export interface RegisterData {
   password_confirmation: string;
 }
 
+export interface ProfileInfo {
+  is_complete: boolean;
+  completion_percentage: number;
+  missing_fields: string[];
+  message?: string;
+}
+
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
@@ -25,6 +32,7 @@ export interface AuthResponse {
     email_verified?: boolean;
     student_id?: string;
   };
+  profile?: ProfileInfo; // Informações do perfil (apenas para escolas)
 }
 
 export interface User {
@@ -65,6 +73,7 @@ class AuthService {
         refreshToken: authData.refreshToken,
         expiresIn: authData.expiresIn,
         user: authData.user,
+        profile: authData.profile, // Incluir informações de perfil se disponível
       };
     }
 

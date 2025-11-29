@@ -404,7 +404,10 @@ export default function Home() {
       await login({ email, password });
       toast.success("Login realizado com sucesso!");
       
-      // Aguardar verificação do perfil completar
+      // Aguardar um pouco para o contexto atualizar
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Redirecionar baseado no perfil (o useEffect também vai verificar, mas fazemos aqui também para garantir)
       // O redirecionamento será feito pelo useEffect acima baseado no profileComplete
     } catch (error: any) {
       toast.error(error.message || "Erro ao fazer login. Verifique suas credenciais.");

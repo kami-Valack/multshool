@@ -454,6 +454,15 @@ class AuthController extends Controller
      *                 @OA\Property(property="email", type="string"),
      *                 @OA\Property(property="name", type="string"),
      *                 @OA\Property(property="role", type="string", enum={"student", "school"})
+     *             ),
+     *             @OA\Property(
+     *                 property="profile",
+     *                 type="object",
+     *                 description="Informações do perfil (apenas para escolas)",
+     *                 @OA\Property(property="is_complete", type="boolean", example=false),
+     *                 @OA\Property(property="completion_percentage", type="integer", example=30),
+     *                 @OA\Property(property="missing_fields", type="array", @OA\Items(type="string")),
+     *                 @OA\Property(property="message", type="string", example="É obrigatório preencher todos os dados da instituição antes de realizar qualquer atividade.")
      *             )
      *         )
      *     ),
@@ -519,7 +528,8 @@ class AuthController extends Controller
                 'device_info' => $request->header('User-Agent'),
             ]);
 
-            return response()->json([
+            // Preparar resposta base
+            $responseData = [
                 'status' => 'success',
                 'accessToken' => $tokenPair['accessToken'],
                 'refreshToken' => $tokenPair['refreshToken'],
@@ -531,7 +541,60 @@ class AuthController extends Controller
                     'name' => $user->name,
                     'role' => $user->role,
                 ],
-            ], Response::HTTP_OK);
+            ];
+
+            // Se for escola, verificar perfil completo na API de escola
+            if ($user->role === User::ROLE_SCHOOL) {
+                try {
+                    $schoolApiUrl = env('SCHOOL_API_URL', 'http://localhost:8003');
+                    $schoolApiSecret = env('SCHOOL_API_SECRET', env('API_SECRET', ''));
+                    
+                    if ($schoolApiUrl && $schoolApiSecret) {
+                        // Fazer requisição para verificar perfil completo
+                        $profileCheckResponse = Http::withHeaders([
+                            'Authorization' => 'Bearer ' . $tokenPair['accessToken'],
+                            'X-API-Secret' => $schoolApiSecret,
+                            'Accept' => 'application/json',
+                        ])->timeout(5)->get("{$schoolApiUrl}/api/profile/check-completion");
+
+                        if ($profileCheckResponse->successful()) {
+                            $profileData = $profileCheckResponse->json();
+                            
+                            // Adicionar informações de perfil na resposta
+                            $responseData['profile'] = [
+                                'is_complete' => $profileData['is_complete'] ?? false,
+                                'completion_percentage' => $profileData['completion_percentage'] ?? 0,
+                                'missing_fields' => $profileData['missing_fields'] ?? [],
+                                'message' => $profileData['message'] ?? null,
+                            ];
+                        } else {
+                            // Se não conseguir verificar, assumir incompleto
+                            $responseData['profile'] = [
+                                'is_complete' => false,
+                                'completion_percentage' => 0,
+                                'missing_fields' => [],
+                                'message' => 'Não foi possível verificar o perfil. Por favor, complete seu perfil.',
+                            ];
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Em caso de erro, logar mas não falhar o login
+                    \Log::warning('Erro ao verificar perfil completo no login', [
+                        'user_id' => $user->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                    
+                    // Assumir perfil incompleto em caso de erro
+                    $responseData['profile'] = [
+                        'is_complete' => false,
+                        'completion_percentage' => 0,
+                        'missing_fields' => [],
+                        'message' => 'Não foi possível verificar o perfil. Por favor, complete seu perfil.',
+                    ];
+                }
+            }
+
+            return response()->json($responseData, Response::HTTP_OK);
         } catch (\Exception $e) {
             \Log::error('Erro ao fazer login', [
                 'error' => $e->getMessage(),

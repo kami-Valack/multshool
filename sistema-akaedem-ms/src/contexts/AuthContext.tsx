@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { authService, User, LoginCredentials } from '@/lib/api/services/auth.service';
+import { authService, User, LoginCredentials, ProfileInfo } from '@/lib/api/services/auth.service';
 import { profileService, ProfileCompletionStatus } from '@/lib/api/services/profile.service';
 
 interface AuthContextType {
@@ -106,10 +106,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = await authService.getMe();
       setUser(userData);
       
-      // Se for escola, verificar perfil completo IMEDIATAMENTE após login
+      // Se for escola, usar informações de perfil da resposta do login
       if (userData.role === 'school') {
-        // Passar userData diretamente para garantir que a verificação use os dados corretos
-        await checkProfileCompletion(userData);
+        // Se a resposta do login já contém informações de perfil, usar diretamente
+        if (response.profile) {
+          const profileInfo = response.profile;
+          setProfileComplete(profileInfo.is_complete);
+          setProfileStatus({
+            is_complete: profileInfo.is_complete,
+            missing_fields: profileInfo.missing_fields || [],
+            completion_percentage: profileInfo.completion_percentage || 0,
+            message: profileInfo.message || 'Perfil incompleto',
+          });
+        } else {
+          // Se não tiver na resposta, verificar manualmente (fallback)
+          await checkProfileCompletion(userData);
+        }
       } else {
         setProfileComplete(true); // Não é escola, não precisa verificar
       }
