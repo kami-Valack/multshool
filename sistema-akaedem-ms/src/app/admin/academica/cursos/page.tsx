@@ -49,9 +49,12 @@ import { toast } from "sonner";
 interface CursoDisplay {
   id: string;
   nome: string;
-  codigo: string;
+  codigo?: string;
   duracao: number; // em semestres
   duracaoMeses: number; // em meses
+  education_level?: 'medio' | 'superior';
+  class_level?: number; // 10, 11, 12, 13 para ensino médio
+  year_level?: number; // Ano para ensino superior
   grau: string;
   coordenador: string;
   coordenadorNome: string;
@@ -60,7 +63,10 @@ interface CursoDisplay {
   subjects?: CourseSubject[];
   description?: string;
   monthly_tuition?: number;
+  price?: number;
+  faculty?: string;
   image?: string;
+  is_active?: boolean;
 }
 
 export default function Academica() {
@@ -82,11 +88,18 @@ export default function Academica() {
     codigo: '',
     duracao: 6,
     duracaoMeses: 36,
+    education_level: 'superior',
+    class_level: undefined,
+    year_level: 1,
     grau: '',
     coordenador: '',
     coordenadorNome: '',
     estado: 'Ativo',
-    disciplinas: []
+    disciplinas: [],
+    monthly_tuition: 0,
+    price: 0,
+    faculty: '',
+    is_active: true,
   });
 
   // Carregar disciplinas de um curso
@@ -112,21 +125,35 @@ export default function Academica() {
     // Garantir que subjects seja sempre um array
     const subjects = Array.isArray(subjectsMap[course.id]) ? subjectsMap[course.id] : [];
     
+    // Determinar grau baseado no education_level
+    let grau = 'Não definido';
+    if (course.education_level === 'medio') {
+      grau = `Ensino Médio - Classe ${course.class_level || ''}`;
+    } else if (course.education_level === 'superior') {
+      grau = `Ensino Superior - ${course.year_level || ''}º Ano`;
+    }
+    
     return {
       id: course.id,
       nome: course.name,
-      codigo: course.id.substring(0, 8).toUpperCase(), // Usa parte do ID como código
+      codigo: course.code || course.id.substring(0, 8).toUpperCase(),
       duracao: duracaoSemestres,
       duracaoMeses: duracaoMeses,
-      grau: 'Licenciatura', // Valor padrão, não existe na API
+      education_level: course.education_level,
+      class_level: course.class_level,
+      year_level: course.year_level,
+      grau: grau,
       coordenador: '',
-      coordenadorNome: 'Não definido', // Valor padrão
-      estado: 'Ativo', // Valor padrão
+      coordenadorNome: 'Não definido',
+      estado: course.is_active ? 'Ativo' : 'Inativo',
       disciplinas: subjects.map(s => s.id),
       subjects: subjects,
       description: course.description,
       monthly_tuition: course.monthly_tuition,
-      image: course.image,
+      price: course.price,
+      faculty: course.faculty,
+      image: course.image || course.image_path,
+      is_active: course.is_active,
     };
   };
 
@@ -135,6 +162,8 @@ export default function Academica() {
     : [];
 
   // Funções
+  const [saving, setSaving] = useState(false);
+
   const handleCreateCurso = () => {
     setIsEditing(false);
     setFormData({
@@ -143,11 +172,18 @@ export default function Academica() {
       codigo: '',
       duracao: 6,
       duracaoMeses: 36,
+      education_level: 'superior',
+      class_level: undefined,
+      year_level: 1,
       grau: '',
       coordenador: '',
       coordenadorNome: '',
       estado: 'Ativo',
-      disciplinas: []
+      disciplinas: [],
+      monthly_tuition: 0,
+      price: 0,
+      faculty: '',
+      is_active: true,
     });
     setIsSheetOpen(true);
   };
@@ -162,21 +198,93 @@ export default function Academica() {
     setIsSheetOpen(true);
   };
 
-  const handleSaveCurso = () => {
+  const handleSaveCurso = async () => {
     if (!formData.nome) {
       toast.error('Por favor, preencha o nome do curso');
       return;
     }
 
-    // TODO: Implementar criação/edição via API
-    toast.info('Funcionalidade de criação/edição será implementada em breve');
-    setIsSheetOpen(false);
+    if (!formData.education_level) {
+      toast.error('Por favor, selecione o nível de ensino');
+      return;
+    }
+
+    if (formData.education_level === 'medio' && !formData.class_level) {
+      toast.error('Por favor, selecione a classe para ensino médio');
+      return;
+    }
+
+    if (formData.education_level === 'superior' && !formData.year_level) {
+      toast.error('Por favor, informe o ano para ensino superior');
+      return;
+    }
+
+    if (!formData.monthly_tuition || formData.monthly_tuition <= 0) {
+      toast.error('Por favor, informe a propina mensal');
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      const courseData: any = {
+        name: formData.nome,
+        description: formData.description || undefined,
+        code: formData.codigo || undefined,
+        education_level: formData.education_level,
+        monthly_tuition: formData.monthly_tuition,
+        is_active: formData.estado === 'Ativo',
+        faculty: formData.faculty || undefined,
+        price: formData.price || undefined,
+      };
+
+      // Campos específicos por nível de ensino
+      if (formData.education_level === 'medio') {
+        courseData.class_level = formData.class_level;
+        // duration_months será sempre 9 para ensino médio (definido no backend)
+      } else if (formData.education_level === 'superior') {
+        courseData.year_level = formData.year_level;
+        courseData.duration_months = formData.duracaoMeses;
+      }
+
+      if (isEditing && formData.id) {
+        // Atualizar curso existente
+        await courseService.updateCourse(formData.id, courseData);
+        toast.success('Curso atualizado com sucesso!');
+      } else {
+        // Criar novo curso
+        const newCourse = await courseService.createCourse(courseData);
+        toast.success('Curso criado com sucesso!');
+        
+        if (newCourse.tuition_info) {
+          toast.info(
+            `Propina total: ${newCourse.tuition_info.total_tuition.toLocaleString('pt-AO', { style: 'currency', currency: 'AOA' })}`
+          );
+        }
+      }
+
+      // Recarregar lista de cursos
+      await fetchCourses();
+      setIsSheetOpen(false);
+    } catch (error: any) {
+      console.error('Erro ao salvar curso:', error);
+      toast.error(error.message || 'Erro ao salvar curso. Tente novamente.');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDeleteCurso = (id: string) => {
-    // TODO: Implementar exclusão via API
-    toast.info('Funcionalidade de exclusão será implementada em breve');
-    setCursoToDelete(null);
+  const handleDeleteCurso = async (id: string) => {
+    try {
+      await courseService.deleteCourse(id);
+      toast.success('Curso eliminado com sucesso!');
+      await fetchCourses();
+      setCursoToDelete(null);
+    } catch (error: any) {
+      console.error('Erro ao eliminar curso:', error);
+      toast.error(error.message || 'Erro ao eliminar curso. Tente novamente.');
+      setCursoToDelete(null);
+    }
   };
 
   // Filtros
@@ -286,7 +394,7 @@ export default function Academica() {
                             <div className="flex-1">
                               <CardTitle className="text-lg">{curso.nome}</CardTitle>
                               <CardDescription className="mt-1">
-                                Código: {curso.codigo}
+                                Código: {curso.codigo || 'N/A'}
                               </CardDescription>
                             </div>
                             <Badge variant={curso.estado === 'Ativo' ? 'default' : 'secondary'}>
@@ -303,9 +411,16 @@ export default function Academica() {
                             )}
                             <div className="flex items-center gap-2 text-sm">
                               <BookOpen className="h-4 w-4 text-gray-500" />
-                              <span className="text-gray-600">Grau:</span>
+                              <span className="text-gray-600">Nível:</span>
                               <span className="font-medium">{curso.grau}</span>
                             </div>
+                            {curso.faculty && (
+                              <div className="flex items-center gap-2 text-sm">
+                                <BookOpen className="h-4 w-4 text-gray-500" />
+                                <span className="text-gray-600">Faculdade:</span>
+                                <span className="font-medium">{curso.faculty}</span>
+                              </div>
+                            )}
                             <div className="flex items-center gap-2 text-sm">
                               <Users className="h-4 w-4 text-gray-500" />
                               <span className="text-gray-600">Coordenador:</span>
@@ -408,60 +523,152 @@ export default function Academica() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="description">Descrição</Label>
+              <textarea
+                id="description"
+                value={formData.description || ''}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Descrição do curso..."
+                className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="codigo">Código</Label>
               <Input
                 id="codigo"
-                value={formData.codigo}
+                value={formData.codigo || ''}
                 onChange={(e) => setFormData({ ...formData, codigo: e.target.value })}
                 placeholder="Ex: EI-001"
-                disabled={isEditing}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="duracao">Duração (meses) *</Label>
-              <Input
-                id="duracao"
-                type="number"
-                min="1"
-                value={formData.duracaoMeses}
-                onChange={(e) => {
-                  const meses = parseInt(e.target.value) || 0;
+              <Label htmlFor="education_level">Nível de Ensino *</Label>
+              <Select
+                value={formData.education_level || ''}
+                onValueChange={(value: 'medio' | 'superior') => {
                   setFormData({ 
                     ...formData, 
-                    duracaoMeses: meses,
-                    duracao: Math.ceil(meses / 6)
+                    education_level: value,
+                    class_level: value === 'medio' ? 10 : undefined,
+                    year_level: value === 'superior' ? 1 : undefined,
+                    duracaoMeses: value === 'medio' ? 9 : formData.duracaoMeses,
+                    duracao: value === 'medio' ? 2 : Math.ceil((formData.duracaoMeses || 36) / 6)
                   });
                 }}
+              >
+                <SelectTrigger id="education_level">
+                  <SelectValue placeholder="Selecione o nível de ensino" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="medio">Ensino Médio</SelectItem>
+                  <SelectItem value="superior">Ensino Superior</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {formData.education_level === 'medio' && (
+              <div className="space-y-2">
+                <Label htmlFor="class_level">Classe *</Label>
+                <Select
+                  value={formData.class_level?.toString() || ''}
+                  onValueChange={(value) => setFormData({ ...formData, class_level: parseInt(value) })}
+                >
+                  <SelectTrigger id="class_level">
+                    <SelectValue placeholder="Selecione a classe" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10ª Classe</SelectItem>
+                    <SelectItem value="11">11ª Classe</SelectItem>
+                    <SelectItem value="12">12ª Classe</SelectItem>
+                    <SelectItem value="13">13ª Classe</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-gray-500">
+                  Duração fixa: 9 meses (definido automaticamente)
+                </p>
+              </div>
+            )}
+
+            {formData.education_level === 'superior' && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="year_level">Ano *</Label>
+                  <Input
+                    id="year_level"
+                    type="number"
+                    min="1"
+                    value={formData.year_level || ''}
+                    onChange={(e) => setFormData({ ...formData, year_level: parseInt(e.target.value) || 1 })}
+                    placeholder="Ex: 1"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="duracao">Duração (meses) *</Label>
+                  <Input
+                    id="duracao"
+                    type="number"
+                    min="1"
+                    value={formData.duracaoMeses}
+                    onChange={(e) => {
+                      const meses = parseInt(e.target.value) || 0;
+                      setFormData({ 
+                        ...formData, 
+                        duracaoMeses: meses,
+                        duracao: Math.ceil(meses / 6)
+                      });
+                    }}
+                  />
+                  <p className="text-sm text-gray-500">
+                    {formData.duracaoMeses} meses = {formData.duracao} semestres
+                  </p>
+                </div>
+              </>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="faculty">Faculdade/Departamento</Label>
+              <Input
+                id="faculty"
+                value={formData.faculty || ''}
+                onChange={(e) => setFormData({ ...formData, faculty: e.target.value })}
+                placeholder="Ex: Faculdade de Engenharia"
               />
-              <p className="text-sm text-gray-500">
-                {formData.duracaoMeses} meses = {formData.duracao} semestres
-              </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="grau">Grau</Label>
-              <Select
-                value={formData.grau}
-                onValueChange={(value) => setFormData({ ...formData, grau: value })}
-              >
-                <SelectTrigger id="grau">
-                  <SelectValue placeholder="Selecione o grau" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Licenciatura">Licenciatura</SelectItem>
-                  <SelectItem value="Técnico">Técnico</SelectItem>
-                  <SelectItem value="Mestrado">Mestrado</SelectItem>
-                  <SelectItem value="Doutoramento">Doutoramento</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="monthly_tuition">Propina Mensal (AOA) *</Label>
+              <Input
+                id="monthly_tuition"
+                type="number"
+                min="0"
+                step="0.01"
+                value={formData.monthly_tuition || ''}
+                onChange={(e) => setFormData({ ...formData, monthly_tuition: parseFloat(e.target.value) || 0 })}
+                placeholder="Ex: 50000"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="price">Preço Total (AOA) - Opcional</Label>
+              <Input
+                id="price"
+                type="number"
+                min="0"
+                step="0.01"
+                value={formData.price || ''}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || undefined })}
+                placeholder="Ex: 500000"
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="estado">Estado</Label>
               <Select
                 value={formData.estado}
-                onValueChange={(value: 'Ativo' | 'Inativo') => setFormData({ ...formData, estado: value })}
+                onValueChange={(value: 'Ativo' | 'Inativo') => setFormData({ ...formData, estado: value, is_active: value === 'Ativo' })}
               >
                 <SelectTrigger id="estado">
                   <SelectValue />
@@ -497,11 +704,18 @@ export default function Academica() {
           </div>
 
           <SheetFooter>
-            <Button variant="outline" onClick={() => setIsSheetOpen(false)}>
+            <Button variant="outline" onClick={() => setIsSheetOpen(false)} disabled={saving}>
               Cancelar
             </Button>
-            <Button onClick={handleSaveCurso}>
-              {isEditing ? 'Salvar Alterações' : 'Criar Curso'}
+            <Button onClick={handleSaveCurso} disabled={saving}>
+              {saving ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  {isEditing ? 'Salvando...' : 'Criando...'}
+                </>
+              ) : (
+                isEditing ? 'Salvar Alterações' : 'Criar Curso'
+              )}
             </Button>
           </SheetFooter>
         </SheetContent>
