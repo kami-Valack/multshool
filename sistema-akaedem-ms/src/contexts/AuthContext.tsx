@@ -106,10 +106,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await authService.login(credentials);
       console.log('AuthContext.login - Resposta do login:', { 
         hasProfile: !!response.profile, 
-        profile: response.profile 
+        profile: response.profile,
+        user: response.user
       });
       
-      const userData = await authService.getMe();
+      // Usar o user da resposta do login ao invés de chamar getMe() novamente
+      // Isso garante que temos os dados corretos e evita uma requisição extra
+      const userData: User = {
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.email,
+        role: response.user.role,
+        email_verified: response.user.email_verified || false,
+        is_active: true,
+      };
+      
       console.log('AuthContext.login - Dados do usuário:', { role: userData.role });
       setUser(userData);
       
