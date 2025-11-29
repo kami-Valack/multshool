@@ -2,14 +2,18 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authService, User, LoginCredentials } from '@/lib/api/services/auth.service';
+import { profileService, ProfileCompletionStatus } from '@/lib/api/services/profile.service';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
+  profileComplete: boolean | null; // null = não verificado ainda, true/false = verificado
+  profileStatus: ProfileCompletionStatus | null;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  checkProfileCompletion: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -17,6 +21,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
+  const [profileStatus, setProfileStatus] = useState<ProfileCompletionStatus | null>(null);
 
   /**
    * Verifica autenticação ao carregar
@@ -30,6 +36,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (authService.isAuthenticated()) {
         const userData = await authService.getMe();
         setUser(userData);
+        
+        // Se for escola, verificar perfil completo
+        if (userData.role === 'school') {
+          await checkProfileCompletion();
+        }
       }
     } catch (error) {
       console.error('Erro ao verificar autenticação:', error);
@@ -43,11 +54,62 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  /**
+   * Verifica se o perfil está completo (apenas para escolas)
+   */
+  const checkProfileCompletion = async () => {
+    try {
+      if (user?.role !== 'school') {
+        setProfileComplete(true); // Não é escola, não precisa verificar
+        return;
+      }
+
+      const status = await profileService.checkCompletion();
+      setProfileStatus(status);
+      setProfileComplete(status.is_complete);
+    } catch (error: any) {
+      // Se o erro for INCOMPLETE_PROFILE (403), significa que o perfil está incompleto
+      if (error.error_code === 'INCOMPLETE_PROFILE' || error.status === 403) {
+        setProfileComplete(false);
+        // Tentar extrair dados do erro
+        if (error.missing_fields) {
+          setProfileStatus({
+            is_complete: false,
+            missing_fields: error.missing_fields,
+            completion_percentage: 0,
+            message: error.message || 'Perfil incompleto',
+          });
+        } else {
+          // Se não tiver missing_fields no erro, tentar buscar do endpoint
+          try {
+            const status = await profileService.checkCompletion();
+            setProfileStatus(status);
+            setProfileComplete(status.is_complete);
+          } catch {
+            // Se falhar, assumir incompleto
+            setProfileComplete(false);
+          }
+        }
+      } else {
+        console.error('Erro ao verificar perfil:', error);
+        // Em caso de erro, assumir que está incompleto para forçar verificação
+        setProfileComplete(false);
+      }
+    }
+  };
+
   const login = async (credentials: LoginCredentials) => {
     try {
       const response = await authService.login(credentials);
       const userData = await authService.getMe();
       setUser(userData);
+      
+      // Se for escola, verificar perfil completo após login
+      if (userData.role === 'school') {
+        await checkProfileCompletion();
+      } else {
+        setProfileComplete(true); // Não é escola, não precisa verificar
+      }
     } catch (error: any) {
       throw error;
     }
@@ -67,6 +129,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const userData = await authService.getMe();
       setUser(userData);
+      
+      // Se for escola, verificar perfil completo após atualizar
+      if (userData.role === 'school') {
+        await checkProfileCompletion();
+      }
     } catch (error) {
       console.error('Erro ao atualizar dados do usuário:', error);
       throw error;
@@ -79,9 +146,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         loading,
         isAuthenticated: !!user,
+        profileComplete,
+        profileStatus,
         login,
         logout,
         refreshUser,
+        checkProfileCompletion,
       }}
     >
       {children}

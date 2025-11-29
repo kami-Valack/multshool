@@ -11,6 +11,9 @@ export interface ApiError {
   message: string;
   status: number;
   errors?: Record<string, string[]>;
+  error_code?: string;
+  missing_fields?: string[];
+  profile_completion_url?: string;
 }
 
 class ApiClient {
@@ -126,7 +129,20 @@ class ApiClient {
       }
 
       if (!response.ok) {
-        throw await this.handleError(response);
+        const error = await this.handleError(response);
+        
+        // Se for erro de perfil incompleto (403) e estiver no browser, redirecionar
+        if (
+          error.status === 403 && 
+          error.error_code === 'INCOMPLETE_PROFILE' &&
+          typeof window !== 'undefined' &&
+          !window.location.pathname.includes('/completar-perfil')
+        ) {
+          // Redirecionar para página de completar perfil
+          window.location.href = '/admin/completar-perfil';
+        }
+        
+        throw error;
       }
 
       const data = await response.json();
@@ -158,11 +174,25 @@ class ApiClient {
   private async handleError(response: Response): Promise<ApiError> {
     let message = 'Erro ao processar requisição';
     let errors: Record<string, string[]> | undefined;
+    let errorCode: string | undefined;
 
     try {
       const data = await response.json();
       message = data.message || data.error || message;
       errors = data.errors;
+      errorCode = data.error_code; // Capturar error_code para INCOMPLETE_PROFILE
+      
+      // Se for erro de perfil incompleto, incluir informações adicionais
+      if (data.error_code === 'INCOMPLETE_PROFILE') {
+        return {
+          message,
+          status: response.status,
+          errors,
+          error_code: errorCode,
+          missing_fields: data.missing_fields,
+          profile_completion_url: data.profile_completion_url,
+        } as ApiError & { error_code?: string; missing_fields?: string[]; profile_completion_url?: string };
+      }
     } catch {
       message = response.statusText || message;
     }
@@ -171,7 +201,8 @@ class ApiClient {
       message,
       status: response.status,
       errors,
-    };
+      error_code: errorCode,
+    } as ApiError & { error_code?: string };
   }
 
   /**

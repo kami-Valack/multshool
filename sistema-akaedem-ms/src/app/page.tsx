@@ -369,14 +369,19 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user, profileComplete } = useAuth();
 
   // Redireciona se já estiver autenticado
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push("/admin");
+      // Se for escola e perfil não estiver completo, redirecionar para completar perfil
+      if (user?.role === 'school' && profileComplete === false) {
+        router.push("/admin/completar-perfil");
+      } else {
+        router.push("/admin");
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, profileComplete, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -390,7 +395,11 @@ export default function Home() {
     try {
       await login({ email, password });
       toast.success("Login realizado com sucesso!");
-      router.push("/admin");
+      
+      // Aguardar um pouco para o contexto atualizar o perfil
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // O redirecionamento será feito pelo useEffect acima
     } catch (error: any) {
       toast.error(error.message || "Erro ao fazer login. Verifique suas credenciais.");
     } finally {
