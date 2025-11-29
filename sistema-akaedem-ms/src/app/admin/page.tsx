@@ -9,7 +9,9 @@ import DynamicTable from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
 import BG from "@/assets/backgrounds/bg.png";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { UserData } from "@/mocks/dashboard";
+import { useAuth } from "@/hooks/useAuth";
+import { profileService } from "@/lib/api/services/profile.service";
+import { useEffect, useState } from "react";
 
 import { Data } from "@/mocks/dashboard";
 import NavbarH from "@/components/ui/heroui/navbar";
@@ -79,6 +81,26 @@ const mockData = [
 ];
 
 export default function Page() {
+  const { user } = useAuth();
+  const [profileData, setProfileData] = useState<any>(null);
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (user?.role === 'school') {
+        try {
+          const profile = await profileService.getProfile();
+          setProfileData(profile);
+        } catch (error) {
+          console.error('Erro ao carregar perfil:', error);
+        }
+      }
+    };
+
+    loadProfile();
+  }, [user]);
+
+  const institutionName = profileData?.name || user?.name || 'Instituição';
+
   return (
     <SidebarProvider
       style={
@@ -109,7 +131,7 @@ export default function Page() {
                 <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40 z-10" />
                 <div className="relative z-20 h-full flex flex-col justify-center px-6 md:px-10">
                   <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                    Bem-vindo de volta, {UserData.name}
+                    Bem-vindo de volta, {institutionName}
                   </h1>
                   <span className="text-lg text-white/90">
                     {new Date().toLocaleDateString("pt-PT", {

@@ -25,7 +25,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { UserData } from "@/mocks/dashboard";
+import { useAuth } from "@/hooks/useAuth";
 
 // This is sample data.
 const data = {
@@ -212,6 +212,19 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuth();
+  
+  // Usar dados reais do usuário ou fallback
+  const userData = user ? {
+    name: user.name || 'Usuário',
+    email: user.email || '',
+    avatar: user.school?.logo_path || '',
+  } : {
+    name: 'Usuário',
+    email: '',
+    avatar: '',
+  };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -222,7 +235,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects atalhos={data.atalhos} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={UserData} />
+        <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { getInitials } from "@/lib/getInitials";
+import { useAuth } from "@/hooks/useAuth";
 
 export function NavUser({
   user,
@@ -37,6 +38,15 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -101,7 +111,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOutIcon />
               Terminar sessão
             </DropdownMenuItem>

@@ -57,9 +57,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   /**
    * Verifica se o perfil está completo (apenas para escolas)
    */
-  const checkProfileCompletion = async () => {
+  const checkProfileCompletion = async (userToCheck?: User | null) => {
     try {
-      if (user?.role !== 'school') {
+      const userToVerify = userToCheck || user;
+      
+      if (userToVerify?.role !== 'school') {
         setProfileComplete(true); // Não é escola, não precisa verificar
         return;
       }
@@ -104,9 +106,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userData = await authService.getMe();
       setUser(userData);
       
-      // Se for escola, verificar perfil completo após login
+      // Se for escola, verificar perfil completo IMEDIATAMENTE após login
       if (userData.role === 'school') {
-        await checkProfileCompletion();
+        // Passar userData diretamente para garantir que a verificação use os dados corretos
+        await checkProfileCompletion(userData);
       } else {
         setProfileComplete(true); // Não é escola, não precisa verificar
       }
@@ -118,10 +121,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     try {
       await authService.logout();
+      // Limpar estados
+      setUser(null);
+      setProfileComplete(null);
+      setProfileStatus(null);
+      // Redirecionar para login
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
-    } finally {
+      // Mesmo com erro, limpar estados e redirecionar
       setUser(null);
+      setProfileComplete(null);
+      setProfileStatus(null);
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
     }
   };
 

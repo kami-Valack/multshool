@@ -373,13 +373,21 @@ export default function Home() {
 
   // Redireciona se já estiver autenticado
   React.useEffect(() => {
-    if (isAuthenticated) {
-      // Se for escola e perfil não estiver completo, redirecionar para completar perfil
-      if (user?.role === 'school' && profileComplete === false) {
-        router.push("/admin/completar-perfil");
-      } else {
-        router.push("/admin");
+    if (isAuthenticated && user) {
+      // Se for escola, verificar perfil antes de redirecionar
+      if (user.role === 'school') {
+        // Se profileComplete ainda não foi verificado (null), aguardar
+        if (profileComplete === null) {
+          return; // Aguardar verificação
+        }
+        // Se perfil não estiver completo, redirecionar para completar perfil
+        if (profileComplete === false) {
+          router.push("/admin/completar-perfil");
+          return;
+        }
       }
+      // Se perfil completo ou não é escola, ir para admin
+      router.push("/admin");
     }
   }, [isAuthenticated, user, profileComplete, router]);
 
@@ -396,10 +404,8 @@ export default function Home() {
       await login({ email, password });
       toast.success("Login realizado com sucesso!");
       
-      // Aguardar um pouco para o contexto atualizar o perfil
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // O redirecionamento será feito pelo useEffect acima
+      // Aguardar verificação do perfil completar
+      // O redirecionamento será feito pelo useEffect acima baseado no profileComplete
     } catch (error: any) {
       toast.error(error.message || "Erro ao fazer login. Verifique suas credenciais.");
     } finally {
