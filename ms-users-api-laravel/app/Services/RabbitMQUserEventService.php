@@ -202,6 +202,7 @@ class RabbitMQUserEventService
                     'email' => $user->email,
                     'name' => $user->name,
                     'role' => $user->role,
+                    'institution_type' => $user->institution_type, // 'medio' ou 'superior'
                     'emailVerified' => $user->email_verified,
                     'isActive' => $user->is_active,
                     'createdAt' => $user->created_at->toIso8601String(),

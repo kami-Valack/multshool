@@ -17,6 +17,7 @@ class RegisterSchoolRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
+            'institution_type' => ['required', 'string', 'in:medio,superior'],
         ];
     }
 
@@ -29,6 +30,8 @@ class RegisterSchoolRequest extends FormRequest
             'email.unique' => 'Este email já está em uso.',
             'password.required' => 'A senha é obrigatória.',
             'password.min' => 'A senha deve ter pelo menos 8 caracteres.',
+            'institution_type.required' => 'O tipo de instituição é obrigatório.',
+            'institution_type.in' => 'O tipo de instituição deve ser "medio" ou "superior".',
         ];
     }
 }

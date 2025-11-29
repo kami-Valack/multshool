@@ -24,9 +24,12 @@ Este documento descreve todas as regras de negócio aplicadas no sistema de gest
   - Email deve ser único no sistema
   - Senha deve ter no mínimo 8 caracteres
   - Role é sempre `school` (não pode ser alterada)
+  - **`institution_type` é obrigatório** e deve ser `'medio'` ou `'superior'`
+    - `'medio'`: Para escolas de ensino médio
+    - `'superior'`: Para instituições de ensino superior
   - Email não é verificado automaticamente (exceto se `AUTO_VERIFY_EMAILS=true`)
   - Usuário é criado com `is_active = true`
-  - Ao ser criada, a escola é replicada para `ms-shocoll-api` com `status = 'pending'`
+  - Ao ser criada, a escola é replicada para `ms-shocoll-api` com `status = 'pending'` e `institution_type` preservado
   - Escola **NÃO** pode acessar o sistema até ser aprovada por um administrador
 
 #### 1.1.3. Docentes

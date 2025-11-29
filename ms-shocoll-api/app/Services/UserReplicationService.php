@@ -54,6 +54,7 @@ class UserReplicationService
                     'name' => $userData['name'] ?? $user->name,
                     'email' => $userData['email'] ?? $user->email,
                     'role' => $userData['role'] ?? $user->role,
+                    'institution_type' => $userData['institution_type'] ?? $user->institution_type, // 'medio' ou 'superior'
                     'email_verified' => $userData['emailVerified'] ?? $user->email_verified,
                     'is_active' => $userData['isActive'] ?? $user->is_active,
                     'email_verified_at' => isset($userData['emailVerified']) && $userData['emailVerified'] 
@@ -75,6 +76,7 @@ class UserReplicationService
                     'name' => $userData['name'] ?? 'Unknown',
                     'email' => $userData['email'] ?? '',
                     'role' => $userRole,
+                    'institution_type' => $userData['institution_type'] ?? null, // 'medio' ou 'superior' (apenas para escolas)
                     'email_verified' => $userData['emailVerified'] ?? false,
                     'is_active' => $userData['isActive'] ?? true,
                     'status' => $userRole === User::ROLE_SCHOOL ? User::STATUS_PENDING : null, // Apenas escolas começam como pending

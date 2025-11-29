@@ -179,10 +179,11 @@ class AuthController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"name", "email", "password"},
+     *             required={"name", "email", "password", "institution_type"},
      *             @OA\Property(property="name", type="string", example="Escola Exemplo", description="Nome da escola"),
      *             @OA\Property(property="email", type="string", format="email", example="escola@example.com", description="Email da escola"),
-     *             @OA\Property(property="password", type="string", format="password", example="senha123456", description="Senha (mínimo 8 caracteres)")
+     *             @OA\Property(property="password", type="string", format="password", example="senha123456", description="Senha (mínimo 8 caracteres)"),
+     *             @OA\Property(property="institution_type", type="string", enum={"medio", "superior"}, example="medio", description="Tipo de instituição: 'medio' para ensino médio ou 'superior' para ensino superior")
      *         )
      *     ),
      *     @OA\Response(
@@ -229,6 +230,7 @@ class AuthController extends Controller
                 'email' => strtolower(trim($request->email)),
                 'password' => Hash::make($request->password),
                 'role' => User::ROLE_SCHOOL,
+                'institution_type' => $request->institution_type, // 'medio' ou 'superior'
                 'email_verified' => $autoVerify, // Verificado automaticamente se AUTO_VERIFY_EMAILS=true
                 'is_active' => true,
             ]);

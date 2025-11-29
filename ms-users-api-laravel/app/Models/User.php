@@ -32,6 +32,7 @@ class User extends Authenticatable implements JWTSubject
         'id_card',
         'email_verified',
         'is_active',
+        'institution_type',
     ];
 
     public $incrementing = false;
