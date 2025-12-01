@@ -162,14 +162,27 @@ class StudentService {
     return [];
   }
 
+  // Mapear tipos internos para nomes de campos da API
+  private mapDocumentTypeToApiField(type: string): string {
+    const mapping: { [key: string]: string } = {
+      'id_document': 'bi',
+      'photo': 'foto_tipo',
+      'grades_declaration': 'habilitacao_literaria',
+      'bi': 'bi',
+      'foto_tipo': 'foto_tipo',
+      'habilitacao_literaria': 'habilitacao_literaria',
+    };
+    return mapping[type] || type;
+  }
+
   async uploadDocument(
     file: File,
     type: string,
     onProgress?: (progress: number) => void
   ): Promise<Document> {
+    const apiFieldName = this.mapDocumentTypeToApiField(type);
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('type', type);
+    formData.append(apiFieldName, file);
 
     const response = await studentApiClient.upload<ApiResponse<Document>>(
       '/documents/upload',

@@ -152,11 +152,11 @@ export default function Welcome() {
   const [studentNumber, setStudentNumber] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const router = useRouter();
   const { showToast, ToastElement } = useToast();
 
-  // Verificar se há um parâmetro de redirecionamento na URL
+  // Verificar se há um parâmetro de redirecionamento na URL ou sessionStorage
   const getRedirectUrl = () => {
     if (typeof window !== 'undefined') {
       // Primeiro, verificar o parâmetro da URL
@@ -164,13 +164,23 @@ export default function Welcome() {
       const redirectParam = urlParams.get('redirect');
       
       if (redirectParam) {
+        // Salvar no sessionStorage também para garantir
+        sessionStorage.setItem('redirectAfterLogin', decodeURIComponent(redirectParam));
         return decodeURIComponent(redirectParam);
+      }
+      
+      // Verificar redirectAfterRegister primeiro (usuário acabou de se registrar)
+      const storedRegisterRedirect = sessionStorage.getItem('redirectAfterRegister');
+      if (storedRegisterRedirect) {
+        // Mover para redirectAfterLogin para manter após o login
+        sessionStorage.removeItem('redirectAfterRegister');
+        sessionStorage.setItem('redirectAfterLogin', storedRegisterRedirect);
+        return storedRegisterRedirect;
       }
       
       // Se não houver na URL, verificar no sessionStorage
       const storedRedirect = sessionStorage.getItem('redirectAfterLogin');
       if (storedRedirect) {
-        sessionStorage.removeItem('redirectAfterLogin');
         return storedRedirect;
       }
     }
@@ -190,9 +200,47 @@ export default function Welcome() {
       await login(studentNumber, password);
       showToast("Login realizado com sucesso!", "success");
       
+      // Aguardar um pouco para o contexto atualizar o usuário
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Verificar se precisa completar documentos (primeiro acesso após registro)
+      if (typeof window !== 'undefined') {
+        const needsDocuments = sessionStorage.getItem('needsDocuments');
+        
+        // Buscar perfil atualizado para verificar documentos
+        try {
+          const { studentService } = await import('@/services/studentService');
+          const profile = await studentService.getProfile();
+          
+          // Se precisa de documentos OU se o usuário não tem todos os documentos
+          if (needsDocuments === 'true' || !profile.has_all_documents) {
+            // Limpar flag
+            sessionStorage.removeItem('needsDocuments');
+            // Redirecionar para documentos (usar a rota que existe)
+            setTimeout(() => {
+              router.push("/candidato/documentos");
+            }, 500);
+            return;
+          }
+        } catch (error) {
+          console.error("Erro ao verificar perfil:", error);
+          // Continuar com o fluxo normal se houver erro
+        }
+      }
+      
       // Redirecionar para a URL salva ou dashboard
       const redirectUrl = getRedirectUrl();
-      router.push(redirectUrl);
+      
+      // Limpar o sessionStorage após obter a URL
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('redirectAfterLogin');
+        sessionStorage.removeItem('redirectAfterRegister');
+      }
+      
+      // Pequeno delay para garantir que o toast seja exibido
+      setTimeout(() => {
+        router.push(redirectUrl);
+      }, 500);
     } catch (error: any) {
       showToast(
         error.message || "Erro ao fazer login. Verifique suas credenciais.",

@@ -70,10 +70,15 @@ class AuthService {
         userRole: authData.user?.role
       });
       
-      // Salva tokens no localStorage
+      // Salva tokens e role no localStorage para acesso imediato
       if (typeof window !== 'undefined') {
         localStorage.setItem('auth_token', authData.accessToken);
         localStorage.setItem('refresh_token', authData.refreshToken);
+        // Salvar role para acesso imediato sem aguardar carregamento do user
+        if (authData.user?.role) {
+          localStorage.setItem('user_role', authData.user.role);
+          console.log('[AuthService] Role salva no localStorage:', authData.user.role);
+        }
       }
       
       const result = {
@@ -115,10 +120,11 @@ class AuthService {
       }
     }
 
-    // Limpa tokens do localStorage
+    // Limpa tokens e role do localStorage
     if (typeof window !== 'undefined') {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_role');
     }
   }
 
@@ -129,7 +135,15 @@ class AuthService {
     const response = await usersApiClient.get<User>(API_ENDPOINTS.AUTH.ME);
 
     if (response.status === 'success' && response.data) {
-      return response.data;
+      const userData = response.data;
+      
+      // Salvar role no localStorage para acesso imediato
+      if (typeof window !== 'undefined' && userData.role) {
+        localStorage.setItem('user_role', userData.role);
+        console.log('[AuthService] Role atualizada no localStorage:', userData.role);
+      }
+      
+      return userData;
     }
 
     throw new Error(response.message || 'Erro ao obter dados do usuário');

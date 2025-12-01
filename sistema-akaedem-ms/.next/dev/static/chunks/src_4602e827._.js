@@ -2387,6 +2387,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$a
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/dropdown-menu.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/sidebar.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$getInitials$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/getInitials.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useAuth$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/hooks/useAuth.ts [app-client] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/contexts/AuthContext.tsx [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -2396,437 +2398,469 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
 function NavUser(t0) {
     _s();
-    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(49);
-    if ($[0] !== "2d785142f4aa3639af8ad23fe5981c9cc13fc310cd2353479300d641ce54ed66") {
-        for(let $i = 0; $i < 49; $i += 1){
+    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(54);
+    if ($[0] !== "67015cd345e62d8474e6a81df201a0b57098cc04c1fa257970d1ba61af1cb1be") {
+        for(let $i = 0; $i < 54; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "2d785142f4aa3639af8ad23fe5981c9cc13fc310cd2353479300d641ce54ed66";
+        $[0] = "67015cd345e62d8474e6a81df201a0b57098cc04c1fa257970d1ba61af1cb1be";
     }
     const { user } = t0;
     const { isMobile } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSidebar"])();
+    const { logout } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     let t1;
-    if ($[1] !== user.avatar || $[2] !== user.name) {
-        t1 = user.avatar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarImage"], {
+    if ($[1] !== logout) {
+        t1 = ({
+            "NavUser[handleLogout]": async ()=>{
+                ;
+                try {
+                    await logout();
+                } catch (t2) {
+                    const error = t2;
+                    console.error("Erro ao fazer logout:", error);
+                }
+            }
+        })["NavUser[handleLogout]"];
+        $[1] = logout;
+        $[2] = t1;
+    } else {
+        t1 = $[2];
+    }
+    const handleLogout = t1;
+    let t2;
+    if ($[3] !== user.avatar || $[4] !== user.name) {
+        t2 = user.avatar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarImage"], {
             src: user.avatar,
             alt: user.name
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 25,
+            lineNumber: 48,
             columnNumber: 25
         }, this);
-        $[1] = user.avatar;
-        $[2] = user.name;
-        $[3] = t1;
-    } else {
-        t1 = $[3];
-    }
-    let t2;
-    if ($[4] !== user.name) {
-        t2 = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$getInitials$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getInitials"])(user.name);
+        $[3] = user.avatar;
         $[4] = user.name;
         $[5] = t2;
     } else {
         t2 = $[5];
     }
     let t3;
-    if ($[6] !== t2) {
-        t3 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
-            className: "rounded-lg",
-            delayMs: 0,
-            children: t2
-        }, void 0, false, {
-            fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 42,
-            columnNumber: 10
-        }, this);
-        $[6] = t2;
+    if ($[6] !== user.name) {
+        t3 = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$getInitials$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getInitials"])(user.name);
+        $[6] = user.name;
         $[7] = t3;
     } else {
         t3 = $[7];
     }
     let t4;
-    if ($[8] !== t1 || $[9] !== t3) {
-        t4 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Avatar"], {
+    if ($[8] !== t3) {
+        t4 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
+            className: "rounded-lg",
+            delayMs: 0,
+            children: t3
+        }, void 0, false, {
+            fileName: "[project]/src/components/nav-user.tsx",
+            lineNumber: 65,
+            columnNumber: 10
+        }, this);
+        $[8] = t3;
+        $[9] = t4;
+    } else {
+        t4 = $[9];
+    }
+    let t5;
+    if ($[10] !== t2 || $[11] !== t4) {
+        t5 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Avatar"], {
             className: "h-8 w-8 rounded-lg grayscale",
             children: [
-                t1,
-                t3
+                t2,
+                t4
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 50,
+            lineNumber: 73,
             columnNumber: 10
         }, this);
-        $[8] = t1;
-        $[9] = t3;
-        $[10] = t4;
-    } else {
-        t4 = $[10];
-    }
-    let t5;
-    if ($[11] !== user.name) {
-        t5 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-            className: "truncate font-medium",
-            children: user.name
-        }, void 0, false, {
-            fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 59,
-            columnNumber: 10
-        }, this);
-        $[11] = user.name;
+        $[10] = t2;
+        $[11] = t4;
         $[12] = t5;
     } else {
         t5 = $[12];
     }
     let t6;
-    if ($[13] !== user.email) {
+    if ($[13] !== user.name) {
         t6 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-            className: "truncate text-xs text-muted-foreground",
-            children: user.email
+            className: "truncate font-medium",
+            children: user.name
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 67,
+            lineNumber: 82,
             columnNumber: 10
         }, this);
-        $[13] = user.email;
+        $[13] = user.name;
         $[14] = t6;
     } else {
         t6 = $[14];
     }
     let t7;
-    if ($[15] !== t5 || $[16] !== t6) {
-        t7 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+    if ($[15] !== user.email) {
+        t7 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            className: "truncate text-xs text-muted-foreground",
+            children: user.email
+        }, void 0, false, {
+            fileName: "[project]/src/components/nav-user.tsx",
+            lineNumber: 90,
+            columnNumber: 10
+        }, this);
+        $[15] = user.email;
+        $[16] = t7;
+    } else {
+        t7 = $[16];
+    }
+    let t8;
+    if ($[17] !== t6 || $[18] !== t7) {
+        t8 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "grid flex-1 text-left text-sm leading-tight",
             children: [
-                t5,
-                t6
+                t6,
+                t7
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 75,
+            lineNumber: 98,
             columnNumber: 10
         }, this);
-        $[15] = t5;
-        $[16] = t6;
-        $[17] = t7;
+        $[17] = t6;
+        $[18] = t7;
+        $[19] = t8;
     } else {
-        t7 = $[17];
+        t8 = $[19];
     }
-    let t8;
-    if ($[18] === Symbol.for("react.memo_cache_sentinel")) {
-        t8 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2d$vertical$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreVerticalIcon$3e$__["MoreVerticalIcon"], {
+    let t9;
+    if ($[20] === Symbol.for("react.memo_cache_sentinel")) {
+        t9 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2d$vertical$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreVerticalIcon$3e$__["MoreVerticalIcon"], {
             className: "ml-auto size-4"
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 84,
+            lineNumber: 107,
             columnNumber: 10
         }, this);
-        $[18] = t8;
+        $[20] = t9;
     } else {
-        t8 = $[18];
+        t9 = $[20];
     }
-    let t9;
-    if ($[19] !== t4 || $[20] !== t7) {
-        t9 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuTrigger"], {
+    let t10;
+    if ($[21] !== t5 || $[22] !== t8) {
+        t10 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuTrigger"], {
             asChild: true,
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarMenuButton"], {
                 size: "lg",
                 className: "data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground",
                 children: [
-                    t4,
-                    t7,
-                    t8
+                    t5,
+                    t8,
+                    t9
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/nav-user.tsx",
-                lineNumber: 91,
-                columnNumber: 46
+                lineNumber: 114,
+                columnNumber: 47
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 91,
-            columnNumber: 10
+            lineNumber: 114,
+            columnNumber: 11
         }, this);
-        $[19] = t4;
-        $[20] = t7;
-        $[21] = t9;
+        $[21] = t5;
+        $[22] = t8;
+        $[23] = t10;
     } else {
-        t9 = $[21];
+        t10 = $[23];
     }
-    const t10 = isMobile ? "bottom" : "right";
-    let t11;
-    if ($[22] !== user.avatar || $[23] !== user.name) {
-        t11 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarImage"], {
+    const t11 = isMobile ? "bottom" : "right";
+    let t12;
+    if ($[24] !== user.avatar || $[25] !== user.name) {
+        t12 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarImage"], {
             src: user.avatar,
             alt: user.name
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 101,
+            lineNumber: 124,
             columnNumber: 11
         }, this);
-        $[22] = user.avatar;
-        $[23] = user.name;
-        $[24] = t11;
+        $[24] = user.avatar;
+        $[25] = user.name;
+        $[26] = t12;
     } else {
-        t11 = $[24];
-    }
-    let t12;
-    if ($[25] === Symbol.for("react.memo_cache_sentinel")) {
-        t12 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
-            className: "rounded-lg"
-        }, void 0, false, {
-            fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 110,
-            columnNumber: 11
-        }, this);
-        $[25] = t12;
-    } else {
-        t12 = $[25];
+        t12 = $[26];
     }
     let t13;
-    if ($[26] !== t11) {
-        t13 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Avatar"], {
-            className: "h-8 w-8 rounded-lg",
-            children: [
-                t11,
-                t12
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 117,
-            columnNumber: 11
-        }, this);
-        $[26] = t11;
-        $[27] = t13;
-    } else {
-        t13 = $[27];
-    }
-    let t14;
-    if ($[28] !== user.name) {
-        t14 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-            className: "truncate font-medium",
-            children: user.name
-        }, void 0, false, {
-            fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 125,
-            columnNumber: 11
-        }, this);
-        $[28] = user.name;
-        $[29] = t14;
-    } else {
-        t14 = $[29];
-    }
-    let t15;
-    if ($[30] !== user.email) {
-        t15 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-            className: "truncate text-xs text-muted-foreground",
-            children: user.email
+    if ($[27] === Symbol.for("react.memo_cache_sentinel")) {
+        t13 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AvatarFallback"], {
+            className: "rounded-lg"
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
             lineNumber: 133,
             columnNumber: 11
         }, this);
-        $[30] = user.email;
+        $[27] = t13;
+    } else {
+        t13 = $[27];
+    }
+    let t14;
+    if ($[28] !== t12) {
+        t14 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$avatar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Avatar"], {
+            className: "h-8 w-8 rounded-lg",
+            children: [
+                t12,
+                t13
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/components/nav-user.tsx",
+            lineNumber: 140,
+            columnNumber: 11
+        }, this);
+        $[28] = t12;
+        $[29] = t14;
+    } else {
+        t14 = $[29];
+    }
+    let t15;
+    if ($[30] !== user.name) {
+        t15 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            className: "truncate font-medium",
+            children: user.name
+        }, void 0, false, {
+            fileName: "[project]/src/components/nav-user.tsx",
+            lineNumber: 148,
+            columnNumber: 11
+        }, this);
+        $[30] = user.name;
         $[31] = t15;
     } else {
         t15 = $[31];
     }
     let t16;
-    if ($[32] !== t14 || $[33] !== t15) {
-        t16 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+    if ($[32] !== user.email) {
+        t16 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+            className: "truncate text-xs text-muted-foreground",
+            children: user.email
+        }, void 0, false, {
+            fileName: "[project]/src/components/nav-user.tsx",
+            lineNumber: 156,
+            columnNumber: 11
+        }, this);
+        $[32] = user.email;
+        $[33] = t16;
+    } else {
+        t16 = $[33];
+    }
+    let t17;
+    if ($[34] !== t15 || $[35] !== t16) {
+        t17 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "grid flex-1 text-left text-sm leading-tight",
             children: [
-                t14,
-                t15
+                t15,
+                t16
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 141,
+            lineNumber: 164,
             columnNumber: 11
         }, this);
-        $[32] = t14;
-        $[33] = t15;
-        $[34] = t16;
+        $[34] = t15;
+        $[35] = t16;
+        $[36] = t17;
     } else {
-        t16 = $[34];
+        t17 = $[36];
     }
-    let t17;
-    if ($[35] !== t13 || $[36] !== t16) {
-        t17 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuLabel"], {
+    let t18;
+    if ($[37] !== t14 || $[38] !== t17) {
+        t18 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuLabel"], {
             className: "p-0 font-normal",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex items-center gap-2 px-1 py-1.5 text-left text-sm",
                 children: [
-                    t13,
-                    t16
+                    t14,
+                    t17
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/nav-user.tsx",
-                lineNumber: 150,
+                lineNumber: 173,
                 columnNumber: 58
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 150,
+            lineNumber: 173,
             columnNumber: 11
         }, this);
-        $[35] = t13;
-        $[36] = t16;
-        $[37] = t17;
+        $[37] = t14;
+        $[38] = t17;
+        $[39] = t18;
     } else {
-        t17 = $[37];
-    }
-    let t18;
-    if ($[38] === Symbol.for("react.memo_cache_sentinel")) {
-        t18 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
-            fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 159,
-            columnNumber: 11
-        }, this);
-        $[38] = t18;
-    } else {
-        t18 = $[38];
+        t18 = $[39];
     }
     let t19;
-    if ($[39] === Symbol.for("react.memo_cache_sentinel")) {
-        t19 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+    if ($[40] === Symbol.for("react.memo_cache_sentinel")) {
+        t19 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
+            fileName: "[project]/src/components/nav-user.tsx",
+            lineNumber: 182,
+            columnNumber: 11
+        }, this);
+        $[40] = t19;
+    } else {
+        t19 = $[40];
+    }
+    let t20;
+    if ($[41] === Symbol.for("react.memo_cache_sentinel")) {
+        t20 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__UserCircleIcon$3e$__["UserCircleIcon"], {}, void 0, false, {
                     fileName: "[project]/src/components/nav-user.tsx",
-                    lineNumber: 166,
+                    lineNumber: 189,
                     columnNumber: 29
                 }, this),
                 "A minha conta"
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 166,
+            lineNumber: 189,
             columnNumber: 11
         }, this);
-        $[39] = t19;
+        $[41] = t20;
     } else {
-        t19 = $[39];
+        t20 = $[41];
     }
-    let t20;
     let t21;
-    if ($[40] === Symbol.for("react.memo_cache_sentinel")) {
-        t20 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuGroup"], {
+    let t22;
+    if ($[42] === Symbol.for("react.memo_cache_sentinel")) {
+        t21 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuGroup"], {
             children: [
-                t19,
+                t20,
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bell$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BellIcon$3e$__["BellIcon"], {}, void 0, false, {
                             fileName: "[project]/src/components/nav-user.tsx",
-                            lineNumber: 174,
+                            lineNumber: 197,
                             columnNumber: 53
                         }, this),
                         "Notificações"
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/nav-user.tsx",
-                    lineNumber: 174,
+                    lineNumber: 197,
                     columnNumber: 35
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 174,
+            lineNumber: 197,
             columnNumber: 11
         }, this);
-        t21 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
+        t22 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuSeparator"], {}, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 175,
+            lineNumber: 198,
             columnNumber: 11
         }, this);
-        $[40] = t20;
-        $[41] = t21;
+        $[42] = t21;
+        $[43] = t22;
     } else {
-        t20 = $[40];
-        t21 = $[41];
+        t21 = $[42];
+        t22 = $[43];
     }
-    let t22;
-    if ($[42] === Symbol.for("react.memo_cache_sentinel")) {
-        t22 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+    let t23;
+    if ($[44] === Symbol.for("react.memo_cache_sentinel")) {
+        t23 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOutIcon$3e$__["LogOutIcon"], {}, void 0, false, {
+            fileName: "[project]/src/components/nav-user.tsx",
+            lineNumber: 207,
+            columnNumber: 11
+        }, this);
+        $[44] = t23;
+    } else {
+        t23 = $[44];
+    }
+    let t24;
+    if ($[45] !== handleLogout) {
+        t24 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuItem"], {
+            onClick: handleLogout,
             children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOutIcon$3e$__["LogOutIcon"], {}, void 0, false, {
-                    fileName: "[project]/src/components/nav-user.tsx",
-                    lineNumber: 184,
-                    columnNumber: 29
-                }, this),
+                t23,
                 "Terminar sessão"
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 184,
+            lineNumber: 214,
             columnNumber: 11
         }, this);
-        $[42] = t22;
+        $[45] = handleLogout;
+        $[46] = t24;
     } else {
-        t22 = $[42];
+        t24 = $[46];
     }
-    let t23;
-    if ($[43] !== t10 || $[44] !== t17) {
-        t23 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
+    let t25;
+    if ($[47] !== t11 || $[48] !== t18 || $[49] !== t24) {
+        t25 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenuContent"], {
             className: "w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg",
-            side: t10,
+            side: t11,
             align: "end",
             sideOffset: 4,
             children: [
-                t17,
                 t18,
-                t20,
+                t19,
                 t21,
-                t22
+                t22,
+                t24
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 191,
+            lineNumber: 222,
             columnNumber: 11
         }, this);
-        $[43] = t10;
-        $[44] = t17;
-        $[45] = t23;
+        $[47] = t11;
+        $[48] = t18;
+        $[49] = t24;
+        $[50] = t25;
     } else {
-        t23 = $[45];
+        t25 = $[50];
     }
-    let t24;
-    if ($[46] !== t23 || $[47] !== t9) {
-        t24 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarMenu"], {
+    let t26;
+    if ($[51] !== t10 || $[52] !== t25) {
+        t26 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarMenu"], {
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarMenuItem"], {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dropdown$2d$menu$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DropdownMenu"], {
                     children: [
-                        t9,
-                        t23
+                        t10,
+                        t25
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/nav-user.tsx",
-                    lineNumber: 200,
+                    lineNumber: 232,
                     columnNumber: 41
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/nav-user.tsx",
-                lineNumber: 200,
+                lineNumber: 232,
                 columnNumber: 24
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/nav-user.tsx",
-            lineNumber: 200,
+            lineNumber: 232,
             columnNumber: 11
         }, this);
-        $[46] = t23;
-        $[47] = t9;
-        $[48] = t24;
+        $[51] = t10;
+        $[52] = t25;
+        $[53] = t26;
     } else {
-        t24 = $[48];
+        t26 = $[53];
     }
-    return t24;
+    return t26;
 }
-_s(NavUser, "0CEzN3MMbWUh8VTSCuU86oKGdCc=", false, function() {
+_s(NavUser, "UeltVWNpuHfKRhjlohjDJNPIeIo=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSidebar"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSidebar"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
     ];
 });
 _c = NavUser;
@@ -3005,9 +3039,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$nav$2d$
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$nav$2d$user$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/nav-user.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$team$2d$switcher$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/team-switcher.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/components/ui/sidebar.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$mocks$2f$dashboard$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/mocks/dashboard.ts [app-client] (ecmascript)");
-"use client";
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useAuth$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/src/hooks/useAuth.ts [app-client] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/contexts/AuthContext.tsx [app-client] (ecmascript)");
 ;
+var _s = __turbopack_context__.k.signature();
+"use client";
 ;
 ;
 ;
@@ -3195,12 +3231,13 @@ const data = {
     ]
 };
 function AppSidebar(t0) {
-    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(9);
-    if ($[0] !== "6b1be87e9e2d348ae8df1507e29a3ab5b7543dc5368f79c6e1faa20db76897e7") {
-        for(let $i = 0; $i < 9; $i += 1){
+    _s();
+    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(13);
+    if ($[0] !== "186cdd5b0cfdbff5d26fe6ab54389c0ca4b9346f7d6ded3318cb42554b8d1871") {
+        for(let $i = 0; $i < 13; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "6b1be87e9e2d348ae8df1507e29a3ab5b7543dc5368f79c6e1faa20db76897e7";
+        $[0] = "186cdd5b0cfdbff5d26fe6ab54389c0ca4b9346f7d6ded3318cb42554b8d1871";
     }
     let props;
     if ($[1] !== t0) {
@@ -3210,103 +3247,131 @@ function AppSidebar(t0) {
     } else {
         props = $[2];
     }
+    const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     let t1;
-    if ($[3] === Symbol.for("react.memo_cache_sentinel")) {
-        t1 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarHeader"], {
+    if ($[3] !== user) {
+        t1 = user ? {
+            name: user.name || "Usu\xE1rio",
+            email: user.email || "",
+            avatar: user.school?.logo_path || ""
+        } : {
+            name: "Usu\xE1rio",
+            email: "",
+            avatar: ""
+        };
+        $[3] = user;
+        $[4] = t1;
+    } else {
+        t1 = $[4];
+    }
+    const userData = t1;
+    let t2;
+    if ($[5] === Symbol.for("react.memo_cache_sentinel")) {
+        t2 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarHeader"], {
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$team$2d$switcher$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["TeamSwitcher"], {
                 teams: data.company
             }, void 0, false, {
                 fileName: "[project]/src/components/app-sidebar.tsx",
-                lineNumber: 177,
+                lineNumber: 197,
                 columnNumber: 25
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/app-sidebar.tsx",
-            lineNumber: 177,
+            lineNumber: 197,
             columnNumber: 10
         }, this);
-        $[3] = t1;
+        $[5] = t2;
     } else {
-        t1 = $[3];
+        t2 = $[5];
     }
-    let t2;
-    if ($[4] === Symbol.for("react.memo_cache_sentinel")) {
-        t2 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarContent"], {
+    let t3;
+    if ($[6] === Symbol.for("react.memo_cache_sentinel")) {
+        t3 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarContent"], {
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$nav$2d$main$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["NavMain"], {
                     items: data.navMain
                 }, void 0, false, {
                     fileName: "[project]/src/components/app-sidebar.tsx",
-                    lineNumber: 184,
+                    lineNumber: 204,
                     columnNumber: 26
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$nav$2d$projects$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["NavProjects"], {
                     atalhos: data.atalhos
                 }, void 0, false, {
                     fileName: "[project]/src/components/app-sidebar.tsx",
-                    lineNumber: 184,
+                    lineNumber: 204,
                     columnNumber: 58
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/app-sidebar.tsx",
-            lineNumber: 184,
+            lineNumber: 204,
             columnNumber: 10
         }, this);
-        $[4] = t2;
+        $[6] = t3;
     } else {
-        t2 = $[4];
+        t3 = $[6];
     }
-    let t3;
     let t4;
-    if ($[5] === Symbol.for("react.memo_cache_sentinel")) {
-        t3 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarFooter"], {
+    if ($[7] !== userData) {
+        t4 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarFooter"], {
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$nav$2d$user$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["NavUser"], {
-                user: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$mocks$2f$dashboard$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["UserData"]
+                user: userData
             }, void 0, false, {
                 fileName: "[project]/src/components/app-sidebar.tsx",
-                lineNumber: 192,
+                lineNumber: 211,
                 columnNumber: 25
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/app-sidebar.tsx",
-            lineNumber: 192,
+            lineNumber: 211,
             columnNumber: 10
         }, this);
-        t4 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarRail"], {}, void 0, false, {
-            fileName: "[project]/src/components/app-sidebar.tsx",
-            lineNumber: 193,
-            columnNumber: 10
-        }, this);
-        $[5] = t3;
-        $[6] = t4;
+        $[7] = userData;
+        $[8] = t4;
     } else {
-        t3 = $[5];
-        t4 = $[6];
+        t4 = $[8];
     }
     let t5;
-    if ($[7] !== props) {
-        t5 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Sidebar"], {
+    if ($[9] === Symbol.for("react.memo_cache_sentinel")) {
+        t5 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarRail"], {}, void 0, false, {
+            fileName: "[project]/src/components/app-sidebar.tsx",
+            lineNumber: 219,
+            columnNumber: 10
+        }, this);
+        $[9] = t5;
+    } else {
+        t5 = $[9];
+    }
+    let t6;
+    if ($[10] !== props || $[11] !== t4) {
+        t6 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Sidebar"], {
             collapsible: "icon",
             ...props,
             children: [
-                t1,
                 t2,
                 t3,
-                t4
+                t4,
+                t5
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/app-sidebar.tsx",
-            lineNumber: 202,
+            lineNumber: 226,
             columnNumber: 10
         }, this);
-        $[7] = props;
-        $[8] = t5;
+        $[10] = props;
+        $[11] = t4;
+        $[12] = t6;
     } else {
-        t5 = $[8];
+        t6 = $[12];
     }
-    return t5;
+    return t6;
 }
+_s(AppSidebar, "WQN1piNkMjaOM8k1F55whTN++Jc=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
+    ];
+});
 _c = AppSidebar;
 var _c;
 __turbopack_context__.k.register(_c, "AppSidebar");
@@ -5299,6 +5364,36 @@ class CourseService {
         }
         throw new Error(response.message || 'Erro ao listar exames');
     }
+    /**
+   * Cria um novo curso
+   */ async createCourse(data) {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["schoolApiClient"].post(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$config$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_ENDPOINTS"].COURSES.LIST, data);
+        if (response.status === 'success' && response.data) {
+            const data = response.data;
+            return {
+                ...data.course,
+                tuition_info: data.tuition_info
+            };
+        }
+        throw new Error(response.message || 'Erro ao criar curso');
+    }
+    /**
+   * Atualiza um curso existente
+   */ async updateCourse(id, data) {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["schoolApiClient"].put(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$config$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_ENDPOINTS"].COURSES.SHOW(id), data);
+        if (response.status === 'success' && response.data) {
+            return response.data;
+        }
+        throw new Error(response.message || 'Erro ao atualizar curso');
+    }
+    /**
+   * Deleta um curso
+   */ async deleteCourse(id) {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["schoolApiClient"].delete(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$config$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_ENDPOINTS"].COURSES.SHOW(id));
+        if (response.status !== 'success') {
+            throw new Error(response.message || 'Erro ao deletar curso');
+        }
+    }
 }
 const courseService = new CourseService();
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -5425,11 +5520,18 @@ function Academica() {
         codigo: '',
         duracao: 6,
         duracaoMeses: 36,
+        education_level: 'superior',
+        class_level: undefined,
+        year_level: 1,
         grau: '',
         coordenador: '',
         coordenadorNome: '',
         estado: 'Ativo',
-        disciplinas: []
+        disciplinas: [],
+        monthly_tuition: 0,
+        price: 0,
+        faculty: '',
+        is_active: true
     });
     // Carregar disciplinas de um curso
     const loadCourseSubjects = async (courseId)=>{
@@ -5459,29 +5561,39 @@ function Academica() {
         const duracaoSemestres = Math.ceil(duracaoMeses / 6);
         // Garantir que subjects seja sempre um array
         const subjects_0 = Array.isArray(subjectsMap[course.id]) ? subjectsMap[course.id] : [];
+        // Determinar grau baseado no education_level
+        let grau = 'Não definido';
+        if (course.education_level === 'medio') {
+            grau = `Ensino Médio - Classe ${course.class_level || ''}`;
+        } else if (course.education_level === 'superior') {
+            grau = `Ensino Superior - ${course.year_level || ''}º Ano`;
+        }
         return {
             id: course.id,
             nome: course.name,
-            codigo: course.id.substring(0, 8).toUpperCase(),
-            // Usa parte do ID como código
+            codigo: course.code || course.id.substring(0, 8).toUpperCase(),
             duracao: duracaoSemestres,
             duracaoMeses: duracaoMeses,
-            grau: 'Licenciatura',
-            // Valor padrão, não existe na API
+            education_level: course.education_level,
+            class_level: course.class_level,
+            year_level: course.year_level,
+            grau: grau,
             coordenador: '',
             coordenadorNome: 'Não definido',
-            // Valor padrão
-            estado: 'Ativo',
-            // Valor padrão
+            estado: course.is_active ? 'Ativo' : 'Inativo',
             disciplinas: subjects_0.map((s)=>s.id),
             subjects: subjects_0,
             description: course.description,
             monthly_tuition: course.monthly_tuition,
-            image: course.image
+            price: course.price,
+            faculty: course.faculty,
+            image: course.image || course.image_path,
+            is_active: course.is_active
         };
     };
     const cursosDisplay = Array.isArray(courses) ? courses.map(convertCourseToDisplay) : [];
     // Funções
+    const [saving, setSaving] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const handleCreateCurso = ()=>{
         setIsEditing(false);
         setFormData({
@@ -5490,11 +5602,18 @@ function Academica() {
             codigo: '',
             duracao: 6,
             duracaoMeses: 36,
+            education_level: 'superior',
+            class_level: undefined,
+            year_level: 1,
             grau: '',
             coordenador: '',
             coordenadorNome: '',
             estado: 'Ativo',
-            disciplinas: []
+            disciplinas: [],
+            monthly_tuition: 0,
+            price: 0,
+            faculty: '',
+            is_active: true
         });
         setIsSheetOpen(true);
     };
@@ -5507,19 +5626,83 @@ function Academica() {
         }
         setIsSheetOpen(true);
     };
-    const handleSaveCurso = ()=>{
+    const handleSaveCurso = async ()=>{
         if (!formData.nome) {
             __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error('Por favor, preencha o nome do curso');
             return;
         }
-        // TODO: Implementar criação/edição via API
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].info('Funcionalidade de criação/edição será implementada em breve');
-        setIsSheetOpen(false);
+        if (!formData.education_level) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error('Por favor, selecione o nível de ensino');
+            return;
+        }
+        if (formData.education_level === 'medio' && !formData.class_level) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error('Por favor, selecione a classe para ensino médio');
+            return;
+        }
+        if (formData.education_level === 'superior' && !formData.year_level) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error('Por favor, informe o ano para ensino superior');
+            return;
+        }
+        if (!formData.monthly_tuition || formData.monthly_tuition <= 0) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error('Por favor, informe a propina mensal');
+            return;
+        }
+        setSaving(true);
+        try {
+            const courseData = {
+                name: formData.nome,
+                description: formData.description || undefined,
+                code: formData.codigo || undefined,
+                education_level: formData.education_level,
+                monthly_tuition: formData.monthly_tuition,
+                is_active: formData.estado === 'Ativo',
+                faculty: formData.faculty || undefined,
+                price: formData.price || undefined
+            };
+            // Campos específicos por nível de ensino
+            if (formData.education_level === 'medio') {
+                courseData.class_level = formData.class_level;
+            // duration_months será sempre 9 para ensino médio (definido no backend)
+            } else if (formData.education_level === 'superior') {
+                courseData.year_level = formData.year_level;
+                courseData.duration_months = formData.duracaoMeses;
+            }
+            if (isEditing && formData.id) {
+                // Atualizar curso existente
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$services$2f$course$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["courseService"].updateCourse(formData.id, courseData);
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success('Curso atualizado com sucesso!');
+            } else {
+                // Criar novo curso
+                const newCourse = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$services$2f$course$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["courseService"].createCourse(courseData);
+                __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success('Curso criado com sucesso!');
+                if (newCourse.tuition_info) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].info(`Propina total: ${newCourse.tuition_info.total_tuition.toLocaleString('pt-AO', {
+                        style: 'currency',
+                        currency: 'AOA'
+                    })}`);
+                }
+            }
+            // Recarregar lista de cursos
+            await fetchCourses();
+            setIsSheetOpen(false);
+        } catch (error_0) {
+            console.error('Erro ao salvar curso:', error_0);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(error_0.message || 'Erro ao salvar curso. Tente novamente.');
+        } finally{
+            setSaving(false);
+        }
     };
-    const handleDeleteCurso = (id)=>{
-        // TODO: Implementar exclusão via API
-        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].info('Funcionalidade de exclusão será implementada em breve');
-        setCursoToDelete(null);
+    const handleDeleteCurso = async (id)=>{
+        try {
+            await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$api$2f$services$2f$course$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["courseService"].deleteCourse(id);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].success('Curso eliminado com sucesso!');
+            await fetchCourses();
+            setCursoToDelete(null);
+        } catch (error_1) {
+            console.error('Erro ao eliminar curso:', error_1);
+            __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["toast"].error(error_1.message || 'Erro ao eliminar curso. Tente novamente.');
+            setCursoToDelete(null);
+        }
     };
     // Filtros
     const cursosFiltrados = cursosDisplay.filter((curso_0)=>{
@@ -5538,7 +5721,7 @@ function Academica() {
                 variant: "sidebar"
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                lineNumber: 173,
+                lineNumber: 269,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SidebarInset"], {
@@ -5549,7 +5732,7 @@ function Academica() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$heroui$2f$navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                lineNumber: 178,
+                                lineNumber: 274,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5565,7 +5748,7 @@ function Academica() {
                                                         children: "Gestão de Cursos"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 185,
+                                                        lineNumber: 281,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5573,13 +5756,13 @@ function Academica() {
                                                         children: "Gerencie os cursos, disciplinas e coordenadores"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 186,
+                                                        lineNumber: 282,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 184,
+                                                lineNumber: 280,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -5590,20 +5773,20 @@ function Academica() {
                                                         className: "h-4 w-4"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 189,
+                                                        lineNumber: 285,
                                                         columnNumber: 19
                                                     }, this),
                                                     "Novo Curso"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 188,
+                                                lineNumber: 284,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                        lineNumber: 183,
+                                        lineNumber: 279,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -5619,7 +5802,7 @@ function Academica() {
                                                                 className: "absolute left-3 top-3 h-4 w-4 text-gray-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 199,
+                                                                lineNumber: 295,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -5629,13 +5812,13 @@ function Academica() {
                                                                 className: "pl-10"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 200,
+                                                                lineNumber: 296,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 198,
+                                                        lineNumber: 294,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -5647,12 +5830,12 @@ function Academica() {
                                                                     placeholder: "Filtrar por grau"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                    lineNumber: 204,
+                                                                    lineNumber: 300,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 203,
+                                                                lineNumber: 299,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5662,7 +5845,7 @@ function Academica() {
                                                                         children: "Todos os Graus"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 207,
+                                                                        lineNumber: 303,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -5670,7 +5853,7 @@ function Academica() {
                                                                         children: "Licenciatura"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 208,
+                                                                        lineNumber: 304,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -5678,7 +5861,7 @@ function Academica() {
                                                                         children: "Técnico"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 209,
+                                                                        lineNumber: 305,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -5686,19 +5869,19 @@ function Academica() {
                                                                         children: "Mestrado"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 210,
+                                                                        lineNumber: 306,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 206,
+                                                                lineNumber: 302,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 202,
+                                                        lineNumber: 298,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
@@ -5710,12 +5893,12 @@ function Academica() {
                                                                     placeholder: "Filtrar por estado"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                    lineNumber: 215,
+                                                                    lineNumber: 311,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 214,
+                                                                lineNumber: 310,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5725,7 +5908,7 @@ function Academica() {
                                                                         children: "Todos os Estados"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 218,
+                                                                        lineNumber: 314,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -5733,7 +5916,7 @@ function Academica() {
                                                                         children: "Ativo"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 219,
+                                                                        lineNumber: 315,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -5741,35 +5924,35 @@ function Academica() {
                                                                         children: "Inativo"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 220,
+                                                                        lineNumber: 316,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 217,
+                                                                lineNumber: 313,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 213,
+                                                        lineNumber: 309,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 197,
+                                                lineNumber: 293,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 196,
+                                            lineNumber: 292,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                        lineNumber: 195,
+                                        lineNumber: 291,
                                         columnNumber: 15
                                     }, this),
                                     coursesLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5779,7 +5962,7 @@ function Academica() {
                                                 className: "h-8 w-8 animate-spin text-muted-foreground"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 229,
+                                                lineNumber: 325,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5787,13 +5970,13 @@ function Academica() {
                                                 children: "Carregando cursos..."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 230,
+                                                lineNumber: 326,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                        lineNumber: 228,
+                                        lineNumber: 324,
                                         columnNumber: 34
                                     }, this),
                                     coursesError && !coursesLoading && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -5808,7 +5991,7 @@ function Academica() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 236,
+                                                    lineNumber: 332,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -5817,18 +6000,18 @@ function Academica() {
                                                     children: "Tentar novamente"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 237,
+                                                    lineNumber: 333,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 235,
+                                            lineNumber: 331,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                        lineNumber: 234,
+                                        lineNumber: 330,
                                         columnNumber: 51
                                     }, this),
                                     !coursesLoading && !coursesError && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -5850,24 +6033,24 @@ function Academica() {
                                                                                     children: curso_1.nome
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                    lineNumber: 250,
+                                                                                    lineNumber: 346,
                                                                                     columnNumber: 31
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardDescription"], {
                                                                                     className: "mt-1",
                                                                                     children: [
                                                                                         "Código: ",
-                                                                                        curso_1.codigo
+                                                                                        curso_1.codigo || 'N/A'
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                    lineNumber: 251,
+                                                                                    lineNumber: 347,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                            lineNumber: 249,
+                                                                            lineNumber: 345,
                                                                             columnNumber: 29
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -5875,18 +6058,18 @@ function Academica() {
                                                                             children: curso_1.estado
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                            lineNumber: 255,
+                                                                            lineNumber: 351,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                    lineNumber: 248,
+                                                                    lineNumber: 344,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 247,
+                                                                lineNumber: 343,
                                                                 columnNumber: 25
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -5899,7 +6082,7 @@ function Academica() {
                                                                                 children: curso_1.description
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 262,
+                                                                                lineNumber: 358,
                                                                                 columnNumber: 53
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5909,15 +6092,15 @@ function Academica() {
                                                                                         className: "h-4 w-4 text-gray-500"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 266,
+                                                                                        lineNumber: 362,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                                         className: "text-gray-600",
-                                                                                        children: "Grau:"
+                                                                                        children: "Nível:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 267,
+                                                                                        lineNumber: 363,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5925,14 +6108,46 @@ function Academica() {
                                                                                         children: curso_1.grau
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 268,
+                                                                                        lineNumber: 364,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 265,
+                                                                                lineNumber: 361,
                                                                                 columnNumber: 29
+                                                                            }, this),
+                                                                            curso_1.faculty && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                className: "flex items-center gap-2 text-sm",
+                                                                                children: [
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
+                                                                                        className: "h-4 w-4 text-gray-500"
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                                                        lineNumber: 367,
+                                                                                        columnNumber: 33
+                                                                                    }, this),
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                        className: "text-gray-600",
+                                                                                        children: "Faculdade:"
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                                                        lineNumber: 368,
+                                                                                        columnNumber: 33
+                                                                                    }, this),
+                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                        className: "font-medium",
+                                                                                        children: curso_1.faculty
+                                                                                    }, void 0, false, {
+                                                                                        fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                                                        lineNumber: 369,
+                                                                                        columnNumber: 33
+                                                                                    }, this)
+                                                                                ]
+                                                                            }, void 0, true, {
+                                                                                fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                                                lineNumber: 366,
+                                                                                columnNumber: 49
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                                 className: "flex items-center gap-2 text-sm",
@@ -5941,7 +6156,7 @@ function Academica() {
                                                                                         className: "h-4 w-4 text-gray-500"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 271,
+                                                                                        lineNumber: 372,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5949,7 +6164,7 @@ function Academica() {
                                                                                         children: "Coordenador:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 272,
+                                                                                        lineNumber: 373,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5957,13 +6172,13 @@ function Academica() {
                                                                                         children: curso_1.coordenadorNome
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 273,
+                                                                                        lineNumber: 374,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 270,
+                                                                                lineNumber: 371,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5974,7 +6189,7 @@ function Academica() {
                                                                                         children: "Duração:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 276,
+                                                                                        lineNumber: 377,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5987,13 +6202,13 @@ function Academica() {
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 277,
+                                                                                        lineNumber: 378,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 275,
+                                                                                lineNumber: 376,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6004,7 +6219,7 @@ function Academica() {
                                                                                         children: "Disciplinas:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 282,
+                                                                                        lineNumber: 383,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -6020,25 +6235,25 @@ function Academica() {
                                                                                                     className: "h-3 w-3 animate-spin"
                                                                                                 }, void 0, false, {
                                                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                                    lineNumber: 285,
+                                                                                                    lineNumber: 386,
                                                                                                     columnNumber: 68
                                                                                                 }, this) : 'Carregar'
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                                lineNumber: 284,
+                                                                                                lineNumber: 385,
                                                                                                 columnNumber: 79
                                                                                             }, this),
                                                                                             curso_1.subjects && ` ${curso_1.subjects.length} associadas`
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 283,
+                                                                                        lineNumber: 384,
                                                                                         columnNumber: 31
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 281,
+                                                                                lineNumber: 382,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             curso_1.monthly_tuition && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6049,7 +6264,7 @@ function Academica() {
                                                                                         children: "Propina mensal:"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 291,
+                                                                                        lineNumber: 392,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -6060,19 +6275,19 @@ function Academica() {
                                                                                         })
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 292,
+                                                                                        lineNumber: 393,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 290,
+                                                                                lineNumber: 391,
                                                                                 columnNumber: 57
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 261,
+                                                                        lineNumber: 357,
                                                                         columnNumber: 27
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6088,14 +6303,14 @@ function Academica() {
                                                                                         className: "h-4 w-4 mr-2"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                        lineNumber: 302,
+                                                                                        lineNumber: 403,
                                                                                         columnNumber: 31
                                                                                     }, this),
                                                                                     "Editar"
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 301,
+                                                                                lineNumber: 402,
                                                                                 columnNumber: 29
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -6106,35 +6321,35 @@ function Academica() {
                                                                                     className: "h-4 w-4"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                    lineNumber: 306,
+                                                                                    lineNumber: 407,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                                lineNumber: 305,
+                                                                                lineNumber: 406,
                                                                                 columnNumber: 29
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                        lineNumber: 300,
+                                                                        lineNumber: 401,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                lineNumber: 260,
+                                                                lineNumber: 356,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, curso_1.id, true, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 246,
+                                                        lineNumber: 342,
                                                         columnNumber: 53
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 245,
+                                                lineNumber: 341,
                                                 columnNumber: 19
                                             }, this),
                                             cursosFiltrados.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -6145,17 +6360,17 @@ function Academica() {
                                                         children: "Nenhum curso encontrado"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 315,
+                                                        lineNumber: 416,
                                                         columnNumber: 25
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 314,
+                                                    lineNumber: 415,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 313,
+                                                lineNumber: 414,
                                                 columnNumber: 52
                                             }, this)
                                         ]
@@ -6163,23 +6378,23 @@ function Academica() {
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                lineNumber: 181,
+                                lineNumber: 277,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                        lineNumber: 177,
+                        lineNumber: 273,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                    lineNumber: 176,
+                    lineNumber: 272,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                lineNumber: 175,
+                lineNumber: 271,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sheet$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Sheet"], {
@@ -6194,20 +6409,20 @@ function Academica() {
                                     children: isEditing ? 'Editar Curso' : 'Novo Curso'
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 328,
+                                    lineNumber: 429,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sheet$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SheetDescription"], {
                                     children: "Preencha os dados do curso abaixo"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 331,
+                                    lineNumber: 432,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                            lineNumber: 327,
+                            lineNumber: 428,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6221,7 +6436,7 @@ function Academica() {
                                             children: "Nome do Curso *"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 338,
+                                            lineNumber: 439,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -6234,13 +6449,44 @@ function Academica() {
                                             placeholder: "Ex: Engenharia Informática"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 339,
+                                            lineNumber: 440,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 337,
+                                    lineNumber: 438,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: "description",
+                                            children: "Descrição"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 447,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                            id: "description",
+                                            value: formData.description || '',
+                                            onChange: (e_1)=>setFormData({
+                                                    ...formData,
+                                                    description: e_1.target.value
+                                                }),
+                                            placeholder: "Descrição do curso...",
+                                            className: "flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 448,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                    lineNumber: 446,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6251,159 +6497,372 @@ function Academica() {
                                             children: "Código"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 346,
+                                            lineNumber: 455,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
                                             id: "codigo",
-                                            value: formData.codigo,
-                                            onChange: (e_1)=>setFormData({
+                                            value: formData.codigo || '',
+                                            onChange: (e_2)=>setFormData({
                                                     ...formData,
-                                                    codigo: e_1.target.value
+                                                    codigo: e_2.target.value
                                                 }),
-                                            placeholder: "Ex: EI-001",
-                                            disabled: isEditing
+                                            placeholder: "Ex: EI-001"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 347,
+                                            lineNumber: 456,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 345,
+                                    lineNumber: 454,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "space-y-2",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                            htmlFor: "duracao",
-                                            children: "Duração (meses) *"
+                                            htmlFor: "education_level",
+                                            children: "Nível de Ensino *"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 354,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                            id: "duracao",
-                                            type: "number",
-                                            min: "1",
-                                            value: formData.duracaoMeses,
-                                            onChange: (e_2)=>{
-                                                const meses = parseInt(e_2.target.value) || 0;
-                                                setFormData({
-                                                    ...formData,
-                                                    duracaoMeses: meses,
-                                                    duracao: Math.ceil(meses / 6)
-                                                });
-                                            }
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 355,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm text-gray-500",
-                                            children: [
-                                                formData.duracaoMeses,
-                                                " meses = ",
-                                                formData.duracao,
-                                                " semestres"
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 363,
-                                            columnNumber: 15
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 353,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "space-y-2",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                            htmlFor: "grau",
-                                            children: "Grau"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 369,
+                                            lineNumber: 463,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
-                                            value: formData.grau,
-                                            onValueChange: (value)=>setFormData({
+                                            value: formData.education_level || '',
+                                            onValueChange: (value)=>{
+                                                setFormData({
                                                     ...formData,
-                                                    grau: value
-                                                }),
+                                                    education_level: value,
+                                                    class_level: value === 'medio' ? 10 : undefined,
+                                                    year_level: value === 'superior' ? 1 : undefined,
+                                                    duracaoMeses: value === 'medio' ? 9 : formData.duracaoMeses,
+                                                    duracao: value === 'medio' ? 2 : Math.ceil((formData.duracaoMeses || 36) / 6)
+                                                });
+                                            },
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectTrigger"], {
-                                                    id: "grau",
+                                                    id: "education_level",
                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectValue"], {
-                                                        placeholder: "Selecione o grau"
+                                                        placeholder: "Selecione o nível de ensino"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 375,
+                                                        lineNumber: 475,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 374,
+                                                    lineNumber: 474,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
-                                                            value: "Licenciatura",
-                                                            children: "Licenciatura"
+                                                            value: "medio",
+                                                            children: "Ensino Médio"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                            lineNumber: 378,
+                                                            lineNumber: 478,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
-                                                            value: "Técnico",
-                                                            children: "Técnico"
+                                                            value: "superior",
+                                                            children: "Ensino Superior"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                            lineNumber: 379,
-                                                            columnNumber: 19
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
-                                                            value: "Mestrado",
-                                                            children: "Mestrado"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                            lineNumber: 380,
-                                                            columnNumber: 19
-                                                        }, this),
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
-                                                            value: "Doutoramento",
-                                                            children: "Doutoramento"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                            lineNumber: 381,
+                                                            lineNumber: 479,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 377,
+                                                    lineNumber: 477,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 370,
+                                            lineNumber: 464,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 368,
+                                    lineNumber: 462,
+                                    columnNumber: 13
+                                }, this),
+                                formData.education_level === 'medio' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: "class_level",
+                                            children: "Classe *"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 485,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
+                                            value: formData.class_level?.toString() || '',
+                                            onValueChange: (value_0)=>setFormData({
+                                                    ...formData,
+                                                    class_level: parseInt(value_0)
+                                                }),
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectTrigger"], {
+                                                    id: "class_level",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectValue"], {
+                                                        placeholder: "Selecione a classe"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                        lineNumber: 491,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                    lineNumber: 490,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
+                                                            value: "10",
+                                                            children: "10ª Classe"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                            lineNumber: 494,
+                                                            columnNumber: 21
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
+                                                            value: "11",
+                                                            children: "11ª Classe"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                            lineNumber: 495,
+                                                            columnNumber: 21
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
+                                                            value: "12",
+                                                            children: "12ª Classe"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                            lineNumber: 496,
+                                                            columnNumber: 21
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
+                                                            value: "13",
+                                                            children: "13ª Classe"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                            lineNumber: 497,
+                                                            columnNumber: 21
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                    lineNumber: 493,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 486,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-sm text-gray-500",
+                                            children: "Duração fixa: 9 meses (definido automaticamente)"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 500,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                    lineNumber: 484,
+                                    columnNumber: 54
+                                }, this),
+                                formData.education_level === 'superior' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "space-y-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                    htmlFor: "year_level",
+                                                    children: "Ano *"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                    lineNumber: 507,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                    id: "year_level",
+                                                    type: "number",
+                                                    min: "1",
+                                                    value: formData.year_level || '',
+                                                    onChange: (e_3)=>setFormData({
+                                                            ...formData,
+                                                            year_level: parseInt(e_3.target.value) || 1
+                                                        }),
+                                                    placeholder: "Ex: 1"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                    lineNumber: 508,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 506,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "space-y-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                                    htmlFor: "duracao",
+                                                    children: "Duração (meses) *"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                    lineNumber: 515,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                                    id: "duracao",
+                                                    type: "number",
+                                                    min: "1",
+                                                    value: formData.duracaoMeses,
+                                                    onChange: (e_4)=>{
+                                                        const meses = parseInt(e_4.target.value) || 0;
+                                                        setFormData({
+                                                            ...formData,
+                                                            duracaoMeses: meses,
+                                                            duracao: Math.ceil(meses / 6)
+                                                        });
+                                                    }
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                    lineNumber: 516,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    className: "text-sm text-gray-500",
+                                                    children: [
+                                                        formData.duracaoMeses,
+                                                        " meses = ",
+                                                        formData.duracao,
+                                                        " semestres"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                    lineNumber: 524,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 514,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: "faculty",
+                                            children: "Faculdade/Departamento"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 531,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                            id: "faculty",
+                                            value: formData.faculty || '',
+                                            onChange: (e_5)=>setFormData({
+                                                    ...formData,
+                                                    faculty: e_5.target.value
+                                                }),
+                                            placeholder: "Ex: Faculdade de Engenharia"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 532,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                    lineNumber: 530,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: "monthly_tuition",
+                                            children: "Propina Mensal (AOA) *"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 539,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                            id: "monthly_tuition",
+                                            type: "number",
+                                            min: "0",
+                                            step: "0.01",
+                                            value: formData.monthly_tuition || '',
+                                            onChange: (e_6)=>setFormData({
+                                                    ...formData,
+                                                    monthly_tuition: parseFloat(e_6.target.value) || 0
+                                                }),
+                                            placeholder: "Ex: 50000"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 540,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                    lineNumber: 538,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "space-y-2",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                            htmlFor: "price",
+                                            children: "Preço Total (AOA) - Opcional"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 547,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                            id: "price",
+                                            type: "number",
+                                            min: "0",
+                                            step: "0.01",
+                                            value: formData.price || '',
+                                            onChange: (e_7)=>setFormData({
+                                                    ...formData,
+                                                    price: parseFloat(e_7.target.value) || undefined
+                                                }),
+                                            placeholder: "Ex: 500000"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                            lineNumber: 548,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                    lineNumber: 546,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6414,26 +6873,27 @@ function Academica() {
                                             children: "Estado"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 387,
+                                            lineNumber: 555,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Select"], {
                                             value: formData.estado,
-                                            onValueChange: (value_0)=>setFormData({
+                                            onValueChange: (value_1)=>setFormData({
                                                     ...formData,
-                                                    estado: value_0
+                                                    estado: value_1,
+                                                    is_active: value_1 === 'Ativo'
                                                 }),
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                     id: "estado",
                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                        lineNumber: 393,
+                                                        lineNumber: 562,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 392,
+                                                    lineNumber: 561,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -6443,7 +6903,7 @@ function Academica() {
                                                             children: "Ativo"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                            lineNumber: 396,
+                                                            lineNumber: 565,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -6451,25 +6911,25 @@ function Academica() {
                                                             children: "Inativo"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                            lineNumber: 397,
+                                                            lineNumber: 566,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 395,
+                                                    lineNumber: 564,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 388,
+                                            lineNumber: 556,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 386,
+                                    lineNumber: 554,
                                     columnNumber: 13
                                 }, this),
                                 isEditing && formData.subjects && formData.subjects.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6479,7 +6939,7 @@ function Academica() {
                                             children: "Disciplinas Associadas"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 403,
+                                            lineNumber: 572,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -6494,7 +6954,7 @@ function Academica() {
                                                                     children: subject.name
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                    lineNumber: 408,
+                                                                    lineNumber: 577,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 subject.code && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Badge"], {
@@ -6503,40 +6963,40 @@ function Academica() {
                                                                     children: subject.code
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                                    lineNumber: 409,
+                                                                    lineNumber: 578,
                                                                     columnNumber: 44
                                                                 }, this)
                                                             ]
                                                         }, subject.id, true, {
                                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                            lineNumber: 407,
+                                                            lineNumber: 576,
                                                             columnNumber: 57
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                    lineNumber: 406,
+                                                    lineNumber: 575,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                                lineNumber: 405,
+                                                lineNumber: 574,
                                                 columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                            lineNumber: 404,
+                                            lineNumber: 573,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 402,
+                                    lineNumber: 571,
                                     columnNumber: 80
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                            lineNumber: 336,
+                            lineNumber: 437,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sheet$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SheetFooter"], {
@@ -6544,35 +7004,48 @@ function Academica() {
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                     variant: "outline",
                                     onClick: ()=>setIsSheetOpen(false),
+                                    disabled: saving,
                                     children: "Cancelar"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 420,
+                                    lineNumber: 589,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                     onClick: handleSaveCurso,
-                                    children: isEditing ? 'Salvar Alterações' : 'Criar Curso'
+                                    disabled: saving,
+                                    children: saving ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                                                className: "h-4 w-4 mr-2 animate-spin"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
+                                                lineNumber: 594,
+                                                columnNumber: 19
+                                            }, this),
+                                            isEditing ? 'Salvando...' : 'Criando...'
+                                        ]
+                                    }, void 0, true) : isEditing ? 'Salvar Alterações' : 'Criar Curso'
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 423,
+                                    lineNumber: 592,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                            lineNumber: 419,
+                            lineNumber: 588,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                    lineNumber: 326,
+                    lineNumber: 427,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                lineNumber: 325,
+                lineNumber: 426,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialog"], {
@@ -6586,20 +7059,20 @@ function Academica() {
                                     children: "Confirmar Exclusão"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 434,
+                                    lineNumber: 606,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialogDescription"], {
                                     children: "Tem certeza que deseja eliminar este curso? Esta ação não pode ser desfeita."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 435,
+                                    lineNumber: 607,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                            lineNumber: 433,
+                            lineNumber: 605,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialogFooter"], {
@@ -6608,7 +7081,7 @@ function Academica() {
                                     children: "Cancelar"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 440,
+                                    lineNumber: 612,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$alert$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AlertDialogAction"], {
@@ -6617,34 +7090,34 @@ function Academica() {
                                     children: "Eliminar"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                                    lineNumber: 441,
+                                    lineNumber: 613,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                            lineNumber: 439,
+                            lineNumber: 611,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                    lineNumber: 432,
+                    lineNumber: 604,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-                lineNumber: 431,
+                lineNumber: 603,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/admin/academica/cursos/page.tsx",
-        lineNumber: 169,
+        lineNumber: 265,
         columnNumber: 10
     }, this);
 }
-_s(Academica, "h2bEDhpmiQ4iUEzZi2pMe4bmALs=", false, function() {
+_s(Academica, "sIh0Gafex+h1aSQHwneH6NZyIAI=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useCourses$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCourses"]
     ];

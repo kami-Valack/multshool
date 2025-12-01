@@ -48,6 +48,7 @@ import {
   Plus,
   Search,
   User,
+  XCircle,
 } from "lucide-react"
 import { z } from "zod"
 import { Badge } from "@/components/ui/badge"
@@ -117,6 +118,8 @@ interface DynamicTableProps {
   onAddNew?: () => void
   onEdit?: (item: DataItem) => void
   onSave?: (item: DataItem, data: any) => Promise<void>
+  onApprove?: (item: DataItem) => Promise<void> | void
+  onReject?: (item: DataItem) => Promise<void> | void
   fieldLabels?: {
     name?: string
     enrollmentNumber?: string
@@ -610,6 +613,8 @@ export default function DynamicTable({
   data: initialData,
   onAddNew,
   onSave,
+  onApprove,
+  onReject,
   fieldLabels = {},
 }: DynamicTableProps) {
   const [data, setData] = React.useState(() => initialData)
@@ -698,6 +703,11 @@ export default function DynamicTable({
       cell: ({ row }) => {
         const [sheetOpen, setSheetOpen] = React.useState(false)
         const [editMode, setEditMode] = React.useState(false)
+        const item = row.original
+        const isPending = item.status === 'Pendente'
+        const hasApproveAction = onApprove && isPending
+        const hasRejectAction = onReject && isPending
+        
         return (
           <>
             <DropdownMenu>
@@ -715,8 +725,37 @@ export default function DynamicTable({
                   Editar
                 </DropdownMenuItem>
                 <DropdownMenuItem>Imprimir ficha</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive">Cancelar</DropdownMenuItem>
+                {(hasApproveAction || hasRejectAction) && <DropdownMenuSeparator />}
+                {hasApproveAction && (
+                  <DropdownMenuItem 
+                    onClick={async () => {
+                      if (onApprove) {
+                        await onApprove(item)
+                      }
+                    }}
+                    className="text-green-600 focus:text-green-600"
+                  >
+                    <CheckCircle className="mr-2 h-4 w-4" />
+                    Aprovar
+                  </DropdownMenuItem>
+                )}
+                {hasRejectAction && (
+                  <DropdownMenuItem 
+                    onClick={async () => {
+                      if (onReject) {
+                        await onReject(item)
+                      }
+                    }}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <XCircle className="mr-2 h-4 w-4" />
+                    Rejeitar
+                  </DropdownMenuItem>
+                )}
+                {!isPending && <DropdownMenuSeparator />}
+                {!isPending && (
+                  <DropdownMenuItem className="text-destructive">Cancelar</DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
             <StudentViewerSheet
@@ -732,7 +771,7 @@ export default function DynamicTable({
         )
       },
     },
-  ], [fieldLabels, onSave])
+  ], [fieldLabels, onSave, onApprove, onReject])
   const table = useReactTable({
     data,
     columns,

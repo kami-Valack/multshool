@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   Plus,
   Filter,
@@ -50,16 +50,24 @@ import { Separator } from "@/components/ui/separator";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import NavbarH from "@/components/ui/heroui/navbar";
+import { useSchedules } from "@/hooks/useSchedules";
+import { useClasses } from "@/hooks/useClasses";
+import { useCourses } from "@/hooks/useCourses";
+import { useTeachers } from "@/hooks/useTeachers";
+import { courseService, CourseSubject } from "@/lib/api/services/course.service";
+import { Schedule } from "@/lib/api/services/schedule.service";
+import { toast } from "sonner";
 
 interface Disciplina {
-  id: number;
+  id: string;
   nome: string;
   cor: string;
   codigo: string;
 }
 
 interface BaseItem {
-  id: number;
+  id: string;
+  scheduleId: string; // ID do schedule na API
   disciplina: Disciplina;
   turma: string;
   sala: string;
@@ -67,11 +75,13 @@ interface BaseItem {
   horaInicio: string;
   horaFim: string;
   curso: string;
+  cursoId: string;
   ano: string;
 }
 
 interface Aula extends BaseItem {
   docente: string;
+  teacherId?: string;
 }
 
 interface Prova extends BaseItem {
@@ -82,192 +92,267 @@ interface Prova extends BaseItem {
 type Item = Aula | Prova;
 
 interface FormData {
-  disciplina: Disciplina;
+  disciplina: Disciplina | null;
   turma: string;
+  classId?: string;
   docente?: string;
+  teacherId?: string;
   sala: string;
   dia: string;
   horaInicio: string;
   horaFim: string;
   curso: string;
+  cursoId: string;
   ano: string;
   tipo?: string;
   data?: string;
+  academicYear: string;
+  semester?: number;
 }
 
-// Dados de exemplo
-const DISCIPLINAS: Disciplina[] = [
-  { id: 1, nome: "Matemática I", cor: "#3b82f6", codigo: "MAT101" },
-  { id: 2, nome: "Física I", cor: "#10b981", codigo: "FIS101" },
-  { id: 3, nome: "Programação I", cor: "#f59e0b", codigo: "PROG101" },
-  { id: 4, nome: "Química Geral", cor: "#ef4444", codigo: "QUI101" },
-  { id: 5, nome: "Inglês Técnico", cor: "#8b5cf6", codigo: "ING101" },
-  { id: 6, nome: "Cálculo I", cor: "#ec4899", codigo: "CAL101" },
+// Cores para disciplinas (geradas dinamicamente)
+const CORES_DISCIPLINAS = [
+  "#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899",
+  "#06b6d4", "#84cc16", "#f97316", "#a855f7", "#e11d48", "#14b8a6"
 ];
-const CURSOS: string[] = [
-  "Engenharia Informática",
-  "Engenharia Civil",
-  "Medicina",
-  "Direito",
-];
-const TURMAS: string[] = ["EI-1A", "EI-1B", "EC-1A", "MED-1A", "DIR-1A"];
-const TURMA_INFO: Record<string, { curso: string; ano: string; }> = {
-  "EI-1A": { curso: "Engenharia Informática", ano: "1º Ano" },
-  "EI-1B": { curso: "Engenharia Informática", ano: "1º Ano" },
-  "EC-1A": { curso: "Engenharia Civil", ano: "1º Ano" },
-  "MED-1A": { curso: "Medicina", ano: "1º Ano" },
-  "DIR-1A": { curso: "Direito", ano: "1º Ano" },
-};
-const DOCENTES: string[] = [
-  "Dr. João Silva",
-  "Dra. Maria Santos",
-  "Prof. Carlos Costa",
-  "Dra. Ana Ferreira",
-  "Prof. Pedro Alves",
-];
-const SALAS: string[] = [
-  "Sala 101",
-  "Sala 102",
-  "Lab 201",
-  "Anfiteatro A",
-  "Sala 305",
-  "Lab 303",
-];
-const ANOS: string[] = ["1º Ano", "2º Ano", "3º Ano", "4º Ano"];
+
 const HORAS: string[] = [
-  "08:00",
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-  "18:00",
+  "08:00", "09:00", "10:00", "11:00", "12:00", "13:00",
+  "14:00", "15:00", "16:00", "17:00", "18:00",
 ];
-const DIAS: string[] = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
-const TIPOS_PROVA: string[] = [
-  "Teste",
-  "Exame Final",
-  "Exame Recorrência",
-  "Prova Prática",
-  "Prova Oral",
-];
+
+const DIAS_SEMANA = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta"];
+const DIAS_API = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+
+const TIPOS_PROVA: Record<string, string> = {
+  "test": "Teste",
+  "final_exam": "Exame Final",
+  "recovery_exam": "Exame Recorrência",
+  "practical_exam": "Prova Prática",
+  "oral_exam": "Prova Oral",
+};
+
+const TIPOS_PROVA_REVERSO: Record<string, string> = {
+  "Teste": "test",
+  "Exame Final": "final_exam",
+  "Exame Recorrência": "recovery_exam",
+  "Prova Prática": "practical_exam",
+  "Prova Oral": "oral_exam",
+};
+
+// Função para mapear dia da API para português
+const mapDayToPortuguese = (day: string): string => {
+  const mapping: Record<string, string> = {
+    monday: "Segunda",
+    tuesday: "Terça",
+    wednesday: "Quarta",
+    thursday: "Quinta",
+    friday: "Sexta",
+    saturday: "Sábado",
+    sunday: "Domingo",
+  };
+  return mapping[day] || day;
+};
+
+// Função para mapear dia em português para API
+const mapDayToAPI = (day: string): string => {
+  const mapping: Record<string, string> = {
+    "Segunda": "monday",
+    "Terça": "tuesday",
+    "Quarta": "wednesday",
+    "Quinta": "thursday",
+    "Sexta": "friday",
+    "Sábado": "saturday",
+    "Domingo": "sunday",
+  };
+  return mapping[day] || day;
+};
 export default function HorariosPage() {
+  // Hooks para buscar dados da API
+  const { schedules, loading: schedulesLoading, createSchedule, updateSchedule, deleteSchedule, fetchSchedules } = useSchedules({ autoFetch: true });
+  const { classes, loading: classesLoading } = useClasses();
+  const { courses, loading: coursesLoading } = useCourses();
+  const { teachers, loading: teachersLoading } = useTeachers();
+  
+  // Debug: Log dos dados carregados
+  useEffect(() => {
+    console.log('[HorariosPage] Schedules carregados:', schedules.length);
+    console.log('[HorariosPage] Classes carregadas:', classes.length);
+    console.log('[HorariosPage] Courses carregados:', courses.length);
+  }, [schedules, classes, courses]);
+  
+  // Estados para disciplinas e salas
+  const [subjectsMap, setSubjectsMap] = useState<Record<string, CourseSubject[]>>({});
+  const [loadingSubjects, setLoadingSubjects] = useState<Record<string, boolean>>({});
+  const [rooms, setRooms] = useState<string[]>([]);
+  
   const [view, setView] = useState<"horarios" | "provas">("horarios");
   const [filtroTipo, setFiltroTipo] = useState<"turma" | "curso" | "docente" | "ano">("turma");
-  const [filtroValor, setFiltroValor] = useState<string>(TURMAS[0]);
+  const [filtroValor, setFiltroValor] = useState<string>("");
   const [selectedHorario, setSelectedHorario] = useState<string | null>(null);
   const [selectedProva, setSelectedProva] = useState<string | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<Item | null>(null);
-  const [aulas, setAulas] = useState<Aula[]>([
-    {
-      id: 1,
-      disciplina: DISCIPLINAS[0],
-      turma: "EI-1A",
-      docente: DOCENTES[0],
-      sala: "Sala 101",
-      dia: "Segunda",
-      horaInicio: "08:00",
-      horaFim: "10:00",
-      curso: "Engenharia Informática",
-      ano: "1º Ano",
-    },
-    {
-      id: 2,
-      disciplina: DISCIPLINAS[1],
-      turma: "EI-1A",
-      docente: DOCENTES[1],
-      sala: "Lab 201",
-      dia: "Terça",
-      horaInicio: "10:00",
-      horaFim: "12:00",
-      curso: "Engenharia Informática",
-      ano: "1º Ano",
-    },
-    {
-      id: 3,
-      disciplina: DISCIPLINAS[2],
-      turma: "EI-1A",
-      docente: DOCENTES[2],
-      sala: "Sala 102",
-      dia: "Quarta",
-      horaInicio: "14:00",
-      horaFim: "16:00",
-      curso: "Engenharia Informática",
-      ano: "1º Ano",
-    },
-    {
-      id: 4,
-      disciplina: DISCIPLINAS[3],
-      turma: "EI-1A",
-      docente: DOCENTES[0],
-      sala: "Lab 303",
-      dia: "Quinta",
-      horaInicio: "09:00",
-      horaFim: "11:00",
-      curso: "Engenharia Informática",
-      ano: "1º Ano",
-    },
-    {
-      id: 5,
-      disciplina: DISCIPLINAS[4],
-      turma: "EI-1A",
-      docente: DOCENTES[3],
-      sala: "Sala 102",
-      dia: "Sexta",
-      horaInicio: "15:00",
-      horaFim: "17:00",
-      curso: "Engenharia Informática",
-      ano: "1º Ano",
-    },
-  ]);
-  const [provas, setProvas] = useState<Prova[]>([
-    {
-      id: 1,
-      tipo: "Exame Final",
-      disciplina: DISCIPLINAS[0],
-      turma: "EI-1A",
-      sala: "Anfiteatro A",
-      dia: "Sexta",
-      horaInicio: "09:00",
-      horaFim: "11:00",
-      data: "2025-12-15",
-      curso: "Engenharia Informática",
-      ano: "1º Ano",
-    },
-    {
-      id: 2,
-      tipo: "Teste",
-      disciplina: DISCIPLINAS[2],
-      turma: "EI-1A",
-      sala: "Sala 101",
-      dia: "Quarta",
-      horaInicio: "08:00",
-      horaFim: "10:00",
-      data: "2025-11-20",
-      curso: "Engenharia Informática",
-      ano: "1º Ano",
-    },
-  ]);
+  
+  // Carregar disciplinas de um curso
+  const loadCourseSubjects = async (courseId: string) => {
+    if (subjectsMap[courseId] || loadingSubjects[courseId]) return;
+    
+    setLoadingSubjects(prev => ({ ...prev, [courseId]: true }));
+    try {
+      const subjects = await courseService.getCourseSubjects(courseId);
+      setSubjectsMap(prev => ({ ...prev, [courseId]: subjects }));
+    } catch (error: any) {
+      toast.error(`Erro ao carregar disciplinas: ${error.message}`);
+    } finally {
+      setLoadingSubjects(prev => ({ ...prev, [courseId]: false }));
+    }
+  };
+  
+  // Extrair salas únicas dos horários
+  useEffect(() => {
+    const uniqueRooms = Array.from(new Set(schedules.filter(s => s.room).map(s => s.room!)));
+    setRooms(uniqueRooms.sort());
+  }, [schedules]);
+  
+  // Mapear Schedule da API para Item da UI
+  const mapScheduleToItem = useCallback((schedule: Schedule, subjectColor: string): Item => {
+    const disciplina: Disciplina = {
+      id: schedule.subject_id,
+      nome: schedule.subject?.name || "N/A",
+      codigo: schedule.subject?.code || "",
+      cor: subjectColor,
+    };
+    
+    // Buscar nome do professor
+    const teacher = schedule.teacher_id ? teachers.find(t => t.id === schedule.teacher_id) : null;
+    const teacherName = teacher?.name || (schedule.teacher_id ? "N/A" : "Não atribuído");
+    
+    const baseItem: BaseItem = {
+      id: `item-${schedule.id}`,
+      scheduleId: schedule.id,
+      disciplina,
+      turma: schedule.class_name,
+      sala: schedule.room || "N/A",
+      dia: mapDayToPortuguese(schedule.day_of_week),
+      horaInicio: schedule.start_time,
+      horaFim: schedule.end_time,
+      curso: schedule.course?.name || "N/A",
+      cursoId: schedule.course_id,
+      ano: schedule.semester ? `${schedule.semester}º Semestre` : "N/A",
+    };
+    
+    if (schedule.type === "exam") {
+      return {
+        ...baseItem,
+        tipo: schedule.exam_type_portuguese || TIPOS_PROVA[schedule.exam_type || ""] || schedule.exam_type || "N/A",
+        data: schedule.exam_date || "",
+      } as Prova;
+    } else {
+      return {
+        ...baseItem,
+        docente: teacherName,
+        teacherId: schedule.teacher_id,
+      } as Aula;
+    }
+  }, [teachers]);
+  
+  // Converter schedules para itens
+  const aulas: Aula[] = useMemo(() => {
+    return schedules
+      .filter(s => s.type === "class" && s.is_active)
+      .map((schedule, index) => {
+        const color = CORES_DISCIPLINAS[index % CORES_DISCIPLINAS.length];
+        return mapScheduleToItem(schedule, color) as Aula;
+      });
+  }, [schedules, mapScheduleToItem]);
+  
+  const provas: Prova[] = useMemo(() => {
+    return schedules
+      .filter(s => s.type === "exam" && s.is_active)
+      .map((schedule, index) => {
+        const color = CORES_DISCIPLINAS[index % CORES_DISCIPLINAS.length];
+        return mapScheduleToItem(schedule, color) as Prova;
+      });
+  }, [schedules, mapScheduleToItem]);
+  
+  // Dados derivados
+  const turmas = useMemo(() => {
+    return Array.from(new Set(classes.map(c => c.name))).sort();
+  }, [classes]);
+  
+  const cursos = useMemo(() => {
+    return courses.map(c => ({ id: c.id, nome: c.name }));
+  }, [courses]);
+  
+  const turmaInfo = useMemo(() => {
+    const info: Record<string, { curso: string; cursoId: string; ano: string }> = {};
+    classes.forEach(cls => {
+      const course = courses.find(c => c.id === cls.course_id);
+      info[cls.name] = {
+        curso: course?.name || "N/A",
+        cursoId: cls.course_id,
+        ano: cls.semester ? `${cls.semester}º Semestre` : cls.academic_year,
+      };
+    });
+    return info;
+  }, [classes, courses]);
+  
+  const disciplinas = useMemo(() => {
+    const allSubjects: Disciplina[] = [];
+    Object.values(subjectsMap).flat().forEach((subject, index) => {
+      allSubjects.push({
+        id: subject.id,
+        nome: subject.name,
+        codigo: subject.code || "",
+        cor: CORES_DISCIPLINAS[index % CORES_DISCIPLINAS.length],
+      });
+    });
+    return allSubjects;
+  }, [subjectsMap]);
+  
+  // Form data inicial
   const [formData, setFormData] = useState<FormData>({
-    disciplina: DISCIPLINAS[0],
-    turma: TURMAS[0],
-    docente: DOCENTES[0],
-    sala: SALAS[0],
-    dia: DIAS[0],
+    disciplina: null,
+    turma: "",
+    classId: undefined,
+    docente: "",
+    teacherId: undefined,
+    sala: "",
+    dia: DIAS_SEMANA[0],
     horaInicio: HORAS[0],
     horaFim: HORAS[2],
-    curso: CURSOS[0],
-    ano: ANOS[0],
-    tipo: TIPOS_PROVA[0],
+    curso: "",
+    cursoId: "",
+    ano: "",
+    tipo: "Teste",
     data: "",
+    academicYear: new Date().getFullYear() + "/" + (new Date().getFullYear() + 1),
+    semester: 1,
   });
+  
+  // Carregar disciplinas quando curso for selecionado
+  useEffect(() => {
+    if (formData.cursoId) {
+      loadCourseSubjects(formData.cursoId);
+    }
+  }, [formData.cursoId]);
+  
+  // Atualizar formData quando turma for selecionada
+  useEffect(() => {
+    if (formData.turma && turmaInfo[formData.turma]) {
+      const info = turmaInfo[formData.turma];
+      setFormData(prev => ({
+        ...prev,
+        curso: info.curso,
+        cursoId: info.cursoId,
+        ano: info.ano,
+      }));
+    }
+  }, [formData.turma, turmaInfo]);
+  
   const filtrarItens = (itens: Item[]): Item[] => {
     return itens.filter((item: Item) => {
       switch (filtroTipo) {
@@ -289,18 +374,24 @@ export default function HorariosPage() {
   const abrirModal = (item: Item | null = null) => {
     setEditingItem(item);
     if (item) {
+      const schedule = schedules.find(s => s.id === item.scheduleId);
       const base: FormData = {
         disciplina: item.disciplina,
         turma: item.turma,
+        classId: schedule?.class_id,
         sala: item.sala,
         dia: item.dia,
         horaInicio: item.horaInicio,
         horaFim: item.horaFim,
         curso: item.curso,
+        cursoId: item.cursoId,
         ano: item.ano,
+        academicYear: schedule?.academic_year || formData.academicYear,
+        semester: schedule?.semester || formData.semester,
       };
       if ("docente" in item) {
         base.docente = item.docente;
+        base.teacherId = item.teacherId;
       }
       if ("tipo" in item) {
         base.tipo = item.tipo;
@@ -308,95 +399,120 @@ export default function HorariosPage() {
       }
       setFormData(base);
     } else {
-      const turmaInfo = TURMA_INFO[filtroValor];
+      // Quando criar novo horário, usar a turma selecionada ou a primeira disponível
+      const turmaSelecionada = selectedHorario || selectedProva || filtroValor || (turmas.length > 0 ? turmas[0] : "");
+      const info = turmaInfo[turmaSelecionada] || { curso: "", cursoId: "", ano: "" };
+      const selectedClass = classes.find(c => c.name === turmaSelecionada);
+      
+      // Se não tiver cursoId, tentar pegar do primeiro curso disponível
+      let cursoIdFinal = info.cursoId;
+      let cursoFinal = info.curso;
+      if (!cursoIdFinal && courses.length > 0) {
+        cursoIdFinal = courses[0].id;
+        cursoFinal = courses[0].name;
+      }
+      
       setFormData({
-        disciplina: DISCIPLINAS[0],
-        turma: filtroValor,
-        docente: DOCENTES[0],
-        sala: SALAS[0],
-        dia: DIAS[0],
+        disciplina: null,
+        turma: turmaSelecionada,
+        classId: selectedClass?.id,
+        docente: "",
+        teacherId: undefined,
+        sala: rooms[0] || "",
+        dia: DIAS_SEMANA[0],
         horaInicio: HORAS[0],
         horaFim: HORAS[2],
-        curso: turmaInfo.curso,
-        ano: turmaInfo.ano,
-        tipo: TIPOS_PROVA[0],
+        curso: cursoFinal,
+        cursoId: cursoIdFinal,
+        ano: info.ano || (selectedClass?.semester ? `${selectedClass.semester}º Semestre` : ""),
+        tipo: "Teste",
         data: "",
+        academicYear: selectedClass?.academic_year || new Date().getFullYear() + "/" + (new Date().getFullYear() + 1),
+        semester: selectedClass?.semester || 1,
       });
+      
+      // Carregar disciplinas se tiver cursoId
+      if (cursoIdFinal) {
+        loadCourseSubjects(cursoIdFinal);
+      }
     }
     setShowModal(true);
   };
-  const confirmarDeletar = () => {
+  const confirmarDeletar = async () => {
     if (deletingId !== null) {
-      if (view === "horarios") {
-        setAulas(aulas.filter((a) => a.id !== deletingId));
-      } else {
-        setProvas(provas.filter((p) => p.id !== deletingId));
-      }
-    }
+      try {
+        await deleteSchedule(deletingId);
     setShowDeleteModal(false);
     setDeletingId(null);
-  };
-  const abrirDeletar = (id: number) => {
-    setDeletingId(id);
-    setShowDeleteModal(true);
-  };
-  const salvarItem = () => {
-    if (view === "horarios") {
-      const aulaData: Omit<Aula, "id"> = {
-        disciplina: formData.disciplina,
-        turma: formData.turma,
-        docente: formData.docente!,
-        sala: formData.sala,
-        dia: formData.dia,
-        horaInicio: formData.horaInicio,
-        horaFim: formData.horaFim,
-        curso: formData.curso,
-        ano: formData.ano,
-      };
-      if (editingItem) {
-        setAulas(
-          aulas.map((a) =>
-            a.id === editingItem.id ? { ...aulaData, id: a.id } : a
-          )
-        );
-      } else {
-        setAulas([...aulas, { ...aulaData, id: Date.now() }]);
-      }
-    } else {
-      const provaData: Omit<Prova, "id"> = {
-        tipo: formData.tipo!,
-        disciplina: formData.disciplina,
-        turma: formData.turma,
-        sala: formData.sala,
-        dia: formData.dia,
-        horaInicio: formData.horaInicio,
-        horaFim: formData.horaFim,
-        data: formData.data!,
-        curso: formData.curso,
-        ano: formData.ano,
-      };
-      if (editingItem) {
-        setProvas(
-          provas.map((p) =>
-            p.id === editingItem.id ? { ...provaData, id: p.id } : p
-          )
-        );
-      } else {
-        setProvas([...provas, { ...provaData, id: Date.now() }]);
+      } catch (error) {
+        // Erro já é tratado no hook
       }
     }
+  };
+  
+  const abrirDeletar = (scheduleId: string) => {
+    setDeletingId(scheduleId);
+    setShowDeleteModal(true);
+  };
+  
+  const salvarItem = async () => {
+    if (!formData.disciplina || !formData.cursoId || !formData.turma) {
+      toast.error("Por favor, preencha todos os campos obrigatórios");
+      console.error("[salvarItem] Campos faltando:", {
+        disciplina: !!formData.disciplina,
+        cursoId: !!formData.cursoId,
+        turma: !!formData.turma,
+        formData
+      });
+      return;
+    }
+    
+    try {
+      const selectedClass = classes.find(c => c.name === formData.turma);
+      const scheduleData = {
+        class_id: selectedClass?.id,
+        class_name: formData.turma,
+        course_id: formData.cursoId,
+        subject_id: formData.disciplina.id,
+        teacher_id: formData.teacherId || undefined,
+        day_of_week: mapDayToAPI(formData.dia) as any,
+        start_time: formData.horaInicio,
+        end_time: formData.horaFim,
+        room: formData.sala || undefined,
+        type: view === "horarios" ? "class" as const : "exam" as const,
+        exam_type: view === "provas" ? (TIPOS_PROVA_REVERSO[formData.tipo || ""] as any) : undefined,
+        exam_date: view === "provas" ? formData.data : undefined,
+        academic_year: formData.academicYear,
+        semester: formData.semester,
+        is_active: true,
+      };
+      
+      console.log("[salvarItem] Dados a enviar:", scheduleData);
+      
+      if (editingItem) {
+        await updateSchedule(editingItem.scheduleId, scheduleData);
+      } else {
+        await createSchedule(scheduleData);
+      }
+      
     setShowModal(false);
+      setEditingItem(null);
+    } catch (error: any) {
+      // Erro já é tratado no hook
+      console.error("Erro ao salvar horário:", error);
+    }
   };
   const getOpcoesValor = (): string[] => {
     switch (filtroTipo) {
       case "turma":
-        return TURMAS;
+        return turmas;
       case "curso":
-        return CURSOS;
+        return cursos.map(c => c.nome);
       case "docente":
-        return DOCENTES;
+        // TODO: Buscar professores da API
+        return [];
       case "ano":
-        return ANOS;
+        return Array.from(new Set(classes.map(c => c.academic_year))).sort();
       default:
         return [];
     }
@@ -441,7 +557,7 @@ export default function HorariosPage() {
             className="h-7 w-7 text-red-600 hover:text-red-700 hover:bg-red-50"
             onClick={(e) => {
               e.stopPropagation();
-              abrirDeletar(item.id);
+              abrirDeletar(item.scheduleId);
             }}
           >
             <Trash2 size={14} />
@@ -485,7 +601,7 @@ export default function HorariosPage() {
             <Clock className="mr-2" size={18} />
             Horário
           </div>
-          {DIAS.map((dia) => (
+          {DIAS_SEMANA.map((dia) => (
             <div
               key={dia}
               className="bg-gradient-to-br from-slate-800 to-slate-900 text-white p-4 font-bold text-center border-l border-slate-700"
@@ -499,7 +615,7 @@ export default function HorariosPage() {
               <div className="bg-slate-50 p-4 font-semibold text-sm border-t border-r flex items-center justify-center text-slate-700">
                 {hora}
               </div>
-              {DIAS.map((dia) => {
+              {DIAS_SEMANA.map((dia) => {
                 const aulasNaCelula: Item[] = itensFiltrados.filter((item: Item) => {
                   const horaInicioIdx = HORAS.indexOf(item.horaInicio);
                   return item.dia === dia && horaInicioIdx === horaIdx;
@@ -565,9 +681,9 @@ export default function HorariosPage() {
                   const currentSelected = isHorarios ? selectedHorario : selectedProva;
                   const setCurrentSelected = isHorarios ? setSelectedHorario : setSelectedProva;
                   const data: Item[] = isHorarios ? aulas : provas;
-                  const turmasComCount = TURMAS.map((t: string) => ({
+                  const turmasComCount = turmas.map((t: string) => ({
                     turma: t,
-                    ...TURMA_INFO[t],
+                    ...(turmaInfo[t] || { curso: "N/A", cursoId: "", ano: "N/A" }),
                     count: data.filter((item: Item) => item.turma === t).length,
                   }));
                   return (
@@ -634,7 +750,7 @@ export default function HorariosPage() {
                                 <p className="text-sm text-green-900 flex items-center gap-2">
                                   <Users size={14} />
                                   Visualizando: Turma <strong>{currentSelected}</strong> -{" "}
-                                  <strong>{TURMA_INFO[currentSelected].curso}</strong>
+                                  <strong>{turmaInfo[currentSelected]?.curso || "N/A"}</strong>
                                 </p>
                                 <p className="text-xs text-green-700 mt-1">
                                   {itensFiltrados.length} {isHorarios ? "aulas" : "provas"} encontradas
@@ -648,15 +764,14 @@ export default function HorariosPage() {
                                 >
                                   Voltar às turmas
                                 </Button>
-                                <DialogTrigger asChild>
                                   <Button
                                     size="lg"
                                     className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 shadow-lg"
+                                  onClick={() => abrirModal(null)}
                                   >
                                     <Plus className="mr-2" size={20} />
                                     {isHorarios ? "Nova Aula" : "Nova Prova"}
                                   </Button>
-                                </DialogTrigger>
                               </div>
                             </div>
                           )}
@@ -672,7 +787,16 @@ export default function HorariosPage() {
                               </Badge>
                             </CardTitle>
                           </CardHeader>
-                          <CardContent>{renderGrade()}</CardContent>
+                          <CardContent>
+                            {itensFiltrados.length === 0 ? (
+                              <div className="text-center py-8">
+                                <p className="text-gray-500 mb-4">Nenhum horário cadastrado para esta turma.</p>
+                                <p className="text-sm text-gray-400">Clique em "Nova Aula" para adicionar horários.</p>
+                              </div>
+                            ) : (
+                              renderGrade()
+                            )}
+                          </CardContent>
                         </Card>
                       )}
                     </div>
@@ -694,31 +818,31 @@ export default function HorariosPage() {
                       <div className="col-span-2">
                         <Label htmlFor="disciplina">Disciplina</Label>
                         <Select
-                          value={formData.disciplina.id.toString()}
-                          onValueChange={(val) =>
+                          value={formData.disciplina?.id || ""}
+                          onValueChange={(val) => {
+                            const disciplina = disciplinas.find(d => d.id === val);
                             setFormData({
                               ...formData,
-                              disciplina: DISCIPLINAS.find(
-                                (d) => d.id === parseInt(val)
-                              )!,
-                            })
-                          }
+                              disciplina: disciplina || null,
+                            });
+                          }}
+                          disabled={!formData.cursoId || loadingSubjects[formData.cursoId]}
                         >
                           <SelectTrigger>
-                            <SelectValue />
+                            <SelectValue placeholder={!formData.cursoId ? "Selecione um curso primeiro" : "Selecione a disciplina"} />
                           </SelectTrigger>
                           <SelectContent>
-                            {DISCIPLINAS.map((d) => (
+                            {disciplinas.map((d) => (
                               <SelectItem
                                 key={d.id}
-                                value={d.id.toString()}
+                                value={d.id}
                               >
                                 <div className="flex items-center gap-2">
                                   <div
                                     className="w-3 h-3 rounded-full"
                                     style={{ backgroundColor: d.cor }}
                                   ></div>
-                                  {d.nome} ({d.codigo})
+                                  {d.nome} {d.codigo && `(${d.codigo})`}
                                 </div>
                               </SelectItem>
                             ))}
@@ -738,7 +862,7 @@ export default function HorariosPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              {TIPOS_PROVA.map((t) => (
+                              {Object.values(TIPOS_PROVA).map((t) => (
                                 <SelectItem key={t} value={t}>
                                   {t}
                                 </SelectItem>
@@ -760,7 +884,7 @@ export default function HorariosPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              {TURMAS.map((t) => (
+                              {turmas.map((t) => (
                                 <SelectItem key={t} value={t}>
                                   {t}
                                 </SelectItem>
@@ -784,9 +908,9 @@ export default function HorariosPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              {CURSOS.map((c) => (
-                                <SelectItem key={c} value={c}>
-                                  {c}
+                              {cursos.map((c) => (
+                                <SelectItem key={c.id} value={c.nome}>
+                                  {c.nome}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -808,7 +932,7 @@ export default function HorariosPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              {ANOS.map((a) => (
+                              {Array.from(new Set(classes.map(c => c.academic_year))).sort().map((a) => (
                                 <SelectItem key={a} value={a}>
                                   {a}
                                 </SelectItem>
@@ -821,20 +945,34 @@ export default function HorariosPage() {
                       )}
                       {view === "horarios" && (
                         <div>
-                          <Label htmlFor="docente">Docente</Label>
+                          <Label htmlFor="docente">Docente (opcional)</Label>
                           <Select
-                            value={formData.docente || ""}
-                            onValueChange={(val) =>
-                              setFormData({ ...formData, docente: val })
-                            }
+                            value={formData.teacherId || "__none__"}
+                            onValueChange={(val) => {
+                              if (val === "__none__") {
+                                setFormData({ 
+                                  ...formData, 
+                                  teacherId: undefined,
+                                  docente: ""
+                                });
+                              } else {
+                                const teacher = teachers.find(t => t.id === val);
+                                setFormData({ 
+                                  ...formData, 
+                                  teacherId: val,
+                                  docente: teacher?.name || ""
+                                });
+                              }
+                            }}
                           >
                             <SelectTrigger>
-                              <SelectValue />
+                              <SelectValue placeholder="Selecione o docente (opcional)" />
                             </SelectTrigger>
                             <SelectContent>
-                              {DOCENTES.map((d) => (
-                                <SelectItem key={d} value={d}>
-                                  {d}
+                              <SelectItem value="__none__">Nenhum docente</SelectItem>
+                              {teachers.map((teacher) => (
+                                <SelectItem key={teacher.id} value={teacher.id}>
+                                  {teacher.name} {teacher.department && `- ${teacher.department}`}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -855,11 +993,12 @@ export default function HorariosPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {SALAS.map((s) => (
+                            {rooms.map((s) => (
                               <SelectItem key={s} value={s}>
                                 {s}
                               </SelectItem>
                             ))}
+                            <SelectItem value="__new__">+ Adicionar nova sala</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -875,7 +1014,7 @@ export default function HorariosPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {DIAS.map((d) => (
+                            {DIAS_SEMANA.map((d) => (
                               <SelectItem key={d} value={d}>
                                 {d}
                               </SelectItem>

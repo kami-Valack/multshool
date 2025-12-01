@@ -34,7 +34,8 @@ Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('
 });
 
 // Protected routes (require JWT authentication and school role and approved status)
-Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function () {
+// O middleware AuthenticateApi já verifica se é role 'school', mas podemos adicionar role:school para garantir
+Route::middleware([\App\Http\Middleware\AuthenticateApi::class, 'role:school'])->group(function () {
     // Rotas de perfil - NÃO requerem perfil completo (permitem atualizar)
     Route::get('/me', [\App\Http\Controllers\ProfileController::class, 'me']);
     Route::get('/profile/check-completion', [\App\Http\Controllers\ProfileController::class, 'checkCompletion']);
@@ -99,6 +100,9 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
     
     // Gerenciamento de Turmas (Classes)
     Route::apiResource('classes', \App\Http\Controllers\ClassController::class);
+    
+    // Gerenciamento de Horários
+    Route::apiResource('schedules', \App\Http\Controllers\ScheduleController::class);
     
     Route::prefix('students')->group(function () {
         Route::get('/{studentId}/teachers', [\App\Http\Controllers\SchoolTeacherStudentController::class, 'listTeachers']);

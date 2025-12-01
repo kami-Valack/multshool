@@ -1,16 +1,15 @@
 // components/DocumentosScreen.tsx
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Header } from "@/components/candidato/Header";
 import { useRouter } from "next/navigation";
 import UserAvatar from "@/components/ui/Avatar";
-import { mockStudents } from "@/mocks/student";
-import { FileCard } from "@/components/FileCard";
-import { SortOption, SortOptionData } from "@/types/sort";
-import { Material, MateriaisData } from "@/types/materiais";
-import { AlertModal } from "@/components/AlertModal";
+import { useAuth } from "@/contexts/AuthContext";
+import { studentService, Document } from "@/services/studentService";
+import { useToast } from "@/hooks/useToast";
+import CustomInput from "@/components/ui/InputRegister";
 
 const Container = styled.div`
   width: 100%;
@@ -75,164 +74,382 @@ const DateLabel = styled.span`
   font-weight: ${(props) => props.theme.fonts.weight.regular};
 `;
 
-const DocumentList = styled.div`
+const DocumentsContainer = styled.div`
   width: 90%;
-  height: 42vh;
-  padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 0;
 `;
 
-interface Document {
-  id: string;
-  name: string;
-}
+const DocumentUploadSection = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const DocumentItem = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const DocumentStatus = styled.div<{ $status: string }>`
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 8px;
+  font-weight: ${(props) => props.theme.fonts.weight.medium};
+  
+  ${({ $status }) => {
+    switch ($status) {
+      case 'approved':
+        return 'background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;';
+      case 'rejected':
+        return 'background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;';
+      case 'pending':
+        return 'background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7;';
+      case 'not_uploaded':
+      default:
+        return 'background-color: #e9ecef; color: #6c757d; border: 1px solid #dee2e6;';
+    }
+  }}
+`;
+
+const ErrorText = styled.span`
+  color: ${(props) => props.theme.colors.error || "#dc3545"};
+  font-size: 12px;
+  margin-top: 4px;
+`;
+
+const LoadingText = styled.span`
+  color: ${(props) => props.theme.colors.primary || "#7c74af"};
+  font-size: 12px;
+  margin-top: 4px;
+`;
+
+const UploadButton = styled.button`
+  width: 90%;
+  padding: 16px;
+  background-color: ${(props) => props.theme.colors.primary || "#7c74af"};
+  color: white;
+  border: none;
+  border-radius: 28px;
+  font-size: 16px;
+  font-weight: ${(props) => props.theme.fonts.weight.semibold || "600"};
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: ${(props) => props.theme.colors.primaryDark || "#6a6388"};
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+// Tipos de documentos necessários
+const REQUIRED_DOCUMENTS = [
+  { type: 'id_document', label: 'Bilhete de identidade ou passaporte', accept: 'image/*,.pdf', placeholder: 'O anexo deve incluir frente e verso' },
+  { type: 'photo', label: 'Fotografia (tipo: passe)', accept: 'image/*', placeholder: 'Clique para fazer o upload' },
+  { type: 'grades_declaration', label: 'Declaração com notas do ensino secundário', accept: 'image/*,.pdf', placeholder: 'Clique para fazer o upload' },
+];
 
 const DocumentosScreen: React.FC = () => {
-  const estudante = mockStudents.find((s) => s.id === "stu-1");
+  const { user, refreshUser } = useAuth();
+  const { showToast, ToastElement } = useToast();
   const router = useRouter();
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState<{ [key: string]: boolean }>({});
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+  const [pendingFiles, setPendingFiles] = useState<{ [key: string]: File }>({});
+  const isRedirectingRef = useRef(false);
+  
   const handleBack = () => {
+    // Verificar se há redirect pendente antes de voltar
+    if (typeof window !== 'undefined') {
+      const redirectAfterDocuments = sessionStorage.getItem('redirectAfterDocuments');
+      if (redirectAfterDocuments && user?.has_all_documents) {
+        // Se documentos estão completos e há redirect, ir para o curso
+        sessionStorage.removeItem('redirectAfterDocuments');
+        router.push(redirectAfterDocuments);
+        return;
+      }
+    }
     router.back();
   };
-
-  const handleMaterialClick = (material: Material) => {
-    console.log("Material clicked:", material);
-    router.push(`/candidato/material/${material.id}`);
+  
+  // Função para armazenar arquivo selecionado
+  const handleFileSelect = (type: string, file: File | null) => {
+    if (!file) return;
+    
+    // Armazenar arquivo pendente
+    setPendingFiles(prev => ({ ...prev, [type]: file }));
+    showToast(`Arquivo ${REQUIRED_DOCUMENTS.find(d => d.type === type)?.label} selecionado`, "success");
   };
-
-  const handleMaterialDownload = (material: Material) => {
-    console.log("Download material:", material);
-    if (material.fileUrl) {
-      const link = document.createElement("a");
-      link.href = material.fileUrl;
-      link.download = `${material.title}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  
+  // Função para fazer upload de todos os documentos
+  const handleUploadAll = async () => {
+    // Verificar se temos todos os três arquivos
+    const allFilesReady = REQUIRED_DOCUMENTS.every(doc => {
+      return pendingFiles[doc.type] !== undefined;
+    });
+    
+    if (!allFilesReady) {
+      showToast("Por favor, selecione todos os três documentos antes de enviar", "error");
+      return;
+    }
+    
+    await uploadAllDocuments();
+  };
+  
+  // Função para fazer upload de todos os documentos de uma vez
+  const uploadAllDocuments = async () => {
+    // Garantir que temos todos os três arquivos
+    const allFiles = REQUIRED_DOCUMENTS.map(doc => {
+      const file = pendingFiles[doc.type];
+      if (!file) return null;
+      return { type: doc.type, file };
+    }).filter((item): item is { type: string; file: File } => item !== null);
+    
+    if (allFiles.length !== 3) {
+      showToast("Por favor, selecione todos os três documentos", "error");
+      return;
+    }
+    
+    try {
+      // Marcar todos como fazendo upload
+      REQUIRED_DOCUMENTS.forEach(doc => {
+        setUploading(prev => ({ ...prev, [doc.type]: true }));
+        setUploadProgress(prev => ({ ...prev, [doc.type]: 0 }));
+      });
+      
+      // Criar FormData com todos os arquivos usando os nomes corretos da API
+      const formData = new FormData();
+      allFiles.forEach(({ type, file }) => {
+        const apiFieldName = type === 'id_document' ? 'bi' : 
+                            type === 'photo' ? 'foto_tipo' : 
+                            'habilitacao_literaria';
+        formData.append(apiFieldName, file);
+      });
+      
+      // Fazer upload usando o cliente da API diretamente
+      const { studentApiClient } = await import('@/services/apiClient');
+      const response = await studentApiClient.upload<any>('/documents/upload', formData);
+      
+      if (response.status === 'success') {
+        // Recarregar documentos
+        const updatedDocs = await studentService.getDocuments();
+        setDocuments(updatedDocs);
+        setPendingFiles({});
+        
+        await refreshUser();
+        showToast("Todos os documentos foram enviados com sucesso!", "success");
+        
+        // Verificar redirecionamento
+        await checkAndRedirectIfComplete();
+      } else {
+        throw new Error(response.message || 'Erro ao fazer upload dos documentos');
+      }
+    } catch (error: any) {
+      console.error("Erro ao fazer upload:", error);
+      showToast(error.message || "Erro ao fazer upload dos documentos", "error");
+    } finally {
+      REQUIRED_DOCUMENTS.forEach(doc => {
+        setUploading(prev => ({ ...prev, [doc.type]: false }));
+        setUploadProgress(prev => {
+          const newProgress = { ...prev };
+          delete newProgress[doc.type];
+          return newProgress;
+        });
+      });
     }
   };
-
-  const handleSortChange = (value: string) => {
-    setCurrentSort(value as SortOption);
-  };
-
-  const handleSortModalClose = () => {
-    setIsSortModalOpen(false);
-  };
-
-  const [isSortModalOpen, setIsSortModalOpen] = useState(false);
-  const [currentSort, setCurrentSort] = useState<SortOption>("date");
-
-
-  // Opções de ordenação
-  const sortOptions: SortOptionData[] = [
-    { value: "date", label: "Mais recente" },
-    { value: "alphabetical", label: "Ordem alfabética" },
-    { value: "subject", label: "Por disciplina" },
-  ];
-
-  // Dados mock - em produção virão da API
-  const mockData: MateriaisData = {
-    courseName: "Materiais - Preparatório",
-    description: "O teu sucesso no exame de acesso e na tua jornada académica.",
-    availableCount: 5,
-    materials: [
-      {
-        id: "1",
-        title: "Bilhete de identidade.pdf",
-        subject: "Matemática",
-        icon: "book",
-        fileUrl: "/materials/matematica-1.pdf",
-        createdAt: "2025-09-01T10:00:00Z",
-      },
-      {
-        id: "2",
-        title: "Declaração com notas ensino secundário",
-        subject: "Física",
-        icon: "science",
-        fileUrl: "/materials/fisica-geral.pdf",
-        createdAt: "2025-09-07T10:00:00Z",
-      },
-      {
-        id: "3",
-        title: "Certificado autenticado",
-        subject: "Programação",
-        icon: "code",
-        fileUrl: "/materials/algoritmo.pdf",
-        createdAt: "2025-08-20T10:00:00Z",
-      },
-    ],
-  };
-
-  // Função para ordenar documentos
-  const sortedMaterials = useMemo(() => {
-    const materials = [...mockData.materials];
-
-    switch (currentSort) {
-      case "alphabetical":
-        return materials.sort((a, b) => a.title.localeCompare(b.title));
-      case "subject":
-        return materials.sort((a, b) => {
-          const subjectComparison = a.subject.localeCompare(b.subject);
-          return subjectComparison !== 0
-            ? subjectComparison
-            : a.title.localeCompare(b.title);
-        });
-      case "date":
-      default:
-        return materials.sort((a, b) => {
-          const dateA = new Date(a.createdAt ?? "").getTime();
-          const dateB = new Date(b.createdAt ?? "").getTime();
-          return dateB - dateA; // mais recente primeiro
-        });
+  
+  // Verificar e redirecionar se todos os documentos estiverem completos
+  const checkAndRedirectIfComplete = async () => {
+    try {
+      const profile = await studentService.getProfile();
+      if (profile.has_all_documents && typeof window !== 'undefined') {
+        const redirectAfterDocuments = sessionStorage.getItem('redirectAfterDocuments');
+        if (redirectAfterDocuments && !isRedirectingRef.current) {
+          isRedirectingRef.current = true;
+          showToast("Todos os documentos foram enviados! Redirecionando...", "success");
+          sessionStorage.removeItem('redirectAfterDocuments');
+          setTimeout(() => {
+            router.push(redirectAfterDocuments);
+          }, 2000);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao verificar documentos:", error);
     }
-  }, [mockData.materials, currentSort]);
+  };
+  
+  // Obter documento por tipo
+  const getDocumentByType = (type: string): Document | undefined => {
+    return documents.find(doc => doc.type === type);
+  };
+  
+  // Carregar documentos da API e verificar redirecionamento
+  useEffect(() => {
+    let mounted = true;
+    
+    const loadDocuments = async () => {
+      if (!user || !mounted) {
+        if (mounted) setLoading(false);
+        return;
+      }
+      
+      try {
+        const docs = await studentService.getDocuments();
+        if (mounted) {
+          setDocuments(docs);
+        }
+        
+        // Verificar se precisa redirecionar (apenas uma vez ao carregar)
+        if (!isRedirectingRef.current && mounted) {
+          const profile = await studentService.getProfile();
+          
+          if (profile.has_all_documents && typeof window !== 'undefined') {
+            const redirectAfterDocuments = sessionStorage.getItem('redirectAfterDocuments');
+            if (redirectAfterDocuments && !isRedirectingRef.current) {
+              isRedirectingRef.current = true;
+              await refreshUser();
+              showToast("Documentos completos! Redirecionando...", "success");
+              sessionStorage.removeItem('redirectAfterDocuments');
+              setTimeout(() => {
+                if (mounted) {
+                  router.push(redirectAfterDocuments);
+                }
+              }, 1500);
+              return;
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Erro ao carregar documentos:", error);
+        if (mounted) {
+          showToast("Erro ao carregar documentos", "error");
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+    
+    loadDocuments();
+    
+    return () => {
+      mounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
 
   return (
     <>
+      {ToastElement}
       <Container>
         <Header variant="with-back" text="Documentos" onBack={handleBack} />
 
         <ProfileSection>
           <UserAvatar />
-          <ProfileName>{estudante?.fullName}</ProfileName>
+          <ProfileName>{user?.name || "Estudante"}</ProfileName>
           <ProfileSubtitle>Os meus documentos</ProfileSubtitle>
         </ProfileSection>
 
         <DocumentsSection>
           <SectionHeader>
-            <SectionTitle>Selecione o documento</SectionTitle>
-            <DateLabel>Data</DateLabel>
+            <SectionTitle>Envie os seus documentos</SectionTitle>
           </SectionHeader>
 
-          <DocumentList>
-            {sortedMaterials.map((material) => (
-              <FileCard
-                key={material.id}
-                id={material.id}
-                title={material.title}
-                icon={material.icon}
-                createdAt={material.createdAt}
-                onClick={() => handleMaterialClick(material)}
-                onDownload={() => handleMaterialDownload(material)}
-              />
-            ))}
-          </DocumentList>
+          <DocumentsContainer>
+            {REQUIRED_DOCUMENTS.map((docType) => {
+              const uploadedDoc = getDocumentByType(docType.type);
+              const isUploading = uploading[docType.type] || false;
+              const progress = uploadProgress[docType.type] || 0;
+              const isDisabled = isUploading || (uploadedDoc && uploadedDoc.status === 'approved');
+              const currentStatus = uploadedDoc ? uploadedDoc.status : 'not_uploaded';
+              
+              return (
+                <DocumentItem key={docType.type}>
+                  <CustomInput
+                    fileInputSize="custom"
+                    fileInputHeight="80px"
+                    fileInputWidth="100%"
+                    label={docType.label}
+                    placeholder={uploadedDoc ? uploadedDoc.name : docType.placeholder}
+                    fileName={uploadedDoc ? uploadedDoc.name : undefined}
+                    variant="file"
+                    accept={docType.accept}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const file = e.target.files?.[0];
+                      if (file && !isDisabled) {
+                        handleFileSelect(docType.type, file);
+                      }
+                    }}
+                    disabled={isDisabled}
+                  />
+                  {isUploading ? (
+                    <LoadingText>
+                      Enviando... {progress > 0 && `${Math.round(progress)}%`}
+                    </LoadingText>
+                  ) : (
+                    <DocumentStatus $status={currentStatus}>
+                      {currentStatus === 'approved' && (
+                        <>
+                          <span>✓</span>
+                          <span>Aprovado</span>
+                        </>
+                      )}
+                      {currentStatus === 'rejected' && (
+                        <>
+                          <span>✗</span>
+                          <span>Rejeitado - Por favor, envie novamente</span>
+                        </>
+                      )}
+                      {currentStatus === 'pending' && (
+                        <>
+                          <span>⏳</span>
+                          <span>Aguardando aprovação</span>
+                        </>
+                      )}
+                      {currentStatus === 'not_uploaded' && (
+                        <>
+                          <span>○</span>
+                          <span>Documento não enviado</span>
+                        </>
+                      )}
+                    </DocumentStatus>
+                  )}
+                </DocumentItem>
+              );
+            })}
+          </DocumentsContainer>
+          
+          {/* Botão para enviar todos os documentos */}
+          {documents.length === 0 && Object.keys(pendingFiles).length === 3 && (
+            <UploadButton
+              onClick={handleUploadAll}
+              disabled={Object.values(uploading).some(u => u)}
+            >
+              {Object.values(uploading).some(u => u) ? "Enviando..." : "Enviar Todos os Documentos"}
+            </UploadButton>
+          )}
         </DocumentsSection>
       </Container>
-
-      <AlertModal
-        isOpen={isSortModalOpen}
-        title="Ordenar materiais"
-        message=""
-        variant="sort"
-        sortOptions={sortOptions}
-        selectedSort={currentSort}
-        onSortChange={handleSortChange}
-        onConfirm={() => {}}
-        onClose={handleSortModalClose}
-      />
     </>
   );
 };

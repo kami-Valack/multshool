@@ -113,17 +113,42 @@ export default function Home() {
     const loadData = async () => {
       if (user) {
         try {
+          // Primeiro verificar se tem matrícula aprovada
+          const enrollmentsData = await studentService.getEnrollments();
+          const hasApprovedEnrollment = enrollmentsData.some((e: any) => e.status === 'approved');
+          
+          // Se não tem matrícula aprovada, verificar documentos
+          if (!hasApprovedEnrollment) {
+            try {
+              const profile = await studentService.getProfile();
+              const documents = await studentService.getDocuments();
+              
+              // Verificar se todos os documentos estão completos
+              if (!profile.has_all_documents) {
+                // Redirecionar para página de documentos
+                router.push("/candidato/documentos");
+                return;
+              }
+              
+              // Verificar se há documentos rejeitados
+              const hasRejectedDocs = documents.some((doc: any) => doc.status === 'rejected');
+              if (hasRejectedDocs) {
+                router.push("/candidato/documentos");
+                return;
+              }
+            } catch (error) {
+              console.error("Erro ao verificar documentos:", error);
+            }
+          }
+          
           // Carregar dados em paralelo
-          const [enrollmentsData, examRegsData, gradesData, feesData] = await Promise.allSettled([
-            studentService.getEnrollments(),
+          const [examRegsData, gradesData, feesData] = await Promise.allSettled([
             studentService.getExamRegistrations(),
             studentService.getGrades(),
             studentService.getFees(),
           ]);
 
-          if (enrollmentsData.status === 'fulfilled') {
-            setEnrollments(enrollmentsData.value);
-          }
+          setEnrollments(enrollmentsData);
 
           if (examRegsData.status === 'fulfilled') {
             setExamRegistrations(examRegsData.value);
@@ -145,7 +170,7 @@ export default function Home() {
     };
 
     loadData();
-  }, [user]);
+  }, [user, router]);
 
   // Preparar dados do cartão de estudante
   const activeEnrollment = enrollments.find((e) => e.status === "approved");

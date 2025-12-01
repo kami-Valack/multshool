@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import bgHero from "@/assets/backgrounds/instituicoes/impal_default.png";
 import Button from "@/components/ui/Button";
-import { studentService, Course as ApiCourse } from "@/services/studentService";
+import { studentService, Course as ApiCourse, StudentProfile, Document } from "@/services/studentService";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
 // Types
@@ -315,6 +315,89 @@ const RequirementsButton = styled.button`
   }
 `;
 
+const AuthDialog = styled.div<{ $show: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: ${props => props.$show ? 'flex' : 'none'};
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+`;
+
+const AuthDialogContent = styled.div`
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+`;
+
+const AuthDialogTitle = styled.h2`
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  text-align: center;
+`;
+
+const AuthDialogSubtitle = styled.p`
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0 0 25px 0;
+  text-align: center;
+`;
+
+const AuthButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const AuthButton = styled.button<{ $primary?: boolean }>`
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  border: ${props => props.$primary ? 'none' : '2px solid #7c74af'};
+  background: ${props => props.$primary ? '#7c74af' : 'transparent'};
+  color: ${props => props.$primary ? 'white' : '#7c74af'};
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #6c757d;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  &:hover {
+    background: #f8f9fa;
+  }
+`;
+
 // Função para verificar se uma string é um UUID
 const isUUID = (str: string): boolean => {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -464,7 +547,7 @@ const mapApiCourseToUIData = (apiCourse: ApiCourse): CourseData => {
 const CourseDetailPage: React.FC = () => {
   const params = useParams();
   const router = useRouter();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, refreshUser } = useAuth();
   const { showToast, ToastElement } = useToast();
   const [activeYear, setActiveYear] = useState<keyof Curriculum>("1º ano");
   const [showRequirements, setShowRequirements] = useState(false);
@@ -473,6 +556,11 @@ const CourseDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [apiCourse, setApiCourse] = useState<ApiCourse | null>(null);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [profile, setProfile] = useState<StudentProfile | null>(null);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [checkingDocuments, setCheckingDocuments] = useState(false);
 
   const courseId = params.id as string;
 
@@ -507,6 +595,26 @@ const CourseDetailPage: React.FC = () => {
 
     loadCourse();
   }, [courseId]);
+
+  // Carregar perfil e documentos quando autenticado
+  useEffect(() => {
+    const loadProfileAndDocuments = async () => {
+      if (isAuthenticated && user) {
+        try {
+          const [profileData, documentsData] = await Promise.all([
+            studentService.getProfile(),
+            studentService.getDocuments()
+          ]);
+          setProfile(profileData);
+          setDocuments(documentsData);
+        } catch (error) {
+          console.error('Erro ao carregar perfil/documentos:', error);
+        }
+      }
+    };
+
+    loadProfileAndDocuments();
+  }, [isAuthenticated, user]);
 
   if (isLoading) {
     return (
@@ -545,22 +653,62 @@ const CourseDetailPage: React.FC = () => {
     router.back();
   };
 
+  // Verificar se todos os documentos estão completos
+  const checkDocumentsComplete = async (): Promise<boolean> => {
+    setCheckingDocuments(true);
+    try {
+      const profileData = await studentService.getProfile();
+      const documentsData = await studentService.getDocuments();
+      
+      setProfile(profileData);
+      setDocuments(documentsData);
+      
+      // Verificar se tem todos os documentos necessários
+      // A API deve retornar has_all_documents no perfil
+      if (profileData.has_all_documents === false) {
+        showToast("Por favor, complete todos os documentos antes de se matricular", "warning");
+        router.push("/candidato/documentos");
+        return false;
+      }
+      
+      // Verificar se há documentos pendentes ou rejeitados
+      const hasRejectedDocs = documentsData.some(doc => doc.status === 'rejected');
+      const hasPendingDocs = documentsData.some(doc => doc.status === 'pending');
+      
+      if (hasRejectedDocs) {
+        showToast("Você tem documentos rejeitados. Por favor, atualize-os antes de se matricular", "warning");
+        router.push("/candidato/documentos");
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Erro ao verificar documentos:', error);
+      showToast("Erro ao verificar documentos. Tente novamente.", "error");
+      return false;
+    } finally {
+      setCheckingDocuments(false);
+    }
+  };
+
   const handleEnroll = async () => {
     // Verificar se o usuário está autenticado
     if (!isAuthenticated || !user) {
-      // Salvar a URL atual para redirecionar após o login
-      const currentUrl = `/curso/${courseId}`;
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('redirectAfterLogin', currentUrl);
-      }
-      showToast("Por favor, faça login para se matricular", "warning");
-      router.push(`/login?redirect=${encodeURIComponent(currentUrl)}`);
+      // Mostrar diálogo de login/register
+      setShowAuthDialog(true);
+      setAuthMode('login');
       return;
     }
     
     // Verificar se temos o ID do curso
     if (!apiCourse || !apiCourse.id) {
       showToast("Erro: Curso não encontrado", "error");
+      return;
+    }
+
+    // Verificar documentos completos antes de permitir matrícula
+    const documentsComplete = await checkDocumentsComplete();
+    if (!documentsComplete) {
       return;
     }
 
@@ -795,7 +943,7 @@ const CourseDetailPage: React.FC = () => {
                   e.stopPropagation();
                   handleEnroll();
                 }}
-                disabled={isEnrolling}
+                disabled={isEnrolling || checkingDocuments}
                 style={{
                   width: "100%",
                   padding: "13px 24px",
@@ -805,13 +953,13 @@ const CourseDetailPage: React.FC = () => {
                   backgroundColor: "#6B46C1",
                   color: "#FFFFFF",
                   border: "none",
-                  cursor: isEnrolling ? "not-allowed" : "pointer",
-                  opacity: isEnrolling ? 0.6 : 1,
+                  cursor: (isEnrolling || checkingDocuments) ? "not-allowed" : "pointer",
+                  opacity: (isEnrolling || checkingDocuments) ? 0.6 : 1,
                   position: "relative",
                   zIndex: 10,
                 }}
               >
-                {isEnrolling ? "Processando..." : "Fazer matrícula"}
+                {(isEnrolling || checkingDocuments) ? "Processando..." : "Fazer matrícula"}
               </button>
             ) : (
               <button
@@ -819,12 +967,8 @@ const CourseDetailPage: React.FC = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  // Salvar a URL atual para redirecionar após o login
-                  const currentUrl = `/curso/${courseId}`;
-                  if (typeof window !== 'undefined') {
-                    sessionStorage.setItem('redirectAfterLogin', currentUrl);
-                  }
-                  router.push(`/login?redirect=${encodeURIComponent(currentUrl)}`);
+                  setShowAuthDialog(true);
+                  setAuthMode('login');
                 }}
                 style={{
                   width: "100%",
@@ -840,12 +984,54 @@ const CourseDetailPage: React.FC = () => {
                   zIndex: 10,
                 }}
               >
-                Fazer login para se matricular
+                Fazer matrícula
               </button>
             )}
           </ActionButtons>
         </InfoCard>
       </Container>
+      
+      {/* Diálogo de Login/Register */}
+      <AuthDialog $show={showAuthDialog}>
+        <AuthDialogContent>
+          <CloseButton onClick={() => setShowAuthDialog(false)}>×</CloseButton>
+          <AuthDialogTitle>
+            {authMode === 'login' ? 'Fazer Login' : 'Criar Conta'}
+          </AuthDialogTitle>
+          <AuthDialogSubtitle>
+            {authMode === 'login' 
+              ? 'Faça login para se matricular neste curso'
+              : 'Crie uma conta para se matricular neste curso'}
+          </AuthDialogSubtitle>
+          <AuthButtonsContainer>
+            <AuthButton
+              $primary={authMode === 'login'}
+              onClick={() => {
+                const currentUrl = `/curso/${courseId}`;
+                if (typeof window !== 'undefined') {
+                  sessionStorage.setItem('redirectAfterLogin', currentUrl);
+                }
+                router.push(`/login?redirect=${encodeURIComponent(currentUrl)}`);
+              }}
+            >
+              Fazer Login
+            </AuthButton>
+            <AuthButton
+              $primary={authMode === 'register'}
+              onClick={() => {
+                const currentUrl = `/curso/${courseId}`;
+                if (typeof window !== 'undefined') {
+                  sessionStorage.setItem('redirectAfterRegister', currentUrl);
+                }
+                router.push(`/registo?redirect=${encodeURIComponent(currentUrl)}`);
+              }}
+            >
+              Criar Conta
+            </AuthButton>
+          </AuthButtonsContainer>
+        </AuthDialogContent>
+      </AuthDialog>
+      
       {ToastElement}
     </>
   );

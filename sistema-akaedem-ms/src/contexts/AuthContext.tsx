@@ -34,6 +34,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkAuth = async () => {
     try {
       if (authService.isAuthenticated()) {
+        // Buscar dados completos do usuário
+        // A role já está no localStorage e será usada pelo useRoleCheck enquanto aguarda
         const userData = await authService.getMe();
         setUser(userData);
         
@@ -44,10 +46,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Erro ao verificar autenticação:', error);
-      // Limpa tokens inválidos
+      // Limpa tokens e role inválidos
       if (typeof window !== 'undefined') {
         localStorage.removeItem('auth_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user_role');
       }
     } finally {
       setLoading(false);
@@ -70,8 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProfileStatus(status);
       setProfileComplete(status.is_complete);
     } catch (error: any) {
-      // Se o erro for INCOMPLETE_PROFILE (403), significa que o perfil está incompleto
-      if (error.error_code === 'INCOMPLETE_PROFILE' || error.status === 403) {
+      // Se o erro for INCOMPLETE_PROFILE (403) com código específico, significa que o perfil está incompleto
+      if (error.error_code === 'INCOMPLETE_PROFILE' || (error.status === 403 && error.message?.includes('obrigatório preencher'))) {
         setProfileComplete(false);
         // Tentar extrair dados do erro
         if (error.missing_fields) {
@@ -87,15 +90,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const status = await profileService.checkCompletion();
             setProfileStatus(status);
             setProfileComplete(status.is_complete);
-          } catch {
-            // Se falhar, assumir incompleto
-            setProfileComplete(false);
+          } catch (innerError: any) {
+            // Se falhar novamente, verificar se é realmente INCOMPLETE_PROFILE
+            if (innerError.error_code === 'INCOMPLETE_PROFILE' || (innerError.status === 403 && innerError.message?.includes('obrigatório preencher'))) {
+              setProfileComplete(false);
+            } else {
+              // Se for outro tipo de erro (rede, servidor, etc), não assumir incompleto
+              // Manter o estado atual ou assumir completo para não bloquear acesso
+              console.warn('Erro ao verificar perfil (não é INCOMPLETE_PROFILE):', innerError);
+              // Não alterar profileComplete para não bloquear acesso indevidamente
+            }
           }
         }
       } else {
-        console.error('Erro ao verificar perfil:', error);
-        // Em caso de erro, assumir que está incompleto para forçar verificação
-        setProfileComplete(false);
+        console.warn('[AuthContext] Erro ao verificar perfil (não relacionado a perfil incompleto):', error);
+        // Em caso de erro que não seja INCOMPLETE_PROFILE, não assumir que está incompleto
+        // Isso evita bloquear acesso por erros de rede ou servidor
+        // Se profileComplete ainda não foi setado (null), assumir true para não bloquear acesso
+        if (profileComplete === null) {
+          console.log('[AuthContext] Erro na verificação de perfil, assumindo completo para não bloquear acesso');
+          setProfileComplete(true);
+        } else {
+          // Se já foi setado antes, manter o valor atual (não alterar)
+          console.log('[AuthContext] Mantendo estado atual de profileComplete:', profileComplete);
+        }
       }
     }
   }, [user]);
@@ -122,6 +140,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       
       console.log('AuthContext.login - Dados do usuário:', { role: userData.role });
+      
+      // Salvar role no localStorage para acesso imediato
+      if (typeof window !== 'undefined' && userData.role) {
+        localStorage.setItem('user_role', userData.role);
+        console.log('[AuthContext] Role salva no localStorage após login:', userData.role);
+      }
+      
       setUser(userData);
       
       // Se for escola, usar informações de perfil da resposta do login
@@ -163,6 +188,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setProfileComplete(null);
       setProfileStatus(null);
+      // Limpar role do localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('user_role');
+      }
       // Redirecionar para login
       if (typeof window !== 'undefined') {
         window.location.href = '/';
@@ -174,6 +203,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProfileComplete(null);
       setProfileStatus(null);
       if (typeof window !== 'undefined') {
+        localStorage.removeItem('user_role');
         window.location.href = '/';
       }
     }
@@ -194,12 +224,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // isAuthenticated deve ser true apenas se user existir E não estiver carregando
+  const isAuthenticated = !!user && !loading;
+
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
-        isAuthenticated: !!user,
+        isAuthenticated,
         profileComplete,
         profileStatus,
         login,

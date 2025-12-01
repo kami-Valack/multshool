@@ -28,6 +28,9 @@ export default function Candidaturas() {
   });
   const [editingEnrollment, setEditingEnrollment] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ class: '', student_phone: '', student_name: '', student_email: '' });
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [rejectingEnrollmentId, setRejectingEnrollmentId] = useState<string | null>(null);
+  const [rejectReason, setRejectReason] = useState('');
 
   // Garante que courses seja sempre um array
   const coursesArray = Array.isArray(courses) ? courses : [];
@@ -57,12 +60,27 @@ export default function Candidaturas() {
   };
 
   const handleReject = async (enrollmentId: string) => {
+    setRejectingEnrollmentId(enrollmentId);
+    setRejectDialogOpen(true);
+  };
+  
+  const confirmReject = async () => {
+    if (!rejectingEnrollmentId) return;
+    
     try {
-      const reason = prompt('Motivo da rejeição (opcional):');
-      await rejectEnrollment(enrollmentId, reason || undefined);
+      await rejectEnrollment(rejectingEnrollmentId, rejectReason || undefined);
+      setRejectDialogOpen(false);
+      setRejectingEnrollmentId(null);
+      setRejectReason('');
     } catch (error) {
       // Erro já é tratado no hook
     }
+  };
+  
+  const cancelReject = () => {
+    setRejectDialogOpen(false);
+    setRejectingEnrollmentId(null);
+    setRejectReason('');
   };
 
   const handleEdit = (enrollment: any) => {
@@ -183,6 +201,16 @@ export default function Candidaturas() {
                           }}
                           onAddNew={() => toast.info("Funcionalidade em desenvolvimento")}
                           onSave={handleSaveFromTable}
+                          onApprove={async (item) => {
+                            if (item.enrollment) {
+                              await handleApprove(item.enrollment.id);
+                            }
+                          }}
+                          onReject={async (item) => {
+                            if (item.enrollment) {
+                              await handleReject(item.enrollment.id);
+                            }
+                          }}
                         />
                       )}
                     </div>
@@ -202,6 +230,37 @@ export default function Candidaturas() {
           </div>
         </SidebarInset>
       </SidebarProvider>
+      
+      {/* Diálogo de Rejeição */}
+      <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rejeitar Candidatura</DialogTitle>
+            <DialogDescription>
+              Tem certeza que deseja rejeitar esta candidatura? Você pode adicionar um motivo (opcional).
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="reject-reason">Motivo da rejeição (opcional)</Label>
+              <Input
+                id="reject-reason"
+                placeholder="Digite o motivo da rejeição..."
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={cancelReject}>
+              Cancelar
+            </Button>
+            <Button variant="destructive" onClick={confirmReject}>
+              Confirmar Rejeição
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

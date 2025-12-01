@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import styled from "styled-components";
 import Header from "@/components/ui/HeaderWelcome";
 import Icon from "@/components/ui/IconLogo";
@@ -40,6 +40,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 }) => {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const { showToast, ToastElement } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [countdown, setCountdown] = useState(119);
@@ -291,7 +292,30 @@ const sendVerificationCode = async (
       if (response.status === 'success') {
         showToast("Conta criada com sucesso! Verifique seu email para ativar a conta.", "success");
         
-        // Aguardar um pouco antes de redirecionar
+        // Verificar se há um redirect na URL ou no sessionStorage
+        if (typeof window !== 'undefined') {
+          // Primeiro, verificar o parâmetro da URL
+          const redirectParam = searchParams?.get('redirect');
+          
+          if (redirectParam) {
+            // Salvar no sessionStorage para usar após completar documentos
+            sessionStorage.setItem('redirectAfterDocuments', decodeURIComponent(redirectParam));
+            // Também salvar para o login usar
+            sessionStorage.setItem('redirectAfterRegister', decodeURIComponent(redirectParam));
+          } else {
+            // Se não houver na URL, verificar no sessionStorage
+            const storedRedirect = sessionStorage.getItem('redirectAfterRegister');
+            if (storedRedirect) {
+              // Salvar também para usar após documentos
+              sessionStorage.setItem('redirectAfterDocuments', storedRedirect);
+            }
+          }
+          
+          // Marcar que precisa completar documentos após login
+          sessionStorage.setItem('needsDocuments', 'true');
+        }
+        
+        // Aguardar um pouco antes de redirecionar para login
         setTimeout(() => {
           router.push("/login");
         }, 2000);
@@ -1115,7 +1139,11 @@ const MethodText = styled.span`
 
 // Componente de página sem props
 const RegistrationPage: React.FC = () => {
-  return <RegistrationForm />;
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <RegistrationForm />
+    </Suspense>
+  );
 };
 
 export default RegistrationPage;

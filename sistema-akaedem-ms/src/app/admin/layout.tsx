@@ -10,7 +10,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const isCompletingProfile = pathname?.includes('/completar-perfil') || false;
   
   return (
-    <ProtectedRoute requireCompleteProfile={!isCompletingProfile}>
+    <ProtectedRoute 
+      requireCompleteProfile={!isCompletingProfile} // Não requer perfil completo na página de completar perfil
+      allowedRoles={['school']} // Apenas escolas podem acessar o admin
+    >
       <SidebarProvider>
         <SidebarInset className="p-4">
           {!isCompletingProfile && <SidebarTrigger />}

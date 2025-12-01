@@ -132,14 +132,19 @@ class ApiClient {
         const error = await this.handleError(response);
         
         // Se for erro de perfil incompleto (403) e estiver no browser, redirecionar
+        // Mas apenas se for especificamente INCOMPLETE_PROFILE, não qualquer 403
+        // E apenas se não estiver já na página de completar perfil
+        // NOTA: Removemos o redirecionamento automático para permitir que os componentes tratem o erro
+        // O ProtectedRoute já cuida do redirecionamento quando necessário
         if (
           error.status === 403 && 
           error.error_code === 'INCOMPLETE_PROFILE' &&
           typeof window !== 'undefined' &&
-          !window.location.pathname.includes('/completar-perfil')
+          !window.location.pathname.includes('/completar-perfil') &&
+          !window.location.pathname.includes('/admin/completar-perfil')
         ) {
-          // Redirecionar para página de completar perfil
-          window.location.href = '/admin/completar-perfil';
+          // Log apenas, não redirecionar automaticamente
+          console.warn('[API Client] Perfil incompleto detectado, mas deixando o componente tratar o redirecionamento');
         }
         
         throw error;
