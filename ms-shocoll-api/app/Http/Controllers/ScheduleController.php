@@ -109,6 +109,148 @@ class ScheduleController extends Controller
     }
 
     /**
+     * Lista horários para um estudante (via API Secret)
+     * Filtra por class_id, class_name ou course_id passados como parâmetros
+     */
+    public function indexForStudent(Request $request): JsonResponse
+    {
+        Log::info('Buscando horários para estudante', [
+            'filters' => $request->all(),
+        ]);
+        
+        $query = Schedule::query()
+            ->with(['course', 'subject', 'class'])
+            ->where('is_active', true);
+        
+        // Se não especificar tipo, retornar tanto aulas quanto exames
+        // Se especificar type=exam, retornar apenas exames
+        // Se especificar type=class, retornar apenas aulas
+        if ($request->has('type')) {
+            $query->where('type', $request->type);
+        } else {
+            // Por padrão, retornar apenas aulas (para manter compatibilidade)
+            $query->where('type', 'class');
+        }
+        
+        // Filtros opcionais
+        if ($request->has('class_id') && $request->class_id) {
+            $query->where(function($q) use ($request) {
+                $q->where('class_id', $request->class_id)
+                  ->orWhereHas('class', function($subQ) use ($request) {
+                      $subQ->where('id', $request->class_id);
+                  });
+            });
+            Log::info('Filtro aplicado: class_id', ['class_id' => $request->class_id]);
+        }
+        
+        if ($request->has('class_name') && $request->class_name) {
+            // Busca case-insensitive e remove espaços extras
+            $className = trim($request->class_name);
+            $query->where(function($q) use ($className) {
+                $q->whereRaw('LOWER(TRIM(class_name)) = ?', [strtolower($className)])
+                  ->orWhereHas('class', function($subQ) use ($className) {
+                      $subQ->whereRaw('LOWER(TRIM(name)) = ?', [strtolower($className)]);
+                  });
+            });
+            Log::info('Filtro aplicado: class_name', ['class_name' => $className]);
+        }
+        
+        if ($request->has('course_id') && $request->course_id) {
+            $query->where('course_id', $request->course_id);
+            Log::info('Filtro aplicado: course_id', ['course_id' => $request->course_id]);
+        }
+        
+        // Se não houver filtros, retornar vazio (não retornar todos os horários)
+        // EXCEÇÃO: Para exames, podemos buscar por course_id se não houver class_name/class_id
+        if (!$request->has('class_id') && !$request->has('class_name') && !$request->has('course_id')) {
+            Log::warning('Nenhum filtro fornecido para buscar horários do estudante', [
+                'type' => $request->input('type', 'class'),
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'schedules' => [],
+            ]);
+        }
+        
+        // Para exames, se não tiver class_name mas tiver course_id, buscar por course_id
+        if ($request->has('type') && $request->type === 'exam' && !$request->has('class_name') && !$request->has('class_id') && $request->has('course_id')) {
+            Log::info('Buscando exames por course_id (sem filtro de turma)', [
+                'course_id' => $request->course_id,
+            ]);
+        }
+
+        // Ordenar: exames por exam_date, aulas por day_of_week e start_time
+        if ($request->has('type') && $request->type === 'exam') {
+            $schedules = $query->orderBy('exam_date')->orderBy('start_time')->get();
+        } else {
+            $schedules = $query->orderBy('day_of_week')->orderBy('start_time')->get();
+        }
+        
+        Log::info('Horários encontrados', [
+            'count' => $schedules->count(),
+            'type' => $request->input('type', 'class'),
+            'filters' => $request->all(),
+            'sample_schedules' => $schedules->take(3)->map(function($s) {
+                return [
+                    'id' => $s->id,
+                    'type' => $s->type,
+                    'exam_date' => $s->exam_date,
+                    'class_name' => $s->class_name,
+                    'course_id' => $s->course_id,
+                    'subject_name' => $s->subject->name ?? null,
+                ];
+            }),
+        ]);
+
+        // Formatar resposta
+        $formattedSchedules = $schedules->map(function ($schedule) {
+            return [
+                'id' => $schedule->id,
+                'class_id' => $schedule->class_id,
+                'class_name' => $schedule->class_name,
+                'course_id' => $schedule->course_id,
+                'course_name' => $schedule->course ? $schedule->course->name : null,
+                'course' => $schedule->course ? [
+                    'id' => $schedule->course->id,
+                    'name' => $schedule->course->name,
+                ] : null,
+                'subject_id' => $schedule->subject_id,
+                'subject_name' => $schedule->subject ? $schedule->subject->name : null,
+                'subject' => $schedule->subject ? [
+                    'id' => $schedule->subject->id,
+                    'name' => $schedule->subject->name,
+                    'code' => $schedule->subject->code,
+                ] : null,
+                'teacher_id' => $schedule->teacher_id,
+                'day_of_week' => $schedule->day_of_week,
+                'day_of_week_portuguese' => $schedule->day_of_week_portuguese ?? null,
+                'start_time' => $schedule->start_time ? $schedule->start_time->format('H:i') : null,
+                'end_time' => $schedule->end_time ? $schedule->end_time->format('H:i') : null,
+                'room' => $schedule->room,
+                'type' => $schedule->type,
+                'exam_type' => $schedule->exam_type,
+                'exam_type_portuguese' => $schedule->exam_type_portuguese ?? null,
+                'exam_date' => $schedule->exam_date ? $schedule->exam_date->format('Y-m-d') : null,
+                'academic_year' => $schedule->academic_year,
+                'semester' => $schedule->semester,
+                'is_active' => $schedule->is_active,
+                'created_at' => $schedule->created_at,
+                'updated_at' => $schedule->updated_at,
+            ];
+        });
+        
+        Log::info('Retornando horários formatados', [
+            'count' => $formattedSchedules->count(),
+            'type' => $request->input('type', 'class'),
+        ]);
+        
+        return response()->json([
+            'status' => 'success',
+            'schedules' => $formattedSchedules,
+        ]);
+    }
+
+    /**
      * Cria um novo horário
      */
     public function store(Request $request): JsonResponse
@@ -119,11 +261,11 @@ class ScheduleController extends Controller
             'class_id' => 'nullable|exists:classes,id',
             'class_name' => 'required|string|max:255',
             'course_id' => 'required|exists:courses,id',
-            'subject_id' => 'required|exists:course_subjects,id',
+            'subject_id' => 'nullable|required_if:type,class|exists:course_subjects,id',
             'teacher_id' => 'nullable|string',
-            'day_of_week' => 'required|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'day_of_week' => 'nullable|required_if:type,class|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
+            'start_time' => 'nullable|required_if:type,class|date_format:H:i',
+            'end_time' => 'nullable|required_if:type,class|date_format:H:i|after:start_time',
             'room' => 'nullable|string|max:255',
             'type' => 'required|in:class,exam',
             'exam_type' => 'nullable|required_if:type,exam|in:test,final_exam,recovery_exam,practical_exam,oral_exam',
@@ -146,10 +288,12 @@ class ScheduleController extends Controller
             ->where('school_id', $school->id)
             ->firstOrFail();
         
-        // Verificar se a disciplina pertence ao curso
-        $subject = CourseSubject::where('id', $request->subject_id)
-            ->where('course_id', $request->course_id)
-            ->firstOrFail();
+        // Verificar se a disciplina pertence ao curso (apenas se fornecida)
+        if ($request->subject_id) {
+            $subject = CourseSubject::where('id', $request->subject_id)
+                ->where('course_id', $request->course_id)
+                ->firstOrFail();
+        }
         
         // Se class_id foi fornecido, verificar se pertence à escola
         if ($request->class_id) {
@@ -158,40 +302,95 @@ class ScheduleController extends Controller
                 ->firstOrFail();
         }
         
-        // Verificar conflitos de horário (mesma turma, dia, hora e sala)
-        $conflict = Schedule::where('school_id', $school->id)
-            ->where('class_id', $request->class_id)
-            ->where('day_of_week', $request->day_of_week)
-            ->where('start_time', $request->start_time)
-            ->where('room', $request->room)
-            ->where('is_active', true)
-            ->first();
-        
-        if ($conflict) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Já existe um horário neste mesmo dia, hora e sala para esta turma.',
-            ], 409);
+        // Verificar conflitos de horário apenas para aulas (não para exames)
+        if ($request->type === 'class') {
+            $conflict = Schedule::where('school_id', $school->id)
+                ->where('type', 'class')
+                ->where('class_id', $request->class_id)
+                ->where('day_of_week', $request->day_of_week)
+                ->where('start_time', $request->start_time)
+                ->where('room', $request->room)
+                ->where('is_active', true)
+                ->first();
+            
+            if ($conflict) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Já existe um horário neste mesmo dia, hora e sala para esta turma.',
+                ], 409);
+            }
+        } else {
+            // Para exames, verificar conflitos por data, hora e sala (se fornecidos)
+            if ($request->exam_date && $request->start_time && $request->room) {
+                $conflict = Schedule::where('school_id', $school->id)
+                    ->where('type', 'exam')
+                    ->where('class_id', $request->class_id)
+                    ->where('exam_date', $request->exam_date)
+                    ->where('start_time', $request->start_time)
+                    ->where('room', $request->room)
+                    ->where('is_active', true)
+                    ->first();
+                
+                if ($conflict) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Já existe um exame nesta mesma data, hora e sala para esta turma.',
+                    ], 409);
+                }
+            }
         }
         
         try {
-            $schedule = Schedule::create([
+            $scheduleData = [
                 'school_id' => $school->id,
                 'class_id' => $request->class_id,
                 'class_name' => $request->class_name,
                 'course_id' => $request->course_id,
-                'subject_id' => $request->subject_id,
                 'teacher_id' => $request->teacher_id,
-                'day_of_week' => $request->day_of_week,
-                'start_time' => $request->start_time,
-                'end_time' => $request->end_time,
-                'room' => $request->room,
                 'type' => $request->type,
                 'exam_type' => $request->exam_type,
                 'exam_date' => $request->exam_date,
                 'academic_year' => $request->academic_year,
                 'semester' => $request->semester,
                 'is_active' => $request->has('is_active') ? $request->boolean('is_active') : true,
+            ];
+            
+            // Adicionar subject_id apenas se fornecido
+            if ($request->has('subject_id') && $request->subject_id) {
+                $scheduleData['subject_id'] = $request->subject_id;
+            }
+            
+            // Campos específicos para aulas
+            if ($request->type === 'class') {
+                $scheduleData['day_of_week'] = $request->day_of_week;
+                $scheduleData['start_time'] = $request->start_time;
+                $scheduleData['end_time'] = $request->end_time;
+            } else {
+                // Para exames, NÃO incluir day_of_week (deve ser NULL)
+                // start_time e end_time são opcionais mas podem ser fornecidos
+                if ($request->has('start_time') && $request->start_time) {
+                    $scheduleData['start_time'] = $request->start_time;
+                }
+                if ($request->has('end_time') && $request->end_time) {
+                    $scheduleData['end_time'] = $request->end_time;
+                }
+                // Garantir que day_of_week seja NULL para exames
+                $scheduleData['day_of_week'] = null;
+            }
+            
+            // Campos opcionais
+            if ($request->has('room') && $request->room) {
+                $scheduleData['room'] = $request->room;
+            }
+            
+            $schedule = Schedule::create($scheduleData);
+            
+            Log::info('Horário criado', [
+                'schedule_id' => $schedule->id,
+                'type' => $schedule->type,
+                'exam_date' => $schedule->exam_date,
+                'class_name' => $schedule->class_name,
+                'course_id' => $schedule->course_id,
             ]);
             
             $schedule->load(['course', 'subject', 'class']);
@@ -217,8 +416,8 @@ class ScheduleController extends Controller
                     'teacher_id' => $schedule->teacher_id,
                     'day_of_week' => $schedule->day_of_week,
                     'day_of_week_portuguese' => $schedule->day_of_week_portuguese,
-                    'start_time' => $schedule->start_time->format('H:i'),
-                    'end_time' => $schedule->end_time->format('H:i'),
+                    'start_time' => $schedule->start_time ? $schedule->start_time->format('H:i') : null,
+                    'end_time' => $schedule->end_time ? $schedule->end_time->format('H:i') : null,
                     'room' => $schedule->room,
                     'type' => $schedule->type,
                     'exam_type' => $schedule->exam_type,
@@ -235,11 +434,15 @@ class ScheduleController extends Controller
             Log::error('Erro ao criar horário', [
                 'school_id' => $school->id,
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all(),
+                'type' => $request->type ?? 'unknown',
             ]);
             
             return response()->json([
                 'status' => 'error',
-                'message' => 'Erro ao criar horário',
+                'message' => 'Erro ao criar horário: ' . $e->getMessage(),
+                'error_details' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
     }

@@ -3789,21 +3789,7 @@ function HorariosPage() {
         classes,
         courses
     ]);
-    const disciplinas = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        const allSubjects = [];
-        Object.values(subjectsMap).flat().forEach((subject, index)=>{
-            allSubjects.push({
-                id: subject.id,
-                nome: subject.name,
-                codigo: subject.code || "",
-                cor: CORES_DISCIPLINAS[index % CORES_DISCIPLINAS.length]
-            });
-        });
-        return allSubjects;
-    }, [
-        subjectsMap
-    ]);
-    // Form data inicial
+    // Form data inicial - DEVE ser declarado ANTES do useMemo que o usa
     const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
         disciplina: null,
         turma: "",
@@ -3822,6 +3808,22 @@ function HorariosPage() {
         academicYear: new Date().getFullYear() + "/" + (new Date().getFullYear() + 1),
         semester: 1
     });
+    // Disciplinas filtradas pelo curso selecionado
+    const disciplinas = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (!formData.cursoId) {
+            return [];
+        }
+        const courseSubjects = subjectsMap[formData.cursoId] || [];
+        return courseSubjects.map((subject, index)=>({
+                id: subject.id,
+                nome: subject.name,
+                codigo: subject.code || "",
+                cor: CORES_DISCIPLINAS[index % CORES_DISCIPLINAS.length]
+            }));
+    }, [
+        subjectsMap,
+        formData.cursoId
+    ]);
     // Carregar disciplinas quando curso for selecionado
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (formData.cursoId) {
@@ -3883,12 +3885,23 @@ function HorariosPage() {
             if ("docente" in item) {
                 base.docente = item.docente;
                 base.teacherId = item.teacherId;
+                // Se tiver teacherId, garantir que está no formData
+                if (item.teacherId) {
+                    const teacher = teachers.find((t)=>t.id === item.teacherId);
+                    if (teacher) {
+                        base.docente = teacher.name;
+                    }
+                }
             }
             if ("tipo" in item) {
                 base.tipo = item.tipo;
                 base.data = item.data;
             }
             setFormData(base);
+            // Carregar disciplinas do curso ao editar
+            if (base.cursoId) {
+                loadCourseSubjects(base.cursoId);
+            }
         } else {
             // Quando criar novo horário, usar a turma selecionada ou a primeira disponível
             const turmaSelecionada = selectedHorario || selectedProva || filtroValor || (turmas.length > 0 ? turmas[0] : "");
@@ -4026,7 +4039,7 @@ function HorariosPage() {
                                     children: item.disciplina.nome
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 532,
+                                    lineNumber: 546,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -4035,13 +4048,13 @@ function HorariosPage() {
                                     children: item.disciplina.codigo
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 538,
+                                    lineNumber: 552,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                            lineNumber: 531,
+                            lineNumber: 545,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4059,12 +4072,12 @@ function HorariosPage() {
                                         size: 14
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                        lineNumber: 552,
+                                        lineNumber: 566,
                                         columnNumber: 13
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 543,
+                                    lineNumber: 557,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4079,24 +4092,24 @@ function HorariosPage() {
                                         size: 14
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                        lineNumber: 563,
+                                        lineNumber: 577,
                                         columnNumber: 13
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 554,
+                                    lineNumber: 568,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                            lineNumber: 542,
+                            lineNumber: 556,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                    lineNumber: 530,
+                    lineNumber: 544,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4109,20 +4122,20 @@ function HorariosPage() {
                                     size: 12
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 569,
+                                    lineNumber: 583,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: item.sala
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 570,
+                                    lineNumber: 584,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                            lineNumber: 568,
+                            lineNumber: 582,
                             columnNumber: 9
                         }, this),
                         view === "horarios" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4132,20 +4145,20 @@ function HorariosPage() {
                                     size: 12
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 574,
+                                    lineNumber: 588,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: item.docente
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 575,
+                                    lineNumber: 589,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                            lineNumber: 573,
+                            lineNumber: 587,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4155,7 +4168,7 @@ function HorariosPage() {
                                     size: 12
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 579,
+                                    lineNumber: 593,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4167,13 +4180,13 @@ function HorariosPage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 580,
+                                    lineNumber: 594,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                            lineNumber: 578,
+                            lineNumber: 592,
                             columnNumber: 9
                         }, this),
                         view === "provas" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -4184,19 +4197,19 @@ function HorariosPage() {
                             children: item.tipo
                         }, void 0, false, {
                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                            lineNumber: 585,
+                            lineNumber: 599,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                    lineNumber: 567,
+                    lineNumber: 581,
                     columnNumber: 7
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-            lineNumber: 521,
+            lineNumber: 535,
             columnNumber: 5
         }, this);
     const renderGrade = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4214,14 +4227,14 @@ function HorariosPage() {
                                     size: 18
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 601,
+                                    lineNumber: 615,
                                     columnNumber: 13
                                 }, this),
                                 "Horário"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                            lineNumber: 600,
+                            lineNumber: 614,
                             columnNumber: 11
                         }, this),
                         DIAS_SEMANA.map((dia)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4231,12 +4244,12 @@ function HorariosPage() {
                                     children: dia
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                    lineNumber: 609,
+                                    lineNumber: 623,
                                     columnNumber: 15
                                 }, this)
                             }, dia, false, {
                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                lineNumber: 605,
+                                lineNumber: 619,
                                 columnNumber: 13
                             }, this)),
                         HORAS.map((hora, horaIdx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].Fragment, {
@@ -4246,7 +4259,7 @@ function HorariosPage() {
                                         children: hora
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                        lineNumber: 615,
+                                        lineNumber: 629,
                                         columnNumber: 15
                                     }, this),
                                     DIAS_SEMANA.map((dia)=>{
@@ -4262,36 +4275,36 @@ function HorariosPage() {
                                                     children: renderAulaCard(aula, duracao)
                                                 }, aula.id, false, {
                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                    lineNumber: 633,
+                                                    lineNumber: 647,
                                                     columnNumber: 25
                                                 }, this);
                                             })
                                         }, `${dia}-${hora}`, false, {
                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                            lineNumber: 624,
+                                            lineNumber: 638,
                                             columnNumber: 19
                                         }, this);
                                     })
                                 ]
                             }, hora, true, {
                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                lineNumber: 614,
+                                lineNumber: 628,
                                 columnNumber: 13
                             }, this))
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                    lineNumber: 598,
+                    lineNumber: 612,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                lineNumber: 597,
+                lineNumber: 611,
                 columnNumber: 7
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-            lineNumber: 596,
+            lineNumber: 610,
             columnNumber: 5
         }, this);
     const renderReadOnlyField = (label, value)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4301,7 +4314,7 @@ function HorariosPage() {
                     children: label
                 }, void 0, false, {
                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                    lineNumber: 647,
+                    lineNumber: 661,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4309,13 +4322,13 @@ function HorariosPage() {
                     children: value
                 }, void 0, false, {
                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                    lineNumber: 648,
+                    lineNumber: 662,
                     columnNumber: 7
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-            lineNumber: 646,
+            lineNumber: 660,
             columnNumber: 5
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SidebarProvider"], {
@@ -4328,7 +4341,7 @@ function HorariosPage() {
                 variant: "sidebar"
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                lineNumber: 662,
+                lineNumber: 676,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$sidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SidebarInset"], {
@@ -4339,7 +4352,7 @@ function HorariosPage() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$heroui$2f$navbar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                lineNumber: 667,
+                                lineNumber: 681,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4352,7 +4365,7 @@ function HorariosPage() {
                                                 children: "Gestão de Horários"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                lineNumber: 670,
+                                                lineNumber: 684,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4360,13 +4373,13 @@ function HorariosPage() {
                                                 children: "Faça a gestão de horários de aulas, provas e exames de forma eficiente"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                lineNumber: 673,
+                                                lineNumber: 687,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                        lineNumber: 669,
+                                        lineNumber: 683,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -4410,14 +4423,14 @@ function HorariosPage() {
                                                                                             size: 18
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 699,
+                                                                                            lineNumber: 713,
                                                                                             columnNumber: 33
                                                                                         }, this),
                                                                                         "Horários de Aulas"
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                    lineNumber: 695,
+                                                                                    lineNumber: 709,
                                                                                     columnNumber: 31
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$tabs$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TabsTrigger"], {
@@ -4429,30 +4442,30 @@ function HorariosPage() {
                                                                                             size: 18
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 706,
+                                                                                            lineNumber: 720,
                                                                                             columnNumber: 33
                                                                                         }, this),
                                                                                         "Provas e Exames"
                                                                                     ]
                                                                                 }, void 0, true, {
                                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                    lineNumber: 702,
+                                                                                    lineNumber: 716,
                                                                                     columnNumber: 31
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                            lineNumber: 694,
+                                                                            lineNumber: 708,
                                                                             columnNumber: 29
                                                                         }, this)
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 693,
+                                                                        lineNumber: 707,
                                                                         columnNumber: 27
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                    lineNumber: 692,
+                                                                    lineNumber: 706,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -4464,7 +4477,7 @@ function HorariosPage() {
                                                                                 children: "Selecione uma turma para visualizar os horários"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 715,
+                                                                                lineNumber: 729,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4484,7 +4497,7 @@ function HorariosPage() {
                                                                                                         children: turma
                                                                                                     }, void 0, false, {
                                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                        lineNumber: 730,
+                                                                                                        lineNumber: 744,
                                                                                                         columnNumber: 39
                                                                                                     }, this),
                                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
@@ -4496,13 +4509,13 @@ function HorariosPage() {
                                                                                                         ]
                                                                                                     }, void 0, true, {
                                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                        lineNumber: 731,
+                                                                                                        lineNumber: 745,
                                                                                                         columnNumber: 39
                                                                                                     }, this)
                                                                                                 ]
                                                                                             }, void 0, true, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 729,
+                                                                                                lineNumber: 743,
                                                                                                 columnNumber: 37
                                                                                             }, this),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -4519,42 +4532,42 @@ function HorariosPage() {
                                                                                                             ]
                                                                                                         }, void 0, true, {
                                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                            lineNumber: 737,
+                                                                                                            lineNumber: 751,
                                                                                                             columnNumber: 41
                                                                                                         }, this),
                                                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
                                                                                                             className: "h-4 w-4 text-gray-400"
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                            lineNumber: 740,
+                                                                                                            lineNumber: 754,
                                                                                                             columnNumber: 41
                                                                                                         }, this)
                                                                                                     ]
                                                                                                 }, void 0, true, {
                                                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                    lineNumber: 736,
+                                                                                                    lineNumber: 750,
                                                                                                     columnNumber: 39
                                                                                                 }, this)
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 735,
+                                                                                                lineNumber: 749,
                                                                                                 columnNumber: 37
                                                                                             }, this)
                                                                                         ]
                                                                                     }, turma, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 720,
+                                                                                        lineNumber: 734,
                                                                                         columnNumber: 35
                                                                                     }, this))
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 718,
+                                                                                lineNumber: 732,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 714,
+                                                                        lineNumber: 728,
                                                                         columnNumber: 29
                                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                         className: "space-y-4",
@@ -4569,7 +4582,7 @@ function HorariosPage() {
                                                                                                 size: 14
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 751,
+                                                                                                lineNumber: 765,
                                                                                                 columnNumber: 35
                                                                                             }, this),
                                                                                             "Visualizando: Turma ",
@@ -4577,7 +4590,7 @@ function HorariosPage() {
                                                                                                 children: currentSelected
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 752,
+                                                                                                lineNumber: 766,
                                                                                                 columnNumber: 55
                                                                                             }, this),
                                                                                             " -",
@@ -4586,13 +4599,13 @@ function HorariosPage() {
                                                                                                 children: turmaInfo[currentSelected]?.curso || "N/A"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 753,
+                                                                                                lineNumber: 767,
                                                                                                 columnNumber: 35
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 750,
+                                                                                        lineNumber: 764,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4605,13 +4618,13 @@ function HorariosPage() {
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 755,
+                                                                                        lineNumber: 769,
                                                                                         columnNumber: 33
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 749,
+                                                                                lineNumber: 763,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4624,7 +4637,7 @@ function HorariosPage() {
                                                                                         children: "Voltar às turmas"
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 760,
+                                                                                        lineNumber: 774,
                                                                                         columnNumber: 33
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -4637,37 +4650,37 @@ function HorariosPage() {
                                                                                                 size: 20
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 772,
+                                                                                                lineNumber: 786,
                                                                                                 columnNumber: 37
                                                                                             }, this),
                                                                                             isHorarios ? "Nova Aula" : "Nova Prova"
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 767,
+                                                                                        lineNumber: 781,
                                                                                         columnNumber: 35
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 759,
+                                                                                lineNumber: 773,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 748,
+                                                                        lineNumber: 762,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                    lineNumber: 712,
+                                                                    lineNumber: 726,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                            lineNumber: 691,
+                                                            lineNumber: 705,
                                                             columnNumber: 23
                                                         }, this),
                                                         currentSelected && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -4681,7 +4694,7 @@ function HorariosPage() {
                                                                                 children: "Grade Horária Semestral"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 784,
+                                                                                lineNumber: 798,
                                                                                 columnNumber: 31
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -4690,18 +4703,18 @@ function HorariosPage() {
                                                                                 children: "Semestre 2025/1"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 785,
+                                                                                lineNumber: 799,
                                                                                 columnNumber: 31
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 783,
+                                                                        lineNumber: 797,
                                                                         columnNumber: 29
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                    lineNumber: 782,
+                                                                    lineNumber: 796,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -4713,7 +4726,7 @@ function HorariosPage() {
                                                                                 children: "Nenhum horário cadastrado para esta turma."
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 793,
+                                                                                lineNumber: 807,
                                                                                 columnNumber: 33
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4721,30 +4734,30 @@ function HorariosPage() {
                                                                                 children: 'Clique em "Nova Aula" para adicionar horários.'
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 794,
+                                                                                lineNumber: 808,
                                                                                 columnNumber: 33
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 792,
+                                                                        lineNumber: 806,
                                                                         columnNumber: 31
                                                                     }, this) : renderGrade()
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                    lineNumber: 790,
+                                                                    lineNumber: 804,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                            lineNumber: 781,
+                                                            lineNumber: 795,
                                                             columnNumber: 25
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                    lineNumber: 690,
+                                                    lineNumber: 704,
                                                     columnNumber: 21
                                                 }, this);
                                             })(),
@@ -4762,7 +4775,7 @@ function HorariosPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                lineNumber: 807,
+                                                                lineNumber: 821,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -4774,13 +4787,13 @@ function HorariosPage() {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                lineNumber: 811,
+                                                                lineNumber: 825,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                        lineNumber: 806,
+                                                        lineNumber: 820,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4797,7 +4810,7 @@ function HorariosPage() {
                                                                                 children: "Disciplina"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 819,
+                                                                                lineNumber: 833,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -4813,19 +4826,26 @@ function HorariosPage() {
                                                                                 children: [
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {
-                                                                                            placeholder: !formData.cursoId ? "Selecione um curso primeiro" : "Selecione a disciplina"
+                                                                                            placeholder: !formData.cursoId ? "Selecione um curso primeiro" : loadingSubjects[formData.cursoId] ? "Carregando disciplinas..." : disciplinas.length === 0 ? "Nenhuma disciplina encontrada para este curso" : "Selecione a disciplina"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 832,
+                                                                                            lineNumber: 846,
                                                                                             columnNumber: 29
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 831,
+                                                                                        lineNumber: 845,
                                                                                         columnNumber: 27
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
-                                                                                        children: disciplinas.map((d)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
+                                                                                        children: disciplinas.length === 0 && formData.cursoId ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                            className: "px-2 py-1.5 text-sm text-gray-500",
+                                                                                            children: loadingSubjects[formData.cursoId] ? "Carregando disciplinas..." : "Nenhuma disciplina disponível para este curso"
+                                                                                        }, void 0, false, {
+                                                                                            fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
+                                                                                            lineNumber: 858,
+                                                                                            columnNumber: 31
+                                                                                        }, this) : disciplinas.map((d)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
                                                                                                 value: d.id,
                                                                                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                                                     className: "flex items-center gap-2",
@@ -4837,8 +4857,8 @@ function HorariosPage() {
                                                                                                             }
                                                                                                         }, void 0, false, {
                                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                            lineNumber: 841,
-                                                                                                            columnNumber: 35
+                                                                                                            lineNumber: 870,
+                                                                                                            columnNumber: 37
                                                                                                         }, this),
                                                                                                         d.nome,
                                                                                                         " ",
@@ -4846,29 +4866,37 @@ function HorariosPage() {
                                                                                                     ]
                                                                                                 }, void 0, true, {
                                                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                    lineNumber: 840,
-                                                                                                    columnNumber: 33
+                                                                                                    lineNumber: 869,
+                                                                                                    columnNumber: 35
                                                                                                 }, this)
                                                                                             }, d.id, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 836,
-                                                                                                columnNumber: 31
+                                                                                                lineNumber: 865,
+                                                                                                columnNumber: 33
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 834,
+                                                                                        lineNumber: 856,
                                                                                         columnNumber: 27
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 820,
+                                                                                lineNumber: 834,
                                                                                 columnNumber: 25
+                                                                            }, this),
+                                                                            formData.cursoId && !loadingSubjects[formData.cursoId] && disciplinas.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                                className: "text-xs text-gray-500 mt-1",
+                                                                                children: "Este curso não possui disciplinas cadastradas. Adicione disciplinas na página de Cursos."
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
+                                                                                lineNumber: 882,
+                                                                                columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 818,
+                                                                        lineNumber: 832,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     view === "provas" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4879,7 +4907,7 @@ function HorariosPage() {
                                                                                 children: "Tipo de Avaliação"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 854,
+                                                                                lineNumber: 889,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -4892,12 +4920,12 @@ function HorariosPage() {
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 862,
+                                                                                            lineNumber: 897,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 861,
+                                                                                        lineNumber: 896,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -4906,24 +4934,24 @@ function HorariosPage() {
                                                                                                 children: t
                                                                                             }, t, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 866,
+                                                                                                lineNumber: 901,
                                                                                                 columnNumber: 33
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 864,
+                                                                                        lineNumber: 899,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 855,
+                                                                                lineNumber: 890,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 853,
+                                                                        lineNumber: 888,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     editingItem ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4933,7 +4961,7 @@ function HorariosPage() {
                                                                                 children: "Turma"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 876,
+                                                                                lineNumber: 911,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -4946,12 +4974,12 @@ function HorariosPage() {
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 884,
+                                                                                            lineNumber: 919,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 883,
+                                                                                        lineNumber: 918,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -4960,24 +4988,24 @@ function HorariosPage() {
                                                                                                 children: t
                                                                                             }, t, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 888,
+                                                                                                lineNumber: 923,
                                                                                                 columnNumber: 33
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 886,
+                                                                                        lineNumber: 921,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 877,
+                                                                                lineNumber: 912,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 875,
+                                                                        lineNumber: 910,
                                                                         columnNumber: 25
                                                                     }, this) : renderReadOnlyField("Turma", formData.turma),
                                                                     editingItem ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4987,51 +5015,60 @@ function HorariosPage() {
                                                                                 children: "Curso"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 900,
+                                                                                lineNumber: 935,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
-                                                                                value: formData.curso,
-                                                                                onValueChange: (val)=>setFormData({
+                                                                                value: formData.cursoId,
+                                                                                onValueChange: (val)=>{
+                                                                                    const curso = cursos.find((c)=>c.id === val);
+                                                                                    setFormData({
                                                                                         ...formData,
-                                                                                        curso: val
-                                                                                    }),
+                                                                                        cursoId: val,
+                                                                                        curso: curso?.nome || "",
+                                                                                        disciplina: null // Limpar disciplina ao mudar curso
+                                                                                    });
+                                                                                    // Carregar disciplinas do novo curso
+                                                                                    if (val) {
+                                                                                        loadCourseSubjects(val);
+                                                                                    }
+                                                                                },
                                                                                 children: [
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 908,
+                                                                                            lineNumber: 953,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 907,
+                                                                                        lineNumber: 952,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
                                                                                         children: cursos.map((c)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
-                                                                                                value: c.nome,
+                                                                                                value: c.id,
                                                                                                 children: c.nome
                                                                                             }, c.id, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 912,
+                                                                                                lineNumber: 957,
                                                                                                 columnNumber: 33
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 910,
+                                                                                        lineNumber: 955,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 901,
+                                                                                lineNumber: 936,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 899,
+                                                                        lineNumber: 934,
                                                                         columnNumber: 25
                                                                     }, this) : renderReadOnlyField("Curso", formData.curso),
                                                                     editingItem ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5041,7 +5078,7 @@ function HorariosPage() {
                                                                                 children: "Ano"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 924,
+                                                                                lineNumber: 969,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -5054,12 +5091,12 @@ function HorariosPage() {
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 932,
+                                                                                            lineNumber: 977,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 931,
+                                                                                        lineNumber: 976,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5068,24 +5105,24 @@ function HorariosPage() {
                                                                                                 children: a
                                                                                             }, a, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 936,
+                                                                                                lineNumber: 981,
                                                                                                 columnNumber: 33
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 934,
+                                                                                        lineNumber: 979,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 925,
+                                                                                lineNumber: 970,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 923,
+                                                                        lineNumber: 968,
                                                                         columnNumber: 25
                                                                     }, this) : renderReadOnlyField("Ano", formData.ano),
                                                                     view === "horarios" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5095,7 +5132,7 @@ function HorariosPage() {
                                                                                 children: "Docente (opcional)"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 948,
+                                                                                lineNumber: 993,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -5122,12 +5159,12 @@ function HorariosPage() {
                                                                                             placeholder: "Selecione o docente (opcional)"
                                                                                         }, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 969,
+                                                                                            lineNumber: 1014,
                                                                                             columnNumber: 31
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 968,
+                                                                                        lineNumber: 1013,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5137,7 +5174,7 @@ function HorariosPage() {
                                                                                                 children: "Nenhum docente"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 972,
+                                                                                                lineNumber: 1017,
                                                                                                 columnNumber: 31
                                                                                             }, this),
                                                                                             teachers.map((teacher)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -5149,25 +5186,25 @@ function HorariosPage() {
                                                                                                     ]
                                                                                                 }, teacher.id, true, {
                                                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                    lineNumber: 974,
+                                                                                                    lineNumber: 1019,
                                                                                                     columnNumber: 33
                                                                                                 }, this))
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 971,
+                                                                                        lineNumber: 1016,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 949,
+                                                                                lineNumber: 994,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 947,
+                                                                        lineNumber: 992,
                                                                         columnNumber: 25
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5178,7 +5215,7 @@ function HorariosPage() {
                                                                                 children: "Sala"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 985,
+                                                                                lineNumber: 1030,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -5191,12 +5228,12 @@ function HorariosPage() {
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 993,
+                                                                                            lineNumber: 1038,
                                                                                             columnNumber: 29
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 992,
+                                                                                        lineNumber: 1037,
                                                                                         columnNumber: 27
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5206,7 +5243,7 @@ function HorariosPage() {
                                                                                                     children: s
                                                                                                 }, s, false, {
                                                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                    lineNumber: 997,
+                                                                                                    lineNumber: 1042,
                                                                                                     columnNumber: 31
                                                                                                 }, this)),
                                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectItem"], {
@@ -5214,25 +5251,25 @@ function HorariosPage() {
                                                                                                 children: "+ Adicionar nova sala"
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 1001,
+                                                                                                lineNumber: 1046,
                                                                                                 columnNumber: 29
                                                                                             }, this)
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 995,
+                                                                                        lineNumber: 1040,
                                                                                         columnNumber: 27
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 986,
+                                                                                lineNumber: 1031,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 982,
+                                                                        lineNumber: 1027,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5242,7 +5279,7 @@ function HorariosPage() {
                                                                                 children: "Dia da Semana"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1006,
+                                                                                lineNumber: 1051,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -5255,12 +5292,12 @@ function HorariosPage() {
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 1014,
+                                                                                            lineNumber: 1059,
                                                                                             columnNumber: 29
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 1013,
+                                                                                        lineNumber: 1058,
                                                                                         columnNumber: 27
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5269,24 +5306,24 @@ function HorariosPage() {
                                                                                                 children: d
                                                                                             }, d, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 1018,
+                                                                                                lineNumber: 1063,
                                                                                                 columnNumber: 31
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 1016,
+                                                                                        lineNumber: 1061,
                                                                                         columnNumber: 27
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1007,
+                                                                                lineNumber: 1052,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 1005,
+                                                                        lineNumber: 1050,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5296,7 +5333,7 @@ function HorariosPage() {
                                                                                 children: "Hora Início"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1026,
+                                                                                lineNumber: 1071,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -5309,12 +5346,12 @@ function HorariosPage() {
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 1034,
+                                                                                            lineNumber: 1079,
                                                                                             columnNumber: 29
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 1033,
+                                                                                        lineNumber: 1078,
                                                                                         columnNumber: 27
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5323,24 +5360,24 @@ function HorariosPage() {
                                                                                                 children: h
                                                                                             }, h, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 1038,
+                                                                                                lineNumber: 1083,
                                                                                                 columnNumber: 31
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 1036,
+                                                                                        lineNumber: 1081,
                                                                                         columnNumber: 27
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1027,
+                                                                                lineNumber: 1072,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 1025,
+                                                                        lineNumber: 1070,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5350,7 +5387,7 @@ function HorariosPage() {
                                                                                 children: "Hora Fim"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1046,
+                                                                                lineNumber: 1091,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Select"], {
@@ -5363,12 +5400,12 @@ function HorariosPage() {
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectTrigger"], {
                                                                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectValue"], {}, void 0, false, {
                                                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                            lineNumber: 1054,
+                                                                                            lineNumber: 1099,
                                                                                             columnNumber: 29
                                                                                         }, this)
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 1053,
+                                                                                        lineNumber: 1098,
                                                                                         columnNumber: 27
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$select$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SelectContent"], {
@@ -5377,24 +5414,24 @@ function HorariosPage() {
                                                                                                 children: h
                                                                                             }, h, false, {
                                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                                lineNumber: 1058,
+                                                                                                lineNumber: 1103,
                                                                                                 columnNumber: 31
                                                                                             }, this))
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                        lineNumber: 1056,
+                                                                                        lineNumber: 1101,
                                                                                         columnNumber: 27
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1047,
+                                                                                lineNumber: 1092,
                                                                                 columnNumber: 25
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 1045,
+                                                                        lineNumber: 1090,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     view === "provas" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5404,7 +5441,7 @@ function HorariosPage() {
                                                                                 children: "Data"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1067,
+                                                                                lineNumber: 1112,
                                                                                 columnNumber: 27
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Input"], {
@@ -5416,24 +5453,24 @@ function HorariosPage() {
                                                                                     })
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1068,
+                                                                                lineNumber: 1113,
                                                                                 columnNumber: 27
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 1066,
+                                                                        lineNumber: 1111,
                                                                         columnNumber: 25
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                lineNumber: 817,
+                                                                lineNumber: 831,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$separator$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Separator"], {}, void 0, false, {
                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                lineNumber: 1081,
+                                                                lineNumber: 1126,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5448,14 +5485,14 @@ function HorariosPage() {
                                                                                 size: 18
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                                lineNumber: 1087,
+                                                                                lineNumber: 1132,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             "Salvar"
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 1083,
+                                                                        lineNumber: 1128,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -5465,31 +5502,31 @@ function HorariosPage() {
                                                                         children: "Cancelar"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                        lineNumber: 1090,
+                                                                        lineNumber: 1135,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                lineNumber: 1082,
+                                                                lineNumber: 1127,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                        lineNumber: 816,
+                                                        lineNumber: 830,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                lineNumber: 805,
+                                                lineNumber: 819,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                        lineNumber: 678,
+                                        lineNumber: 692,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -5507,27 +5544,27 @@ function HorariosPage() {
                                                                     size: 24
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                                    lineNumber: 1105,
+                                                                    lineNumber: 1150,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 "Confirmar Eliminação"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                            lineNumber: 1104,
+                                                            lineNumber: 1149,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
                                                             children: "Tem certeza que deseja eliminar este item? Esta ação não pode ser desfeita."
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                            lineNumber: 1108,
+                                                            lineNumber: 1153,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                    lineNumber: 1103,
+                                                    lineNumber: 1148,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogFooter"], {
@@ -5541,7 +5578,7 @@ function HorariosPage() {
                                                             children: "Cancelar"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                            lineNumber: 1113,
+                                                            lineNumber: 1158,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -5550,52 +5587,52 @@ function HorariosPage() {
                                                             children: "Eliminar"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                            lineNumber: 1122,
+                                                            lineNumber: 1167,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                                    lineNumber: 1112,
+                                                    lineNumber: 1157,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                            lineNumber: 1102,
+                                            lineNumber: 1147,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                        lineNumber: 1101,
+                                        lineNumber: 1146,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                                lineNumber: 668,
+                                lineNumber: 682,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                        lineNumber: 666,
+                        lineNumber: 680,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                    lineNumber: 665,
+                    lineNumber: 679,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-                lineNumber: 663,
+                lineNumber: 677,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/admin/academica/horarios/page.tsx",
-        lineNumber: 654,
+        lineNumber: 668,
         columnNumber: 5
     }, this);
 }

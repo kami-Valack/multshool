@@ -1,91 +1,60 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Header from "@/components/ui/HeaderGeneral";
 import BottomMenu from "@/components/ui/BottomMenu";
+import { studentService } from "@/services/studentService";
 
-// Mock data - simulando dados que viriam da BD
-const mockScheduleData = [
-  {
-    id: 1,
-    day: "Segunda-feira",
-    classes: [
-      {
-        id: 1,
-        time: "07:30",
-        endTime: "09:00",
-        title: "CDI I - Cálculo Difer. e Int...",
-        subtitle: "Capítulo I : Funções",
-        location: "Sala: BAA3",
-        professor: "Bernardo Manuel",
-        isActive: true,
-      },
-      {
-        id: 2,
-        time: "09:10",
-        endTime: "10:30",
-        title: "IEF - Introd. à Eng. Inform...",
-        subtitle: "Capítulo I : Sistema binário",
-        location: "LAB - B",
-        professor: "Judson Paiva",
-        isActive: false,
-      },
-      {
-        id: 3,
-        time: "10:45",
-        endTime: "12:15",
-        title: "Programação I",
-        subtitle: "Capítulo I : Introd. à ling. C",
-        location: "LAB - C",
-        professor: "Aires Veloso",
-        isActive: false,
-      },
-    ],
-  },
-  {
-    id: 2,
-    day: "Terça-feira",
-    classes: [
-      {
-        id: 4,
-        time: "08:00",
-        endTime: "09:30",
-        title: "Álgebra Linear",
-        subtitle: "Capítulo II : Matrizes",
-        location: "Sala: BAA1",
-        professor: "Maria Silva",
-        isActive: false,
-      },
-      {
-        id: 5,
-        time: "10:00",
-        endTime: "11:30",
-        title: "Física I",
-        subtitle: "Capítulo I : Cinemática",
-        location: "LAB - A",
-        professor: "João Costa",
-        isActive: false,
-      },
-    ],
-  },
-  {
-    id: 3,
-    day: "Quarta-feira",
-    classes: [
-      {
-        id: 6,
-        time: "07:30",
-        endTime: "09:00",
-        title: "Estrutura de Dados",
-        subtitle: "Capítulo III : Listas Ligadas",
-        location: "LAB - C",
-        professor: "Pedro Santos",
-        isActive: false,
-      },
-    ],
-  },
-];
+// Mapear dia da API para português
+const mapDayToPortuguese = (day: string): string => {
+  const mapping: Record<string, string> = {
+    monday: "Segunda-feira",
+    tuesday: "Terça-feira",
+    wednesday: "Quarta-feira",
+    thursday: "Quinta-feira",
+    friday: "Sexta-feira",
+    saturday: "Sábado",
+    sunday: "Domingo",
+  };
+  return mapping[day] || day;
+};
+
+// Interface para os dados da API
+interface ScheduleFromAPI {
+  id: string;
+  class_name: string;
+  subject?: {
+    name: string;
+    code?: string;
+  };
+  start_time: string;
+  end_time: string;
+  day_of_week: string;
+  room?: string;
+  teacher_id?: string;
+  course?: {
+    name: string;
+  };
+}
+
+// Interface para os dados formatados da UI
+interface DaySchedule {
+  id: string;
+  day: string;
+  classes: ClassItem[];
+}
+
+interface ClassItem {
+  id: string;
+  time: string;
+  endTime: string;
+  title: string;
+  subtitle: string;
+  location: string;
+  professor: string;
+  isActive: boolean;
+}
 
 // Styled Components
 const Top = styled.div`
@@ -232,7 +201,110 @@ const LocationIcon = () => (
 );
 
 export default function HorariosPage() {
-  const [scheduleData] = useState(mockScheduleData);
+  const [scheduleData, setScheduleData] = useState<DaySchedule[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadSchedules = async () => {
+      try {
+        setLoading(true);
+        const schedules = await studentService.getSchedules();
+        
+        if (schedules.length === 0) {
+          // Se não houver horários, retornar array vazio
+          setScheduleData([]);
+          setLoading(false);
+          return;
+        }
+
+        // Agrupar horários por dia da semana
+        const schedulesByDay: Record<string, ScheduleFromAPI[]> = {};
+        schedules.forEach((schedule: ScheduleFromAPI) => {
+          const day = schedule.day_of_week;
+          if (!schedulesByDay[day]) {
+            schedulesByDay[day] = [];
+          }
+          schedulesByDay[day].push(schedule);
+        });
+
+        // Converter para o formato esperado pela UI
+        const formattedSchedules: DaySchedule[] = Object.entries(schedulesByDay).map(([day, daySchedules], index) => {
+          // Ordenar por hora de início
+          daySchedules.sort((a, b) => {
+            const timeA = a.start_time || '00:00';
+            const timeB = b.start_time || '00:00';
+            return timeA.localeCompare(timeB);
+          });
+
+          return {
+            id: `day-${index}`,
+            day: mapDayToPortuguese(day),
+            classes: daySchedules.map((schedule: ScheduleFromAPI) => {
+              // Determinar se a aula está ativa (pode ser baseado em lógica de horário atual)
+              const now = new Date();
+              const currentDay = now.getDay(); // 0 = Domingo, 1 = Segunda, etc.
+              const dayMap: Record<string, number> = {
+                monday: 1,
+                tuesday: 2,
+                wednesday: 3,
+                thursday: 4,
+                friday: 5,
+                saturday: 6,
+                sunday: 0,
+              };
+              const scheduleDay = dayMap[day] ?? -1;
+              
+              // Verificar se é o dia atual e se está dentro do horário
+              const [startHour, startMin] = (schedule.start_time || '00:00').split(':').map(Number);
+              const [endHour, endMin] = (schedule.end_time || '00:00').split(':').map(Number);
+              const currentHour = now.getHours();
+              const currentMin = now.getMinutes();
+              
+              const isActive = scheduleDay === currentDay &&
+                ((currentHour > startHour || (currentHour === startHour && currentMin >= startMin)) &&
+                 (currentHour < endHour || (currentHour === endHour && currentMin <= endMin)));
+
+              return {
+                id: schedule.id,
+                time: schedule.start_time || '00:00',
+                endTime: schedule.end_time || '00:00',
+                title: schedule.subject?.name || 'Disciplina não informada',
+                subtitle: schedule.subject?.code ? `Código: ${schedule.subject.code}` : schedule.course?.name || '',
+                location: schedule.room ? `Sala: ${schedule.room}` : 'Sala não informada',
+                professor: schedule.teacher_id ? `Professor ID: ${schedule.teacher_id}` : 'Professor não atribuído',
+                isActive,
+              };
+            }),
+          };
+        });
+
+        // Ordenar por dia da semana
+        const dayOrder: Record<string, number> = {
+          'Segunda-feira': 1,
+          'Terça-feira': 2,
+          'Quarta-feira': 3,
+          'Quinta-feira': 4,
+          'Sexta-feira': 5,
+          'Sábado': 6,
+          'Domingo': 7,
+        };
+        
+        formattedSchedules.sort((a, b) => {
+          return (dayOrder[a.day] || 99) - (dayOrder[b.day] || 99);
+        });
+
+        setScheduleData(formattedSchedules);
+      } catch (error) {
+        console.error('Erro ao carregar horários:', error);
+        // Em caso de erro, retornar array vazio
+        setScheduleData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSchedules();
+  }, []);
 
   return (
     <>
@@ -244,7 +316,16 @@ export default function HorariosPage() {
 
         {/* Content */}
         <Content>
-          {scheduleData.map((daySchedule) => (
+          {loading ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#7b7b8e' }}>
+              Carregando horários...
+            </div>
+          ) : scheduleData.length === 0 ? (
+            <div style={{ padding: '20px', textAlign: 'center', color: '#7b7b8e' }}>
+              Nenhum horário disponível no momento.
+            </div>
+          ) : (
+            scheduleData.map((daySchedule) => (
             <DaySection key={daySchedule.id}>
               <DayHeader>
                 <DayTitle>{daySchedule.day}</DayTitle>
@@ -287,7 +368,8 @@ export default function HorariosPage() {
                 ))}
               </ClassesContainer>
             </DaySection>
-          ))}
+            ))
+          )}
         </Content>
 
         {/* Bottom Menu */}

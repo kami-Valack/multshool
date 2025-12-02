@@ -300,20 +300,7 @@ export default function HorariosPage() {
     return info;
   }, [classes, courses]);
   
-  const disciplinas = useMemo(() => {
-    const allSubjects: Disciplina[] = [];
-    Object.values(subjectsMap).flat().forEach((subject, index) => {
-      allSubjects.push({
-        id: subject.id,
-        nome: subject.name,
-        codigo: subject.code || "",
-        cor: CORES_DISCIPLINAS[index % CORES_DISCIPLINAS.length],
-      });
-    });
-    return allSubjects;
-  }, [subjectsMap]);
-  
-  // Form data inicial
+  // Form data inicial - DEVE ser declarado ANTES do useMemo que o usa
   const [formData, setFormData] = useState<FormData>({
     disciplina: null,
     turma: "",
@@ -332,6 +319,21 @@ export default function HorariosPage() {
     academicYear: new Date().getFullYear() + "/" + (new Date().getFullYear() + 1),
     semester: 1,
   });
+  
+  // Disciplinas filtradas pelo curso selecionado
+  const disciplinas = useMemo(() => {
+    if (!formData.cursoId) {
+      return [];
+    }
+    
+    const courseSubjects = subjectsMap[formData.cursoId] || [];
+    return courseSubjects.map((subject, index) => ({
+      id: subject.id,
+      nome: subject.name,
+      codigo: subject.code || "",
+      cor: CORES_DISCIPLINAS[index % CORES_DISCIPLINAS.length],
+    }));
+  }, [subjectsMap, formData.cursoId]);
   
   // Carregar disciplinas quando curso for selecionado
   useEffect(() => {
@@ -392,12 +394,24 @@ export default function HorariosPage() {
       if ("docente" in item) {
         base.docente = item.docente;
         base.teacherId = item.teacherId;
+        // Se tiver teacherId, garantir que está no formData
+        if (item.teacherId) {
+          const teacher = teachers.find(t => t.id === item.teacherId);
+          if (teacher) {
+            base.docente = teacher.name;
+          }
+        }
       }
       if ("tipo" in item) {
         base.tipo = item.tipo;
         base.data = item.data;
       }
       setFormData(base);
+      
+      // Carregar disciplinas do curso ao editar
+      if (base.cursoId) {
+        loadCourseSubjects(base.cursoId);
+      }
     } else {
       // Quando criar novo horário, usar a turma selecionada ou a primeira disponível
       const turmaSelecionada = selectedHorario || selectedProva || filtroValor || (turmas.length > 0 ? turmas[0] : "");
@@ -829,25 +843,46 @@ export default function HorariosPage() {
                           disabled={!formData.cursoId || loadingSubjects[formData.cursoId]}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={!formData.cursoId ? "Selecione um curso primeiro" : "Selecione a disciplina"} />
+                            <SelectValue placeholder={
+                              !formData.cursoId 
+                                ? "Selecione um curso primeiro" 
+                                : loadingSubjects[formData.cursoId]
+                                ? "Carregando disciplinas..."
+                                : disciplinas.length === 0
+                                ? "Nenhuma disciplina encontrada para este curso"
+                                : "Selecione a disciplina"
+                            } />
                           </SelectTrigger>
                           <SelectContent>
-                            {disciplinas.map((d) => (
-                              <SelectItem
-                                key={d.id}
-                                value={d.id}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <div
-                                    className="w-3 h-3 rounded-full"
-                                    style={{ backgroundColor: d.cor }}
-                                  ></div>
-                                  {d.nome} {d.codigo && `(${d.codigo})`}
-                                </div>
-                              </SelectItem>
-                            ))}
+                            {disciplinas.length === 0 && formData.cursoId ? (
+                              <div className="px-2 py-1.5 text-sm text-gray-500">
+                                {loadingSubjects[formData.cursoId]
+                                  ? "Carregando disciplinas..."
+                                  : "Nenhuma disciplina disponível para este curso"}
+                              </div>
+                            ) : (
+                              disciplinas.map((d) => (
+                                <SelectItem
+                                  key={d.id}
+                                  value={d.id}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <div
+                                      className="w-3 h-3 rounded-full"
+                                      style={{ backgroundColor: d.cor }}
+                                    ></div>
+                                    {d.nome} {d.codigo && `(${d.codigo})`}
+                                  </div>
+                                </SelectItem>
+                              ))
+                            )}
                           </SelectContent>
                         </Select>
+                        {formData.cursoId && !loadingSubjects[formData.cursoId] && disciplinas.length === 0 && (
+                          <p className="text-xs text-gray-500 mt-1">
+                            Este curso não possui disciplinas cadastradas. Adicione disciplinas na página de Cursos.
+                          </p>
+                        )}
                       </div>
                       {view === "provas" && (
                         <div className="col-span-2">
@@ -899,17 +934,27 @@ export default function HorariosPage() {
                         <div>
                           <Label htmlFor="curso">Curso</Label>
                           <Select
-                            value={formData.curso}
-                            onValueChange={(val) =>
-                              setFormData({ ...formData, curso: val })
-                            }
+                            value={formData.cursoId}
+                            onValueChange={(val) => {
+                              const curso = cursos.find(c => c.id === val);
+                              setFormData({ 
+                                ...formData, 
+                                cursoId: val,
+                                curso: curso?.nome || "",
+                                disciplina: null // Limpar disciplina ao mudar curso
+                              });
+                              // Carregar disciplinas do novo curso
+                              if (val) {
+                                loadCourseSubjects(val);
+                              }
+                            }}
                           >
                             <SelectTrigger>
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                               {cursos.map((c) => (
-                                <SelectItem key={c.id} value={c.nome}>
+                                <SelectItem key={c.id} value={c.id}>
                                   {c.nome}
                                 </SelectItem>
                               ))}

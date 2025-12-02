@@ -97,8 +97,12 @@ class Schedule extends Model
     /**
      * Get day of week in Portuguese.
      */
-    public function getDayOfWeekPortugueseAttribute(): string
+    public function getDayOfWeekPortugueseAttribute(): ?string
     {
+        if (!$this->day_of_week) {
+            return null;
+        }
+
         $days = [
             'monday' => 'Segunda',
             'tuesday' => 'Terça',

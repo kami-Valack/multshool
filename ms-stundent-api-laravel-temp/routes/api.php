@@ -123,6 +123,9 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
     // Propinas/Fees
     Route::get('/fees', [\App\Http\Controllers\FeeController::class, 'index']);
 
+    // Horários do estudante
+    Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'index']);
+
     // TODO: Adicionar rotas para:
     // - GET /api/grades
     // - GET /api/scholarships
@@ -131,6 +134,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
 
 // API Secret routes (for inter-service communication)
 Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('student')->group(function () {
+    Route::get('/{studentId}', [\App\Http\Controllers\StudentController::class, 'getByStudentId']);
     Route::get('/{studentId}/grades', [\App\Http\Controllers\StudentGradeController::class, 'getGradesByStudentId']);
     Route::get('/{studentId}/fees', [\App\Http\Controllers\FeeController::class, 'getByStudentId']);
     Route::post('/{studentId}/fees/bulk', [\App\Http\Controllers\FeeController::class, 'bulkCreate']);

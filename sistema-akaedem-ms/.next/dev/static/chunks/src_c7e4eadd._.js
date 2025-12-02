@@ -3230,12 +3230,12 @@ var _s = __turbopack_context__.k.signature();
 ;
 function ProtectedRoute(t0) {
     _s();
-    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(60);
-    if ($[0] !== "87985cdccb1e79ace60c987ea285f61cccbd097e5344a4901f308a2e26b4078f") {
-        for(let $i = 0; $i < 60; $i += 1){
+    const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(70);
+    if ($[0] !== "f9ac760c73585903acfc37a974aebca849a451b99e0bd7b2acf5d0120b1e17be") {
+        for(let $i = 0; $i < 70; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "87985cdccb1e79ace60c987ea285f61cccbd097e5344a4901f308a2e26b4078f";
+        $[0] = "f9ac760c73585903acfc37a974aebca849a451b99e0bd7b2acf5d0120b1e17be";
     }
     const { children, requireAuth: t1, requireCompleteProfile: t2, allowedRoles: t3 } = t0;
     const requireAuth = t1 === undefined ? true : t1;
@@ -3251,6 +3251,8 @@ function ProtectedRoute(t0) {
     const allowedRoles = t4;
     const { isAuthenticated, loading, user, profileComplete, checkProfileCompletion } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
+    const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"])();
+    const [isMounted, setIsMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const shouldCheckRole = allowedRoles.length > 0;
     let t5;
     if ($[3] !== allowedRoles || $[4] !== shouldCheckRole) {
@@ -3277,33 +3279,54 @@ function ProtectedRoute(t0) {
     const { hasAccess: hasRoleAccess, loading: roleLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useRoleCheck$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRoleCheck"])(t6);
     const shouldCheckProfile = shouldCheckRole ? hasRoleAccess : true;
     let t7;
-    if ($[9] !== isAuthenticated || $[10] !== loading || $[11] !== profileComplete || $[12] !== requireAuth || $[13] !== requireCompleteProfile || $[14] !== router || $[15] !== shouldCheckProfile || $[16] !== user?.role) {
+    let t8;
+    if ($[9] === Symbol.for("react.memo_cache_sentinel")) {
         t7 = ({
             "ProtectedRoute[useEffect()]": ()=>{
+                setIsMounted(true);
+            }
+        })["ProtectedRoute[useEffect()]"];
+        t8 = [];
+        $[9] = t7;
+        $[10] = t8;
+    } else {
+        t7 = $[9];
+        t8 = $[10];
+    }
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])(t7, t8);
+    let t9;
+    if ($[11] !== isAuthenticated || $[12] !== isMounted || $[13] !== loading || $[14] !== pathname || $[15] !== profileComplete || $[16] !== requireAuth || $[17] !== requireCompleteProfile || $[18] !== router || $[19] !== shouldCheckProfile || $[20] !== user?.role) {
+        t9 = ({
+            "ProtectedRoute[useEffect()]": ()=>{
+                if (!isMounted) {
+                    return;
+                }
                 if (!loading && requireAuth && !isAuthenticated) {
                     router.push("/");
                     return;
                 }
-                if (!loading && isAuthenticated && shouldCheckProfile && requireCompleteProfile && user?.role === "school" && profileComplete === false && ("TURBOPACK compile-time value", "object") !== "undefined" && !window.location.pathname.includes("/completar-perfil")) {
+                if (!loading && isAuthenticated && shouldCheckProfile && requireCompleteProfile && user?.role === "school" && profileComplete === false && !pathname.includes("/completar-perfil")) {
                     router.push("/admin/completar-perfil");
                 }
             }
         })["ProtectedRoute[useEffect()]"];
-        $[9] = isAuthenticated;
-        $[10] = loading;
-        $[11] = profileComplete;
-        $[12] = requireAuth;
-        $[13] = requireCompleteProfile;
-        $[14] = router;
-        $[15] = shouldCheckProfile;
-        $[16] = user?.role;
-        $[17] = t7;
+        $[11] = isAuthenticated;
+        $[12] = isMounted;
+        $[13] = loading;
+        $[14] = pathname;
+        $[15] = profileComplete;
+        $[16] = requireAuth;
+        $[17] = requireCompleteProfile;
+        $[18] = router;
+        $[19] = shouldCheckProfile;
+        $[20] = user?.role;
+        $[21] = t9;
     } else {
-        t7 = $[17];
+        t9 = $[21];
     }
-    let t8;
-    if ($[18] !== isAuthenticated || $[19] !== loading || $[20] !== profileComplete || $[21] !== requireAuth || $[22] !== requireCompleteProfile || $[23] !== router || $[24] !== shouldCheckProfile || $[25] !== user) {
-        t8 = [
+    let t10;
+    if ($[22] !== isAuthenticated || $[23] !== isMounted || $[24] !== loading || $[25] !== pathname || $[26] !== profileComplete || $[27] !== requireAuth || $[28] !== requireCompleteProfile || $[29] !== router || $[30] !== shouldCheckProfile || $[31] !== user) {
+        t10 = [
             isAuthenticated,
             loading,
             requireAuth,
@@ -3311,43 +3334,47 @@ function ProtectedRoute(t0) {
             user,
             profileComplete,
             router,
-            shouldCheckProfile
+            shouldCheckProfile,
+            isMounted,
+            pathname
         ];
-        $[18] = isAuthenticated;
-        $[19] = loading;
-        $[20] = profileComplete;
-        $[21] = requireAuth;
-        $[22] = requireCompleteProfile;
-        $[23] = router;
-        $[24] = shouldCheckProfile;
-        $[25] = user;
-        $[26] = t8;
+        $[22] = isAuthenticated;
+        $[23] = isMounted;
+        $[24] = loading;
+        $[25] = pathname;
+        $[26] = profileComplete;
+        $[27] = requireAuth;
+        $[28] = requireCompleteProfile;
+        $[29] = router;
+        $[30] = shouldCheckProfile;
+        $[31] = user;
+        $[32] = t10;
     } else {
-        t8 = $[26];
+        t10 = $[32];
     }
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])(t7, t8);
-    let t9;
-    if ($[27] !== checkProfileCompletion || $[28] !== isAuthenticated || $[29] !== loading || $[30] !== profileComplete || $[31] !== shouldCheckProfile || $[32] !== user?.role) {
-        t9 = ({
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])(t9, t10);
+    let t11;
+    if ($[33] !== checkProfileCompletion || $[34] !== isAuthenticated || $[35] !== loading || $[36] !== profileComplete || $[37] !== shouldCheckProfile || $[38] !== user?.role) {
+        t11 = ({
             "ProtectedRoute[useEffect()]": ()=>{
                 if (!loading && isAuthenticated && shouldCheckProfile && user?.role === "school" && profileComplete === null) {
                     checkProfileCompletion();
                 }
             }
         })["ProtectedRoute[useEffect()]"];
-        $[27] = checkProfileCompletion;
-        $[28] = isAuthenticated;
-        $[29] = loading;
-        $[30] = profileComplete;
-        $[31] = shouldCheckProfile;
-        $[32] = user?.role;
-        $[33] = t9;
+        $[33] = checkProfileCompletion;
+        $[34] = isAuthenticated;
+        $[35] = loading;
+        $[36] = profileComplete;
+        $[37] = shouldCheckProfile;
+        $[38] = user?.role;
+        $[39] = t11;
     } else {
-        t9 = $[33];
+        t11 = $[39];
     }
-    let t10;
-    if ($[34] !== checkProfileCompletion || $[35] !== isAuthenticated || $[36] !== loading || $[37] !== profileComplete || $[38] !== shouldCheckProfile || $[39] !== user) {
-        t10 = [
+    let t12;
+    if ($[40] !== checkProfileCompletion || $[41] !== isAuthenticated || $[42] !== loading || $[43] !== profileComplete || $[44] !== shouldCheckProfile || $[45] !== user) {
+        t12 = [
             loading,
             isAuthenticated,
             user,
@@ -3355,62 +3382,79 @@ function ProtectedRoute(t0) {
             checkProfileCompletion,
             shouldCheckProfile
         ];
-        $[34] = checkProfileCompletion;
-        $[35] = isAuthenticated;
-        $[36] = loading;
-        $[37] = profileComplete;
-        $[38] = shouldCheckProfile;
-        $[39] = user;
-        $[40] = t10;
+        $[40] = checkProfileCompletion;
+        $[41] = isAuthenticated;
+        $[42] = loading;
+        $[43] = profileComplete;
+        $[44] = shouldCheckProfile;
+        $[45] = user;
+        $[46] = t12;
     } else {
-        t10 = $[40];
+        t12 = $[46];
     }
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])(t9, t10);
-    let t11;
-    let t12;
-    if ($[41] !== allowedRoles || $[42] !== hasRoleAccess || $[43] !== isAuthenticated || $[44] !== loading || $[45] !== profileComplete || $[46] !== requireCompleteProfile || $[47] !== user) {
-        t11 = ({
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])(t11, t12);
+    let t13;
+    let t14;
+    if ($[47] !== allowedRoles || $[48] !== hasRoleAccess || $[49] !== isAuthenticated || $[50] !== isMounted || $[51] !== loading || $[52] !== pathname || $[53] !== profileComplete || $[54] !== requireCompleteProfile || $[55] !== user) {
+        t13 = ({
             "ProtectedRoute[useEffect()]": ()=>{
-                if (!loading && isAuthenticated && user) {
+                if (!loading && isAuthenticated && user && isMounted) {
                     console.log("[ProtectedRoute] Estado atual:", {
                         userRole: user.role,
                         allowedRoles,
                         hasRoleAccess,
                         profileComplete,
                         requireCompleteProfile,
-                        pathname: ("TURBOPACK compile-time truthy", 1) ? window.location.pathname : "TURBOPACK unreachable"
+                        pathname
                     });
                 }
             }
         })["ProtectedRoute[useEffect()]"];
-        t12 = [
+        t14 = [
             loading,
             isAuthenticated,
             user,
             allowedRoles,
             hasRoleAccess,
             profileComplete,
-            requireCompleteProfile
+            requireCompleteProfile,
+            isMounted,
+            pathname
         ];
-        $[41] = allowedRoles;
-        $[42] = hasRoleAccess;
-        $[43] = isAuthenticated;
-        $[44] = loading;
-        $[45] = profileComplete;
-        $[46] = requireCompleteProfile;
-        $[47] = user;
-        $[48] = t11;
-        $[49] = t12;
+        $[47] = allowedRoles;
+        $[48] = hasRoleAccess;
+        $[49] = isAuthenticated;
+        $[50] = isMounted;
+        $[51] = loading;
+        $[52] = pathname;
+        $[53] = profileComplete;
+        $[54] = requireCompleteProfile;
+        $[55] = user;
+        $[56] = t13;
+        $[57] = t14;
     } else {
-        t11 = $[48];
-        t12 = $[49];
+        t13 = $[56];
+        t14 = $[57];
     }
-    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useEffect(t11, t12);
+    __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].useEffect(t13, t14);
     const isStillLoading = loading || shouldCheckRole && (roleLoading || !user);
+    if (!isMounted) {
+        let t15;
+        if ($[58] !== children) {
+            t15 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                children: children
+            }, void 0, false);
+            $[58] = children;
+            $[59] = t15;
+        } else {
+            t15 = $[59];
+        }
+        return t15;
+    }
     if (isStillLoading) {
-        let t13;
-        if ($[50] === Symbol.for("react.memo_cache_sentinel")) {
-            t13 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        let t15;
+        if ($[60] === Symbol.for("react.memo_cache_sentinel")) {
+            t15 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex items-center justify-center min-h-screen",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "text-center",
@@ -3419,7 +3463,7 @@ function ProtectedRoute(t0) {
                             className: "animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto"
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProtectedRoute.tsx",
-                            lineNumber: 185,
+                            lineNumber: 223,
                             columnNumber: 105
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3427,25 +3471,25 @@ function ProtectedRoute(t0) {
                             children: "A carregar..."
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProtectedRoute.tsx",
-                            lineNumber: 185,
+                            lineNumber: 223,
                             columnNumber: 213
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProtectedRoute.tsx",
-                    lineNumber: 185,
+                    lineNumber: 223,
                     columnNumber: 76
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/ProtectedRoute.tsx",
-                lineNumber: 185,
+                lineNumber: 223,
                 columnNumber: 13
             }, this);
-            $[50] = t13;
+            $[60] = t15;
         } else {
-            t13 = $[50];
+            t15 = $[60];
         }
-        return t13;
+        return t15;
     }
     if (requireAuth && !isAuthenticated) {
         console.log("[ProtectedRoute] Usu\xE1rio n\xE3o autenticado");
@@ -3457,100 +3501,101 @@ function ProtectedRoute(t0) {
             allowedRoles,
             hasRoleAccess
         });
-        let t13;
-        let t14;
-        if ($[51] === Symbol.for("react.memo_cache_sentinel")) {
-            t13 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+        let t15;
+        let t16;
+        if ($[61] === Symbol.for("react.memo_cache_sentinel")) {
+            t15 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                 className: "text-2xl font-bold text-red-600 dark:text-red-400 mb-4",
                 children: "Acesso Negado"
             }, void 0, false, {
                 fileName: "[project]/src/components/ProtectedRoute.tsx",
-                lineNumber: 205,
+                lineNumber: 243,
                 columnNumber: 13
             }, this);
-            t14 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+            t16 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                 className: "text-gray-600 dark:text-gray-400",
                 children: "Você não tem permissão para acessar esta página."
             }, void 0, false, {
                 fileName: "[project]/src/components/ProtectedRoute.tsx",
-                lineNumber: 206,
+                lineNumber: 244,
                 columnNumber: 13
             }, this);
-            $[51] = t13;
-            $[52] = t14;
+            $[61] = t15;
+            $[62] = t16;
         } else {
-            t13 = $[51];
-            t14 = $[52];
+            t15 = $[61];
+            t16 = $[62];
         }
-        let t15;
-        if ($[53] !== allowedRoles) {
-            t15 = allowedRoles.join(" ou ");
-            $[53] = allowedRoles;
-            $[54] = t15;
-        } else {
-            t15 = $[54];
-        }
-        const t16 = user?.role && ` | Sua role: ${user.role}`;
         let t17;
-        if ($[55] !== t15 || $[56] !== t16) {
-            t17 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        if ($[63] !== allowedRoles) {
+            t17 = allowedRoles.join(" ou ");
+            $[63] = allowedRoles;
+            $[64] = t17;
+        } else {
+            t17 = $[64];
+        }
+        const t18 = user?.role && ` | Sua role: ${user.role}`;
+        let t19;
+        if ($[65] !== t17 || $[66] !== t18) {
+            t19 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex items-center justify-center min-h-screen",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "text-center",
                     children: [
-                        t13,
-                        t14,
+                        t15,
+                        t16,
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             className: "text-sm text-gray-500 dark:text-gray-500 mt-2",
                             children: [
                                 "Role requerida: ",
-                                t15,
-                                t16
+                                t17,
+                                t18
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProtectedRoute.tsx",
-                            lineNumber: 224,
+                            lineNumber: 262,
                             columnNumber: 115
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProtectedRoute.tsx",
-                    lineNumber: 224,
+                    lineNumber: 262,
                     columnNumber: 76
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/ProtectedRoute.tsx",
-                lineNumber: 224,
+                lineNumber: 262,
                 columnNumber: 13
             }, this);
-            $[55] = t15;
-            $[56] = t16;
-            $[57] = t17;
+            $[65] = t17;
+            $[66] = t18;
+            $[67] = t19;
         } else {
-            t17 = $[57];
+            t19 = $[67];
         }
-        return t17;
+        return t19;
     }
-    if (shouldCheckProfile && requireCompleteProfile && user?.role === "school" && profileComplete === false && ("TURBOPACK compile-time value", "object") !== "undefined" && !window.location.pathname.includes("/completar-perfil")) {
+    if (shouldCheckProfile && requireCompleteProfile && user?.role === "school" && profileComplete === false && !pathname.includes("/completar-perfil")) {
         console.log("[ProtectedRoute] Perfil incompleto detectado, redirecionando...");
         return null;
     }
-    let t13;
-    if ($[58] !== children) {
-        t13 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+    let t15;
+    if ($[68] !== children) {
+        t15 = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
             children: children
         }, void 0, false);
-        $[58] = children;
-        $[59] = t13;
+        $[68] = children;
+        $[69] = t15;
     } else {
-        t13 = $[59];
+        t15 = $[69];
     }
-    return t13;
+    return t15;
 }
-_s(ProtectedRoute, "jUZ8/RNRwlt/ajjeknRNpyMHzWg=", false, function() {
+_s(ProtectedRoute, "QRIIIB7glhAnSGXz2jnkbGSbtxw=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePathname"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useRoleCheck$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRoleCheck"]
     ];
 });

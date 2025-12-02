@@ -1,9 +1,11 @@
 "use client";
 
 import BottomMenu from "@/components/ui/BottomMenu";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import Header from "@/components/ui/HeaderGeneral";
+import { studentService, CalendarEvent } from "@/services/studentService";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Styled Components
 const Container = styled.div`
@@ -150,66 +152,152 @@ const NavIcon = styled.div`
   font-size: 24px;
 `;
 
-// Dados dos eventos
-const events = [
-  {
-    date: "12/09/24",
-    day: "12",
-    month: "Set/24",
-    title: "CDI I - Cálculo Dif. e Integral I",
-    time: "08:00 - 10:30 | 1º Ano",
-    color: "#4ade80",
-    bgColor: "#dcfce7"
-  },
-  {
-    date: "14/09/24",
-    day: "14",
-    month: "Set/24",
-    title: "Álgebra Linear e Geo. Analít.",
-    time: "08:00 - 10:30 | 1º Ano",
-    color: "#fb923c",
-    bgColor: "#fed7aa"
-  },
-  {
-    date: "16/09/24",
-    day: "16",
-    month: "Set/24",
-    title: "Engenharia de Softwares",
-    time: "10:00 - 12:30 | 3º Ano",
-    color: "#f87171",
-    bgColor: "#fecaca"
-  },
-  {
-    date: "20/09/24",
-    day: "20",
-    month: "Set/24",
-    title: "Análise de Algoritmos",
-    time: "10:00 - 12:30 | 3º Ano",
-    color: "#c084fc",
-    bgColor: "#e9d5ff"
-  },
-  {
-    date: "21/09/24",
-    day: "21",
-    month: "Set/24",
-    title: "Sistemas Operativos",
-    time: "10:00 - 12:30 | 3º Ano",
-    color: "#60a5fa",
-    bgColor: "#dbeafe"
-  },
-  {
-    date: "24/09/24",
-    day: "24",
-    month: "Set/24",
-    title: "Programação III",
-    time: "08:00 - 10:30 | 2º Ano",
-    color: "#4b5563",
-    bgColor: "#d1d5db"
-  }
-];
+const LoadingMessage = styled.div`
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 14px;
+`;
+
+const ErrorMessage = styled.div`
+  text-align: center;
+  padding: 40px 20px;
+  color: #e74c3c;
+  font-size: 14px;
+`;
+
+const EmptyMessage = styled.div`
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
+`;
+
+// Cores para diferentes tipos de exame
+const getExamColor = (examType?: string): { color: string; bgColor: string } => {
+  const colors: Record<string, { color: string; bgColor: string }> = {
+    test: { color: "#4ade80", bgColor: "#dcfce7" },
+    final_exam: { color: "#f87171", bgColor: "#fecaca" },
+    recovery_exam: { color: "#fb923c", bgColor: "#fed7aa" },
+    practical_exam: { color: "#60a5fa", bgColor: "#dbeafe" },
+    oral_exam: { color: "#c084fc", bgColor: "#e9d5ff" },
+  };
+  
+  return colors[examType || 'test'] || { color: "#4b5563", bgColor: "#d1d5db" };
+};
+
+// Formatar data para exibição
+const formatDate = (dateString: string): { day: string; month: string; date: string } => {
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear().toString().slice(-2);
+  
+  return {
+    day,
+    month: `${month}/${year}`,
+    date: `${day}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${year}`,
+  };
+};
 
 export default function Calendarios() {
-  const [activeNav, setActiveNav] = useState("calendar");
+  const { user, loading: authLoading } = useAuth();
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  
+  // Buscar eventos do calendário (exames)
+  useEffect(() => {
+    const loadCalendarEvents = async () => {
+      if (authLoading || !user) return;
+      
+      setLoading(true);
+      setError(null);
+      
+      try {
+        // Buscar matrículas aprovadas para obter informações do curso
+        const enrollmentsData = await studentService.getEnrollments('approved');
+        setEnrollments(enrollmentsData);
+        
+        // Buscar exames/eventos do calendário
+        const calendarEvents = await studentService.getCalendarEvents();
+        
+        // Filtrar eventos (mostrar todos os exames, não apenas futuros)
+        // Pode ajustar para mostrar apenas futuros se necessário
+        const filteredEvents = calendarEvents.filter(event => {
+          if (!event.exam_date) {
+            console.warn('Evento sem exam_date:', event);
+            return false;
+          }
+          // Mostrar todos os exames (pode ajustar para apenas futuros se necessário)
+          const eventDate = new Date(event.exam_date);
+          const now = new Date();
+          // Mostrar exames do último mês até 1 ano no futuro
+          const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          const oneYearAhead = new Date(now.getFullYear() + 1, now.getMonth(), 31);
+          return eventDate >= oneMonthAgo && eventDate <= oneYearAhead;
+        });
+        
+        console.log('Eventos do calendário:', {
+          total: calendarEvents.length,
+          filtrados: filteredEvents.length,
+          eventos: filteredEvents,
+        });
+        
+        // Ordenar por data
+        filteredEvents.sort((a, b) => {
+          const dateA = new Date(a.exam_date).getTime();
+          const dateB = new Date(b.exam_date).getTime();
+          return dateA - dateB;
+        });
+        
+        setEvents(filteredEvents);
+      } catch (err: any) {
+        console.error('Erro ao carregar eventos do calendário:', err);
+        setError('Erro ao carregar eventos do calendário. Tente novamente mais tarde.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadCalendarEvents();
+  }, [user, authLoading]);
+  
+  // Obter informações do curso atual (primeira matrícula aprovada)
+  const currentEnrollment = useMemo(() => {
+    return enrollments.length > 0 ? enrollments[0] : null;
+  }, [enrollments]);
+  
+  const courseName = currentEnrollment?.course?.name || 'Curso';
+  const courseCode = currentEnrollment?.course?.code || '';
+  const semester = currentEnrollment?.course?.year_level || currentEnrollment?.course?.class_level || '';
+  
+  // Formatar eventos para exibição
+  const formattedEvents = useMemo(() => {
+    return events.map(event => {
+      const dateInfo = formatDate(event.exam_date);
+      const colors = getExamColor(event.exam_type);
+      const examTypeLabel = event.exam_type_portuguese || event.exam_type || 'Exame';
+      const timeInfo = event.start_time && event.end_time 
+        ? `${event.start_time} - ${event.end_time}` 
+        : '';
+      const semesterInfo = event.semester ? `${event.semester}º Semestre` : '';
+      const timeDisplay = [timeInfo, semesterInfo].filter(Boolean).join(' | ') || examTypeLabel;
+      
+      return {
+        id: event.id,
+        date: dateInfo.date,
+        day: dateInfo.day,
+        month: dateInfo.month,
+        title: event.subject_name || event.course_name || 'Exame',
+        time: timeDisplay,
+        color: colors.color,
+        bgColor: colors.bgColor,
+      };
+    });
+  }, [events]);
 
   return (
     <Container>
@@ -218,26 +306,46 @@ export default function Calendarios() {
           </Top>
 
       <Content>
-        <CourseInfo>
-          <CourseCode>EINF6-M1 - Engenharia Informática</CourseCode>
-          <SemesterBadge>VIº SEMESTRE – 3º ANO</SemesterBadge>
-        </CourseInfo>
+        {loading ? (
+          <LoadingMessage>Carregando eventos do calendário...</LoadingMessage>
+        ) : error ? (
+          <ErrorMessage>{error}</ErrorMessage>
+        ) : (
+          <>
+            <CourseInfo>
+              <CourseCode>
+                {courseCode ? `${courseCode} - ` : ''}{courseName}
+              </CourseCode>
+              {semester && (
+                <SemesterBadge>
+                  {typeof semester === 'number' ? `${semester}º ANO` : semester}
+                </SemesterBadge>
+              )}
+            </CourseInfo>
 
-        <CalendarList>
-          {events.map((event, index) => (
-            <CalendarItem key={index}>
-              <DateColumn>
-                <DateDay>{event.day}</DateDay>
-                <DateMonth>{event.month}</DateMonth>
-              </DateColumn>
-              <ColorBar color={event.color} />
-              <EventContent bgColor={event.bgColor}>
-                <EventTitle>{event.title}</EventTitle>
-                <EventTime>{event.time}</EventTime>
-              </EventContent>
-            </CalendarItem>
-          ))}
-        </CalendarList>
+            {formattedEvents.length === 0 ? (
+              <EmptyMessage>
+                Nenhum evento agendado no momento.
+              </EmptyMessage>
+            ) : (
+              <CalendarList>
+                {formattedEvents.map((event) => (
+                  <CalendarItem key={event.id}>
+                    <DateColumn>
+                      <DateDay>{event.day}</DateDay>
+                      <DateMonth>{event.month}</DateMonth>
+                    </DateColumn>
+                    <ColorBar color={event.color} />
+                    <EventContent bgColor={event.bgColor}>
+                      <EventTitle>{event.title}</EventTitle>
+                      <EventTime>{event.time}</EventTime>
+                    </EventContent>
+                  </CalendarItem>
+                ))}
+              </CalendarList>
+            )}
+          </>
+        )}
       </Content>
 
       <BottomMenu/>

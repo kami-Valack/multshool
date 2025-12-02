@@ -1258,6 +1258,8 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
  }) {
     const { isAuthenticated, loading, user, profileComplete, checkProfileCompletion } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$contexts$2f$AuthContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
+    const pathname = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePathname"])();
+    const [isMounted, setIsMounted] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     // Verificar role PRIMEIRO - se não tiver role correta, bloquear imediatamente
     const shouldCheckRole = allowedRoles.length > 0;
     const { hasAccess: hasRoleAccess, loading: roleLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useRoleCheck$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRoleCheck"])({
@@ -1267,15 +1269,21 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
     });
     // Se não tiver role correta, não verificar perfil completo
     const shouldCheckProfile = shouldCheckRole ? hasRoleAccess : true;
+    // Garantir que o componente está montado no cliente antes de fazer verificações que dependem do window
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        setIsMounted(true);
+    }, []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (!isMounted) return;
         if (!loading && requireAuth && !isAuthenticated) {
             router.push('/');
             return;
         }
         // Se tiver role correta E for escola E perfil não estiver completo, redirecionar para completar perfil
         // Mas apenas se requireCompleteProfile for true E não estiver na página de completar perfil
-        if (!loading && isAuthenticated && shouldCheckProfile && requireCompleteProfile && user?.role === 'school' && profileComplete === false && ("TURBOPACK compile-time value", "undefined") !== 'undefined' && !window.location.pathname.includes('/completar-perfil')) //TURBOPACK unreachable
-        ;
+        if (!loading && isAuthenticated && shouldCheckProfile && requireCompleteProfile && user?.role === 'school' && profileComplete === false && !pathname.includes('/completar-perfil')) {
+            router.push('/admin/completar-perfil');
+        }
     }, [
         isAuthenticated,
         loading,
@@ -1284,7 +1292,9 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
         user,
         profileComplete,
         router,
-        shouldCheckProfile
+        shouldCheckProfile,
+        isMounted,
+        pathname
     ]);
     // Verificar perfil ao carregar se for escola E tiver role correta
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
@@ -1301,14 +1311,14 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
     ]);
     // Debug: Log do estado atual
     __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].useEffect(()=>{
-        if (!loading && isAuthenticated && user) {
+        if (!loading && isAuthenticated && user && isMounted) {
             console.log('[ProtectedRoute] Estado atual:', {
                 userRole: user.role,
                 allowedRoles,
                 hasRoleAccess,
                 profileComplete,
                 requireCompleteProfile,
-                pathname: ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : 'N/A'
+                pathname
             });
         }
     }, [
@@ -1318,11 +1328,24 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
         allowedRoles,
         hasRoleAccess,
         profileComplete,
-        requireCompleteProfile
+        requireCompleteProfile,
+        isMounted,
+        pathname
     ]);
     // Verificar se está carregando (auth ou role, se necessário)
     // IMPORTANTE: Se estiver verificando role, também aguardar o usuário estar disponível
     const isStillLoading = loading || shouldCheckRole && (roleLoading || !user);
+    // IMPORTANTE: Para evitar erro de hidratação, sempre renderizar o mesmo conteúdo inicial
+    // no servidor e no cliente. Usar useEffect apenas para redirecionamentos.
+    // Durante o carregamento inicial, mostrar loading apenas no cliente após montagem
+    // No servidor, sempre renderizar children para evitar diferença de HTML
+    if (!isMounted) {
+        // No servidor e no primeiro render do cliente, renderizar children
+        // O useEffect vai fazer as verificações e redirecionamentos necessários
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+            children: children
+        }, void 0, false);
+    }
     if (isStillLoading) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "flex items-center justify-center min-h-screen",
@@ -1333,7 +1356,7 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
                         className: "animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto"
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProtectedRoute.tsx",
-                        lineNumber: 86,
+                        lineNumber: 105,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1341,18 +1364,18 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
                         children: "A carregar..."
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProtectedRoute.tsx",
-                        lineNumber: 87,
+                        lineNumber: 106,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ProtectedRoute.tsx",
-                lineNumber: 85,
+                lineNumber: 104,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/ProtectedRoute.tsx",
-            lineNumber: 84,
+            lineNumber: 103,
             columnNumber: 7
         }, this);
     }
@@ -1379,7 +1402,7 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
                         children: "Acesso Negado"
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProtectedRoute.tsx",
-                        lineNumber: 110,
+                        lineNumber: 129,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1387,7 +1410,7 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
                         children: "Você não tem permissão para acessar esta página."
                     }, void 0, false, {
                         fileName: "[project]/src/components/ProtectedRoute.tsx",
-                        lineNumber: 111,
+                        lineNumber: 130,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1399,18 +1422,18 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/ProtectedRoute.tsx",
-                        lineNumber: 114,
+                        lineNumber: 133,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/ProtectedRoute.tsx",
-                lineNumber: 109,
+                lineNumber: 128,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/ProtectedRoute.tsx",
-            lineNumber: 108,
+            lineNumber: 127,
             columnNumber: 7
         }, this);
     }
@@ -1420,8 +1443,11 @@ function ProtectedRoute({ children, requireAuth = true, requireCompleteProfile =
     // IMPORTANTE: Só bloquear se profileComplete for explicitamente false (não null)
     // Se for null, significa que ainda está verificando, então permitir acesso
     if (shouldCheckProfile && requireCompleteProfile && user?.role === 'school' && profileComplete === false && // Apenas se for explicitamente false, não null
-    ("TURBOPACK compile-time value", "undefined") !== 'undefined' && !window.location.pathname.includes('/completar-perfil')) //TURBOPACK unreachable
-    ;
+    !pathname.includes('/completar-perfil')) {
+        console.log('[ProtectedRoute] Perfil incompleto detectado, redirecionando...');
+        // Retornar null enquanto redireciona
+        return null;
+    }
     // Se profileComplete for null (ainda não verificado), permitir acesso enquanto verifica
     // Isso evita bloqueios indevidos enquanto a verificação está em andamento
     // A verificação será feita em background e o redirecionamento acontecerá se necessário

@@ -123,5 +123,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateTeacher::class])->prefix('te
 Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('student')->group(function () {
     Route::apiResource('enrollments', \App\Http\Controllers\Student\EnrollmentController::class)->only(['index', 'store']);
     Route::apiResource('exam-registrations', \App\Http\Controllers\Student\ExamRegistrationController::class)->only(['index', 'store']);
+    // Horários do estudante - busca por class_id das matrículas
+    Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'indexForStudent']);
 });
 

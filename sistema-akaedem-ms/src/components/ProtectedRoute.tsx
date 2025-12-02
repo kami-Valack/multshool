@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRoleCheck } from '@/hooks/useRoleCheck';
 
@@ -20,6 +20,8 @@ export function ProtectedRoute({
 }: ProtectedRouteProps) {
   const { isAuthenticated, loading, user, profileComplete, checkProfileCompletion } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
   
   // Verificar role PRIMEIRO - se não tiver role correta, bloquear imediatamente
   const shouldCheckRole = allowedRoles.length > 0;
@@ -31,8 +33,15 @@ export function ProtectedRoute({
   
   // Se não tiver role correta, não verificar perfil completo
   const shouldCheckProfile = shouldCheckRole ? hasRoleAccess : true;
+  
+  // Garantir que o componente está montado no cliente antes de fazer verificações que dependem do window
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!isMounted) return;
+    
     if (!loading && requireAuth && !isAuthenticated) {
       router.push('/');
       return;
@@ -47,12 +56,11 @@ export function ProtectedRoute({
       requireCompleteProfile &&
       user?.role === 'school' && 
       profileComplete === false &&
-      typeof window !== 'undefined' &&
-      !window.location.pathname.includes('/completar-perfil')
+      !pathname.includes('/completar-perfil')
     ) {
       router.push('/admin/completar-perfil');
     }
-  }, [isAuthenticated, loading, requireAuth, requireCompleteProfile, user, profileComplete, router, shouldCheckProfile]);
+  }, [isAuthenticated, loading, requireAuth, requireCompleteProfile, user, profileComplete, router, shouldCheckProfile, isMounted, pathname]);
 
   // Verificar perfil ao carregar se for escola E tiver role correta
   useEffect(() => {
@@ -63,21 +71,32 @@ export function ProtectedRoute({
 
   // Debug: Log do estado atual
   React.useEffect(() => {
-    if (!loading && isAuthenticated && user) {
+    if (!loading && isAuthenticated && user && isMounted) {
       console.log('[ProtectedRoute] Estado atual:', {
         userRole: user.role,
         allowedRoles,
         hasRoleAccess,
         profileComplete,
         requireCompleteProfile,
-        pathname: typeof window !== 'undefined' ? window.location.pathname : 'N/A'
+        pathname
       });
     }
-  }, [loading, isAuthenticated, user, allowedRoles, hasRoleAccess, profileComplete, requireCompleteProfile]);
+  }, [loading, isAuthenticated, user, allowedRoles, hasRoleAccess, profileComplete, requireCompleteProfile, isMounted, pathname]);
 
   // Verificar se está carregando (auth ou role, se necessário)
   // IMPORTANTE: Se estiver verificando role, também aguardar o usuário estar disponível
   const isStillLoading = loading || (shouldCheckRole && (roleLoading || !user));
+  
+  // IMPORTANTE: Para evitar erro de hidratação, sempre renderizar o mesmo conteúdo inicial
+  // no servidor e no cliente. Usar useEffect apenas para redirecionamentos.
+  
+  // Durante o carregamento inicial, mostrar loading apenas no cliente após montagem
+  // No servidor, sempre renderizar children para evitar diferença de HTML
+  if (!isMounted) {
+    // No servidor e no primeiro render do cliente, renderizar children
+    // O useEffect vai fazer as verificações e redirecionamentos necessários
+    return <>{children}</>;
+  }
   
   if (isStillLoading) {
     return (
@@ -130,8 +149,7 @@ export function ProtectedRoute({
     requireCompleteProfile &&
     user?.role === 'school' && 
     profileComplete === false && // Apenas se for explicitamente false, não null
-    typeof window !== 'undefined' &&
-    !window.location.pathname.includes('/completar-perfil')
+    !pathname.includes('/completar-perfil')
   ) {
     console.log('[ProtectedRoute] Perfil incompleto detectado, redirecionando...');
     // Retornar null enquanto redireciona

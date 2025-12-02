@@ -37,6 +37,27 @@ class EnrollmentController extends Controller
         }
 
         $enrollments = $query->orderBy('created_at', 'desc')->get();
+        
+        // Adicionar class_id e class_name das turmas relacionadas
+        $enrollments = $enrollments->map(function ($enrollment) {
+            // Buscar class_students relacionado para obter class_id
+            $classStudent = \App\Models\ClassStudent::where('enrollment_id', $enrollment->id)
+                ->with('class')
+                ->first();
+            
+            $enrollmentData = $enrollment->toArray();
+            
+            if ($classStudent && $classStudent->class) {
+                $enrollmentData['class_id'] = $classStudent->class_id;
+                $enrollmentData['class_name'] = $classStudent->class->name;
+                // Garantir que o campo 'class' está preenchido
+                if (empty($enrollmentData['class'])) {
+                    $enrollmentData['class'] = $classStudent->class->name;
+                }
+            }
+            
+            return $enrollmentData;
+        });
 
         return response()->json([
             'status' => 'success',

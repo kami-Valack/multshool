@@ -14,6 +14,7 @@ class Fee extends Model
         'id',
         'student_id',
         'enrollment_id',
+        'course_id',
         'amount',
         'due_date',
         'status',

@@ -427,6 +427,63 @@ class StudentService {
       return [];
     }
   }
+
+  // Horários do estudante
+  async getSchedules(): Promise<any[]> {
+    try {
+      const response = await studentApiClient.get<ApiResponse<any[]>>('/schedules');
+      
+      if (response.status === 'success' && response.schedules) {
+        return response.schedules;
+      }
+      
+      return [];
+    } catch (error: any) {
+      console.error('Erro ao buscar horários:', error);
+      return [];
+    }
+  }
+
+  // Exames/Eventos do calendário do estudante
+  async getCalendarEvents(): Promise<CalendarEvent[]> {
+    try {
+      console.log('Buscando eventos do calendário (exames)...');
+      const response = await studentApiClient.get<ApiResponse<CalendarEvent[]>>('/schedules?type=exam');
+      
+      console.log('Resposta da API de eventos:', {
+        status: response.status,
+        hasSchedules: !!response.schedules,
+        schedulesCount: response.schedules?.length || 0,
+        schedules: response.schedules,
+      });
+      
+      if (response.status === 'success' && response.schedules) {
+        return response.schedules;
+      }
+      
+      return [];
+    } catch (error: any) {
+      console.error('Erro ao buscar eventos do calendário:', error);
+      return [];
+    }
+  }
+}
+
+export interface CalendarEvent {
+  id: string;
+  class_name: string;
+  course_id: string;
+  course_name?: string;
+  subject_id?: string;
+  subject_name?: string;
+  exam_type?: 'test' | 'final_exam' | 'recovery_exam' | 'practical_exam' | 'oral_exam';
+  exam_type_portuguese?: string;
+  exam_date: string; // YYYY-MM-DD
+  start_time?: string; // HH:mm
+  end_time?: string; // HH:mm
+  room?: string;
+  academic_year: string;
+  semester?: number;
 }
 
 export const studentService = new StudentService();

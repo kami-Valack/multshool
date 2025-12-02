@@ -1,5 +1,4 @@
 {
-  "/admin/academica/cursos/page": "app/admin/academica/cursos/page.js",
-  "/admin/academica/horarios/page": "app/admin/academica/horarios/page.js",
-  "/admin/academica/turmas/page": "app/admin/academica/turmas/page.js"
+  "/admin/academica/candidaturas/page": "app/admin/academica/candidaturas/page.js",
+  "/page": "app/page.js"
 }
