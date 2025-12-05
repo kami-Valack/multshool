@@ -1,4 +1,16 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/admin/academica/candidaturas/page": "app/admin/academica/candidaturas/page.js",
+  "/admin/academica/horarios/page": "app/admin/academica/horarios/page.js",
+  "/admin/academica/matriculas/page": "app/admin/academica/matriculas/page.js",
+  "/admin/academica/turmas/page": "app/admin/academica/turmas/page.js",
+  "/admin/estudantes/gerir/page": "app/admin/estudantes/gerir/page.js",
+  "/admin/estudantes/transferencias/page": "app/admin/estudantes/transferencias/page.js",
+  "/admin/financeiro/debitosemultas/page": "app/admin/financeiro/debitosemultas/page.js",
+  "/admin/financeiro/pagamentos/page": "app/admin/financeiro/pagamentos/page.js",
+  "/admin/financeiro/propinas/page": "app/admin/financeiro/propinas/page.js",
+  "/admin/financeiro/recibos/page": "app/admin/financeiro/recibos/page.js",
+  "/admin/financeiro/relatorios/page": "app/admin/financeiro/relatorios/page.js",
+  "/admin/page": "app/admin/page.js",
   "/page": "app/page.js"
 }
