@@ -1,4 +1,4 @@
-import { studentApiClient } from './apiClient';
+import { studentApiClient, schoolApiClient } from './apiClient';
 import { API_CONFIG } from '@/config/api';
 
 export interface PaymentTokenResponse {
@@ -33,7 +33,7 @@ class PaymentService {
     studentName: string
   ): Promise<PaymentTokenResponse> {
     try {
-      const response = await studentApiClient.post<PaymentTokenResponse>(
+      const response = await schoolApiClient.post<PaymentTokenResponse>(
         '/student/payments/generate-token',
         {
           course_id: courseId,
@@ -58,7 +58,7 @@ class PaymentService {
    */
   async checkPaymentStatus(paymentId: string): Promise<PaymentStatus> {
     try {
-      const response = await studentApiClient.get<{
+      const response = await schoolApiClient.get<{
         status: string;
         payment: PaymentStatus;
       }>(`/student/payments/check-status?payment_id=${paymentId}`);
@@ -81,7 +81,7 @@ class PaymentService {
     studentId: string
   ): Promise<{ has_payment: boolean; payment?: PaymentStatus }> {
     try {
-      const response = await studentApiClient.get<{
+      const response = await schoolApiClient.get<{
         status: string;
         has_payment: boolean;
         payment?: PaymentStatus;

@@ -121,6 +121,34 @@ GET /api/student/payments/check-status?payment_id={uuid}
 GET /api/student/payments/check-by-course?course_id={uuid}&student_id={uuid}
 ```
 
+**Response (sucesso):**
+```json
+{
+  "status": "success",
+  "has_payment": true,
+  "payment": {
+    "id": "uuid",
+    "reference": "PAY2025012312345",
+    "amount": 50000.00,
+    "status": "completed",
+    "paid_at": "2025-01-23T10:30:00Z",
+    "course": {
+      "id": "uuid",
+      "name": "Nome do Curso"
+    }
+  }
+}
+```
+
+**Response (não encontrado - 404):**
+```json
+{
+  "status": "error",
+  "message": "Pagamento não encontrado",
+  "has_payment": false
+}
+```
+
 ### Callback do GPO (público)
 
 ```
