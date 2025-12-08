@@ -130,9 +130,13 @@ Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('
     // Horários do estudante - busca por class_id das matrículas
     Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'indexForStudent']);
     
-    // Payment routes
+    // Payment routes (require API Secret)
     Route::post('/payments/generate-token', [\App\Http\Controllers\Student\PaymentController::class, 'generatePurchaseToken']);
     Route::get('/payments/check-status', [\App\Http\Controllers\Student\PaymentController::class, 'checkStatus']);
+});
+
+// Student payment routes (NO API Secret required)
+Route::prefix('student')->group(function () {
     Route::get('/payments/check-by-course', [\App\Http\Controllers\Student\PaymentController::class, 'getByStudentAndCourse']);
 });
 

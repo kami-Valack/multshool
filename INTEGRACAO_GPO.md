@@ -83,12 +83,15 @@ Quando o estudante tenta se matricular em um curso:
 
 ## 🔌 Endpoints da API
 
+**⚠️ IMPORTANTE:** Todas as rotas de pagamento estão no serviço **`ms-shocoll-api`** (SCHOOL_API), não no STUDENT_API.
+
 ### Estudante (requer API Secret)
 
 #### Gerar Token de Compra
 ```
 POST /api/student/payments/generate-token
 ```
+**Serviço:** `ms-shocoll-api` (SCHOOL_API - porta 8003)
 
 **Body:**
 ```json
@@ -115,11 +118,14 @@ POST /api/student/payments/generate-token
 ```
 GET /api/student/payments/check-status?payment_id={uuid}
 ```
+**Serviço:** `ms-shocoll-api` (SCHOOL_API - porta 8003)
 
 #### Verificar Pagamento por Curso
 ```
 GET /api/student/payments/check-by-course?course_id={uuid}&student_id={uuid}
 ```
+**Serviço:** `ms-shocoll-api` (SCHOOL_API - porta 8003)  
+**Autenticação:** Nenhuma (rota pública)
 
 **Response (sucesso):**
 ```json
@@ -154,6 +160,7 @@ GET /api/student/payments/check-by-course?course_id={uuid}&student_id={uuid}
 ```
 POST /api/payments/gpo-callback
 ```
+**Serviço:** `ms-shocoll-api` (SCHOOL_API - porta 8003)
 
 **Body (exemplo):**
 ```json
@@ -170,11 +177,13 @@ POST /api/payments/gpo-callback
 ```
 GET /api/admin/payments?status=completed&page=1&per_page=15
 ```
+**Serviço:** `ms-shocoll-api` (SCHOOL_API - porta 8003)
 
 #### Detalhes do Pagamento
 ```
 GET /api/admin/payments/{id}
 ```
+**Serviço:** `ms-shocoll-api` (SCHOOL_API - porta 8003)
 
 ## 📊 Estrutura do Banco de Dados
 
