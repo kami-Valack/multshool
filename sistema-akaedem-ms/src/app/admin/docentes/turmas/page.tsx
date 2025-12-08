@@ -363,7 +363,6 @@ export default function Academica() {
       });
       setOpen(false);
       setEditingDocente(null);
-      resetForm();
     } catch (error) {
       // Erro já é tratado no hook
     }

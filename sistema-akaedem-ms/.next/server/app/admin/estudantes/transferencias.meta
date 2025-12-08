@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/estudantes/layout,_N_T_/admin/estudantes/transferencias/layout,_N_T_/admin/estudantes/transferencias/page,_N_T_/admin/estudantes/transferencias"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/admin/estudantes/transferencias/__PAGE__",
+    "/admin/estudantes/transferencias",
+    "/admin/estudantes",
+    "/admin",
+    "/_index"
+  ]
+}

@@ -38,11 +38,12 @@ class ProfileService {
    * Obtém dados do perfil atual
    */
   async getProfile(): Promise<any> {
-    const response = await schoolApiClient.get(API_ENDPOINTS.PROFILE.ME);
+    const response = await schoolApiClient.get<{ user?: any }>(API_ENDPOINTS.PROFILE.ME);
 
     if (response.status === 'success' && response.data) {
       // A API retorna { status: 'success', user: {...} }
-      return response.data.user || response.data;
+      const data = response.data as { user?: any };
+      return data.user || data;
     }
 
     throw new Error(response.message || 'Erro ao obter perfil');

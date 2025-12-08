@@ -95,7 +95,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 // ==================== TABELA ORIGINAL (para Estudantes/Candidaturas/Matrículas) ====================
 
 export const schema = z.object({
-  id: z.number(),
+  id: z.union([z.number(), z.string()]),
   photo: z.string(),
   name: z.string(),
   enrollmentNumber: z.string(),
@@ -105,7 +105,8 @@ export const schema = z.object({
   status: z.string(),
   phone: z.string(),
   email: z.string(),
-})
+  enrollment: z.any().optional(), // Objeto completo de enrollment para uso interno
+}).passthrough() // Permite propriedades extras
 
 type DataItem = z.infer<typeof schema>
 
@@ -195,7 +196,7 @@ const mockData: DataItem[] = [
   },
 ]
 
-function DragHandle({ id }: { id: number }) {
+function DragHandle({ id }: { id: string | number }) {
   const { attributes, listeners } = useSortable({ id })
   return (
     <Button

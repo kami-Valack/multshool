@@ -133,6 +133,7 @@ const GestaoDocentes = () => {
     email: '',
     telefone: '',
     curso: '',
+    course_id: '',
     departamento: '',
     cargo: '',
     contrato: 'Efetivo',
@@ -198,7 +199,7 @@ const GestaoDocentes = () => {
         contract_type: formData.contrato || undefined,
         address: formData.morada || undefined,
         id_card: formData.bi || undefined,
-        status: formData.estado === 'ativo' ? 'active' : 'inactive',
+        status: selectedDocente.estado === 'ativo' ? 'active' : 'inactive',
       });
       setIsEditDialogOpen(false);
       setIsDrawerOpen(false);

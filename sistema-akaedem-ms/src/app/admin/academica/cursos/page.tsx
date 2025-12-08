@@ -290,7 +290,7 @@ export default function Academica() {
   // Filtros
   const cursosFiltrados = cursosDisplay.filter(curso => {
     const matchSearch = curso.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                       curso.codigo.toLowerCase().includes(searchTerm.toLowerCase());
+                       (curso.codigo?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
     const matchGrau = filterGrau === 'todos' || curso.grau === filterGrau;
     const matchEstado = filterEstado === 'todos' || curso.estado === filterEstado;
     

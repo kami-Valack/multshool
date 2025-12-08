@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/estudantes/layout,_N_T_/admin/estudantes/gerir/layout,_N_T_/admin/estudantes/gerir/page,_N_T_/admin/estudantes/gerir"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/admin/estudantes/gerir/__PAGE__",
+    "/admin/estudantes/gerir",
+    "/admin/estudantes",
+    "/admin",
+    "/_index"
+  ]
+}
