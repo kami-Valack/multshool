@@ -338,11 +338,14 @@ class PaymentController extends Controller
             ->first();
 
         if (!$payment) {
+            // Retornar 200 com has_payment: false para indicar que não há pagamento
+            // Isso permite que o frontend redirecione para iniciar o pagamento
             return response()->json([
-                'status' => 'error',
-                'message' => 'Pagamento não encontrado',
+                'status' => 'success',
+                'message' => 'Nenhum pagamento encontrado para este curso',
                 'has_payment' => false,
-            ], 404);
+                'requires_payment' => true,
+            ], 200);
         }
 
         return response()->json([

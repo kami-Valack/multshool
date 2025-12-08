@@ -79,28 +79,27 @@ class PaymentService {
   async checkPaymentByCourse(
     courseId: string,
     studentId: string
-  ): Promise<{ has_payment: boolean; payment?: PaymentStatus }> {
+  ): Promise<{ has_payment: boolean; payment?: PaymentStatus; requires_payment?: boolean }> {
     try {
       const response = await schoolApiClient.get<{
         status: string;
         has_payment: boolean;
         payment?: PaymentStatus;
+        requires_payment?: boolean;
       }>(`/student/payments/check-by-course?course_id=${courseId}&student_id=${studentId}`);
 
       if (response.status === 'success') {
         return {
           has_payment: response.has_payment || false,
           payment: response.payment,
+          requires_payment: response.requires_payment || !response.has_payment,
         };
       }
 
-      return { has_payment: false };
+      return { has_payment: false, requires_payment: true };
     } catch (error: any) {
-      // Se retornar 404, significa que não há pagamento
-      if (error.status === 404) {
-        return { has_payment: false };
-      }
-      throw error;
+      // Se retornar 404 ou qualquer erro, significa que não há pagamento e precisa iniciar
+      return { has_payment: false, requires_payment: true };
     }
   }
 }

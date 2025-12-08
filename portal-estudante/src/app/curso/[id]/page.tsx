@@ -719,14 +719,16 @@ const CourseDetailPage: React.FC = () => {
       const { paymentService } = await import('@/services/paymentService');
       const paymentCheck = await paymentService.checkPaymentByCourse(apiCourse.id, user.id);
       
-      if (!paymentCheck.has_payment) {
-        // Redirecionar para página de pagamento
-        showToast("É necessário efetuar o pagamento antes de se matricular", "info");
-        setTimeout(() => {
+      // Se não houver pagamento ou se o curso requer pagamento, redirecionar para página de pagamento
+      if (!paymentCheck.has_payment || paymentCheck.requires_payment) {
+        // Verificar se o curso tem preço (requer pagamento)
+        if (apiCourse.price && apiCourse.price > 0) {
+          // Redirecionar imediatamente para página de pagamento
+          showToast("Redirecionando para o pagamento...", "info");
           router.push(`/curso/${apiCourse.id}/pagamento`);
-        }, 1500);
-        setIsEnrolling(false);
-        return;
+          setIsEnrolling(false);
+          return;
+        }
       }
 
       // Criar matrícula na API
