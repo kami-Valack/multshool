@@ -33,6 +33,7 @@ logs/
 coverage/
 .phpunit.cache/
 
+
 # Arquivos de build
 node_modules/
 /public/build

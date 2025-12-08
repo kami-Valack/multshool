@@ -1,0 +1,13 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_not-found/page.js")
+R.c("server/chunks/ssr/multshool_sistema-akaedem-ms_92878351._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__5a658e82._.js")
+R.c("server/chunks/ssr/8eda7_next_dist_esm_build_templates_app-page_5de7afbd.js")
+R.c("server/chunks/ssr/[root-of-the-server]__ee04ac1e._.js")
+R.c("server/chunks/ssr/8eda7_next_dist_ff78b0fb._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__afa682fb._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__f484a620._.js")
+R.c("server/chunks/ssr/multshool_sistema-akaedem-ms_src_app_not-found_tsx_31dbbb81._.js")
+R.c("server/chunks/ssr/8eda7_next_dist_client_components_19a055a7._.js")
+R.c("server/chunks/ssr/cbd05_sistema-akaedem-ms__next-internal_server_app__not-found_page_actions_6bf44ae4.js")
+R.m(33991)
+module.exports=R.m(33991).exports

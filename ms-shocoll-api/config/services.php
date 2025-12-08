@@ -50,4 +50,12 @@ return [
         'secret' => env('USERS_API_SECRET', env('API_SECRET', '')),
     ],
 
+    'gpo' => [
+        'frame_token' => env('GPO_FRAME_TOKEN'),
+        'callback_url' => env('GPO_CALLBACK_URL'),
+        'css_url' => env('GPO_CSS_URL'),
+        'api_url' => env('GPO_API_URL', 'https://gpo.emis.co.ao/online-payment-gateway/webframe/v1/frameToken'),
+        'frame_url' => env('GPO_FRAME_URL', 'https://gpo.emis.co.ao/online-payment-gateway/webframe/frame'),
+    ],
+
 ];

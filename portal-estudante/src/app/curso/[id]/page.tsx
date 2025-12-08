@@ -715,6 +715,20 @@ const CourseDetailPage: React.FC = () => {
     setIsEnrolling(true);
 
     try {
+      // Verificar se existe pagamento antes de criar matrícula
+      const { paymentService } = await import('@/services/paymentService');
+      const paymentCheck = await paymentService.checkPaymentByCourse(apiCourse.id, user.id);
+      
+      if (!paymentCheck.has_payment) {
+        // Redirecionar para página de pagamento
+        showToast("É necessário efetuar o pagamento antes de se matricular", "info");
+        setTimeout(() => {
+          router.push(`/curso/${apiCourse.id}/pagamento`);
+        }, 1500);
+        setIsEnrolling(false);
+        return;
+      }
+
       // Criar matrícula na API
       const enrollment = await studentService.createEnrollment(apiCourse.id);
       
@@ -727,19 +741,28 @@ const CourseDetailPage: React.FC = () => {
     } catch (error: any) {
       let errorMessage = "Erro ao fazer matrícula. Tente novamente.";
       
-      if (error.message) {
-        errorMessage = error.message;
-      } else if (typeof error === 'object' && error.status === 'error' && error.message) {
-        errorMessage = error.message;
-      } else if (error.errors && typeof error.errors === 'object') {
-        // Se houver erros de validação, mostrar o primeiro
-        const firstError = Object.values(error.errors)[0];
-        if (Array.isArray(firstError) && firstError.length > 0) {
-          errorMessage = firstError[0] as string;
+      // Verificar se é erro de pagamento necessário
+      if (error.status === 402 || (error.message && error.message.includes('pagamento'))) {
+        errorMessage = error.message || "É necessário efetuar o pagamento antes de se matricular";
+        showToast(errorMessage, "info");
+        setTimeout(() => {
+          router.push(`/curso/${apiCourse?.id}/pagamento`);
+        }, 1500);
+      } else {
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (typeof error === 'object' && error.status === 'error' && error.message) {
+          errorMessage = error.message;
+        } else if (error.errors && typeof error.errors === 'object') {
+          // Se houver erros de validação, mostrar o primeiro
+          const firstError = Object.values(error.errors)[0];
+          if (Array.isArray(firstError) && firstError.length > 0) {
+            errorMessage = firstError[0] as string;
+          }
         }
+        
+        showToast(errorMessage, "error");
       }
-      
-      showToast(errorMessage, "error");
     } finally {
       setIsEnrolling(false);
     }

@@ -31,6 +31,10 @@ Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('
     Route::get('/courses/{id}', [\App\Http\Controllers\CourseController::class, 'show']);
     Route::get('/courses/{id}/admission-exams', [\App\Http\Controllers\AdmissionExamController::class, 'index']);
     Route::get('/courses/{id}/subjects', [\App\Http\Controllers\CourseSubjectController::class, 'indexPublic']);
+    
+    // Admin routes for payments
+    Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index']);
+    Route::get('/payments/{id}', [\App\Http\Controllers\Admin\PaymentController::class, 'show']);
 });
 
 // Protected routes (require JWT authentication and school role and approved status)
@@ -125,5 +129,13 @@ Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('
     Route::apiResource('exam-registrations', \App\Http\Controllers\Student\ExamRegistrationController::class)->only(['index', 'store']);
     // Horários do estudante - busca por class_id das matrículas
     Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'indexForStudent']);
+    
+    // Payment routes
+    Route::post('/payments/generate-token', [\App\Http\Controllers\Student\PaymentController::class, 'generatePurchaseToken']);
+    Route::get('/payments/check-status', [\App\Http\Controllers\Student\PaymentController::class, 'checkStatus']);
+    Route::get('/payments/check-by-course', [\App\Http\Controllers\Student\PaymentController::class, 'getByStudentAndCourse']);
 });
+
+// GPO Callback (public route - no authentication required)
+Route::post('/payments/gpo-callback', [\App\Http\Controllers\Student\PaymentController::class, 'callback']);
 

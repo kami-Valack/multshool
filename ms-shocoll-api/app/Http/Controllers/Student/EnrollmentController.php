@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -106,6 +107,20 @@ class EnrollmentController extends Controller
                 'status' => 'error',
                 'message' => 'Este curso não está disponível para matrícula',
             ], 400);
+        }
+
+        // Verificar se existe pagamento completo para este curso e estudante
+        $payment = Payment::where('course_id', $request->course_id)
+            ->where('student_id', $request->student_id)
+            ->where('status', Payment::STATUS_COMPLETED)
+            ->first();
+
+        if (!$payment) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'É necessário efetuar o pagamento do curso antes de se matricular',
+                'requires_payment' => true,
+            ], 402); // 402 Payment Required
         }
 
         $enrollment = Enrollment::create([

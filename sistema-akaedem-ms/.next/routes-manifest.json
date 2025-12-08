@@ -1,0 +1,182 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/admin/academica/candidaturas",
+      "regex": "^/admin/academica/candidaturas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/academica/candidaturas(?:/)?$"
+    },
+    {
+      "page": "/admin/academica/certificacao",
+      "regex": "^/admin/academica/certificacao(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/academica/certificacao(?:/)?$"
+    },
+    {
+      "page": "/admin/academica/cursos",
+      "regex": "^/admin/academica/cursos(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/academica/cursos(?:/)?$"
+    },
+    {
+      "page": "/admin/academica/horarios",
+      "regex": "^/admin/academica/horarios(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/academica/horarios(?:/)?$"
+    },
+    {
+      "page": "/admin/academica/matriculas",
+      "regex": "^/admin/academica/matriculas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/academica/matriculas(?:/)?$"
+    },
+    {
+      "page": "/admin/academica/turmas",
+      "regex": "^/admin/academica/turmas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/academica/turmas(?:/)?$"
+    },
+    {
+      "page": "/admin/completar-perfil",
+      "regex": "^/admin/completar\\-perfil(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/completar\\-perfil(?:/)?$"
+    },
+    {
+      "page": "/admin/docentes/gerir",
+      "regex": "^/admin/docentes/gerir(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/docentes/gerir(?:/)?$"
+    },
+    {
+      "page": "/admin/docentes/relatorios",
+      "regex": "^/admin/docentes/relatorios(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/docentes/relatorios(?:/)?$"
+    },
+    {
+      "page": "/admin/docentes/turmas",
+      "regex": "^/admin/docentes/turmas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/docentes/turmas(?:/)?$"
+    },
+    {
+      "page": "/admin/estudantes/gerir",
+      "regex": "^/admin/estudantes/gerir(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/estudantes/gerir(?:/)?$"
+    },
+    {
+      "page": "/admin/estudantes/transferencias",
+      "regex": "^/admin/estudantes/transferencias(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/estudantes/transferencias(?:/)?$"
+    },
+    {
+      "page": "/admin/financeiro/debitosemultas",
+      "regex": "^/admin/financeiro/debitosemultas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/financeiro/debitosemultas(?:/)?$"
+    },
+    {
+      "page": "/admin/financeiro/pagamentos",
+      "regex": "^/admin/financeiro/pagamentos(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/financeiro/pagamentos(?:/)?$"
+    },
+    {
+      "page": "/admin/financeiro/propinas",
+      "regex": "^/admin/financeiro/propinas(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/financeiro/propinas(?:/)?$"
+    },
+    {
+      "page": "/admin/financeiro/recibos",
+      "regex": "^/admin/financeiro/recibos(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/financeiro/recibos(?:/)?$"
+    },
+    {
+      "page": "/admin/financeiro/relatorios",
+      "regex": "^/admin/financeiro/relatorios(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/financeiro/relatorios(?:/)?$"
+    },
+    {
+      "page": "/admin/relatorios/assistencia",
+      "regex": "^/admin/relatorios/assistencia(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/relatorios/assistencia(?:/)?$"
+    },
+    {
+      "page": "/admin/relatorios/gerais",
+      "regex": "^/admin/relatorios/gerais(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/relatorios/gerais(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

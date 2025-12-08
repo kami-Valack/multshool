@@ -1,0 +1,118 @@
+O processo de integração do **iframe de pagamento** (Webframe) no GPO API requer alguns passos essenciais, focados na obtenção e utilização de tokens de segurança e compra, e na correta configuração do *callback* para receber o estado da transação.
+
+[cite_start]Abaixo está o passo a passo dedicado exclusivamente à integração do *iframe* de pagamento, conforme o Manual de Integração GPO[cite: 1664].
+
+-----
+
+## 1\. Obter o Frame Token (Token de Segurança)
+
+[cite_start]O **Frame Token** é o identificador do Comerciante, um tipo de token de segurança necessário para solicitar o **Token de Compra** (Passo 2)[cite: 2508].
+
+1.  [cite_start]**Acesso:** O Frame Token é obtido no **GPO Portal**[cite: 1664].
+2.  [cite_start]**Localização:** Na consulta do perfil de comerciante, clicando sobre o logotipo do Quiosque, no canto superior direito[cite: 2508].
+3.  [cite_start]**Utilização:** Este token é confidencial e deve ser usado apenas no *backend* do comerciante para gerar o Token de Compra, não devendo ser exposto no *frontend*[cite: 2508].
+
+-----
+
+## 2\. Solicitar o Token de Compra (Backend)
+
+[cite_start]O **Token de Compra** é um identificador **único por transação** que será utilizado para construir o URL do *iframe*[cite: 1664]. Este pedido deve ser feito do seu servidor (*backend*) para o GPO, utilizando o Frame Token (Passo 1).
+
+1.  [cite_start]**Método:** `POST` [cite: 2508]
+
+2.  **Endpoint:** Utilize o endpoint específico para a geração do token de compra.
+
+      * [cite_start]**Exemplo de URL (Geral):** `https://gpo.emis.co.ao/online-payment-gateway/webframe/v1/frameToken` [cite: 1664]
+
+3.  **Corpo do Pedido (`Request Body` - JSON):** Envie um objeto JSON com os dados da transação.
+    | Parâmetro | Tipo | Descrição |
+    | :--- | :--- | :--- |
+    | **`reference`** | String | [cite_start]Referência da transação, criada pelo comerciante (máx. 15 dígitos, letras e números)[cite: 2508]. |
+    | **`amount`** | Numérico | [cite_start]Montante da compra[cite: 2508]. |
+    | **`token`** | String | [cite_start]O Frame Token (Token de Segurança) obtido no Passo 1[cite: 2508]. |
+    | **`callbackUrl`** | String | [cite_start]**Obrigatório.** URL para onde a GPO irá enviar a resposta da transação (*server-to-server*)[cite: 2508, 2505]. |
+    | **`qrCode`, `mobile`, `card`** | String | [cite_start]Define quais métodos de pagamento estarão disponíveis na *webframe* (Ex: `"PAYMENT"`, `"DISABLED"`)[cite: 2508]. |
+    | **`cssUrl`** | String | [cite_start]URL de um ficheiro CSS para customização da *webframe* (deve ser um endereço HTTPS)[cite: 1664]. |
+
+    ```json
+    // Exemplo de corpo do pedido para obter o Token de Compra
+    {
+        "reference": "6U8R5764j", 
+        "amount": 200, 
+        "token": "XxxxXXxxXxXXXxxxXXX", 
+        "qrCode": "PAYMENT",
+        "mobile": "DISABLED",
+        "card":"DISABLED", 
+        "cssUrl": "https://seu-dominio.com/estilos.css",
+        "callbackUrl": "https://urlCallBackdoComerciante.com"
+    }
+    ```
+
+4.  [cite_start]**Resposta do Pedido (`Response Body` - JSON):** O GPO devolverá o Token de Compra, que é o campo **`id`**[cite: 2508].
+
+    ```json
+    // Exemplo de resposta do Token de Compra
+    {
+        "id": "ffaf4050-2bb9-4a5c-9e86-62dcb468e363", // Este é o Token de Compra (id)
+        "timeToLive": 1800000 
+    }
+    ```
+
+-----
+
+## 3\. Integrar o Iframe na Página de Pagamento (Frontend)
+
+Com o **Token de Compra (`id`)** em mãos, utilize-o para construir o URL e incorporar o *iframe* na sua página web.
+
+1.  [cite_start]**Construção do URL:** Use o URL da *webframe* concatenado com o Token de Compra[cite: 1664].
+
+      * **URL da Webframe:** `https://gpo.emis.co.ao/online-payment-gateway/webframe/frame?token=...`
+
+2.  **Estrutura do Iframe:** Adicione a tag `<iframe>` no HTML da sua página.
+
+    ```html
+    <iframe 
+        src="https://gpo.emis.co.ao/online-payment-gateway/webframe/frame?token=ffaf4050-2bb9-4a5c-9e86-62dcb468e363" 
+        width="450" 
+        height="600" 
+        frameborder="0">
+    </iframe>
+    ```
+
+      * **Nota:** Ajuste as dimensões (`width` e `height`) conforme necessário.
+
+-----
+
+## 4\. Gerir a Notificação de Conclusão (Callback)
+
+É fundamental que a sua aplicação esteja preparada para receber a notificação da conclusão da operação. O GPO oferece dois mecanismos:
+
+### A. Callback (Server-to-Server)
+
+  * [cite_start]O GPO enviará o estado final da transação para a **`callbackUrl`** que foi especificada no Passo 2[cite: 2508].
+  * [cite_start]É através desta URL que a GPO envia a resposta de uma transação, sendo a sua configuração e desenvolvimento **obrigatórios**[cite: 2505].
+
+### B. PostMessage (Client-to-Client)
+
+  * [cite_start]A *webframe* utiliza o mecanismo de *postMessage* para notificar o *website* do comerciante sobre a conclusão da operação no lado do cliente[cite: 1664].
+
+  * **Implementação (JavaScript no *Frontend*):** Adicione um *listener* para intercetar a mensagem da *webframe*.
+
+    ```javascript
+    window.addEventListener('message', receiveMessage, false);
+
+    function receiveMessage(event) {
+        // 1. Validar a origem para garantir a segurança da comunicação
+        if (event.origin !== 'https://gpo.emis.co.ao') {
+            return;
+        }
+        
+        // 2. Processar os dados da mensagem (event.data) para obter o estado da transação
+        console.log('Received from GPO: ', event.data); 
+
+        // Os dados (event.data) contêm a informação do estado da operação para que o 
+        // seu frontend possa, por exemplo, redirecionar o cliente para uma página de sucesso/erro.
+    }
+    ```
+
+[cite_start]A comunicação com o GPO e a *webframe* é sempre segura, assente sobre o protocolo **HTTPS**[cite: 1664].
