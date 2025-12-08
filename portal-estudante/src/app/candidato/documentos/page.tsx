@@ -105,7 +105,7 @@ const DocumentStatus = styled.div<{ $status: string }>`
   gap: 6px;
   width: fit-content;
   margin-top: 8px;
-  font-weight: ${(props) => props.theme.fonts.weight.medium};
+  font-weight: ${(props) => props.theme.fonts.weight.semibold};
   
   ${({ $status }) => {
     switch ($status) {
@@ -148,7 +148,7 @@ const UploadButton = styled.button`
   transition: background-color 0.2s ease;
   
   &:hover:not(:disabled) {
-    background-color: ${(props) => props.theme.colors.primaryDark || "#6a6388"};
+    background-color: ${(props) => props.theme.colors.primary_dark || "#6a6388"};
   }
   
   &:disabled {

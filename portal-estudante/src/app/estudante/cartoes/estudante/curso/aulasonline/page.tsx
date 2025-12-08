@@ -91,18 +91,6 @@ const mockLiveClasses = [
 ];
 
 // mockComments será inicializado dentro do componente para ter acesso ao user
-  {
-    id: 3,
-    user: "Carlos Santos",
-    avatar: "👨",
-    text: "Poderia explicar melhor a parte dos limites?",
-    time: "10min",
-    online: false,
-    likes: 3,
-    liked: false,
-    replies: [],
-  },
-];
 
 // ============ STYLED COMPONENTS ============
 const GlobalWrapper = styled.div`

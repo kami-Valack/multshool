@@ -173,8 +173,8 @@ export default function Propinas() {
   };
 
   // Obter informações da instituição do estudante (se houver matrícula)
-  const activeEnrollment = user ? null : null; // TODO: buscar matrícula ativa se necessário
-  const institutionName = activeEnrollment?.course?.name || "Instituição";
+  // TODO: buscar matrícula ativa se necessário
+  const institutionName = "Instituição";
   const institutionLocation = ""; // TODO: buscar localização se necessário
 
   return (
