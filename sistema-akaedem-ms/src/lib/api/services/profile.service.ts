@@ -42,7 +42,7 @@ class ProfileService {
 
     if (response.status === 'success' && response.data) {
       // A API retorna { status: 'success', user: {...} }
-      return response.data.user || response.data;
+      return (response.data as any).user || response.data;
     }
 
     throw new Error(response.message || 'Erro ao obter perfil');

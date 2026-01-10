@@ -50,9 +50,9 @@ class ApiClient {
    * Configura os headers da requisição
    */
   private getHeaders(customHeaders?: HeadersInit, useAuth: boolean = true): HeadersInit {
-    const headers: HeadersInit = {
-      ...this.defaultHeaders,
-      ...customHeaders,
+    const headers: Record<string, string> = {
+      ...(this.defaultHeaders as Record<string, string>),
+      ...(customHeaders as Record<string, string> || {}),
     };
 
     if (useAuth) {
@@ -62,18 +62,18 @@ class ApiClient {
       }
     }
 
-    return headers;
+    return headers as HeadersInit;
   }
 
   /**
    * Adiciona API Secret aos headers (para comunicação entre serviços)
    */
   private getHeadersWithSecret(customHeaders?: HeadersInit): HeadersInit {
-    const headers = this.getHeaders(customHeaders, false);
+    const headers = this.getHeaders(customHeaders, false) as Record<string, string>;
     if (API_CONFIG.API_SECRET) {
       headers['X-API-Secret'] = API_CONFIG.API_SECRET;
     }
-    return headers;
+    return headers as HeadersInit;
   }
 
   /**

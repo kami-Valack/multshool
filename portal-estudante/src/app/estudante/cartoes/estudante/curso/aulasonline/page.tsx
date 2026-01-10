@@ -5,104 +5,7 @@ import styled from "styled-components";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFirstAndLastName } from "@/utils/cutName";
 
-// ============ DADOS MOCKADOS ============
-const mockTeachers = [
-  { id: 1, name: "Judson Paiva", avatar: "👨‍🏫", online: true },
-  { id: 2, name: "Benvindo Costa", avatar: "👨‍💼", online: true },
-  { id: 3, name: "José Manuel", avatar: "👨‍🎓", online: false },
-  { id: 4, name: "Adão Silva", avatar: "👨", online: false },
-  { id: 5, name: "Bernardo Manuel", avatar: "👨‍🏫", online: true },
-];
-
-const mockClasses = [
-  {
-    id: 1,
-    title: "CDI I - Cálculo Diferencial e Integral I",
-    subtitle: "Capítulo I: Funções e Limites",
-    teacher: mockTeachers[4],
-    year: "1º Ano",
-    totalClasses: 20,
-    views: 1250,
-    likes: 890,
-    uploadTime: "Há 2 dias",
-    duration: "59:32",
-    thumbnail: "📐",
-    isLive: false,
-  },
-  {
-    id: 2,
-    title: "Análise de Algoritmos",
-    subtitle: "Complexidade e Notação Big O",
-    teacher: mockTeachers[0],
-    year: "3º Ano",
-    totalClasses: 15,
-    views: 850,
-    likes: 620,
-    uploadTime: "Há 5 dias",
-    duration: "45:20",
-    thumbnail: "💻",
-    isLive: false,
-  },
-  {
-    id: 3,
-    title: "Programação Orientada a Objetos",
-    subtitle: "Herança e Polimorfismo",
-    teacher: mockTeachers[1],
-    year: "2º Ano",
-    totalClasses: 18,
-    views: 2100,
-    likes: 1450,
-    uploadTime: "Há 1 dia",
-    duration: "52:15",
-    thumbnail: "🎯",
-    isLive: false,
-  },
-];
-
-const mockLiveClasses = [
-  {
-    id: 101,
-    title: "Física II - Mecânica Quântica",
-    subtitle: "Aula ao vivo",
-    teacher: mockTeachers[0],
-    year: "2º Ano",
-    totalClasses: 1,
-    views: 145,
-    likes: 98,
-    uploadTime: "Iniciado às 14:30",
-    duration: "AO VIVO",
-    thumbnail: "⚛️",
-    isLive: true,
-  },
-  {
-    id: 102,
-    title: "Programação Web - React Avançado",
-    subtitle: "Aula ao vivo",
-    teacher: mockTeachers[1],
-    year: "3º Ano",
-    totalClasses: 1,
-    views: 278,
-    likes: 189,
-    uploadTime: "Iniciado às 15:00",
-    duration: "AO VIVO",
-    thumbnail: "⚛️",
-    isLive: true,
-  },
-];
-
-// mockComments será inicializado dentro do componente para ter acesso ao user
-  {
-    id: 3,
-    user: "Carlos Santos",
-    avatar: "👨",
-    text: "Poderia explicar melhor a parte dos limites?",
-    time: "10min",
-    online: false,
-    likes: 3,
-    liked: false,
-    replies: [],
-  },
-];
+// ============ STYLED COMPONENTS ============
 
 // ============ STYLED COMPONENTS ============
 const GlobalWrapper = styled.div`
@@ -1063,60 +966,14 @@ export default function AulasOnlineApp() {
   const [showChat, setShowChat] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState<any>(null);
   
-  // Inicializar comentários com nome do usuário real
-  const initialComments = [
-    {
-      id: 1,
-      user: "Natalinel Diogo",
-      avatar: "👨‍🎓",
-      text: "Amei a aula, Prof. Já não tiro negativas!",
-      time: "2min",
-      online: true,
-      likes: 15,
-      liked: false,
-      replies: [],
-    },
-    {
-      id: 2,
-      user: user ? getFirstAndLastName(user.name) : "Estudante",
-      avatar: "👩‍🎓",
-      text: "Explicação muito clara! Obrigada!",
-      time: "5min",
-      online: true,
-      likes: 8,
-      liked: false,
-      replies: [],
-    },
-    {
-      id: 3,
-      user: "Carlos Santos",
-      avatar: "👨",
-      text: "Quando será a próxima aula?",
-      time: "10min",
-      online: false,
-      likes: 3,
-      liked: false,
-      replies: [],
-    },
-  ];
-  
-  const [comments, setComments] = useState<any[]>(initialComments);
+  const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("all");
   const [selectedTeacherFilter, setSelectedTeacherFilter] = useState("all");
-  const [chatMessages, setChatMessages] = useState<any[]>([
-    {
-      id: 1,
-      user: "Professor",
-      avatar: "👨‍🏫",
-      text: "Olá! Como posso ajudar?",
-      isOwn: false,
-      time: "14:30",
-    },
-  ]);
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [newChatMessage, setNewChatMessage] = useState("");
 
   useEffect(() => {
@@ -1263,11 +1120,13 @@ export default function AulasOnlineApp() {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const [teachers, setTeachers] = useState<any[]>([]);
+  const [classes, setClasses] = useState<any[]>([]);
+  const [liveClasses, setLiveClasses] = useState<any[]>([]);
   const subjects = ["all", "Matemática", "Programação", "Física"];
-  const teachers = ["all", ...mockTeachers.map((t) => t.name)];
 
   const getFilteredClasses = () => {
-    let filtered = mockClasses;
+    let filtered = classes;
 
     if (searchQuery) {
       filtered = filtered.filter(
@@ -1283,14 +1142,14 @@ export default function AulasOnlineApp() {
 
     if (selectedTeacherFilter !== "all") {
       filtered = filtered.filter(
-        (c) => c.teacher.name === selectedTeacherFilter
+        (c) => c.teacher && c.teacher.name === selectedTeacherFilter
       );
     }
 
     return filtered;
   };
 
-  const recentClasses = mockClasses.slice(0, 3);
+  const recentClasses = classes.slice(0, 3);
 
   // ============ TELA DE EXPLORAÇÃO ============
   if (view === "explore") {
@@ -1319,7 +1178,7 @@ export default function AulasOnlineApp() {
                 <LiveBadge>AO VIVO</LiveBadge>
               </SectionHeader>
               <LiveClassesList>
-                {mockLiveClasses.map((live) => (
+                {liveClasses.map((live) => (
                   <LiveClassCard key={live.id} onClick={() => openClass(live)}>
                     <LiveClassInfo>
                       <LiveClassTitle>{live.title}</LiveClassTitle>
@@ -1338,7 +1197,7 @@ export default function AulasOnlineApp() {
               <SectionTitle>Professores Online</SectionTitle>
               <br></br>
               <TeachersScroll>
-                {mockTeachers.map((teacher) => (
+                {teachers.map((teacher) => (
                   <TeacherCard
                     key={teacher.id}
                     onClick={() => openChat(teacher)}
@@ -1346,7 +1205,7 @@ export default function AulasOnlineApp() {
                     <TeacherAvatar $online={teacher.online}>
                       {teacher.avatar}
                     </TeacherAvatar>
-                    <TeacherName>{teacher.name.split(" ")[0]}</TeacherName>
+                    <TeacherName>{teacher.name?.split(" ")[0] || "Professor"}</TeacherName>
                   </TeacherCard>
                 ))}
               </TeachersScroll>
@@ -1665,10 +1524,10 @@ export default function AulasOnlineApp() {
               >
                 <option value="all">Todos os professores</option>
                 {teachers
-                  .filter((t) => t !== "all")
+                  .filter((t) => t && typeof t === "object" && t.name)
                   .map((teacher) => (
-                    <option key={teacher} value={teacher}>
-                      {teacher}
+                    <option key={teacher.id} value={teacher.name}>
+                      {teacher.name}
                     </option>
                   ))}
               </FilterSelect>

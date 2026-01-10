@@ -202,7 +202,7 @@ const formatDate = (dateString: string): { day: string; month: string; date: str
 };
 
 export default function Calendarios() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

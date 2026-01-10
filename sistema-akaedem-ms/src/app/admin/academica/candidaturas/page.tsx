@@ -36,8 +36,8 @@ export default function Candidaturas() {
   const coursesArray = Array.isArray(courses) ? courses : [];
 
   // Transforma dados da API para o formato esperado pela tabela
-  const tableData = enrollments.map((enrollment) => ({
-    id: enrollment.id,
+  const tableData = enrollments.map((enrollment, index) => ({
+    id: parseInt(enrollment.id, 10) || index + 1, // Converte string para number, usa index como fallback
     photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${enrollment.student?.name || enrollment.student_name || enrollment.id}`,
     name: enrollment.student?.name || enrollment.student_name || 'N/A',
     enrollmentNumber: enrollment.student_id || enrollment.id,
@@ -49,7 +49,19 @@ export default function Candidaturas() {
     phone: enrollment.student?.phone || enrollment.student_phone || 'N/A',
     email: enrollment.student?.email || enrollment.student_email || 'N/A',
     enrollment: enrollment, // Guarda o objeto completo para edição
-  }));
+  })) as Array<{
+    id: number;
+    photo: string;
+    name: string;
+    enrollmentNumber: string;
+    course: string;
+    class: string;
+    enrollmentDate: string;
+    status: string;
+    phone: string;
+    email: string;
+    enrollment: typeof enrollments[0];
+  }>;
 
   const handleApprove = async (enrollmentId: string) => {
     try {
@@ -110,8 +122,9 @@ export default function Candidaturas() {
   };
 
   const handleSaveFromTable = async (item: any, formData: any) => {
-    if (item.enrollment) {
-      await updateEnrollment(item.enrollment.id, formData);
+    const extendedItem = item as typeof item & { enrollment?: typeof enrollments[0] };
+    if (extendedItem.enrollment) {
+      await updateEnrollment(extendedItem.enrollment.id, formData);
     }
   };
 
@@ -202,13 +215,15 @@ export default function Candidaturas() {
                           onAddNew={() => toast.info("Funcionalidade em desenvolvimento")}
                           onSave={handleSaveFromTable}
                           onApprove={async (item) => {
-                            if (item.enrollment) {
-                              await handleApprove(item.enrollment.id);
+                            const extendedItem = item as typeof item & { enrollment?: typeof enrollments[0] };
+                            if (extendedItem.enrollment) {
+                              await handleApprove(extendedItem.enrollment.id);
                             }
                           }}
                           onReject={async (item) => {
-                            if (item.enrollment) {
-                              await handleReject(item.enrollment.id);
+                            const extendedItem = item as typeof item & { enrollment?: typeof enrollments[0] };
+                            if (extendedItem.enrollment) {
+                              await handleReject(extendedItem.enrollment.id);
                             }
                           }}
                         />

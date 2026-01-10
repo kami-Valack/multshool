@@ -133,11 +133,13 @@ const GestaoDocentes = () => {
     email: '',
     telefone: '',
     curso: '',
+    course_id: '',
     departamento: '',
     cargo: '',
     contrato: 'Efetivo',
     morada: '',
-    bi: ''
+    bi: '',
+    estado: 'ativo'
   });
 
   const cursos = [...new Set(docentes.map(d => d.curso))];
@@ -248,7 +250,8 @@ const GestaoDocentes = () => {
       cargo: '',
       contrato: 'Efetivo',
       morada: '',
-      bi: ''
+      bi: '',
+      estado: 'ativo'
     });
   };
 
@@ -263,7 +266,8 @@ const GestaoDocentes = () => {
       cargo: docente.cargo,
       contrato: docente.contrato,
       morada: docente.morada,
-      bi: docente.bi
+      bi: docente.bi,
+      estado: docente.estado
     });
     setIsEditDialogOpen(true);
   };

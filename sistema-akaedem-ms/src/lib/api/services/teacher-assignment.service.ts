@@ -105,7 +105,7 @@ class TeacherAssignmentService {
       data
     );
 
-    if (response.status === 'success' || response.status === 'partial') {
+    if (response.status === 'success') {
       const responseData = response.data as any;
       return {
         created: responseData.created || [],

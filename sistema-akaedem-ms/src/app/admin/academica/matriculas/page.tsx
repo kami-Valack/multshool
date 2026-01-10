@@ -26,8 +26,8 @@ export default function Matriculas() {
 
   // Transformar dados da API para o formato esperado pela tabela
   // A API já filtra apenas matrículas aprovadas quando status='approved'
-  const tableData = enrollments.map((enrollment) => ({
-      id: enrollment.id,
+  const tableData = enrollments.map((enrollment, index) => ({
+      id: parseInt(enrollment.id, 10) || index + 1, // Converte string para number, usa index como fallback
       photo: `https://api.dicebear.com/7.x/avataaars/svg?seed=${enrollment.student?.name || enrollment.student_name || enrollment.id}`,
       name: enrollment.student?.name || enrollment.student_name || 'N/A',
       enrollmentNumber: enrollment.student_id || enrollment.id,
@@ -38,12 +38,25 @@ export default function Matriculas() {
       phone: enrollment.student?.phone || enrollment.student_phone || 'N/A',
       email: enrollment.student?.email || enrollment.student_email || 'N/A',
       enrollment: enrollment, // Guarda o objeto completo para edição
-    }));
+    })) as Array<{
+      id: number;
+      photo: string;
+      name: string;
+      enrollmentNumber: string;
+      course: string;
+      class: string;
+      enrollmentDate: string;
+      status: string;
+      phone: string;
+      email: string;
+      enrollment: typeof enrollments[0];
+    }>;
 
   const handleSaveFromTable = async (item: any, formData: any) => {
-    if (item.enrollment) {
+    const extendedItem = item as typeof item & { enrollment?: typeof enrollments[0] };
+    if (extendedItem.enrollment) {
       try {
-        await updateEnrollment(item.enrollment.id, formData);
+        await updateEnrollment(extendedItem.enrollment.id, formData);
       } catch (error) {
         // Erro já é tratado no hook
       }

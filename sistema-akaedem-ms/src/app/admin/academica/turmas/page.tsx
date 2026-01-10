@@ -320,7 +320,7 @@ export default function Academica() {
         course_id: formData.curso,
         semester: formData.semestre,
         academic_year: formData.anoLetivo,
-        status: formData.estado === "Ativa" ? "active" : "completed",
+        status: (formData.estado === "Ativa" ? "active" : "completed") as "active" | "completed",
         max_students: formData.limiteEstudantes || undefined,
         student_ids: formData.estudantes.length > 0 ? formData.estudantes : undefined,
         subject_ids: formData.disciplinas.length > 0 ? formData.disciplinas : undefined,
