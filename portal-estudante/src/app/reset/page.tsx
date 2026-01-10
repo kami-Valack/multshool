@@ -8,6 +8,9 @@ import Button from "@/components/ui/Button";
 import Link from "next/link";
 import { useState } from "react";
 import BackgroundVectors from "@/components/Bg_vectors";
+import { useRouter } from "next/navigation";
+import { authService } from "@/services/authService";
+import { useToast } from "@/hooks/useToast";
 
 const Content = styled.div`
   width: 90%;
@@ -164,61 +167,120 @@ export default function RecoverAccount() {
 
   const [email, setEmail] = useState("");
   const [studentNumber, setStudentNumber] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const router = useRouter();
+  const { showToast, ToastElement } = useToast();
+
+  const handleRecoverAccount = async () => {
+    if (!email && !studentNumber) {
+      showToast("Por favor, preencha pelo menos o e-mail ou número de estudante", "error");
+      return;
+    }
+
+    // Se tiver número de estudante mas não email, usar o número de estudante como email
+    const emailToUse = email || studentNumber;
+
+    setIsLoading(true);
+    try {
+      await authService.requestPasswordReset(emailToUse);
+      setIsSuccess(true);
+      showToast("Se o e-mail existir, um link de recuperação foi enviado. Verifique sua caixa de entrada e spam.", "success");
+      
+      // Redirecionar para login após 3 segundos
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
+    } catch (error: any) {
+      let errorMessage = "Erro ao solicitar recuperação de senha. Tente novamente.";
+      if (error.message) {
+        errorMessage = error.message;
+      }
+      showToast(errorMessage, "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <BackgroundVectors>
+      {ToastElement}
       <Content>
         <Header
           variant="withBack"
-        //   onBackClick={() => console.log("Voltar clicado")}
+          title="Recuperar conta"
         />
-        <Text>
-          <Title>Recuperar conta</Title>
-          <Description>Insira os seus dados para recuperar o acesso à sua conta</Description>
-        </Text>
-        <Inputs>
-          <CustomInput
-            label="E-mail institucional"
-            icon={<EmailIcon />}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="exemplo@instituicao.ao"
-            type="email"
-          />
-          <CustomInput
-            label="Número de estudante"
-            icon={<UserIcon />}
-            value={studentNumber}
-            onChange={(e) => setStudentNumber(e.target.value)}
-            placeholder="ex: 2032742"
-            type="text"
-          />
-          <InfoBox>
-            <InfoText>
-              Enviaremos um link de recuperação para o seu e-mail institucional. Verifique também a pasta de spam.
-            </InfoText>
-          </InfoBox>
-        </Inputs>
-        <Links>
-          <Button
-            bgColor="primary"
-            textColor="#FFFFFF"
-            text="Recuperar conta"
-            hasBorder={false}
-            href="/recover"
-            onClick={() => console.log("Recuperar conta clicado")}
-          />
-          <LinkContainer>
-            <LinkMerge>
-              <InlineText>Lembrou-se da senha? - </InlineText>
-              <StyledLink href="/login">Fazer login</StyledLink>
-            </LinkMerge>
-            <LinkMerge>
-              <InlineText>Não possui uma conta? - </InlineText>
-              <StyledLink href="/tips">Criar conta</StyledLink>
-            </LinkMerge>
-          </LinkContainer>
-        </Links>
+        {!isSuccess ? (
+          <>
+            <Text>
+              <Title>Recuperar conta</Title>
+              <Description>Insira os seus dados para recuperar o acesso à sua conta</Description>
+            </Text>
+            <Inputs>
+              <CustomInput
+                label="E-mail institucional"
+                icon={<EmailIcon />}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="exemplo@instituicao.ao"
+                type="email"
+                disabled={isLoading}
+              />
+              <CustomInput
+                label="Número de estudante (opcional)"
+                icon={<UserIcon />}
+                value={studentNumber}
+                onChange={(e) => setStudentNumber(e.target.value)}
+                placeholder="ex: 2032742"
+                type="text"
+                disabled={isLoading}
+              />
+              <InfoBox>
+                <InfoText>
+                  Enviaremos um link de recuperação para o seu e-mail institucional. Verifique também a pasta de spam.
+                </InfoText>
+              </InfoBox>
+            </Inputs>
+            <Links>
+              <Button
+                bgColor="primary"
+                textColor="#FFFFFF"
+                text={isLoading ? "A enviar..." : "Recuperar conta"}
+                hasBorder={false}
+                onClick={handleRecoverAccount}
+                disabled={isLoading}
+              />
+              <LinkContainer>
+                <LinkMerge>
+                  <InlineText>Lembrou-se da senha? - </InlineText>
+                  <StyledLink href="/login">Fazer login</StyledLink>
+                </LinkMerge>
+                <LinkMerge>
+                  <InlineText>Não possui uma conta? - </InlineText>
+                  <StyledLink href="/tips">Criar conta</StyledLink>
+                </LinkMerge>
+              </LinkContainer>
+            </Links>
+          </>
+        ) : (
+          <>
+            <Text>
+              <Title>E-mail enviado!</Title>
+              <Description>
+                Se o e-mail existir, um link de recuperação foi enviado. Verifique sua caixa de entrada e pasta de spam.
+                Você será redirecionado para a página de login em instantes.
+              </Description>
+            </Text>
+            <Links>
+              <LinkContainer>
+                <LinkMerge>
+                  <InlineText>Lembrou-se da senha? - </InlineText>
+                  <StyledLink href="/login">Fazer login</StyledLink>
+                </LinkMerge>
+              </LinkContainer>
+            </Links>
+          </>
+        )}
       </Content>
     </BackgroundVectors>
   );

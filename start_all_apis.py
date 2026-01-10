@@ -331,6 +331,131 @@ def find_npm():
     
     return None
 
+def check_composer_dependencies(api_config):
+    """Verifica e instala dependências do Composer se necessário"""
+    project_dir = Path(__file__).parent / api_config["dir"]
+    
+    if not project_dir.exists():
+        return False
+    
+    vendor_dir = project_dir / "vendor"
+    composer_json = project_dir / "composer.json"
+    
+    if not composer_json.exists():
+        print(f"[AVISO] {api_config['name']} - composer.json não encontrado")
+        return False
+    
+    original_dir = os.getcwd()
+    try:
+        os.chdir(project_dir)
+        
+        # Verificar se vendor existe
+        if not vendor_dir.exists():
+            print(f"[INFO] {api_config['name']} - Instalando dependências do Composer...")
+            
+            # Verificar se composer está disponível
+            try:
+                result = subprocess.run(
+                    ["composer", "--version"],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    timeout=5
+                )
+                if result.returncode != 0:
+                    print(f"[ERRO] {api_config['name']} - Composer não encontrado. Instale o Composer primeiro.")
+                    return False
+            except FileNotFoundError:
+                print(f"[ERRO] {api_config['name']} - Composer não encontrado. Instale o Composer primeiro.")
+                return False
+            
+            # Instalar dependências
+            print(f"[INFO] {api_config['name']} - Executando composer install...")
+            result = subprocess.run(
+                ["composer", "install", "--no-interaction", "--prefer-dist"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=300  # 5 minutos
+            )
+            
+            if result.returncode == 0:
+                print(f"[OK] {api_config['name']} - Dependências do Composer instaladas")
+                return True
+            else:
+                print(f"[ERRO] {api_config['name']} - Erro ao instalar dependências:")
+                print(f"[ERRO] {result.stderr[:500]}")
+                return False
+        else:
+            print(f"[INFO] {api_config['name']} - Dependências do Composer já instaladas")
+            return True
+        
+    except subprocess.TimeoutExpired:
+        print(f"[ERRO] {api_config['name']} - Timeout ao instalar dependências do Composer")
+        return False
+    except Exception as e:
+        print(f"[ERRO] {api_config['name']} - Erro ao verificar dependências: {e}")
+        return False
+    finally:
+        os.chdir(original_dir)
+
+def check_npm_dependencies(frontend_config):
+    """Verifica e instala dependências do npm se necessário"""
+    project_dir = Path(__file__).parent / frontend_config["dir"]
+    
+    if not project_dir.exists():
+        return False
+    
+    node_modules_dir = project_dir / "node_modules"
+    package_json = project_dir / "package.json"
+    
+    if not package_json.exists():
+        print(f"[AVISO] {frontend_config['name']} - package.json não encontrado")
+        return False
+    
+    original_dir = os.getcwd()
+    try:
+        os.chdir(project_dir)
+        
+        # Verificar se node_modules existe
+        if not node_modules_dir.exists():
+            print(f"[INFO] {frontend_config['name']} - Instalando dependências do npm...")
+            
+            # Encontrar o comando npm
+            npm_cmd = find_npm()
+            if not npm_cmd:
+                print(f"[ERRO] {frontend_config['name']} - npm não encontrado. Instale o Node.js primeiro.")
+                return False
+            
+            # Instalar dependências
+            print(f"[INFO] {frontend_config['name']} - Executando npm install...")
+            result = subprocess.run(
+                npm_cmd + ["install"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=600  # 10 minutos
+            )
+            
+            if result.returncode == 0:
+                print(f"[OK] {frontend_config['name']} - Dependências do npm instaladas")
+                return True
+            else:
+                print(f"[ERRO] {frontend_config['name']} - Erro ao instalar dependências:")
+                print(f"[ERRO] {result.stderr[:500]}")
+                return False
+        else:
+            print(f"[INFO] {frontend_config['name']} - Dependências do npm já instaladas")
+            return True
+        
+    except subprocess.TimeoutExpired:
+        print(f"[ERRO] {frontend_config['name']} - Timeout ao instalar dependências do npm")
+        return False
+    except Exception as e:
+        print(f"[ERRO] {frontend_config['name']} - Erro ao verificar dependências: {e}")
+        return False
+    finally:
+        os.chdir(original_dir)
+
 def check_node_version(min_version="20.9.0"):
     """Verifica a versão do Node.js e retorna (sucesso, versão_atual, mensagem)"""
     try:
@@ -385,7 +510,10 @@ def start_frontend(frontend_config):
         if node_version:
             print(f"[INFO] Versão atual do Node.js: {node_version}")
         print(f"[INFO] Versão mínima requerida: {min_node_version}")
-        print(f"[INFO] Atualize o Node.js ou use nvm para gerenciar versões")
+        print(f"[INFO] Para atualizar o Node.js, você pode usar:")
+        print(f"[INFO]   1. nvm install {min_node_version.split('.')[0]}")
+        print(f"[INFO]   2. nvm use {min_node_version.split('.')[0]}")
+        print(f"[INFO]   3. Ou instale o Node.js {min_node_version} manualmente")
         return None
     
     if node_version:
@@ -526,32 +654,50 @@ def main():
             print(f"[OK] RabbitMQ está acessível")
         print()
     
-    # 1. Limpar cache de todas as APIs
-    print("[ETAPA 1/5] Limpando cache dos serviços...")
+    # 1. Verificar e instalar dependências
+    print("[ETAPA 1/6] Verificando dependências...")
+    print()
+    
+    # Verificar dependências do Composer para APIs Laravel
+    print("[INFO] Verificando dependências do Composer...")
+    for api in APIS:
+        check_composer_dependencies(api)
+        time.sleep(0.5)
+    print()
+    
+    # Verificar dependências do npm para Frontends
+    print("[INFO] Verificando dependências do npm...")
+    for frontend in FRONTENDS:
+        check_npm_dependencies(frontend)
+        time.sleep(0.5)
+    print()
+    
+    # 2. Limpar cache de todas as APIs
+    print("[ETAPA 2/6] Limpando cache dos serviços...")
     print()
     for api in APIS:
         clear_cache(api)
         time.sleep(0.5)
     print()
     
-    # 2. Gerar chaves de aplicação
-    print("[ETAPA 2/5] Gerando chaves de aplicação...")
+    # 3. Gerar chaves de aplicação
+    print("[ETAPA 3/6] Gerando chaves de aplicação...")
     print()
     for api in APIS:
         generate_key(api)
         time.sleep(0.5)
     print()
     
-    # 3. Executar migrations
-    print("[ETAPA 3/5] Executando migrations...")
+    # 4. Executar migrations
+    print("[ETAPA 4/6] Executando migrations...")
     print()
     for api in APIS:
         run_migrations(api)
         time.sleep(0.5)
     print()
     
-    # 4. Iniciar APIs
-    print("[ETAPA 4/5] Iniciando APIs...")
+    # 5. Iniciar APIs
+    print("[ETAPA 5/6] Iniciando APIs...")
     print()
     all_processes = {}
     
@@ -563,8 +709,8 @@ def main():
         time.sleep(1)  # Pequeno delay entre iniciações
         print()
     
-    # 5. Iniciar Frontends
-    print("[ETAPA 5/5] Iniciando Frontends...")
+    # 6. Iniciar Frontends
+    print("[ETAPA 6/6] Iniciando Frontends...")
     print()
     frontend_processes = {}
     

@@ -427,7 +427,33 @@ export default function Home() {
       // O redirecionamento será feito pelo useEffect acima baseado no profileComplete
       // Não redirecionar aqui, deixar o useEffect fazer isso
     } catch (error: any) {
-      toast.error(error.message || "Erro ao fazer login. Verifique suas credenciais.");
+      console.error('handleLogin - Erro capturado:', error);
+      console.error('handleLogin - Tipo do erro:', typeof error);
+      console.error('handleLogin - Erro completo:', error);
+      
+      // Extrair mensagem de erro de forma robusta
+      let errorMessage = "Credenciais inválidas. Verifique o utilizador e a palavra-passe.";
+      
+      if (error) {
+        // Se for uma instância de Error, usar message diretamente
+        if (error instanceof Error) {
+          errorMessage = error.message || errorMessage;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error.message && typeof error.message === 'string') {
+          errorMessage = error.message;
+        } else if (error.status === 401 || (error.status && error.status === 401)) {
+          errorMessage = "Credenciais inválidas. Verifique o utilizador e a palavra-passe.";
+        }
+      }
+      
+      // Garantir que sempre há uma mensagem
+      if (!errorMessage || errorMessage.trim() === '' || errorMessage === '{}') {
+        errorMessage = "Credenciais inválidas. Verifique o utilizador e a palavra-passe.";
+      }
+      
+      console.log('handleLogin - Mensagem de erro final:', errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

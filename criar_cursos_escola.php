@@ -8,12 +8,12 @@
  */
 
 // Configurações
-$usersApiUrl = 'http://localhost:8000/api';
-$schoolApiUrl = 'http://localhost:8003/api';
+$usersApiUrl = 'https://paymente.reduaneamin.ct.ws/users/api';
+$schoolApiUrl = 'https://paymente.reduaneamin.ct.ws/schools/api';
 
 // Credenciais da escola
-$email = 'escola.teste.1764170091.4183@ist.ao';
-$password = 'Senha123!';
+$email = 'escola.teste.20260105175312@example.com';
+$password = 'senha123456';
 
 // Cores para output
 $colors = [

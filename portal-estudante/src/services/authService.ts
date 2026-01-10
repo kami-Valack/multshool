@@ -76,21 +76,41 @@ class AuthService {
     }
   }
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
-    const response = await usersApiClient.post<LoginResponse>(
-      '/auth/login',
-      credentials
-    );
+    try {
+      const response = await usersApiClient.post<LoginResponse>(
+        '/auth/login',
+        credentials
+      );
 
-    if (response.status === 'success' && response.accessToken) {
-      // Salvar tokens no localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('accessToken', response.accessToken);
-        localStorage.setItem('refreshToken', response.refreshToken);
-        localStorage.setItem('user', JSON.stringify(response.user));
+      if (response.status === 'success' && response.accessToken) {
+        // Salvar tokens no localStorage
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('accessToken', response.accessToken);
+          localStorage.setItem('refreshToken', response.refreshToken);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        }
       }
-    }
 
-    return response;
+      return response;
+    } catch (error: any) {
+      // Extrair mensagem de erro de forma robusta
+      let errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+      
+      if (error) {
+        if (error.status === 'error' && error.message) {
+          errorMessage = error.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      }
+      
+      // Criar um novo erro com mensagem clara
+      const loginError: any = {
+        status: 'error',
+        message: errorMessage,
+      };
+      throw loginError;
+    }
   }
 
   async logout(): Promise<void> {

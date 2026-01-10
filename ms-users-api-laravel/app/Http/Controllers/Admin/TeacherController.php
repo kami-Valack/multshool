@@ -9,9 +9,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @OA\Tag(
+ *     name="Admin Teachers",
+ *     description="Endpoints administrativos para gerenciamento de professores (uso interno)"
+ * )
+ */
 class TeacherController extends Controller
 {
     /**
+     * @OA\Get(
+     *     path="/api/admin/teachers",
+     *     summary="Listar professores",
+     *     description="Lista professores (filtrado por school_id se fornecido). Endpoint interno para uso por outros microserviços.",
+     *     operationId="adminListTeachers",
+     *     tags={"Admin Teachers"},
+     *     security={{"apiSecret":{}}},
+     *     @OA\Parameter(
+     *         name="school_id",
+     *         in="query",
+     *         required=false,
+     *         @OA\Schema(type="string", format="uuid")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de professores"
+     *     )
+     * )
      * Lista professores (filtrado por school_id se fornecido)
      */
     public function index(Request $request): JsonResponse

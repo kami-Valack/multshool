@@ -51,53 +51,79 @@ class AuthService {
    * Faz login
    */
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await usersApiClient.post<AuthResponse>(
-      API_ENDPOINTS.AUTH.LOGIN,
-      credentials,
-      false // Não usa auth para login
-    );
+    try {
+      const response = await usersApiClient.post<AuthResponse>(
+        API_ENDPOINTS.AUTH.LOGIN,
+        credentials,
+        false // Não usa auth para login
+      );
 
-    // A API retorna { status: 'success', accessToken, refreshToken, ... }
-    // O client.ts já envolve em { status: 'success', data: {...} }
-    if (response.status === 'success' && response.data) {
-      const authData = response.data as any;
+      // A API retorna { status: 'success', accessToken, refreshToken, ... }
+      // O client.ts já envolve em { status: 'success', data: {...} }
+      if (response.status === 'success' && response.data) {
+        const authData = response.data as any;
+        
+        console.log('AuthService.login - Dados recebidos:', {
+          hasAccessToken: !!authData.accessToken,
+          hasUser: !!authData.user,
+          hasProfile: !!authData.profile,
+          profile: authData.profile,
+          userRole: authData.user?.role
+        });
+        
+        // Salva tokens e role no localStorage para acesso imediato
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('auth_token', authData.accessToken);
+          localStorage.setItem('refresh_token', authData.refreshToken);
+          // Salvar role para acesso imediato sem aguardar carregamento do user
+          if (authData.user?.role) {
+            localStorage.setItem('user_role', authData.user.role);
+            console.log('[AuthService] Role salva no localStorage:', authData.user.role);
+          }
+        }
+        
+        const result = {
+          accessToken: authData.accessToken,
+          refreshToken: authData.refreshToken,
+          expiresIn: authData.expiresIn,
+          user: authData.user,
+          profile: authData.profile, // Incluir informações de perfil se disponível
+        };
+        
+        console.log('AuthService.login - Retornando:', {
+          hasProfile: !!result.profile,
+          profile: result.profile
+        });
+        
+        return result;
+      }
+
+      // Se não foi sucesso, extrair mensagem de erro
+      const errorMessage = response.message || 'Erro ao fazer login';
+      throw new Error(errorMessage);
+    } catch (error: any) {
+      console.error('AuthService.login - Erro capturado:', error);
       
-      console.log('AuthService.login - Dados recebidos:', {
-        hasAccessToken: !!authData.accessToken,
-        hasUser: !!authData.user,
-        hasProfile: !!authData.profile,
-        profile: authData.profile,
-        userRole: authData.user?.role
-      });
+      // Extrair mensagem de erro de forma robusta
+      let errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
       
-      // Salva tokens e role no localStorage para acesso imediato
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('auth_token', authData.accessToken);
-        localStorage.setItem('refresh_token', authData.refreshToken);
-        // Salvar role para acesso imediato sem aguardar carregamento do user
-        if (authData.user?.role) {
-          localStorage.setItem('user_role', authData.user.role);
-          console.log('[AuthService] Role salva no localStorage:', authData.user.role);
+      if (error) {
+        // Se for um ApiError (objeto com propriedades message, status, etc.)
+        if (error.message) {
+          errorMessage = error.message;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error.status === 401) {
+          errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
         }
       }
       
-      const result = {
-        accessToken: authData.accessToken,
-        refreshToken: authData.refreshToken,
-        expiresIn: authData.expiresIn,
-        user: authData.user,
-        profile: authData.profile, // Incluir informações de perfil se disponível
-      };
-      
-      console.log('AuthService.login - Retornando:', {
-        hasProfile: !!result.profile,
-        profile: result.profile
-      });
-      
-      return result;
+      // Lançar um novo Error com a mensagem extraída para garantir que seja propagado corretamente
+      const loginError = new Error(errorMessage);
+      // Preservar informações do erro original se disponível
+      (loginError as any).originalError = error;
+      throw loginError;
     }
-
-    throw new Error(response.message || 'Erro ao fazer login');
   }
 
   /**

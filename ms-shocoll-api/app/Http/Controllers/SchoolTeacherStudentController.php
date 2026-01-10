@@ -184,7 +184,7 @@ class SchoolTeacherStudentController extends Controller
      *     path="/api/teachers/{teacherId}/students",
      *     summary="Listar alunos de um docente",
      *     description="Lista todos os alunos vinculados a um docente específico",
-     *     operationId="listTeacherStudents",
+     *     operationId="listTeacherStudentsBySchool",
      *     tags={"School"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(

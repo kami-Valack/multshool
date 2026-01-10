@@ -187,6 +187,19 @@ class ApiClient {
       errors = data.errors;
       errorCode = data.error_code; // Capturar error_code para INCOMPLETE_PROFILE
       
+      // Mensagens específicas para códigos de status comuns
+      if (!message || message === 'Erro ao processar requisição') {
+        if (response.status === 401) {
+          message = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+        } else if (response.status === 403) {
+          message = 'Acesso negado. Você não tem permissão para realizar esta ação.';
+        } else if (response.status === 404) {
+          message = 'Recurso não encontrado.';
+        } else if (response.status === 500) {
+          message = 'Erro interno do servidor. Tente novamente mais tarde.';
+        }
+      }
+      
       // Se for erro de perfil incompleto, incluir informações adicionais
       if (data.error_code === 'INCOMPLETE_PROFILE') {
         return {
@@ -199,7 +212,21 @@ class ApiClient {
         } as ApiError & { error_code?: string; missing_fields?: string[]; profile_completion_url?: string };
       }
     } catch {
-      message = response.statusText || message;
+      // Se não conseguir fazer parse do JSON, usar statusText ou mensagem padrão baseada no status
+      if (response.status === 401) {
+        message = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+      } else {
+        message = response.statusText || message;
+      }
+    }
+
+    // Garantir que sempre há uma mensagem
+    if (!message || message.trim() === '') {
+      if (response.status === 401) {
+        message = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+      } else {
+        message = 'Erro ao processar requisição';
+      }
     }
 
     return {

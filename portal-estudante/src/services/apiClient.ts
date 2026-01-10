@@ -127,9 +127,17 @@ class ApiClient {
       const data = await response.json();
 
       if (!response.ok) {
+        // Mensagem de erro específica para credenciais inválidas (401)
+        let errorMessage = 'Erro na requisição';
+        if (response.status === 401) {
+          errorMessage = data.message || 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+        } else if (data.message) {
+          errorMessage = data.message;
+        }
+        
         const error: ApiError = {
           status: 'error',
-          message: data.message || 'Erro na requisição',
+          message: errorMessage,
           errors: data.errors,
         };
         throw error;

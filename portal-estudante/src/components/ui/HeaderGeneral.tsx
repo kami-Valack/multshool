@@ -114,11 +114,16 @@ type HeaderProps = {
 export default function Header({ variant = "default", title }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   const studentFullName = user ? getFirstAndLastName(user.name) : "Estudante";
 
-  const handleMenuToggle = () => setIsMenuOpen(!isMenuOpen);
+  const handleMenuToggle = () => {
+    // Só permitir abrir o menu se o usuário estiver autenticado
+    if (isAuthenticated) {
+      setIsMenuOpen(!isMenuOpen);
+    }
+  };
   const handleMenuClose = () => setIsMenuOpen(false);
 
   return (
@@ -130,9 +135,11 @@ export default function Header({ variant = "default", title }: HeaderProps) {
               <UserAvatar size={45} name={user?.name || ""} />
             </Avatar>
             <Title>Olá, {studentFullName}</Title>
-            <MenuLateral onClick={handleMenuToggle}>
-              <span />
-            </MenuLateral>
+            {isAuthenticated && (
+              <MenuLateral onClick={handleMenuToggle}>
+                <span />
+              </MenuLateral>
+            )}
           </UserInfo>
         )}
 
@@ -142,9 +149,12 @@ export default function Header({ variant = "default", title }: HeaderProps) {
               <Image src={ArrowLeft} alt="Voltar" width={14} height={14} />
             </BackButton>
             <Title>{title}</Title>
-            <MenuLateral onClick={handleMenuToggle}>
-              <span />
-            </MenuLateral>
+            {/* Não mostrar menu durante recuperação de senha ou quando não autenticado */}
+            {isAuthenticated && (
+              <MenuLateral onClick={handleMenuToggle}>
+                <span />
+              </MenuLateral>
+            )}
           </UserInfo>
         )}
 
@@ -185,7 +195,10 @@ export default function Header({ variant = "default", title }: HeaderProps) {
         )}
       </HeaderContainer>
 
-      <SideMenu isOpen={isMenuOpen} onClose={handleMenuClose} />
+      {/* Só renderizar o menu se o usuário estiver autenticado */}
+      {isAuthenticated && (
+        <SideMenu isOpen={isMenuOpen} onClose={handleMenuClose} />
+      )}
     </>
   );
 }

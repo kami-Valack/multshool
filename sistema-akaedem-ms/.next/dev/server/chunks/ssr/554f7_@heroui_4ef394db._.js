@@ -1,0 +1,7956 @@
+module.exports = [
+"[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-3XT5V4LF.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "createContext",
+    ()=>createContext2
+]);
+// src/context.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+"use client";
+;
+function createContext2(options = {}) {
+    const { strict = true, errorMessage = "useContext: `context` is undefined. Seems you forgot to wrap component within the Provider", name } = options;
+    const Context = __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"](void 0);
+    Context.displayName = name;
+    function useContext2() {
+        var _a;
+        const context = __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"](Context);
+        if (!context && strict) {
+            const error = new Error(errorMessage);
+            error.name = "ContextError";
+            (_a = Error.captureStackTrace) == null ? void 0 : _a.call(Error, error, useContext2);
+            throw error;
+        }
+        return context;
+    }
+    return [
+        Context.Provider,
+        useContext2,
+        Context
+    ];
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "areRectsIntersecting",
+    ()=>areRectsIntersecting,
+    "canUseDOM",
+    ()=>canUseDOM,
+    "createDOMRef",
+    ()=>createDOMRef,
+    "createFocusableRef",
+    ()=>createFocusableRef,
+    "detectBrowser",
+    ()=>detectBrowser,
+    "detectDeviceType",
+    ()=>detectDeviceType,
+    "detectOS",
+    ()=>detectOS,
+    "detectTouch",
+    ()=>detectTouch,
+    "getUserAgentBrowser",
+    ()=>getUserAgentBrowser,
+    "getUserAgentOS",
+    ()=>getUserAgentOS,
+    "isBrowser",
+    ()=>isBrowser,
+    "useDOMRef",
+    ()=>useDOMRef,
+    "useFocusableRef",
+    ()=>useFocusableRef,
+    "useSyncRef",
+    ()=>useSyncRef
+]);
+// src/dom.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+"use client";
+;
+function canUseDOM() {
+    return !!(("TURBOPACK compile-time value", "undefined") !== "undefined" && window.document && window.document.createElement);
+}
+var isBrowser = canUseDOM();
+function getUserAgentBrowser(navigator) {
+    const { userAgent: ua, vendor } = navigator;
+    const android = /(android)/i.test(ua);
+    switch(true){
+        case /CriOS/.test(ua):
+            return "Chrome for iOS";
+        case /Edg\//.test(ua):
+            return "Edge";
+        case android && /Silk\//.test(ua):
+            return "Silk";
+        case /Chrome/.test(ua) && /Google Inc/.test(vendor):
+            return "Chrome";
+        case /Firefox\/\d+\.\d+$/.test(ua):
+            return "Firefox";
+        case android:
+            return "AOSP";
+        case /MSIE|Trident/.test(ua):
+            return "IE";
+        case /Safari/.test(navigator.userAgent) && /Apple Computer/.test(ua):
+            return "Safari";
+        case /AppleWebKit/.test(ua):
+            return "WebKit";
+        default:
+            return null;
+    }
+}
+function getUserAgentOS(navigator) {
+    const { userAgent: ua, platform } = navigator;
+    switch(true){
+        case /Android/.test(ua):
+            return "Android";
+        case /iPhone|iPad|iPod/.test(platform):
+            return "iOS";
+        case /Win/.test(platform):
+            return "Windows";
+        case /Mac/.test(platform):
+            return "Mac";
+        case /CrOS/.test(ua):
+            return "Chrome OS";
+        case /Firefox/.test(ua):
+            return "Firefox OS";
+        default:
+            return null;
+    }
+}
+function detectDeviceType(navigator) {
+    const { userAgent: ua } = navigator;
+    if (/(tablet)|(iPad)|(Nexus 9)/i.test(ua)) return "tablet";
+    if (/(mobi)/i.test(ua)) return "phone";
+    return "desktop";
+}
+function detectOS(os) {
+    if ("TURBOPACK compile-time truthy", 1) return false;
+    //TURBOPACK unreachable
+    ;
+}
+function detectBrowser(browser) {
+    if ("TURBOPACK compile-time truthy", 1) return false;
+    //TURBOPACK unreachable
+    ;
+}
+function detectTouch() {
+    if ("TURBOPACK compile-time truthy", 1) return false;
+    //TURBOPACK unreachable
+    ;
+}
+function createDOMRef(ref) {
+    return {
+        UNSAFE_getDOMNode () {
+            return ref.current;
+        }
+    };
+}
+function createFocusableRef(domRef, focusableRef = domRef) {
+    return {
+        ...createDOMRef(domRef),
+        focus () {
+            if (focusableRef.current) {
+                focusableRef.current.focus();
+            }
+        }
+    };
+}
+function useDOMRef(ref) {
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useImperativeHandle"])(ref, ()=>domRef.current);
+    return domRef;
+}
+function useFocusableRef(ref, focusableRef) {
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useImperativeHandle"])(ref, ()=>createFocusableRef(domRef, focusableRef));
+    return domRef;
+}
+function useSyncRef(context, ref) {
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLayoutEffect"])(()=>{
+        if (context && context.ref && ref && ref.current) {
+            context.ref.current = ref.current;
+            return ()=>{
+                var _a;
+                if ((_a = context.ref) == null ? void 0 : _a.current) {
+                    context.ref.current = null;
+                }
+            };
+        }
+    }, [
+        context,
+        ref
+    ]);
+}
+function areRectsIntersecting(rect1, rect2) {
+    return rect1 && rect2 && rect1.x < rect2.x + rect2.width && rect1.x + rect1.width > rect2.x && rect1.y < rect2.y + rect2.height && rect1.y + rect1.height > rect2.y;
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-6UBKM7F3.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useIsHydrated",
+    ()=>useIsHydrated
+]);
+// src/use-is-hydrated.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+"use client";
+;
+function useIsHydrated() {
+    const subscribe = ()=>()=>{};
+    return __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSyncExternalStore"](subscribe, ()=>true, ()=>false);
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-LGMZDQT5.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "assignRef",
+    ()=>assignRef,
+    "mergeRefs",
+    ()=>mergeRefs
+]);
+// src/refs.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+function assignRef(ref, value) {
+    if (ref == null) return;
+    if ((0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isFunction"])(ref)) {
+        ref(value);
+        return;
+    }
+    try {
+        ref.current = value;
+    } catch  {
+        throw new Error(`Cannot assign value '${value}' to ref '${ref}'`);
+    }
+}
+function mergeRefs(...refs) {
+    return (node)=>{
+        refs.forEach((ref)=>assignRef(ref, node));
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-IGERPFKH.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "NavbarProvider",
+    ()=>NavbarProvider,
+    "useNavbarContext",
+    ()=>useNavbarContext
+]);
+// src/navbar-context.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-3XT5V4LF.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+var [NavbarProvider, useNavbarContext] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])({
+    name: "NavbarContext",
+    strict: true,
+    errorMessage: "useNavbarContext: `context` is undefined. Seems you forgot to wrap component within <Navbar />"
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-UJDFI5KD.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "menuVariants",
+    ()=>menuVariants
+]);
+"use client";
+// src/navbar-menu-transitions.ts
+var menuVariants = {
+    enter: {
+        height: "calc(100vh - var(--navbar-height))",
+        transition: {
+            duration: 0.3,
+            easings: "easeOut"
+        }
+    },
+    exit: {
+        height: 0,
+        transition: {
+            duration: 0.25,
+            easings: "easeIn"
+        }
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-SOOT4SRX.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "navbar_menu_default",
+    ()=>navbar_menu_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-IGERPFKH.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$UJDFI5KD$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-UJDFI5KD.mjs [app-ssr] (ecmascript)");
+// src/navbar-menu.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/components/LazyMotion/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/render/components/m/proxy.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$Overlay$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/overlays/dist/Overlay.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+var domAnimation = ()=>__turbopack_context__.A("[project]/sistema-akaedem-ms/node_modules/@heroui/dom-animation/dist/index.mjs [app-ssr] (ecmascript, async loader)").then((res)=>res.default);
+var NavbarMenu = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    var _a, _b;
+    const { className, children, portalContainer, motionProps, style, ...otherProps } = props;
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const { slots, isMenuOpen, height, disableAnimation, classNames } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useNavbarContext"])();
+    const styles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.menu, className);
+    if (disableAnimation) {
+        if (!isMenuOpen) return null;
+        return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$Overlay$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Overlay"], {
+            portalContainer,
+            children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("ul", {
+                ref: domRef,
+                className: (_a = slots.menu) == null ? void 0 : _a.call(slots, {
+                    class: styles
+                }),
+                "data-open": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isMenuOpen),
+                style: {
+                    // @ts-expect-error
+                    "--navbar-height": typeof height === "number" ? `${height}px` : height
+                },
+                ...otherProps,
+                children
+            })
+        });
+    }
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
+        mode: "wait",
+        children: isMenuOpen ? /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$Overlay$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Overlay"], {
+            portalContainer,
+            children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LazyMotion"], {
+                features: domAnimation,
+                children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["m"].ul, {
+                    ref: domRef,
+                    layoutScroll: true,
+                    animate: "enter",
+                    className: (_b = slots.menu) == null ? void 0 : _b.call(slots, {
+                        class: styles
+                    }),
+                    "data-open": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isMenuOpen),
+                    exit: "exit",
+                    initial: "exit",
+                    style: {
+                        // @ts-expect-error
+                        "--navbar-height": typeof height === "number" ? `${height}px` : height,
+                        ...style
+                    },
+                    variants: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$UJDFI5KD$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menuVariants"],
+                    ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(motionProps, otherProps),
+                    children
+                })
+            })
+        }) : null
+    });
+});
+NavbarMenu.displayName = "HeroUI.NavbarMenu";
+var navbar_menu_default = NavbarMenu;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-RRUQIZLR.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "hideOnScrollVariants",
+    ()=>hideOnScrollVariants
+]);
+// src/navbar-transitions.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$framer$2d$utils$2f$dist$2f$chunk$2d$736YWA4T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/framer-utils/dist/chunk-736YWA4T.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+var hideOnScrollVariants = {
+    visible: {
+        y: 0,
+        transition: {
+            ease: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$framer$2d$utils$2f$dist$2f$chunk$2d$736YWA4T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TRANSITION_EASINGS"].easeOut
+        }
+    },
+    hidden: {
+        y: "-100%",
+        transition: {
+            ease: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$framer$2d$utils$2f$dist$2f$chunk$2d$736YWA4T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TRANSITION_EASINGS"].easeIn
+        }
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-Q3XKXXMH.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useNavbar",
+    ()=>useNavbar
+]);
+// src/use-navbar.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$3K3T5W6T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-3K3T5W6T.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$scroll$2d$position$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-scroll-position/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$resize$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-resize/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$utils$2f$dist$2f$useControlledState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-stately/utils/dist/useControlledState.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$usePreventScroll$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/overlays/dist/usePreventScroll.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+function useNavbar(originalProps) {
+    var _a, _b;
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const [props, variantProps] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mapPropsVariants"])(originalProps, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$3K3T5W6T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["navbar"].variantKeys);
+    const { ref, as, parentRef, height = "4rem", shouldHideOnScroll = false, disableScrollHandler = false, shouldBlockScroll = true, onScrollPositionChange, isMenuOpen: isMenuOpenProp, isMenuDefaultOpen, onMenuOpenChange = ()=>{}, motionProps, className, classNames, ...otherProps } = props;
+    const Component = as || "nav";
+    const disableAnimation = (_b = (_a = originalProps.disableAnimation) != null ? _a : globalContext == null ? void 0 : globalContext.disableAnimation) != null ? _b : false;
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const prevWidth = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(0);
+    const navHeight = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(0);
+    const [isHidden, setIsHidden] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const handleMenuOpenChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((isOpen)=>{
+        onMenuOpenChange(isOpen || false);
+    }, [
+        onMenuOpenChange
+    ]);
+    const [isMenuOpen, setIsMenuOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$utils$2f$dist$2f$useControlledState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useControlledState"])(isMenuOpenProp, isMenuDefaultOpen != null ? isMenuDefaultOpen : false, handleMenuOpenChange);
+    const updateWidth = ()=>{
+        if (domRef.current) {
+            const width = domRef.current.offsetWidth;
+            if (width !== prevWidth.current) {
+                prevWidth.current = width;
+            }
+        }
+    };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$usePreventScroll$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePreventScroll"])({
+        isDisabled: !(shouldBlockScroll && isMenuOpen)
+    });
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$resize$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useResizeObserver"])({
+        ref: domRef,
+        onResize: ()=>{
+            var _a2;
+            const currentWidth = (_a2 = domRef.current) == null ? void 0 : _a2.offsetWidth;
+            const scrollWidth = window.innerWidth - document.documentElement.clientWidth;
+            if (currentWidth && currentWidth + scrollWidth == prevWidth.current) {
+                return;
+            }
+            if (currentWidth !== prevWidth.current) {
+                updateWidth();
+                setIsMenuOpen(false);
+            }
+        }
+    });
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        var _a2;
+        updateWidth();
+        navHeight.current = ((_a2 = domRef.current) == null ? void 0 : _a2.offsetHeight) || 0;
+    }, []);
+    const slots = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$3K3T5W6T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["navbar"])({
+            ...variantProps,
+            disableAnimation,
+            hideOnScroll: shouldHideOnScroll
+        }), [
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["objectToDeps"])(variantProps),
+        disableAnimation,
+        shouldHideOnScroll
+    ]);
+    const baseStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.base, className);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$scroll$2d$position$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useScrollPosition"])({
+        elementRef: parentRef,
+        isEnabled: shouldHideOnScroll || !disableScrollHandler,
+        callback: ({ prevPos, currPos })=>{
+            onScrollPositionChange == null ? void 0 : onScrollPositionChange(currPos.y);
+            if (shouldHideOnScroll) {
+                setIsHidden((prev)=>{
+                    const next = currPos.y > prevPos.y && currPos.y > navHeight.current;
+                    return next !== prev ? next : prev;
+                });
+            }
+        }
+    });
+    const getBaseProps = (props2 = {})=>({
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(otherProps, props2),
+            "data-hidden": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isHidden),
+            "data-menu-open": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isMenuOpen),
+            ref: domRef,
+            className: slots.base({
+                class: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(baseStyles, props2 == null ? void 0 : props2.className)
+            }),
+            style: {
+                "--navbar-height": typeof height === "number" ? `${height}px` : height,
+                ...otherProps == null ? void 0 : otherProps.style,
+                ...props2 == null ? void 0 : props2.style
+            }
+        });
+    const getWrapperProps = (props2 = {})=>({
+            ...props2,
+            "data-menu-open": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isMenuOpen),
+            className: slots.wrapper({
+                class: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.wrapper, props2 == null ? void 0 : props2.className)
+            })
+        });
+    return {
+        Component,
+        slots,
+        domRef,
+        height,
+        isHidden,
+        disableAnimation,
+        shouldHideOnScroll,
+        isMenuOpen,
+        classNames,
+        setIsMenuOpen,
+        motionProps,
+        getBaseProps,
+        getWrapperProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-GACT3GHG.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "navbar_default",
+    ()=>navbar_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$SOOT4SRX$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-SOOT4SRX.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$RRUQIZLR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-RRUQIZLR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$Q3XKXXMH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-Q3XKXXMH.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-IGERPFKH.mjs [app-ssr] (ecmascript)");
+// src/navbar.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$WR7VNGRW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-WR7VNGRW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/components/LazyMotion/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/render/components/m/proxy.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+var domAnimation = ()=>__turbopack_context__.A("[project]/sistema-akaedem-ms/node_modules/@heroui/dom-animation/dist/index.mjs [app-ssr] (ecmascript, async loader)").then((res)=>res.default);
+var Navbar = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    const { children, ...otherProps } = props;
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$Q3XKXXMH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useNavbar"])({
+        ...otherProps,
+        ref
+    });
+    const Component = context.Component;
+    const [childrenWithoutMenu, menu] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$WR7VNGRW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["pickChildren"])(children, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$SOOT4SRX$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["navbar_menu_default"]);
+    const content = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: [
+            /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("header", {
+                ...context.getWrapperProps(),
+                children: childrenWithoutMenu
+            }),
+            menu
+        ]
+    });
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["NavbarProvider"], {
+        value: context,
+        children: context.shouldHideOnScroll ? /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LazyMotion"], {
+            features: domAnimation,
+            children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["m"].nav, {
+                animate: context.isHidden ? "hidden" : "visible",
+                initial: false,
+                variants: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$RRUQIZLR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["hideOnScrollVariants"],
+                ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(context.getBaseProps(), context.motionProps),
+                children: content
+            })
+        }) : /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(Component, {
+            ...context.getBaseProps(),
+            children: content
+        })
+    });
+});
+Navbar.displayName = "HeroUI.Navbar";
+var navbar_default = Navbar;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-GACT3GHG.mjs [app-ssr] (ecmascript) <export navbar_default as Navbar>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Navbar",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$GACT3GHG$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["navbar_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$GACT3GHG$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-GACT3GHG.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-4DMBHLGU.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "navbar_brand_default",
+    ()=>navbar_brand_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-IGERPFKH.mjs [app-ssr] (ecmascript)");
+// src/navbar-brand.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+var NavbarBrand = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    var _a;
+    const { as, className, children, ...otherProps } = props;
+    const Component = as || "div";
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const { slots, classNames } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useNavbarContext"])();
+    const styles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.brand, className);
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(Component, {
+        ref: domRef,
+        className: (_a = slots.brand) == null ? void 0 : _a.call(slots, {
+            class: styles
+        }),
+        ...otherProps,
+        children
+    });
+});
+NavbarBrand.displayName = "HeroUI.NavbarBrand";
+var navbar_brand_default = NavbarBrand;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-4DMBHLGU.mjs [app-ssr] (ecmascript) <export navbar_brand_default as NavbarBrand>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "NavbarBrand",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$4DMBHLGU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["navbar_brand_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$4DMBHLGU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-4DMBHLGU.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-UYTDJMPP.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "navbar_content_default",
+    ()=>navbar_content_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-IGERPFKH.mjs [app-ssr] (ecmascript)");
+// src/navbar-content.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+var NavbarContent = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    var _a;
+    const { as, className, children, justify = "start", ...otherProps } = props;
+    const Component = as || "ul";
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const { slots, classNames } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$IGERPFKH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useNavbarContext"])();
+    const styles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.content, className);
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(Component, {
+        ref: domRef,
+        className: (_a = slots.content) == null ? void 0 : _a.call(slots, {
+            class: styles
+        }),
+        "data-justify": justify,
+        ...otherProps,
+        children
+    });
+});
+NavbarContent.displayName = "HeroUI.NavbarContent";
+var navbar_content_default = NavbarContent;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-UYTDJMPP.mjs [app-ssr] (ecmascript) <export navbar_content_default as NavbarContent>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "NavbarContent",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$UYTDJMPP$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["navbar_content_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$navbar$2f$dist$2f$chunk$2d$UYTDJMPP$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/navbar/dist/chunk-UYTDJMPP.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utils.ts
+__turbopack_context__.s([
+    "forwardRef",
+    ()=>forwardRef,
+    "isHeroUIEl",
+    ()=>isHeroUIEl,
+    "mapPropsVariants",
+    ()=>mapPropsVariants,
+    "mapPropsVariantsWithCommon",
+    ()=>mapPropsVariantsWithCommon,
+    "toIterator",
+    ()=>toIterator
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+function forwardRef(component) {
+    return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])(component);
+}
+var toIterator = (obj)=>{
+    return {
+        ...obj,
+        [Symbol.iterator]: function() {
+            const keys = Object.keys(this);
+            let index = 0;
+            return {
+                next: ()=>{
+                    if (index >= keys.length) {
+                        return {
+                            done: true
+                        };
+                    }
+                    const key = keys[index];
+                    const value = this[key];
+                    index++;
+                    return {
+                        value: {
+                            key,
+                            value
+                        },
+                        done: false
+                    };
+                }
+            };
+        }
+    };
+};
+var mapPropsVariants = (props, variantKeys, removeVariantProps = true)=>{
+    if (!variantKeys) {
+        return [
+            props,
+            {}
+        ];
+    }
+    const picked = variantKeys.reduce((acc, key)=>{
+        if (key in props) {
+            return {
+                ...acc,
+                [key]: props[key]
+            };
+        } else {
+            return acc;
+        }
+    }, {});
+    if (removeVariantProps) {
+        const omitted = Object.keys(props).filter((key)=>!variantKeys.includes(key)).reduce((acc, key)=>({
+                ...acc,
+                [key]: props[key]
+            }), {});
+        return [
+            omitted,
+            picked
+        ];
+    } else {
+        return [
+            props,
+            picked
+        ];
+    }
+};
+var mapPropsVariantsWithCommon = (originalProps, variantKeys, commonKeys)=>{
+    const props = Object.keys(originalProps).filter((key)=>!variantKeys.includes(key) || (commonKeys == null ? void 0 : commonKeys.includes(key))).reduce((acc, key)=>({
+            ...acc,
+            [key]: originalProps[key]
+        }), {});
+    const variants = variantKeys.reduce((acc, key)=>({
+            ...acc,
+            [key]: originalProps[key]
+        }), {});
+    return [
+        props,
+        variants
+    ];
+};
+var isHeroUIEl = (component)=>{
+    var _a, _b, _c;
+    return !!((_c = (_b = (_a = component.type) == null ? void 0 : _a.render) == null ? void 0 : _b.displayName) == null ? void 0 : _c.includes("HeroUI"));
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/demi/react19/getInertValue.ts
+__turbopack_context__.s([
+    "__DEV__",
+    ()=>__DEV__,
+    "__TEST__",
+    ()=>__TEST__,
+    "arrayToObject",
+    ()=>arrayToObject,
+    "callAll",
+    ()=>callAll,
+    "callAllHandlers",
+    ()=>callAllHandlers,
+    "capitalize",
+    ()=>capitalize,
+    "chain",
+    ()=>chain,
+    "clamp",
+    ()=>clamp,
+    "clampPercentage",
+    ()=>clampPercentage,
+    "cleanObject",
+    ()=>cleanObject,
+    "cleanObjectKeys",
+    ()=>cleanObjectKeys,
+    "clsx",
+    ()=>clsx,
+    "compact",
+    ()=>compact,
+    "copyObject",
+    ()=>copyObject,
+    "dataAttr",
+    ()=>dataAttr,
+    "debounce",
+    ()=>debounce,
+    "extractProperty",
+    ()=>extractProperty,
+    "get",
+    ()=>get,
+    "getGregorianYearOffset",
+    ()=>getGregorianYearOffset,
+    "getInertValue",
+    ()=>getInertValue,
+    "getKeyValue",
+    ()=>getKeyValue,
+    "getMargin",
+    ()=>getMargin,
+    "getProp",
+    ()=>getProp,
+    "getUniqueID",
+    ()=>getUniqueID,
+    "idsUpdaterMap",
+    ()=>idsUpdaterMap,
+    "intersectionBy",
+    ()=>intersectionBy,
+    "isArray",
+    ()=>isArray,
+    "isEmpty",
+    ()=>isEmpty,
+    "isEmptyArray",
+    ()=>isEmptyArray,
+    "isEmptyObject",
+    ()=>isEmptyObject,
+    "isFunction",
+    ()=>isFunction,
+    "isNumeric",
+    ()=>isNumeric,
+    "isObject",
+    ()=>isObject,
+    "isPatternNumeric",
+    ()=>isPatternNumeric,
+    "kebabCase",
+    ()=>kebabCase,
+    "mapKeys",
+    ()=>mapKeys,
+    "mergeIds",
+    ()=>mergeIds,
+    "mergeProps",
+    ()=>mergeProps,
+    "mergeRefs",
+    ()=>mergeRefs,
+    "objectToDeps",
+    ()=>objectToDeps,
+    "omit",
+    ()=>omit,
+    "omitObject",
+    ()=>omitObject,
+    "range",
+    ()=>range,
+    "removeEvents",
+    ()=>removeEvents,
+    "renameProp",
+    ()=>renameProp,
+    "safeAriaLabel",
+    ()=>safeAriaLabel,
+    "safeInitials",
+    ()=>safeInitials,
+    "safeText",
+    ()=>safeText,
+    "uniqBy",
+    ()=>uniqBy,
+    "warn",
+    ()=>warn
+]);
+var getInertValue = (v)=>{
+    return v;
+};
+// src/common/assertion.ts
+var __DEV__ = ("TURBOPACK compile-time value", "development") !== "production";
+var __TEST__ = ("TURBOPACK compile-time value", "development") === "test";
+function isArray(value) {
+    return Array.isArray(value);
+}
+function isEmptyArray(value) {
+    return isArray(value) && value.length === 0;
+}
+function isObject(value) {
+    const type = typeof value;
+    return value != null && (type === "object" || type === "function") && !isArray(value);
+}
+function isEmptyObject(value) {
+    return isObject(value) && Object.keys(value).length === 0;
+}
+function isEmpty(value) {
+    if (isArray(value)) return isEmptyArray(value);
+    if (isObject(value)) return isEmptyObject(value);
+    if (value == null || value === "") return true;
+    return false;
+}
+function isFunction(value) {
+    return typeof value === "function";
+}
+var dataAttr = (condition)=>condition ? "true" : void 0;
+var isNumeric = (value)=>value != null && parseInt(value.toString(), 10) > 0;
+// src/common/clsx.ts
+function toVal(mix) {
+    var k, y, str = "";
+    if (typeof mix === "string" || typeof mix === "number") {
+        str += mix;
+    } else if (typeof mix === "object") {
+        if (Array.isArray(mix)) {
+            for(k = 0; k < mix.length; k++){
+                if (mix[k]) {
+                    if (y = toVal(mix[k])) {
+                        str && (str += " ");
+                        str += y;
+                    }
+                }
+            }
+        } else {
+            for(k in mix){
+                if (mix[k]) {
+                    str && (str += " ");
+                    str += k;
+                }
+            }
+        }
+    }
+    return str;
+}
+function clsx(...args) {
+    var i = 0, tmp, x, str = "";
+    while(i < args.length){
+        if (tmp = args[i++]) {
+            if (x = toVal(tmp)) {
+                str && (str += " ");
+                str += x;
+            }
+        }
+    }
+    return str;
+}
+// src/common/object.ts
+var renameProp = (oldProp, newProp, { [oldProp]: old, ...others })=>({
+        [newProp]: old,
+        ...others
+    });
+var copyObject = (obj)=>{
+    if (!isObject(obj)) return obj;
+    if (obj instanceof Array) return [
+        ...obj
+    ];
+    return {
+        ...obj
+    };
+};
+var omitObject = (obj, omitKeys)=>{
+    if (!isObject(obj)) return obj;
+    if (obj instanceof Array) return [
+        ...obj
+    ];
+    const newObj = {
+        ...obj
+    };
+    omitKeys.forEach((key)=>newObj[key] && delete newObj[key]);
+    return newObj;
+};
+var cleanObject = (obj)=>{
+    if (!isObject(obj)) return obj;
+    if (obj instanceof Array) return [
+        ...obj
+    ];
+    const newObj = {
+        ...obj
+    };
+    Object.keys(newObj).forEach((key)=>{
+        if (newObj[key] === void 0 || newObj[key] === null) {
+            delete newObj[key];
+        }
+    });
+    return newObj;
+};
+var cleanObjectKeys = (obj, keys = [])=>{
+    if (!isObject(obj)) return obj;
+    if (obj instanceof Array) return [
+        ...obj
+    ];
+    const newObj = {
+        ...obj
+    };
+    keys.forEach((key)=>{
+        if (newObj[key]) {
+            delete newObj[key];
+        }
+    });
+    return newObj;
+};
+var getKeyValue = (obj, key)=>{
+    if (!isObject(obj)) return obj;
+    if (obj instanceof Array) return [
+        ...obj
+    ];
+    return obj[key];
+};
+var getProp = (obj, path, fallback, index)=>{
+    const key = typeof path === "string" ? path.split(".") : [
+        path
+    ];
+    for(index = 0; index < key.length; index += 1){
+        if (!obj) break;
+        obj = obj[key[index]];
+    }
+    return obj === void 0 ? fallback : obj;
+};
+var arrayToObject = (arr)=>{
+    if (!arr.length || !Array.isArray(arr)) return {};
+    return arr.reduce((acc, item)=>{
+        return {
+            ...acc,
+            ...item
+        };
+    }, {});
+};
+function compact(object) {
+    const clone = Object.assign({}, object);
+    for(let key in clone){
+        if (clone[key] === void 0) delete clone[key];
+    }
+    return clone;
+}
+// src/common/text.ts
+var safeText = (text)=>{
+    if ((text == null ? void 0 : text.length) <= 4) return text;
+    return text == null ? void 0 : text.slice(0, 3);
+};
+var safeInitials = (text)=>{
+    const initials = (text == null ? void 0 : text.trim().split(/[\s\-_.]+/).filter(Boolean).map((word)=>word.charAt(0).toUpperCase()).join("")) || "";
+    return safeText(initials);
+};
+var safeAriaLabel = (...texts)=>{
+    let ariaLabel = " ";
+    for (const text of texts){
+        if (typeof text === "string" && text.length > 0) {
+            ariaLabel = text;
+            break;
+        }
+    }
+    return ariaLabel;
+};
+// src/common/dimensions.ts
+var getMargin = (num)=>{
+    return `calc(${num * 15.25}pt + 1px * ${num - 1})`;
+};
+// src/common/functions.ts
+var capitalize = (s)=>{
+    return s ? s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() : "";
+};
+function callAllHandlers(...fns) {
+    return function func(event) {
+        fns.some((fn)=>{
+            fn == null ? void 0 : fn(event);
+            return event == null ? void 0 : event.defaultPrevented;
+        });
+    };
+}
+function callAll(...fns) {
+    return function mergedFn(arg) {
+        fns.forEach((fn)=>{
+            fn == null ? void 0 : fn(arg);
+        });
+    };
+}
+function extractProperty(key, defaultValue, ...objs) {
+    let result = defaultValue;
+    for (const obj of objs){
+        if (obj && key in obj && !!obj[key]) {
+            result = obj[key];
+        }
+    }
+    return result;
+}
+function getUniqueID(prefix) {
+    return `${prefix}-${Math.floor(Math.random() * 1e6)}`;
+}
+function removeEvents(input) {
+    for(const key in input){
+        if (key.startsWith("on")) {
+            delete input[key];
+        }
+    }
+    return input;
+}
+function objectToDeps(obj) {
+    if (!obj || typeof obj !== "object") {
+        return "";
+    }
+    try {
+        return JSON.stringify(obj);
+    } catch  {
+        return "";
+    }
+}
+function debounce(func, waitMilliseconds = 0) {
+    let timeout;
+    return function(...args) {
+        const later = ()=>{
+            timeout = void 0;
+            func.apply(this, args);
+        };
+        if (timeout !== void 0) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(later, waitMilliseconds);
+    };
+}
+function uniqBy(arr, iteratee) {
+    if (typeof iteratee === "string") {
+        iteratee = (item)=>item[iteratee];
+    }
+    return arr.filter((x, i, self)=>i === self.findIndex((y)=>iteratee(x) === iteratee(y)));
+}
+var omit = (obj, keys)=>{
+    const res = Object.assign({}, obj);
+    keys.forEach((key)=>{
+        delete res[key];
+    });
+    return res;
+};
+var kebabCase = (s)=>{
+    return s.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+};
+var mapKeys = (obj, iteratee)=>{
+    return Object.fromEntries(Object.entries(obj).map(([key, value])=>[
+            iteratee(value, key),
+            value
+        ]));
+};
+var get = (object, path, defaultValue)=>{
+    const keys = Array.isArray(path) ? path : path.replace(/\[(\d+)\]/g, ".$1").split(".");
+    let res = object;
+    for (const key of keys){
+        res = res == null ? void 0 : res[key];
+        if (res === void 0) {
+            return defaultValue;
+        }
+    }
+    return res;
+};
+var intersectionBy = (...args)=>{
+    if (args.length < 2) {
+        throw new Error("intersectionBy requires at least two arrays and an iteratee");
+    }
+    const iteratee = args[args.length - 1];
+    const arrays = args.slice(0, -1);
+    if (arrays.length === 0) {
+        return [];
+    }
+    const getIterateeValue = (item)=>{
+        if (typeof iteratee === "function") {
+            return iteratee(item);
+        } else if (typeof iteratee === "string") {
+            return item[iteratee];
+        } else {
+            throw new Error("Iteratee must be a function or a string key of the array elements");
+        }
+    };
+    const [first, ...rest] = arrays;
+    const transformedFirst = first.map((item)=>getIterateeValue(item));
+    const transformedSets = rest.map((array)=>new Set(array.map((item)=>getIterateeValue(item))));
+    const res = [];
+    const seen = /* @__PURE__ */ new Set();
+    for(let i = 0; i < first.length; i++){
+        const item = first[i];
+        const transformed = transformedFirst[i];
+        if (seen.has(transformed)) {
+            continue;
+        }
+        const existsInAll = transformedSets.every((set)=>set.has(transformed));
+        if (existsInAll) {
+            res.push(item);
+            seen.add(transformed);
+        }
+    }
+    return res;
+};
+// src/common/numbers.ts
+function range(start, end) {
+    const length = end - start + 1;
+    return Array.from({
+        length
+    }, (_, index)=>index + start);
+}
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+function clampPercentage(value, max = 100) {
+    return Math.min(Math.max(value, 0), max);
+}
+// src/common/console.ts
+var warningStack = {};
+function warn(message, component, ...args) {
+    const tag = component ? ` [${component}]` : " ";
+    const log = `[Hero UI]${tag}: ${message}`;
+    if (typeof console === "undefined") return;
+    if (warningStack[log]) return;
+    warningStack[log] = true;
+    if ("TURBOPACK compile-time truthy", 1) {
+        return console.warn(log, args);
+    }
+}
+// src/common/dates.ts
+function getGregorianYearOffset(identifier) {
+    switch(identifier){
+        case "buddhist":
+            return 543;
+        case "ethiopic":
+        case "ethioaa":
+            return -8;
+        case "coptic":
+            return -284;
+        case "hebrew":
+            return 3760;
+        case "indian":
+            return -78;
+        case "islamic-civil":
+        case "islamic-tbla":
+        case "islamic-umalqura":
+            return -579;
+        case "persian":
+            return -600;
+        case "roc":
+        case "japanese":
+        case "gregory":
+        default:
+            return 0;
+    }
+}
+// src/common/regex.ts
+var isPatternNumeric = (pattern)=>{
+    const numericPattern = /(^|\W)[0-9](\W|$)/;
+    return numericPattern.test(pattern) && !/[^\d\^$\[\]\(\)\*\+\-\.\|]/.test(pattern);
+};
+// src/common/ra.ts
+function chain(...callbacks) {
+    return (...args)=>{
+        for (let callback of callbacks){
+            if (typeof callback === "function") {
+                callback(...args);
+            }
+        }
+    };
+}
+var idsUpdaterMap = /* @__PURE__ */ new Map();
+function mergeIds(idA, idB) {
+    if (idA === idB) {
+        return idA;
+    }
+    let setIdsA = idsUpdaterMap.get(idA);
+    if (setIdsA) {
+        setIdsA.forEach((ref)=>ref.current = idB);
+        return idB;
+    }
+    let setIdsB = idsUpdaterMap.get(idB);
+    if (setIdsB) {
+        setIdsB.forEach((ref)=>ref.current = idA);
+        return idA;
+    }
+    return idB;
+}
+function mergeProps(...args) {
+    let result = {
+        ...args[0]
+    };
+    for(let i = 1; i < args.length; i++){
+        let props = args[i];
+        for(let key in props){
+            let a = result[key];
+            let b = props[key];
+            if (typeof a === "function" && typeof b === "function" && // This is a lot faster than a regex.
+            key[0] === "o" && key[1] === "n" && key.charCodeAt(2) >= /* 'A' */ 65 && key.charCodeAt(2) <= /* 'Z' */ 90) {
+                result[key] = chain(a, b);
+            } else if ((key === "className" || key === "UNSAFE_className") && typeof a === "string" && typeof b === "string") {
+                result[key] = clsx(a, b);
+            } else if (key === "id" && a && b) {
+                result.id = mergeIds(a, b);
+            } else {
+                result[key] = b !== void 0 ? b : a;
+            }
+        }
+    }
+    return result;
+}
+function mergeRefs(...refs) {
+    if (refs.length === 1 && refs[0]) {
+        return refs[0];
+    }
+    return (value)=>{
+        let hasCleanup = false;
+        const cleanups = refs.map((ref)=>{
+            const cleanup = setRef(ref, value);
+            hasCleanup || (hasCleanup = typeof cleanup == "function");
+            return cleanup;
+        });
+        if (hasCleanup) {
+            return ()=>{
+                cleanups.forEach((cleanup, i)=>{
+                    if (typeof cleanup === "function") {
+                        cleanup == null ? void 0 : cleanup();
+                    } else {
+                        setRef(refs[i], null);
+                    }
+                });
+            };
+        }
+    };
+}
+function setRef(ref, value) {
+    if (typeof ref === "function") {
+        return ()=>ref(value);
+    } else if (ref != null) {
+        if ("current" in ref) {
+            ref.current = value;
+        }
+    }
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/framer-utils/dist/chunk-736YWA4T.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "TRANSITION_DEFAULTS",
+    ()=>TRANSITION_DEFAULTS,
+    "TRANSITION_EASINGS",
+    ()=>TRANSITION_EASINGS,
+    "TRANSITION_VARIANTS",
+    ()=>TRANSITION_VARIANTS
+]);
+"use client";
+// src/transition-utils.ts
+var TRANSITION_EASINGS = {
+    ease: [
+        0.36,
+        0.66,
+        0.4,
+        1
+    ],
+    easeIn: [
+        0.4,
+        0,
+        1,
+        1
+    ],
+    easeOut: [
+        0,
+        0,
+        0.2,
+        1
+    ],
+    easeInOut: [
+        0.4,
+        0,
+        0.2,
+        1
+    ],
+    spring: [
+        0.155,
+        1.105,
+        0.295,
+        1.12
+    ],
+    springOut: [
+        0.57,
+        -0.15,
+        0.62,
+        0.07
+    ],
+    softSpring: [
+        0.16,
+        1.11,
+        0.3,
+        1.02
+    ]
+};
+var TRANSITION_DEFAULTS = {
+    enter: {
+        duration: 0.2,
+        ease: TRANSITION_EASINGS.easeOut
+    },
+    exit: {
+        duration: 0.1,
+        ease: TRANSITION_EASINGS.easeIn
+    }
+};
+var TRANSITION_VARIANTS = {
+    scaleSpring: {
+        enter: {
+            transform: "scale(1)",
+            opacity: 1,
+            transition: {
+                type: "spring",
+                bounce: 0,
+                duration: 0.2
+            }
+        },
+        exit: {
+            transform: "scale(0.85)",
+            opacity: 0,
+            transition: {
+                type: "easeOut",
+                duration: 0.15
+            }
+        }
+    },
+    scaleSpringOpacity: {
+        initial: {
+            opacity: 0,
+            transform: "scale(0.8)"
+        },
+        enter: {
+            opacity: 1,
+            transform: "scale(1)",
+            transition: {
+                type: "spring",
+                bounce: 0,
+                duration: 0.3
+            }
+        },
+        exit: {
+            opacity: 0,
+            transform: "scale(0.96)",
+            transition: {
+                type: "easeOut",
+                bounce: 0,
+                duration: 0.15
+            }
+        }
+    },
+    scale: {
+        enter: {
+            scale: 1
+        },
+        exit: {
+            scale: 0.95
+        }
+    },
+    scaleFadeIn: {
+        enter: {
+            transform: "scale(1)",
+            opacity: 1,
+            transition: {
+                duration: 0.25,
+                ease: TRANSITION_EASINGS.easeIn
+            }
+        },
+        exit: {
+            transform: "scale(0.95)",
+            opacity: 0,
+            transition: {
+                duration: 0.2,
+                ease: TRANSITION_EASINGS.easeOut
+            }
+        }
+    },
+    scaleInOut: {
+        enter: {
+            transform: "scale(1)",
+            opacity: 1,
+            transition: {
+                duration: 0.4,
+                ease: TRANSITION_EASINGS.ease
+            }
+        },
+        exit: {
+            transform: "scale(1.03)",
+            opacity: 0,
+            transition: {
+                duration: 0.3,
+                ease: TRANSITION_EASINGS.ease
+            }
+        }
+    },
+    fade: {
+        enter: {
+            opacity: 1,
+            transition: {
+                duration: 0.4,
+                ease: TRANSITION_EASINGS.ease
+            }
+        },
+        exit: {
+            opacity: 0,
+            transition: {
+                duration: 0.3,
+                ease: TRANSITION_EASINGS.ease
+            }
+        }
+    },
+    collapse: {
+        enter: {
+            opacity: 1,
+            height: "auto",
+            transition: {
+                height: {
+                    type: "spring",
+                    bounce: 0,
+                    duration: 0.3
+                },
+                opacity: {
+                    easings: "ease",
+                    duration: 0.4
+                }
+            }
+        },
+        exit: {
+            opacity: 0,
+            height: 0,
+            transition: {
+                easings: "ease",
+                duration: 0.3
+            }
+        }
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ProviderContext",
+    ()=>ProviderContext,
+    "useProviderContext",
+    ()=>useProviderContext
+]);
+// src/provider-context.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-3XT5V4LF.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+var [ProviderContext, useProviderContext] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])({
+    name: "ProviderContext",
+    strict: false
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-POSTVCTR.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utilities/animation.ts
+__turbopack_context__.s([
+    "animation_default",
+    ()=>animation_default
+]);
+var animation_default = {
+    /** Animation Utilities */ ".spinner-bar-animation": {
+        "animation-delay": "calc(-1.2s + (0.1s * var(--bar-index)))",
+        transform: "rotate(calc(30deg * var(--bar-index)))translate(140%)"
+    },
+    ".spinner-dot-animation": {
+        "animation-delay": "calc(250ms * var(--dot-index))"
+    },
+    ".spinner-dot-blink-animation": {
+        "animation-delay": "calc(200ms * var(--dot-index))"
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-MPVWW3DX.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utilities/custom.ts
+__turbopack_context__.s([
+    "custom_default",
+    ()=>custom_default
+]);
+var custom_default = {
+    /**
+   * Custom utilities
+   */ ".leading-inherit": {
+        "line-height": "inherit"
+    },
+    ".bg-img-inherit": {
+        "background-image": "inherit"
+    },
+    ".bg-clip-inherit": {
+        "background-clip": "inherit"
+    },
+    ".text-fill-inherit": {
+        "-webkit-text-fill-color": "inherit"
+    },
+    ".tap-highlight-transparent": {
+        "-webkit-tap-highlight-color": "transparent"
+    },
+    ".input-search-cancel-button-none": {
+        "&::-webkit-search-cancel-button": {
+            "-webkit-appearance": "none"
+        }
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-WH6SPIFG.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utilities/scrollbar-hide.ts
+__turbopack_context__.s([
+    "scrollbar_hide_default",
+    ()=>scrollbar_hide_default
+]);
+var scrollbar_hide_default = {
+    /**
+   * Scroll Hide
+   */ ".scrollbar-hide": {
+        /* IE and Edge */ "-ms-overflow-style": "none",
+        /* Firefox */ "scrollbar-width": "none",
+        /* Safari and Chrome */ "&::-webkit-scrollbar": {
+            display: "none"
+        }
+    },
+    ".scrollbar-default": {
+        /* IE and Edge */ "-ms-overflow-style": "auto",
+        /* Firefox */ "scrollbar-width": "auto",
+        /* Safari and Chrome */ "&::-webkit-scrollbar": {
+            display: "block"
+        }
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-RUIUXVZ4.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utilities/text.ts
+__turbopack_context__.s([
+    "text_default",
+    ()=>text_default
+]);
+var text_default = {
+    /**
+   * Text utilities
+   */ ".text-tiny": {
+        "font-size": "var(--heroui-font-size-tiny)",
+        "line-height": "var(--heroui-line-height-tiny)"
+    },
+    ".text-small": {
+        "font-size": "var(--heroui-font-size-small)",
+        "line-height": "var(--heroui-line-height-small)"
+    },
+    ".text-medium": {
+        "font-size": "var(--heroui-font-size-medium)",
+        "line-height": "var(--heroui-line-height-medium)"
+    },
+    ".text-large": {
+        "font-size": "var(--heroui-font-size-large)",
+        "line-height": "var(--heroui-line-height-large)"
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-GSRZWDGA.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utilities/transition.ts
+__turbopack_context__.s([
+    "DEFAULT_TRANSITION_DURATION",
+    ()=>DEFAULT_TRANSITION_DURATION,
+    "transition_default",
+    ()=>transition_default
+]);
+var DEFAULT_TRANSITION_DURATION = "250ms";
+var transition_default = {
+    /**
+   * Transition utilities
+   */ ".transition-background": {
+        "transition-property": "background",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-colors-opacity": {
+        "transition-property": "color, background-color, border-color, text-decoration-color, fill, stroke, opacity",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-width": {
+        "transition-property": "width",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-height": {
+        "transition-property": "height",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-size": {
+        "transition-property": "width, height",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-left": {
+        "transition-property": "left",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-transform-opacity": {
+        "transition-property": "transform, scale, opacity rotate",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-transform-background": {
+        "transition-property": "transform, scale, background",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-transform-colors": {
+        "transition-property": "transform, scale, color, background, background-color, border-color, text-decoration-color, fill, stroke",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    },
+    ".transition-transform-colors-opacity": {
+        "transition-property": "transform, scale, color, background, background-color, border-color, text-decoration-color, fill, stroke, opacity",
+        "transition-timing-function": "ease",
+        "transition-duration": DEFAULT_TRANSITION_DURATION
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-6JJPIEK7.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "utilities",
+    ()=>utilities
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$POSTVCTR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-POSTVCTR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$MPVWW3DX$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-MPVWW3DX.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$WH6SPIFG$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-WH6SPIFG.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$RUIUXVZ4$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-RUIUXVZ4.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GSRZWDGA$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-GSRZWDGA.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+;
+;
+// src/utilities/index.ts
+var utilities = {
+    ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$MPVWW3DX$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["custom_default"],
+    ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GSRZWDGA$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["transition_default"],
+    ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$WH6SPIFG$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["scrollbar_hide_default"],
+    ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$RUIUXVZ4$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["text_default"],
+    ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$POSTVCTR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["animation_default"]
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-UFVD3L5A.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "COMMON_UNITS",
+    ()=>COMMON_UNITS,
+    "twMergeConfig",
+    ()=>twMergeConfig
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$6JJPIEK7$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-6JJPIEK7.mjs [app-ssr] (ecmascript)");
+;
+// src/utils/tw-merge-config.ts
+var COMMON_UNITS = [
+    "small",
+    "medium",
+    "large"
+];
+var twMergeConfig = {
+    theme: {
+        spacing: [
+            "divider"
+        ],
+        radius: COMMON_UNITS
+    },
+    classGroups: {
+        shadow: [
+            {
+                shadow: COMMON_UNITS
+            }
+        ],
+        opacity: [
+            {
+                opacity: [
+                    "disabled"
+                ]
+            }
+        ],
+        "font-size": [
+            {
+                text: [
+                    "tiny",
+                    ...COMMON_UNITS
+                ]
+            }
+        ],
+        "border-w": [
+            {
+                border: COMMON_UNITS
+            }
+        ],
+        "bg-image": [
+            "bg-stripe-gradient-default",
+            "bg-stripe-gradient-primary",
+            "bg-stripe-gradient-secondary",
+            "bg-stripe-gradient-success",
+            "bg-stripe-gradient-warning",
+            "bg-stripe-gradient-danger"
+        ],
+        transition: Object.keys(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$6JJPIEK7$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["utilities"]).filter((key)=>key.includes(".transition")).map((key)=>key.replace(".", ""))
+    }
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "tv",
+    ()=>tv
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$UFVD3L5A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-UFVD3L5A.mjs [app-ssr] (ecmascript)");
+// src/utils/tv.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$tailwind$2d$variants$2f$dist$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/tailwind-variants/dist/index.js [app-ssr] (ecmascript) <locals>");
+;
+;
+var tv = (options, config)=>{
+    var _a, _b, _c;
+    return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$tailwind$2d$variants$2f$dist$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["tv"])(options, {
+        ...config,
+        twMerge: (_a = config == null ? void 0 : config.twMerge) != null ? _a : true,
+        twMergeConfig: {
+            ...config == null ? void 0 : config.twMergeConfig,
+            theme: {
+                ...(_b = config == null ? void 0 : config.twMergeConfig) == null ? void 0 : _b.theme,
+                ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$UFVD3L5A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["twMergeConfig"].theme
+            },
+            classGroups: {
+                ...(_c = config == null ? void 0 : config.twMergeConfig) == null ? void 0 : _c.classGroups,
+                ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$UFVD3L5A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["twMergeConfig"].classGroups
+            }
+        }
+    });
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-JGY6VQQQ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utils/classes.ts
+__turbopack_context__.s([
+    "absoluteFullClasses",
+    ()=>absoluteFullClasses,
+    "baseStyles",
+    ()=>baseStyles,
+    "collapseAdjacentVariantBorders",
+    ()=>collapseAdjacentVariantBorders,
+    "dataFocusVisibleClasses",
+    ()=>dataFocusVisibleClasses,
+    "focusVisibleClasses",
+    ()=>focusVisibleClasses,
+    "groupDataFocusVisibleClasses",
+    ()=>groupDataFocusVisibleClasses,
+    "hiddenInputClasses",
+    ()=>hiddenInputClasses,
+    "ringClasses",
+    ()=>ringClasses,
+    "translateCenterClasses",
+    ()=>translateCenterClasses
+]);
+var baseStyles = (prefix)=>({
+        color: `hsl(var(--${prefix}-foreground))`,
+        backgroundColor: `hsl(var(--${prefix}-background))`
+    });
+var focusVisibleClasses = [
+    "focus-visible:z-10",
+    "focus-visible:outline-2",
+    "focus-visible:outline-focus",
+    "focus-visible:outline-offset-2"
+];
+var dataFocusVisibleClasses = [
+    "outline-solid outline-transparent",
+    "data-[focus-visible=true]:z-10",
+    "data-[focus-visible=true]:outline-2",
+    "data-[focus-visible=true]:outline-focus",
+    "data-[focus-visible=true]:outline-offset-2"
+];
+var groupDataFocusVisibleClasses = [
+    "outline-solid outline-transparent",
+    "group-data-[focus-visible=true]:z-10",
+    "group-data-[focus-visible=true]:ring-2",
+    "group-data-[focus-visible=true]:ring-focus",
+    "group-data-[focus-visible=true]:ring-offset-2",
+    "group-data-[focus-visible=true]:ring-offset-background"
+];
+var ringClasses = [
+    "outline-solid outline-transparent",
+    "ring-2",
+    "ring-focus",
+    "ring-offset-2",
+    "ring-offset-background"
+];
+var translateCenterClasses = [
+    "absolute",
+    "top-1/2",
+    "left-1/2",
+    "-translate-x-1/2",
+    "-translate-y-1/2"
+];
+var absoluteFullClasses = [
+    "absolute",
+    "inset-0"
+];
+var collapseAdjacentVariantBorders = {
+    default: [
+        "[&+.border-medium.border-default]:ms-[calc(var(--heroui-border-width-medium)*-1)]"
+    ],
+    primary: [
+        "[&+.border-medium.border-primary]:ms-[calc(var(--heroui-border-width-medium)*-1)]"
+    ],
+    secondary: [
+        "[&+.border-medium.border-secondary]:ms-[calc(var(--heroui-border-width-medium)*-1)]"
+    ],
+    success: [
+        "[&+.border-medium.border-success]:ms-[calc(var(--heroui-border-width-medium)*-1)]"
+    ],
+    warning: [
+        "[&+.border-medium.border-warning]:ms-[calc(var(--heroui-border-width-medium)*-1)]"
+    ],
+    danger: [
+        "[&+.border-medium.border-danger]:ms-[calc(var(--heroui-border-width-medium)*-1)]"
+    ]
+};
+var hiddenInputClasses = [
+    // Font styles
+    "font-inherit",
+    "text-[100%]",
+    "leading-[1.15]",
+    // Reset margins and padding
+    "m-0",
+    "p-0",
+    // Overflow and box-sizing
+    "overflow-visible",
+    "box-border",
+    // Positioning & Hit area
+    "absolute",
+    "top-0",
+    "w-full",
+    "h-full",
+    // Opacity and z-index
+    "opacity-[0.0001]",
+    "z-[1]",
+    // Cursor
+    "cursor-pointer",
+    // Disabled state
+    "disabled:cursor-default"
+];
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-3K3T5W6T.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "navbar",
+    ()=>navbar
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-JGY6VQQQ.mjs [app-ssr] (ecmascript)");
+;
+;
+// src/components/navbar.ts
+var navbar = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: [
+            "flex",
+            "z-40",
+            "w-full",
+            "h-auto",
+            "items-center",
+            "justify-center",
+            "data-[menu-open=true]:border-none"
+        ],
+        wrapper: [
+            "z-40",
+            "flex",
+            "px-6",
+            "gap-4",
+            "w-full",
+            "flex-row",
+            "relative",
+            "flex-nowrap",
+            "items-center",
+            "justify-between",
+            "h-[var(--navbar-height)]"
+        ],
+        toggle: [
+            "group",
+            "flex",
+            "items-center",
+            "justify-center",
+            "w-6",
+            "h-full",
+            "outline-solid outline-transparent",
+            "rounded-small",
+            "tap-highlight-transparent",
+            // focus ring
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataFocusVisibleClasses"]
+        ],
+        srOnly: [
+            "sr-only"
+        ],
+        toggleIcon: [
+            "w-full",
+            "h-full",
+            "pointer-events-none",
+            "flex",
+            "flex-col",
+            "items-center",
+            "justify-center",
+            "text-inherit",
+            "group-data-[pressed=true]:opacity-70",
+            "transition-opacity",
+            // before - first line
+            "before:content-['']",
+            "before:block",
+            "before:h-px",
+            "before:w-6",
+            "before:bg-current",
+            "before:transition-transform",
+            "before:duration-150",
+            "before:-translate-y-1",
+            "before:rotate-0",
+            "group-data-[open=true]:before:translate-y-px",
+            "group-data-[open=true]:before:rotate-45",
+            // after - second line
+            "after:content-['']",
+            "after:block",
+            "after:h-px",
+            "after:w-6",
+            "after:bg-current",
+            "after:transition-transform",
+            "after:duration-150",
+            "after:translate-y-1",
+            "after:rotate-0",
+            "group-data-[open=true]:after:translate-y-0",
+            "group-data-[open=true]:after:-rotate-45"
+        ],
+        brand: [
+            "flex",
+            "basis-0",
+            "flex-row",
+            "flex-grow",
+            "flex-nowrap",
+            "justify-start",
+            "bg-transparent",
+            "items-center",
+            "no-underline",
+            "text-medium",
+            "whitespace-nowrap",
+            "box-border"
+        ],
+        content: [
+            "flex",
+            "gap-4",
+            "h-full",
+            "flex-row",
+            "flex-nowrap",
+            "items-center",
+            "data-[justify=start]:justify-start",
+            "data-[justify=start]:flex-grow",
+            "data-[justify=start]:basis-0",
+            "data-[justify=center]:justify-center",
+            "data-[justify=end]:justify-end",
+            "data-[justify=end]:flex-grow",
+            "data-[justify=end]:basis-0"
+        ],
+        item: [
+            "text-medium",
+            "whitespace-nowrap",
+            "box-border",
+            "list-none",
+            // active
+            "data-[active=true]:font-semibold"
+        ],
+        menu: [
+            "z-30",
+            "px-6",
+            "pt-2",
+            "fixed",
+            "flex",
+            "max-w-full",
+            "top-[var(--navbar-height)]",
+            "inset-x-0",
+            "bottom-0",
+            "w-screen",
+            "flex-col",
+            "gap-2",
+            "overflow-y-auto"
+        ],
+        menuItem: [
+            "text-large",
+            // active
+            "data-[active=true]:font-semibold"
+        ]
+    },
+    variants: {
+        position: {
+            static: {
+                base: "static"
+            },
+            sticky: {
+                base: "sticky top-0 inset-x-0"
+            }
+        },
+        maxWidth: {
+            sm: {
+                wrapper: "max-w-[640px]"
+            },
+            md: {
+                wrapper: "max-w-[768px]"
+            },
+            lg: {
+                wrapper: "max-w-[1024px]"
+            },
+            xl: {
+                wrapper: "max-w-[1280px]"
+            },
+            "2xl": {
+                wrapper: "max-w-[1536px]"
+            },
+            full: {
+                wrapper: "max-w-full"
+            }
+        },
+        hideOnScroll: {
+            true: {
+                base: [
+                    "sticky",
+                    "top-0",
+                    "inset-x-0"
+                ]
+            }
+        },
+        isBordered: {
+            true: {
+                base: [
+                    "border-b",
+                    "border-divider"
+                ]
+            }
+        },
+        isBlurred: {
+            false: {
+                base: "bg-background",
+                menu: "bg-background"
+            },
+            true: {
+                base: [
+                    "backdrop-blur-lg",
+                    "data-[menu-open=true]:backdrop-blur-xl",
+                    "backdrop-saturate-150",
+                    "bg-background/70"
+                ],
+                menu: [
+                    "backdrop-blur-xl",
+                    "backdrop-saturate-150",
+                    "bg-background/70"
+                ]
+            }
+        },
+        disableAnimation: {
+            true: {
+                menu: [
+                    "hidden",
+                    "h-[calc(100dvh_-_var(--navbar-height))]",
+                    "data-[open=true]:flex"
+                ]
+            }
+        }
+    },
+    defaultVariants: {
+        maxWidth: "lg",
+        position: "sticky",
+        isBlurred: true
+    }
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-GQT3YUX3.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utils/variants.ts
+__turbopack_context__.s([
+    "colorVariants",
+    ()=>colorVariants
+]);
+var solid = {
+    default: "bg-default text-default-foreground",
+    primary: "bg-primary text-primary-foreground",
+    secondary: "bg-secondary text-secondary-foreground",
+    success: "bg-success text-success-foreground",
+    warning: "bg-warning text-warning-foreground",
+    danger: "bg-danger text-danger-foreground",
+    foreground: "bg-foreground text-background"
+};
+var shadow = {
+    default: "shadow-lg shadow-default/50 bg-default text-default-foreground",
+    primary: "shadow-lg shadow-primary/40 bg-primary text-primary-foreground",
+    secondary: "shadow-lg shadow-secondary/40 bg-secondary text-secondary-foreground",
+    success: "shadow-lg shadow-success/40 bg-success text-success-foreground",
+    warning: "shadow-lg shadow-warning/40 bg-warning text-warning-foreground",
+    danger: "shadow-lg shadow-danger/40 bg-danger text-danger-foreground",
+    foreground: "shadow-lg shadow-foreground/40 bg-foreground text-background"
+};
+var bordered = {
+    default: "bg-transparent border-default text-foreground",
+    primary: "bg-transparent border-primary text-primary",
+    secondary: "bg-transparent border-secondary text-secondary",
+    success: "bg-transparent border-success text-success",
+    warning: "bg-transparent border-warning text-warning",
+    danger: "bg-transparent border-danger text-danger",
+    foreground: "bg-transparent border-foreground text-foreground"
+};
+var flat = {
+    default: "bg-default/40 text-default-700",
+    primary: "bg-primary/20 text-primary-600",
+    secondary: "bg-secondary/20 text-secondary-600",
+    success: "bg-success/20 text-success-700 dark:text-success",
+    warning: "bg-warning/20 text-warning-700 dark:text-warning",
+    danger: "bg-danger/20 text-danger-600 dark:text-danger-500",
+    foreground: "bg-foreground/10 text-foreground"
+};
+var faded = {
+    default: "border-default bg-default-100 text-default-foreground",
+    primary: "border-default bg-default-100 text-primary",
+    secondary: "border-default bg-default-100 text-secondary",
+    success: "border-default bg-default-100 text-success",
+    warning: "border-default bg-default-100 text-warning",
+    danger: "border-default bg-default-100 text-danger",
+    foreground: "border-default bg-default-100 text-foreground"
+};
+var light = {
+    default: "bg-transparent text-default-foreground",
+    primary: "bg-transparent text-primary",
+    secondary: "bg-transparent text-secondary",
+    success: "bg-transparent text-success",
+    warning: "bg-transparent text-warning",
+    danger: "bg-transparent text-danger",
+    foreground: "bg-transparent text-foreground"
+};
+var ghost = {
+    default: "border-default text-default-foreground",
+    primary: "border-primary text-primary",
+    secondary: "border-secondary text-secondary",
+    success: "border-success text-success",
+    warning: "border-warning text-warning",
+    danger: "border-danger text-danger",
+    foreground: "border-foreground text-foreground hover:!bg-foreground"
+};
+var colorVariants = {
+    solid,
+    shadow,
+    bordered,
+    flat,
+    faded,
+    light,
+    ghost
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-D2DWF4OD.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "avatar",
+    ()=>avatar,
+    "avatarGroup",
+    ()=>avatarGroup
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-GQT3YUX3.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-JGY6VQQQ.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+// src/components/avatar.ts
+var avatar = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: [
+            "flex",
+            "relative",
+            "justify-center",
+            "items-center",
+            "box-border",
+            "overflow-hidden",
+            "align-middle",
+            "text-white",
+            "z-0",
+            // focus ring
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataFocusVisibleClasses"]
+        ],
+        img: [
+            "flex",
+            "object-cover",
+            "w-full",
+            "h-full",
+            "transition-opacity",
+            "!duration-500",
+            "opacity-0",
+            "data-[loaded=true]:opacity-100"
+        ],
+        fallback: [
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translateCenterClasses"],
+            "flex",
+            "items-center",
+            "justify-center"
+        ],
+        name: [
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translateCenterClasses"],
+            "font-normal",
+            "text-center",
+            "text-inherit"
+        ],
+        icon: [
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["translateCenterClasses"],
+            "flex",
+            "items-center",
+            "justify-center",
+            "text-inherit",
+            "w-full",
+            "h-full"
+        ]
+    },
+    variants: {
+        size: {
+            sm: {
+                base: "w-8 h-8 text-tiny"
+            },
+            md: {
+                base: "w-10 h-10 text-tiny"
+            },
+            lg: {
+                base: "w-14 h-14 text-small"
+            }
+        },
+        color: {
+            default: {
+                base: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.default
+            },
+            primary: {
+                base: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.primary
+            },
+            secondary: {
+                base: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.secondary
+            },
+            success: {
+                base: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.success
+            },
+            warning: {
+                base: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.warning
+            },
+            danger: {
+                base: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.danger
+            }
+        },
+        radius: {
+            none: {
+                base: "rounded-none"
+            },
+            sm: {
+                base: "rounded-small"
+            },
+            md: {
+                base: "rounded-medium"
+            },
+            lg: {
+                base: "rounded-large"
+            },
+            full: {
+                base: "rounded-full"
+            }
+        },
+        isBordered: {
+            true: {
+                base: "ring-2 ring-offset-2 ring-offset-background dark:ring-offset-background-dark"
+            }
+        },
+        isDisabled: {
+            true: {
+                base: "opacity-disabled"
+            }
+        },
+        isInGroup: {
+            true: {
+                base: [
+                    "-ms-2 data-[hover=true]:-translate-x-3 rtl:data-[hover=true]:translate-x-3 transition-transform",
+                    "data-[focus-visible=true]:-translate-x-3 rtl:data-[focus-visible=true]:translate-x-3"
+                ]
+            }
+        },
+        isInGridGroup: {
+            true: {
+                base: "m-0 data-[hover=true]:translate-x-0"
+            }
+        },
+        disableAnimation: {
+            true: {
+                base: "transition-none",
+                img: "transition-none"
+            },
+            false: {}
+        }
+    },
+    defaultVariants: {
+        size: "md",
+        color: "default",
+        radius: "full"
+    },
+    compoundVariants: [
+        {
+            color: "default",
+            isBordered: true,
+            class: {
+                base: "ring-default"
+            }
+        },
+        {
+            color: "primary",
+            isBordered: true,
+            class: {
+                base: "ring-primary"
+            }
+        },
+        {
+            color: "secondary",
+            isBordered: true,
+            class: {
+                base: "ring-secondary"
+            }
+        },
+        {
+            color: "success",
+            isBordered: true,
+            class: {
+                base: "ring-success"
+            }
+        },
+        {
+            color: "warning",
+            isBordered: true,
+            class: {
+                base: "ring-warning"
+            }
+        },
+        {
+            color: "danger",
+            isBordered: true,
+            class: {
+                base: "ring-danger"
+            }
+        }
+    ]
+});
+var avatarGroup = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: "flex items-center justify-center h-auto w-max",
+        count: "hover:-translate-x-0"
+    },
+    variants: {
+        isGrid: {
+            true: "inline-grid grid-cols-4 gap-3"
+        }
+    }
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-HN25UZIQ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "dropdown",
+    ()=>dropdown,
+    "dropdownItem",
+    ()=>dropdownItem,
+    "dropdownMenu",
+    ()=>dropdownMenu,
+    "dropdownSection",
+    ()=>dropdownSection
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-JGY6VQQQ.mjs [app-ssr] (ecmascript)");
+;
+;
+// src/components/dropdown.ts
+var dropdown = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    base: [
+        "w-full",
+        "p-1",
+        "min-w-[200px]"
+    ]
+});
+var dropdownItem = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: [
+            "flex",
+            "group",
+            "gap-2",
+            "items-center",
+            "justify-between",
+            "relative",
+            "px-2",
+            "py-1.5",
+            "w-full",
+            "h-full",
+            "box-border",
+            "rounded-small",
+            "outline-solid outline-transparent",
+            "cursor-pointer",
+            "tap-highlight-transparent",
+            "data-[pressed=true]:opacity-70",
+            // focus ring
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataFocusVisibleClasses"],
+            "data-[focus-visible=true]:dark:ring-offset-background-content1"
+        ],
+        wrapper: "w-full flex flex-col items-start justify-center",
+        title: "flex-1 text-small font-normal truncate",
+        description: [
+            "w-full",
+            "text-tiny",
+            "text-foreground-500",
+            "group-hover:text-current"
+        ],
+        selectedIcon: [
+            "text-inherit",
+            "w-3",
+            "h-3",
+            "shrink-0"
+        ],
+        shortcut: [
+            "px-1",
+            "py-0.5",
+            "rounded-sm",
+            "font-sans",
+            "text-foreground-500",
+            "text-tiny",
+            "border-small",
+            "border-default-300",
+            "group-hover:border-current"
+        ]
+    },
+    variants: {
+        variant: {
+            solid: {
+                base: ""
+            },
+            bordered: {
+                base: "border-medium border-transparent bg-transparent"
+            },
+            light: {
+                base: "bg-transparent"
+            },
+            faded: {
+                base: "border-small border-transparent hover:border-default data-[hover=true]:bg-default-100"
+            },
+            flat: {
+                base: ""
+            },
+            shadow: {
+                base: "data-[hover=true]:shadow-lg"
+            }
+        },
+        color: {
+            default: {},
+            primary: {},
+            secondary: {},
+            success: {},
+            warning: {},
+            danger: {}
+        },
+        isDisabled: {
+            true: {
+                base: "opacity-disabled pointer-events-none"
+            }
+        },
+        disableAnimation: {
+            true: {},
+            false: {}
+        }
+    },
+    defaultVariants: {
+        variant: "solid",
+        color: "default"
+    },
+    compoundVariants: [
+        // solid / color
+        {
+            variant: "solid",
+            color: "default",
+            class: {
+                base: "data-[hover=true]:bg-default data-[hover=true]:text-default-foreground"
+            }
+        },
+        {
+            variant: "solid",
+            color: "primary",
+            class: {
+                base: "data-[hover=true]:bg-primary data-[hover=true]:text-primary-foreground"
+            }
+        },
+        {
+            variant: "solid",
+            color: "secondary",
+            class: {
+                base: "data-[hover=true]:bg-secondary data-[hover=true]:text-secondary-foreground"
+            }
+        },
+        {
+            variant: "solid",
+            color: "success",
+            class: {
+                base: "data-[hover=true]:bg-success data-[hover=true]:text-success-foreground"
+            }
+        },
+        {
+            variant: "solid",
+            color: "warning",
+            class: {
+                base: "data-[hover=true]:bg-warning data-[hover=true]:text-warning-foreground"
+            }
+        },
+        {
+            variant: "solid",
+            color: "danger",
+            class: {
+                base: "data-[hover=true]:bg-danger data-[hover=true]:text-danger-foreground"
+            }
+        },
+        // shadow / color
+        {
+            variant: "shadow",
+            color: "default",
+            class: {
+                base: "data-[hover=true]:shadow-default/50 data-[hover=true]:bg-default data-[hover=true]:text-default-foreground"
+            }
+        },
+        {
+            variant: "shadow",
+            color: "primary",
+            class: {
+                base: "data-[hover=true]:shadow-primary/30 data-[hover=true]:bg-primary data-[hover=true]:text-primary-foreground"
+            }
+        },
+        {
+            variant: "shadow",
+            color: "secondary",
+            class: {
+                base: "data-[hover=true]:shadow-secondary/30 data-[hover=true]:bg-secondary data-[hover=true]:text-secondary-foreground"
+            }
+        },
+        {
+            variant: "shadow",
+            color: "success",
+            class: {
+                base: "data-[hover=true]:shadow-success/30 data-[hover=true]:bg-success data-[hover=true]:text-success-foreground"
+            }
+        },
+        {
+            variant: "shadow",
+            color: "warning",
+            class: {
+                base: "data-[hover=true]:shadow-warning/30 data-[hover=true]:bg-warning data-[hover=true]:text-warning-foreground"
+            }
+        },
+        {
+            variant: "shadow",
+            color: "danger",
+            class: {
+                base: "data-[hover=true]:shadow-danger/30 data-[hover=true]:bg-danger data-[hover=true]:text-danger-foreground"
+            }
+        },
+        // bordered / color
+        {
+            variant: "bordered",
+            color: "default",
+            class: {
+                base: "data-[hover=true]:border-default"
+            }
+        },
+        {
+            variant: "bordered",
+            color: "primary",
+            class: {
+                base: "data-[hover=true]:border-primary data-[hover=true]:text-primary"
+            }
+        },
+        {
+            variant: "bordered",
+            color: "secondary",
+            class: {
+                base: "data-[hover=true]:border-secondary data-[hover=true]:text-secondary"
+            }
+        },
+        {
+            variant: "bordered",
+            color: "success",
+            class: {
+                base: "data-[hover=true]:border-success data-[hover=true]:text-success"
+            }
+        },
+        {
+            variant: "bordered",
+            color: "warning",
+            class: {
+                base: "data-[hover=true]:border-warning data-[hover=true]:text-warning"
+            }
+        },
+        {
+            variant: "bordered",
+            color: "danger",
+            class: {
+                base: "data-[hover=true]:border-danger data-[hover=true]:text-danger"
+            }
+        },
+        // flat / color
+        {
+            variant: "flat",
+            color: "default",
+            class: {
+                base: "data-[hover=true]:bg-default/40 data-[hover=true]:text-default-foreground"
+            }
+        },
+        {
+            variant: "flat",
+            color: "primary",
+            class: {
+                base: "data-[hover=true]:bg-primary/20 data-[hover=true]:text-primary"
+            }
+        },
+        {
+            variant: "flat",
+            color: "secondary",
+            class: {
+                base: "data-[hover=true]:bg-secondary/20 data-[hover=true]:text-secondary"
+            }
+        },
+        {
+            variant: "flat",
+            color: "success",
+            class: {
+                base: "data-[hover=true]:bg-success/20 data-[hover=true]:text-success "
+            }
+        },
+        {
+            variant: "flat",
+            color: "warning",
+            class: {
+                base: "data-[hover=true]:bg-warning/20 data-[hover=true]:text-warning"
+            }
+        },
+        {
+            variant: "flat",
+            color: "danger",
+            class: {
+                base: "data-[hover=true]:bg-danger/20 data-[hover=true]:text-danger"
+            }
+        },
+        // faded / color
+        {
+            variant: "faded",
+            color: "default",
+            class: {
+                base: "data-[hover=true]:text-default-foreground"
+            }
+        },
+        {
+            variant: "faded",
+            color: "primary",
+            class: {
+                base: "data-[hover=true]:text-primary"
+            }
+        },
+        {
+            variant: "faded",
+            color: "secondary",
+            class: {
+                base: "data-[hover=true]:text-secondary"
+            }
+        },
+        {
+            variant: "faded",
+            color: "success",
+            class: {
+                base: "data-[hover=true]:text-success"
+            }
+        },
+        {
+            variant: "faded",
+            color: "warning",
+            class: {
+                base: "data-[hover=true]:text-warning"
+            }
+        },
+        {
+            variant: "faded",
+            color: "danger",
+            class: {
+                base: "data-[hover=true]:text-danger"
+            }
+        },
+        // light / color
+        {
+            variant: "light",
+            color: "default",
+            class: {
+                base: "data-[hover=true]:text-default-500"
+            }
+        },
+        {
+            variant: "light",
+            color: "primary",
+            class: {
+                base: "data-[hover=true]:text-primary"
+            }
+        },
+        {
+            variant: "light",
+            color: "secondary",
+            class: {
+                base: "data-[hover=true]:text-secondary"
+            }
+        },
+        {
+            variant: "light",
+            color: "success",
+            class: {
+                base: "data-[hover=true]:text-success"
+            }
+        },
+        {
+            variant: "light",
+            color: "warning",
+            class: {
+                base: "data-[hover=true]:text-warning"
+            }
+        },
+        {
+            variant: "light",
+            color: "danger",
+            class: {
+                base: "data-[hover=true]:text-danger"
+            }
+        }
+    ]
+});
+var dropdownSection = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: "relative mb-2",
+        heading: "pl-1 text-tiny text-foreground-500",
+        group: "data-[has-title=true]:pt-1",
+        divider: "mt-2"
+    }
+});
+var dropdownMenu = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    base: "w-full flex flex-col gap-0.5 p-1"
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-D2FF7S3A.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "popover",
+    ()=>popover
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-GQT3YUX3.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-JGY6VQQQ.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+// src/components/popover.ts
+var popover = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: [
+            "z-0",
+            "relative",
+            "bg-transparent",
+            "[transform-origin:var(--trigger-anchor-point)]",
+            // arrow
+            "before:content-['']",
+            "before:hidden",
+            "before:z-[-1]",
+            "before:absolute",
+            "before:rotate-45",
+            "before:w-2.5",
+            "before:h-2.5",
+            "before:rounded-sm",
+            // visibility
+            "data-[arrow=true]:before:block",
+            // top
+            "data-[placement=top]:before:-bottom-[calc(theme(spacing.5)/4_-_1.5px)]",
+            "data-[placement=top]:before:left-1/2",
+            "data-[placement=top]:before:-translate-x-1/2",
+            "data-[placement=top-start]:before:-bottom-[calc(theme(spacing.5)/4_-_1.5px)]",
+            "data-[placement=top-start]:before:left-3",
+            "data-[placement=top-end]:before:-bottom-[calc(theme(spacing.5)/4_-_1.5px)]",
+            "data-[placement=top-end]:before:right-3",
+            // bottom
+            "data-[placement=bottom]:before:-top-[calc(theme(spacing.5)/4_-_1.5px)]",
+            "data-[placement=bottom]:before:left-1/2",
+            "data-[placement=bottom]:before:-translate-x-1/2",
+            "data-[placement=bottom-start]:before:-top-[calc(theme(spacing.5)/4_-_1.5px)]",
+            "data-[placement=bottom-start]:before:left-3",
+            "data-[placement=bottom-end]:before:-top-[calc(theme(spacing.5)/4_-_1.5px)]",
+            "data-[placement=bottom-end]:before:right-3",
+            // left
+            "data-[placement=left]:before:-right-[calc(theme(spacing.5)/4_-_2px)]",
+            "data-[placement=left]:before:top-1/2",
+            "data-[placement=left]:before:-translate-y-1/2",
+            "data-[placement=left-start]:before:-right-[calc(theme(spacing.5)/4_-_3px)]",
+            "data-[placement=left-start]:before:top-1/4",
+            "data-[placement=left-end]:before:-right-[calc(theme(spacing.5)/4_-_3px)]",
+            "data-[placement=left-end]:before:bottom-1/4",
+            // right
+            "data-[placement=right]:before:-left-[calc(theme(spacing.5)/4_-_2px)]",
+            "data-[placement=right]:before:top-1/2",
+            "data-[placement=right]:before:-translate-y-1/2",
+            "data-[placement=right-start]:before:-left-[calc(theme(spacing.5)/4_-_3px)]",
+            "data-[placement=right-start]:before:top-1/4",
+            "data-[placement=right-end]:before:-left-[calc(theme(spacing.5)/4_-_3px)]",
+            "data-[placement=right-end]:before:bottom-1/4",
+            // focus ring
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataFocusVisibleClasses"]
+        ],
+        content: [
+            "z-10",
+            "px-2.5",
+            "py-1",
+            "w-full",
+            "inline-flex",
+            "flex-col",
+            "items-center",
+            "justify-center",
+            "box-border",
+            "subpixel-antialiased",
+            "outline-solid outline-transparent",
+            "box-border"
+        ],
+        trigger: [
+            "z-10"
+        ],
+        backdrop: [
+            "hidden"
+        ],
+        arrow: []
+    },
+    variants: {
+        size: {
+            sm: {
+                content: "text-tiny"
+            },
+            md: {
+                content: "text-small"
+            },
+            lg: {
+                content: "text-medium"
+            }
+        },
+        color: {
+            default: {
+                base: "before:bg-content1 before:shadow-small",
+                content: "bg-content1"
+            },
+            foreground: {
+                base: "before:bg-foreground",
+                content: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.foreground
+            },
+            primary: {
+                base: "before:bg-primary",
+                content: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.primary
+            },
+            secondary: {
+                base: "before:bg-secondary",
+                content: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.secondary
+            },
+            success: {
+                base: "before:bg-success",
+                content: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.success
+            },
+            warning: {
+                base: "before:bg-warning",
+                content: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.warning
+            },
+            danger: {
+                base: "before:bg-danger",
+                content: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.danger
+            }
+        },
+        radius: {
+            none: {
+                content: "rounded-none"
+            },
+            sm: {
+                content: "rounded-small"
+            },
+            md: {
+                content: "rounded-medium"
+            },
+            lg: {
+                content: "rounded-large"
+            },
+            full: {
+                content: "rounded-full"
+            }
+        },
+        shadow: {
+            none: {
+                content: "shadow-none"
+            },
+            sm: {
+                content: "shadow-small"
+            },
+            md: {
+                content: "shadow-medium"
+            },
+            lg: {
+                content: "shadow-large"
+            }
+        },
+        backdrop: {
+            transparent: {},
+            opaque: {
+                backdrop: "bg-overlay/50 backdrop-opacity-disabled"
+            },
+            blur: {
+                backdrop: "backdrop-blur-sm backdrop-saturate-150 bg-overlay/30"
+            }
+        },
+        triggerScaleOnOpen: {
+            true: {
+                trigger: [
+                    "aria-expanded:scale-[0.97]",
+                    "aria-expanded:opacity-70",
+                    "subpixel-antialiased"
+                ]
+            },
+            false: {}
+        },
+        disableAnimation: {
+            true: {
+                base: "animate-none"
+            }
+        },
+        isTriggerDisabled: {
+            true: {
+                trigger: "opacity-disabled pointer-events-none"
+            },
+            false: {}
+        }
+    },
+    defaultVariants: {
+        color: "default",
+        radius: "lg",
+        size: "md",
+        shadow: "md",
+        backdrop: "transparent",
+        triggerScaleOnOpen: true
+    },
+    compoundVariants: [
+        // backdrop (opaque/blur)
+        {
+            backdrop: [
+                "opaque",
+                "blur"
+            ],
+            class: {
+                backdrop: "block w-full h-full fixed inset-0 -z-30"
+            }
+        }
+    ]
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-CAM646RT.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "menu",
+    ()=>menu,
+    "menuItem",
+    ()=>menuItem,
+    "menuSection",
+    ()=>menuSection
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-JGY6VQQQ.mjs [app-ssr] (ecmascript)");
+;
+;
+// src/components/menu.ts
+var menu = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: "w-full relative flex flex-col gap-1 p-1 overflow-clip",
+        list: "w-full flex flex-col gap-0.5 outline-solid outline-transparent",
+        emptyContent: [
+            "h-10",
+            "px-2",
+            "py-1.5",
+            "w-full",
+            "h-full",
+            "text-foreground-400",
+            "text-start"
+        ]
+    }
+});
+var menuItem = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: [
+            "flex",
+            "group",
+            "gap-2",
+            "items-center",
+            "justify-between",
+            "relative",
+            "px-2",
+            "py-1.5",
+            "w-full",
+            "h-full",
+            "box-border",
+            "rounded-small",
+            "subpixel-antialiased",
+            "outline-solid outline-transparent",
+            "cursor-pointer",
+            "tap-highlight-transparent",
+            // focus ring
+            ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataFocusVisibleClasses"],
+            "data-[focus-visible=true]:dark:ring-offset-background-content1"
+        ],
+        wrapper: "w-full flex flex-col items-start justify-center min-w-0",
+        title: "flex-1 text-small font-normal w-full",
+        description: [
+            "w-full",
+            "text-tiny",
+            "text-foreground-500",
+            "group-hover:text-current"
+        ],
+        selectedIcon: [
+            "text-inherit",
+            "w-3",
+            "h-3",
+            "shrink-0"
+        ],
+        shortcut: [
+            "px-1",
+            "py-0.5",
+            "rounded-sm",
+            "font-sans",
+            "text-foreground-500",
+            "text-tiny",
+            "border-small",
+            "border-default-300",
+            "group-hover:border-current"
+        ]
+    },
+    variants: {
+        variant: {
+            solid: {
+                base: ""
+            },
+            bordered: {
+                base: "border-medium border-transparent bg-transparent"
+            },
+            light: {
+                base: "bg-transparent"
+            },
+            faded: {
+                base: [
+                    "border-small border-transparent hover:border-default data-[hover=true]:bg-default-100",
+                    "data-[selectable=true]:focus:border-default data-[selectable=true]:focus:bg-default-100"
+                ]
+            },
+            flat: {
+                base: ""
+            },
+            shadow: {
+                base: "data-[hover=true]:shadow-lg"
+            }
+        },
+        color: {
+            default: {},
+            primary: {},
+            secondary: {},
+            success: {},
+            warning: {},
+            danger: {}
+        },
+        showDivider: {
+            true: {
+                base: [
+                    "mb-1.5",
+                    "after:content-['']",
+                    "after:absolute",
+                    "after:-bottom-1",
+                    "after:left-0",
+                    "after:right-0",
+                    "after:h-divider",
+                    "after:bg-divider"
+                ]
+            },
+            false: {}
+        },
+        isDisabled: {
+            true: {
+                base: "opacity-disabled pointer-events-none"
+            }
+        },
+        disableAnimation: {
+            true: {},
+            false: {
+                base: "data-[hover=true]:transition-colors"
+            }
+        },
+        // If the child isn't a string, the truncate such as `overflow, white-space, text-overflow` css won't be extended to the child, so we remove the truncate class here
+        hasTitleTextChild: {
+            true: {
+                title: "truncate"
+            }
+        },
+        hasDescriptionTextChild: {
+            true: {
+                description: "truncate"
+            }
+        }
+    },
+    defaultVariants: {
+        variant: "solid",
+        color: "default",
+        showDivider: false
+    },
+    compoundVariants: [
+        // solid / color
+        {
+            variant: "solid",
+            color: "default",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-default",
+                    "data-[hover=true]:text-default-foreground",
+                    "data-[selectable=true]:focus:bg-default",
+                    "data-[selectable=true]:focus:text-default-foreground"
+                ]
+            }
+        },
+        {
+            variant: "solid",
+            color: "primary",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-primary data-[hover=true]:text-primary-foreground",
+                    "data-[selectable=true]:focus:bg-primary data-[selectable=true]:focus:text-primary-foreground"
+                ]
+            }
+        },
+        {
+            variant: "solid",
+            color: "secondary",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-secondary data-[hover=true]:text-secondary-foreground",
+                    "data-[selectable=true]:focus:bg-secondary data-[selectable=true]:focus:text-secondary-foreground"
+                ]
+            }
+        },
+        {
+            variant: "solid",
+            color: "success",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-success data-[hover=true]:text-success-foreground",
+                    "data-[selectable=true]:focus:bg-success data-[selectable=true]:focus:text-success-foreground"
+                ]
+            }
+        },
+        {
+            variant: "solid",
+            color: "warning",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-warning data-[hover=true]:text-warning-foreground",
+                    "data-[selectable=true]:focus:bg-warning data-[selectable=true]:focus:text-warning-foreground"
+                ]
+            }
+        },
+        {
+            variant: "solid",
+            color: "danger",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-danger data-[hover=true]:text-danger-foreground",
+                    "data-[selectable=true]:focus:bg-danger data-[selectable=true]:focus:text-danger-foreground"
+                ]
+            }
+        },
+        // shadow / color
+        {
+            variant: "shadow",
+            color: "default",
+            class: {
+                base: [
+                    "data-[hover=true]:shadow-default/50 data-[hover=true]:bg-default data-[hover=true]:text-default-foreground",
+                    "data-[selectable=true]:focus:shadow-default/50 data-[selectable=true]:focus:bg-default data-[selectable=true]:focus:text-default-foreground"
+                ]
+            }
+        },
+        {
+            variant: "shadow",
+            color: "primary",
+            class: {
+                base: [
+                    "data-[hover=true]:shadow-primary/30 data-[hover=true]:bg-primary data-[hover=true]:text-primary-foreground",
+                    "data-[selectable=true]:focus:shadow-primary/30 data-[selectable=true]:focus:bg-primary data-[selectable=true]:focus:text-primary-foreground"
+                ]
+            }
+        },
+        {
+            variant: "shadow",
+            color: "secondary",
+            class: {
+                base: [
+                    "data-[hover=true]:shadow-secondary/30 data-[hover=true]:bg-secondary data-[hover=true]:text-secondary-foreground",
+                    "data-[selectable=true]:focus:shadow-secondary/30 data-[selectable=true]:focus:bg-secondary data-[selectable=true]:focus:text-secondary-foreground"
+                ]
+            }
+        },
+        {
+            variant: "shadow",
+            color: "success",
+            class: {
+                base: [
+                    "data-[hover=true]:shadow-success/30 data-[hover=true]:bg-success data-[hover=true]:text-success-foreground",
+                    "data-[selectable=true]:focus:shadow-success/30 data-[selectable=true]:focus:bg-success data-[selectable=true]:focus:text-success-foreground"
+                ]
+            }
+        },
+        {
+            variant: "shadow",
+            color: "warning",
+            class: {
+                base: [
+                    "data-[hover=true]:shadow-warning/30 data-[hover=true]:bg-warning data-[hover=true]:text-warning-foreground",
+                    "data-[selectable=true]:focus:shadow-warning/30 data-[selectable=true]:focus:bg-warning data-[selectable=true]:focus:text-warning-foreground"
+                ]
+            }
+        },
+        {
+            variant: "shadow",
+            color: "danger",
+            class: {
+                base: [
+                    "data-[hover=true]:shadow-danger/30 data-[hover=true]:bg-danger data-[hover=true]:text-danger-foreground",
+                    "data-[selectable=true]:focus:shadow-danger/30 data-[selectable=true]:focus:bg-danger data-[selectable=true]:focus:text-danger-foreground"
+                ]
+            }
+        },
+        // bordered / color
+        {
+            variant: "bordered",
+            color: "default",
+            class: {
+                base: [
+                    "data-[hover=true]:border-default",
+                    "data-[selectable=true]:focus:border-default"
+                ]
+            }
+        },
+        {
+            variant: "bordered",
+            color: "primary",
+            class: {
+                base: [
+                    "data-[hover=true]:border-primary data-[hover=true]:text-primary",
+                    "data-[selectable=true]:focus:border-primary data-[selectable=true]:focus:text-primary"
+                ]
+            }
+        },
+        {
+            variant: "bordered",
+            color: "secondary",
+            class: {
+                base: [
+                    "data-[hover=true]:border-secondary data-[hover=true]:text-secondary",
+                    "data-[selectable=true]:focus:border-secondary data-[selectable=true]:focus:text-secondary"
+                ]
+            }
+        },
+        {
+            variant: "bordered",
+            color: "success",
+            class: {
+                base: [
+                    "data-[hover=true]:border-success data-[hover=true]:text-success",
+                    "data-[selectable=true]:focus:border-success data-[selectable=true]:focus:text-success"
+                ]
+            }
+        },
+        {
+            variant: "bordered",
+            color: "warning",
+            class: {
+                base: [
+                    "data-[hover=true]:border-warning data-[hover=true]:text-warning",
+                    "data-[selectable=true]:focus:border-warning data-[selectable=true]:focus:text-warning"
+                ]
+            }
+        },
+        {
+            variant: "bordered",
+            color: "danger",
+            class: {
+                base: [
+                    "data-[hover=true]:border-danger data-[hover=true]:text-danger",
+                    "data-[selectable=true]:focus:border-danger data-[selectable=true]:focus:text-danger"
+                ]
+            }
+        },
+        // flat / color
+        {
+            variant: "flat",
+            color: "default",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-default/40",
+                    "data-[hover=true]:text-default-foreground",
+                    "data-[selectable=true]:focus:bg-default/40",
+                    "data-[selectable=true]:focus:text-default-foreground"
+                ]
+            }
+        },
+        {
+            variant: "flat",
+            color: "primary",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-primary/20 data-[hover=true]:text-primary",
+                    "data-[selectable=true]:focus:bg-primary/20 data-[selectable=true]:focus:text-primary"
+                ]
+            }
+        },
+        {
+            variant: "flat",
+            color: "secondary",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-secondary/20 data-[hover=true]:text-secondary",
+                    "data-[selectable=true]:focus:bg-secondary/20 data-[selectable=true]:focus:text-secondary"
+                ]
+            }
+        },
+        {
+            variant: "flat",
+            color: "success",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-success/20 data-[hover=true]:text-success",
+                    "data-[selectable=true]:focus:bg-success/20 data-[selectable=true]:focus:text-success"
+                ]
+            }
+        },
+        {
+            variant: "flat",
+            color: "warning",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-warning/20 data-[hover=true]:text-warning",
+                    "data-[selectable=true]:focus:bg-warning/20 data-[selectable=true]:focus:text-warning"
+                ]
+            }
+        },
+        {
+            variant: "flat",
+            color: "danger",
+            class: {
+                base: [
+                    "data-[hover=true]:bg-danger/20 data-[hover=true]:text-danger",
+                    "data-[selectable=true]:focus:bg-danger/20 data-[selectable=true]:focus:text-danger"
+                ]
+            }
+        },
+        // faded / color
+        {
+            variant: "faded",
+            color: "default",
+            class: {
+                base: [
+                    "data-[hover=true]:text-default-foreground",
+                    "data-[selectable=true]:focus:text-default-foreground"
+                ]
+            }
+        },
+        {
+            variant: "faded",
+            color: "primary",
+            class: {
+                base: [
+                    "data-[hover=true]:text-primary",
+                    "data-[selectable=true]:focus:text-primary"
+                ]
+            }
+        },
+        {
+            variant: "faded",
+            color: "secondary",
+            class: {
+                base: [
+                    "data-[hover=true]:text-secondary",
+                    "data-[selectable=true]:focus:text-secondary"
+                ]
+            }
+        },
+        {
+            variant: "faded",
+            color: "success",
+            class: {
+                base: [
+                    "data-[hover=true]:text-success",
+                    "data-[selectable=true]:focus:text-success"
+                ]
+            }
+        },
+        {
+            variant: "faded",
+            color: "warning",
+            class: {
+                base: [
+                    "data-[hover=true]:text-warning",
+                    "data-[selectable=true]:focus:text-warning"
+                ]
+            }
+        },
+        {
+            variant: "faded",
+            color: "danger",
+            class: {
+                base: [
+                    "data-[hover=true]:text-danger",
+                    "data-[selectable=true]:focus:text-danger"
+                ]
+            }
+        },
+        // light / color
+        {
+            variant: "light",
+            color: "default",
+            class: {
+                base: [
+                    "data-[hover=true]:text-default-500",
+                    "data-[selectable=true]:focus:text-default-500"
+                ]
+            }
+        },
+        {
+            variant: "light",
+            color: "primary",
+            class: {
+                base: [
+                    "data-[hover=true]:text-primary",
+                    "data-[selectable=true]:focus:text-primary"
+                ]
+            }
+        },
+        {
+            variant: "light",
+            color: "secondary",
+            class: {
+                base: [
+                    "data-[hover=true]:text-secondary",
+                    "data-[selectable=true]:focus:text-secondary"
+                ]
+            }
+        },
+        {
+            variant: "light",
+            color: "success",
+            class: {
+                base: [
+                    "data-[hover=true]:text-success",
+                    "data-[selectable=true]:focus:text-success"
+                ]
+            }
+        },
+        {
+            variant: "light",
+            color: "warning",
+            class: {
+                base: [
+                    "data-[hover=true]:text-warning",
+                    "data-[selectable=true]:focus:text-warning"
+                ]
+            }
+        },
+        {
+            variant: "light",
+            color: "danger",
+            class: {
+                base: [
+                    "data-[hover=true]:text-danger",
+                    "data-[selectable=true]:focus:text-danger"
+                ]
+            }
+        }
+    ]
+});
+var menuSection = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: "relative mb-2",
+        heading: "pl-1 text-tiny text-foreground-500",
+        group: "data-[has-title=true]:pt-1",
+        divider: "mt-2"
+    }
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-O5X46N53.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "divider",
+    ()=>divider
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+;
+// src/components/divider.ts
+var divider = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    base: "shrink-0 bg-divider border-none",
+    variants: {
+        orientation: {
+            horizontal: "w-full h-divider",
+            vertical: "h-full w-divider"
+        }
+    },
+    defaultVariants: {
+        orientation: "horizontal"
+    }
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-CT4RPJWF.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/utils/merge-classes.ts
+__turbopack_context__.s([
+    "mergeClasses",
+    ()=>mergeClasses
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+;
+var mergeClasses = (itemClasses, itemPropsClasses)=>{
+    if (!itemClasses && !itemPropsClasses) return {};
+    const keys = /* @__PURE__ */ new Set([
+        ...Object.keys(itemClasses || {}),
+        ...Object.keys(itemPropsClasses || {})
+    ]);
+    return Array.from(keys).reduce((acc, key)=>({
+            ...acc,
+            [key]: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(itemClasses == null ? void 0 : itemClasses[key], itemPropsClasses == null ? void 0 : itemPropsClasses[key])
+        }), {});
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-ZQGNWTBN.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "button",
+    ()=>button,
+    "buttonGroup",
+    ()=>buttonGroup
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-GQT3YUX3.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-JGY6VQQQ.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+// src/components/button.ts
+var button = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    base: [
+        "z-0",
+        "group",
+        "relative",
+        "inline-flex",
+        "items-center",
+        "justify-center",
+        "box-border",
+        "appearance-none",
+        "outline-solid outline-transparent",
+        "select-none",
+        "whitespace-nowrap",
+        "min-w-max",
+        "font-normal",
+        "subpixel-antialiased",
+        "overflow-hidden",
+        "tap-highlight-transparent",
+        "transform-gpu data-[pressed=true]:scale-[0.97]",
+        "cursor-pointer",
+        // focus ring
+        ...__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataFocusVisibleClasses"]
+    ],
+    variants: {
+        variant: {
+            solid: "",
+            bordered: "border-medium bg-transparent",
+            light: "bg-transparent",
+            flat: "",
+            faded: "border-medium",
+            shadow: "",
+            ghost: "border-medium bg-transparent"
+        },
+        size: {
+            sm: "px-3 min-w-16 h-8 text-tiny gap-2 rounded-small",
+            md: "px-4 min-w-20 h-10 text-small gap-2 rounded-medium",
+            lg: "px-6 min-w-24 h-12 text-medium gap-3 rounded-large"
+        },
+        color: {
+            default: "",
+            primary: "",
+            secondary: "",
+            success: "",
+            warning: "",
+            danger: ""
+        },
+        radius: {
+            none: "rounded-none",
+            sm: "rounded-small",
+            md: "rounded-medium",
+            lg: "rounded-large",
+            full: "rounded-full"
+        },
+        fullWidth: {
+            true: "w-full"
+        },
+        isDisabled: {
+            true: "opacity-disabled pointer-events-none"
+        },
+        isInGroup: {
+            true: "[&:not(:first-child):not(:last-child)]:rounded-none"
+        },
+        isIconOnly: {
+            true: "px-0 !gap-0",
+            false: "[&>svg]:max-w-[theme(spacing.8)]"
+        },
+        disableAnimation: {
+            true: "!transition-none data-[pressed=true]:scale-100",
+            false: "transition-transform-colors-opacity motion-reduce:transition-none"
+        }
+    },
+    defaultVariants: {
+        size: "md",
+        variant: "solid",
+        color: "default",
+        fullWidth: false,
+        isDisabled: false,
+        isInGroup: false
+    },
+    compoundVariants: [
+        // solid / color
+        {
+            variant: "solid",
+            color: "default",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.default
+        },
+        {
+            variant: "solid",
+            color: "primary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.primary
+        },
+        {
+            variant: "solid",
+            color: "secondary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.secondary
+        },
+        {
+            variant: "solid",
+            color: "success",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.success
+        },
+        {
+            variant: "solid",
+            color: "warning",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.warning
+        },
+        {
+            variant: "solid",
+            color: "danger",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].solid.danger
+        },
+        // shadow / color
+        {
+            variant: "shadow",
+            color: "default",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].shadow.default
+        },
+        {
+            variant: "shadow",
+            color: "primary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].shadow.primary
+        },
+        {
+            variant: "shadow",
+            color: "secondary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].shadow.secondary
+        },
+        {
+            variant: "shadow",
+            color: "success",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].shadow.success
+        },
+        {
+            variant: "shadow",
+            color: "warning",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].shadow.warning
+        },
+        {
+            variant: "shadow",
+            color: "danger",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].shadow.danger
+        },
+        // bordered / color
+        {
+            variant: "bordered",
+            color: "default",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].bordered.default
+        },
+        {
+            variant: "bordered",
+            color: "primary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].bordered.primary
+        },
+        {
+            variant: "bordered",
+            color: "secondary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].bordered.secondary
+        },
+        {
+            variant: "bordered",
+            color: "success",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].bordered.success
+        },
+        {
+            variant: "bordered",
+            color: "warning",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].bordered.warning
+        },
+        {
+            variant: "bordered",
+            color: "danger",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].bordered.danger
+        },
+        // flat / color
+        {
+            variant: "flat",
+            color: "default",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].flat.default
+        },
+        {
+            variant: "flat",
+            color: "primary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].flat.primary
+        },
+        {
+            variant: "flat",
+            color: "secondary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].flat.secondary
+        },
+        {
+            variant: "flat",
+            color: "success",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].flat.success
+        },
+        {
+            variant: "flat",
+            color: "warning",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].flat.warning
+        },
+        {
+            variant: "flat",
+            color: "danger",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].flat.danger
+        },
+        // faded / color
+        {
+            variant: "faded",
+            color: "default",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].faded.default
+        },
+        {
+            variant: "faded",
+            color: "primary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].faded.primary
+        },
+        {
+            variant: "faded",
+            color: "secondary",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].faded.secondary
+        },
+        {
+            variant: "faded",
+            color: "success",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].faded.success
+        },
+        {
+            variant: "faded",
+            color: "warning",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].faded.warning
+        },
+        {
+            variant: "faded",
+            color: "danger",
+            class: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].faded.danger
+        },
+        // light / color
+        {
+            variant: "light",
+            color: "default",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].light.default,
+                "data-[hover=true]:bg-default/40"
+            ]
+        },
+        {
+            variant: "light",
+            color: "primary",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].light.primary,
+                "data-[hover=true]:bg-primary/20"
+            ]
+        },
+        {
+            variant: "light",
+            color: "secondary",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].light.secondary,
+                "data-[hover=true]:bg-secondary/20"
+            ]
+        },
+        {
+            variant: "light",
+            color: "success",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].light.success,
+                "data-[hover=true]:bg-success/20"
+            ]
+        },
+        {
+            variant: "light",
+            color: "warning",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].light.warning,
+                "data-[hover=true]:bg-warning/20"
+            ]
+        },
+        {
+            variant: "light",
+            color: "danger",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].light.danger,
+                "data-[hover=true]:bg-danger/20"
+            ]
+        },
+        // ghost / color
+        {
+            variant: "ghost",
+            color: "default",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].ghost.default,
+                "data-[hover=true]:!bg-default"
+            ]
+        },
+        {
+            variant: "ghost",
+            color: "primary",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].ghost.primary,
+                "data-[hover=true]:!bg-primary data-[hover=true]:!text-primary-foreground"
+            ]
+        },
+        {
+            variant: "ghost",
+            color: "secondary",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].ghost.secondary,
+                "data-[hover=true]:!bg-secondary data-[hover=true]:!text-secondary-foreground"
+            ]
+        },
+        {
+            variant: "ghost",
+            color: "success",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].ghost.success,
+                "data-[hover=true]:!bg-success data-[hover=true]:!text-success-foreground"
+            ]
+        },
+        {
+            variant: "ghost",
+            color: "warning",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].ghost.warning,
+                "data-[hover=true]:!bg-warning data-[hover=true]:!text-warning-foreground"
+            ]
+        },
+        {
+            variant: "ghost",
+            color: "danger",
+            class: [
+                __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$GQT3YUX3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["colorVariants"].ghost.danger,
+                "data-[hover=true]:!bg-danger data-[hover=true]:!text-danger-foreground"
+            ]
+        },
+        // isInGroup / radius / size <-- radius not provided
+        {
+            isInGroup: true,
+            class: "rounded-none first:rounded-s-medium last:rounded-e-medium"
+        },
+        {
+            isInGroup: true,
+            size: "sm",
+            class: "rounded-none first:rounded-s-small last:rounded-e-small"
+        },
+        {
+            isInGroup: true,
+            size: "md",
+            class: "rounded-none first:rounded-s-medium last:rounded-e-medium"
+        },
+        {
+            isInGroup: true,
+            size: "lg",
+            class: "rounded-none first:rounded-s-large last:rounded-e-large"
+        },
+        {
+            isInGroup: true,
+            isRounded: true,
+            class: "rounded-none first:rounded-s-full last:rounded-e-full"
+        },
+        // isInGroup / radius <-- radius provided
+        {
+            isInGroup: true,
+            radius: "none",
+            class: "rounded-none first:rounded-s-none last:rounded-e-none"
+        },
+        {
+            isInGroup: true,
+            radius: "sm",
+            class: "rounded-none first:rounded-s-small last:rounded-e-small"
+        },
+        {
+            isInGroup: true,
+            radius: "md",
+            class: "rounded-none first:rounded-s-medium last:rounded-e-medium"
+        },
+        {
+            isInGroup: true,
+            radius: "lg",
+            class: "rounded-none first:rounded-s-large last:rounded-e-large"
+        },
+        {
+            isInGroup: true,
+            radius: "full",
+            class: "rounded-none first:rounded-s-full last:rounded-e-full"
+        },
+        // isInGroup / bordered / ghost
+        {
+            isInGroup: true,
+            variant: [
+                "ghost",
+                "bordered"
+            ],
+            color: "default",
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["collapseAdjacentVariantBorders"].default
+        },
+        {
+            isInGroup: true,
+            variant: [
+                "ghost",
+                "bordered"
+            ],
+            color: "primary",
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["collapseAdjacentVariantBorders"].primary
+        },
+        {
+            isInGroup: true,
+            variant: [
+                "ghost",
+                "bordered"
+            ],
+            color: "secondary",
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["collapseAdjacentVariantBorders"].secondary
+        },
+        {
+            isInGroup: true,
+            variant: [
+                "ghost",
+                "bordered"
+            ],
+            color: "success",
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["collapseAdjacentVariantBorders"].success
+        },
+        {
+            isInGroup: true,
+            variant: [
+                "ghost",
+                "bordered"
+            ],
+            color: "warning",
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["collapseAdjacentVariantBorders"].warning
+        },
+        {
+            isInGroup: true,
+            variant: [
+                "ghost",
+                "bordered"
+            ],
+            color: "danger",
+            className: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$JGY6VQQQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["collapseAdjacentVariantBorders"].danger
+        },
+        {
+            isIconOnly: true,
+            size: "sm",
+            class: "min-w-8 w-8 h-8"
+        },
+        {
+            isIconOnly: true,
+            size: "md",
+            class: "min-w-10 w-10 h-10"
+        },
+        {
+            isIconOnly: true,
+            size: "lg",
+            class: "min-w-12 w-12 h-12"
+        },
+        // variant / hover
+        {
+            variant: [
+                "solid",
+                "faded",
+                "flat",
+                "bordered",
+                "shadow"
+            ],
+            class: "data-[hover=true]:opacity-hover"
+        }
+    ]
+});
+var buttonGroup = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    base: "inline-flex items-center justify-center h-auto",
+    variants: {
+        fullWidth: {
+            true: "w-full"
+        }
+    },
+    defaultVariants: {
+        fullWidth: false
+    }
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-SCJBZBCG.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "spinner",
+    ()=>spinner
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-TX3FPB7D.mjs [app-ssr] (ecmascript)");
+;
+// src/components/spinner.ts
+var spinner = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$TX3FPB7D$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["tv"])({
+    slots: {
+        base: "relative inline-flex flex-col gap-2 items-center justify-center",
+        wrapper: "relative flex",
+        label: "text-foreground dark:text-foreground-dark font-regular",
+        circle1: "absolute w-full h-full rounded-full",
+        circle2: "absolute w-full h-full rounded-full",
+        dots: "relative rounded-full mx-auto",
+        spinnerBars: [
+            "absolute",
+            "animate-fade-out",
+            "rounded-full",
+            "w-[25%]",
+            "h-[8%]",
+            "left-[calc(37.5%)]",
+            "top-[calc(46%)]",
+            "spinner-bar-animation"
+        ]
+    },
+    variants: {
+        size: {
+            sm: {
+                wrapper: "w-5 h-5",
+                circle1: "border-2",
+                circle2: "border-2",
+                dots: "size-1",
+                label: "text-small"
+            },
+            md: {
+                wrapper: "w-8 h-8",
+                circle1: "border-3",
+                circle2: "border-3",
+                dots: "size-1.5",
+                label: "text-medium"
+            },
+            lg: {
+                wrapper: "w-10 h-10",
+                circle1: "border-3",
+                circle2: "border-3",
+                dots: "size-2",
+                label: "text-large"
+            }
+        },
+        color: {
+            current: {
+                circle1: "border-b-current",
+                circle2: "border-b-current",
+                dots: "bg-current",
+                spinnerBars: "bg-current"
+            },
+            white: {
+                circle1: "border-b-white",
+                circle2: "border-b-white",
+                dots: "bg-white",
+                spinnerBars: "bg-white"
+            },
+            default: {
+                circle1: "border-b-default",
+                circle2: "border-b-default",
+                dots: "bg-default",
+                spinnerBars: "bg-default"
+            },
+            primary: {
+                circle1: "border-b-primary",
+                circle2: "border-b-primary",
+                dots: "bg-primary",
+                spinnerBars: "bg-primary"
+            },
+            secondary: {
+                circle1: "border-b-secondary",
+                circle2: "border-b-secondary",
+                dots: "bg-secondary",
+                spinnerBars: "bg-secondary"
+            },
+            success: {
+                circle1: "border-b-success",
+                circle2: "border-b-success",
+                dots: "bg-success",
+                spinnerBars: "bg-success"
+            },
+            warning: {
+                circle1: "border-b-warning",
+                circle2: "border-b-warning",
+                dots: "bg-warning",
+                spinnerBars: "bg-warning"
+            },
+            danger: {
+                circle1: "border-b-danger",
+                circle2: "border-b-danger",
+                dots: "bg-danger",
+                spinnerBars: "bg-danger"
+            }
+        },
+        labelColor: {
+            foreground: {
+                label: "text-foreground"
+            },
+            primary: {
+                label: "text-primary"
+            },
+            secondary: {
+                label: "text-secondary"
+            },
+            success: {
+                label: "text-success"
+            },
+            warning: {
+                label: "text-warning"
+            },
+            danger: {
+                label: "text-danger"
+            }
+        },
+        variant: {
+            default: {
+                circle1: [
+                    "animate-spinner-ease-spin",
+                    "border-solid",
+                    "border-t-transparent",
+                    "border-l-transparent",
+                    "border-r-transparent"
+                ],
+                circle2: [
+                    "opacity-75",
+                    "animate-spinner-linear-spin",
+                    "border-dotted",
+                    "border-t-transparent",
+                    "border-l-transparent",
+                    "border-r-transparent"
+                ]
+            },
+            gradient: {
+                circle1: [
+                    "border-0",
+                    "bg-gradient-to-b",
+                    "from-transparent",
+                    "via-transparent",
+                    "to-primary",
+                    "animate-spinner-linear-spin",
+                    "[animation-duration:1s]",
+                    "[-webkit-mask:radial-gradient(closest-side,rgba(0,0,0,0.0)calc(100%-3px),rgba(0,0,0,1)calc(100%-3px))]"
+                ],
+                circle2: [
+                    "hidden"
+                ]
+            },
+            wave: {
+                wrapper: "translate-y-3/4",
+                dots: [
+                    "animate-sway",
+                    "spinner-dot-animation"
+                ]
+            },
+            dots: {
+                wrapper: "translate-y-2/4",
+                dots: [
+                    "animate-blink",
+                    "spinner-dot-blink-animation"
+                ]
+            },
+            spinner: {},
+            simple: {
+                wrapper: "text-foreground h-5 w-5 animate-spin",
+                circle1: "opacity-25",
+                circle2: "opacity-75"
+            }
+        }
+    },
+    defaultVariants: {
+        size: "md",
+        color: "primary",
+        labelColor: "foreground",
+        variant: "default"
+    },
+    compoundVariants: [
+        {
+            variant: "gradient",
+            color: "current",
+            class: {
+                circle1: "to-current"
+            }
+        },
+        {
+            variant: "gradient",
+            color: "white",
+            class: {
+                circle1: "to-white"
+            }
+        },
+        {
+            variant: "gradient",
+            color: "default",
+            class: {
+                circle1: "to-default"
+            }
+        },
+        {
+            variant: "gradient",
+            color: "primary",
+            class: {
+                circle1: "to-primary"
+            }
+        },
+        {
+            variant: "gradient",
+            color: "secondary",
+            class: {
+                circle1: "to-secondary"
+            }
+        },
+        {
+            variant: "gradient",
+            color: "success",
+            class: {
+                circle1: "to-success"
+            }
+        },
+        {
+            variant: "gradient",
+            color: "warning",
+            class: {
+                circle1: "to-warning"
+            }
+        },
+        {
+            variant: "gradient",
+            color: "danger",
+            class: {
+                circle1: "to-danger"
+            }
+        },
+        {
+            variant: "wave",
+            size: "sm",
+            class: {
+                wrapper: "w-5 h-5"
+            }
+        },
+        {
+            variant: "wave",
+            size: "md",
+            class: {
+                wrapper: "w-8 h-8"
+            }
+        },
+        {
+            variant: "wave",
+            size: "lg",
+            class: {
+                wrapper: "w-12 h-12"
+            }
+        },
+        {
+            variant: "dots",
+            size: "sm",
+            class: {
+                wrapper: "w-5 h-5"
+            }
+        },
+        {
+            variant: "dots",
+            size: "md",
+            class: {
+                wrapper: "w-8 h-8"
+            }
+        },
+        {
+            variant: "dots",
+            size: "lg",
+            class: {
+                wrapper: "w-12 h-12"
+            }
+        },
+        // Simple variants
+        // Size
+        {
+            variant: "simple",
+            size: "sm",
+            class: {
+                wrapper: "w-5 h-5"
+            }
+        },
+        {
+            variant: "simple",
+            size: "md",
+            class: {
+                wrapper: "w-8 h-8"
+            }
+        },
+        {
+            variant: "simple",
+            size: "lg",
+            class: {
+                wrapper: "w-12 h-12"
+            }
+        },
+        // Color
+        {
+            variant: "simple",
+            color: "current",
+            class: {
+                wrapper: "text-current"
+            }
+        },
+        {
+            variant: "simple",
+            color: "white",
+            class: {
+                wrapper: "text-white"
+            }
+        },
+        {
+            variant: "simple",
+            color: "default",
+            class: {
+                wrapper: "text-default"
+            }
+        },
+        {
+            variant: "simple",
+            color: "primary",
+            class: {
+                wrapper: "text-primary"
+            }
+        },
+        {
+            variant: "simple",
+            color: "secondary",
+            class: {
+                wrapper: "text-secondary"
+            }
+        },
+        {
+            variant: "simple",
+            color: "success",
+            class: {
+                wrapper: "text-success"
+            }
+        },
+        {
+            variant: "simple",
+            color: "warning",
+            class: {
+                wrapper: "text-warning"
+            }
+        },
+        {
+            variant: "simple",
+            color: "danger",
+            class: {
+                wrapper: "text-danger"
+            }
+        }
+    ]
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/use-scroll-position/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/index.ts
+__turbopack_context__.s([
+    "useScrollPosition",
+    ()=>useScrollPosition
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+var isBrowser = ("TURBOPACK compile-time value", "undefined") !== "undefined";
+function getScrollPosition(element) {
+    if ("TURBOPACK compile-time truthy", 1) return {
+        x: 0,
+        y: 0
+    };
+    //TURBOPACK unreachable
+    ;
+}
+var useScrollPosition = (props)=>{
+    const { elementRef, delay = 30, callback, isEnabled } = props;
+    const position = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(isEnabled ? getScrollPosition(elementRef == null ? void 0 : elementRef.current) : {
+        x: 0,
+        y: 0
+    });
+    const throttleTimeout = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const handler = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        const currPos = getScrollPosition(elementRef == null ? void 0 : elementRef.current);
+        if (typeof callback === "function") {
+            callback({
+                prevPos: position.current,
+                currPos
+            });
+        }
+        position.current = currPos;
+        throttleTimeout.current = null;
+    }, [
+        callback,
+        elementRef
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (!isEnabled) return;
+        const handleScroll = ()=>{
+            if (delay) {
+                if (throttleTimeout.current) {
+                    clearTimeout(throttleTimeout.current);
+                }
+                throttleTimeout.current = setTimeout(handler, delay);
+            } else {
+                handler();
+            }
+        };
+        const target = (elementRef == null ? void 0 : elementRef.current) || window;
+        target.addEventListener("scroll", handleScroll);
+        return ()=>{
+            target.removeEventListener("scroll", handleScroll);
+            if (throttleTimeout.current) {
+                clearTimeout(throttleTimeout.current);
+                throttleTimeout.current = null;
+            }
+        };
+    }, [
+        elementRef == null ? void 0 : elementRef.current,
+        delay,
+        handler,
+        isEnabled
+    ]);
+    return position.current;
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/use-resize/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/index.ts
+__turbopack_context__.s([
+    "useResize",
+    ()=>useResize,
+    "useResizeObserver",
+    ()=>useResizeObserver
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+function useResize(callback, immediatelyInvoke = true) {
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const fn = ()=>callback();
+        if (immediatelyInvoke) {
+            fn();
+        }
+        window.addEventListener("resize", fn);
+        return ()=>window.removeEventListener("resize", fn);
+    }, []);
+}
+function hasResizeObserver() {
+    return typeof window.ResizeObserver !== "undefined";
+}
+function useResizeObserver(options) {
+    const { ref, box, onResize } = options;
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        let element = ref == null ? void 0 : ref.current;
+        if (!element) {
+            return;
+        }
+        if (!hasResizeObserver()) {
+            window.addEventListener("resize", onResize, false);
+            return ()=>{
+                window.removeEventListener("resize", onResize, false);
+            };
+        } else {
+            const resizeObserverInstance = new window.ResizeObserver((entries)=>{
+                if (!entries.length) {
+                    return;
+                }
+                onResize();
+            });
+            resizeObserverInstance.observe(element, {
+                box
+            });
+            return ()=>{
+                if (element) {
+                    resizeObserverInstance.unobserve(element);
+                }
+            };
+        }
+    }, [
+        onResize,
+        ref,
+        box
+    ]);
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-WR7VNGRW.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/children.ts
+__turbopack_context__.s([
+    "getValidChildren",
+    ()=>getValidChildren,
+    "pickChildren",
+    ()=>pickChildren
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+function getValidChildren(children) {
+    return __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Children"].toArray(children).filter((child)=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isValidElement"])(child));
+}
+var pickChildren = (children, targetChild)=>{
+    var _a;
+    let target = [];
+    const withoutTargetChildren = (_a = __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Children"].map(children, (item)=>{
+        if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isValidElement"])(item)) return item;
+        if (item.type === targetChild) {
+            target.push(item);
+            return null;
+        }
+        return item;
+    })) == null ? void 0 : _a.filter(Boolean);
+    const targetChildren = target.length >= 0 ? target : void 0;
+    return [
+        withoutTargetChildren,
+        targetChildren
+    ];
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RFWDHYLZ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/dom-props.ts
+__turbopack_context__.s([
+    "DOMEventNames",
+    ()=>DOMEventNames,
+    "DOMPropNames",
+    ()=>DOMPropNames
+]);
+var DOMPropNames = /* @__PURE__ */ new Set([
+    "id",
+    "type",
+    "style",
+    "title",
+    "role",
+    "tabIndex",
+    "htmlFor",
+    "width",
+    "height",
+    "abbr",
+    "accept",
+    "acceptCharset",
+    "accessKey",
+    "action",
+    "allowFullScreen",
+    "allowTransparency",
+    "alt",
+    "async",
+    "autoComplete",
+    "autoFocus",
+    "autoPlay",
+    "cellPadding",
+    "cellSpacing",
+    "challenge",
+    "charset",
+    "checked",
+    "cite",
+    "class",
+    "className",
+    "cols",
+    "colSpan",
+    "command",
+    "content",
+    "contentEditable",
+    "contextMenu",
+    "controls",
+    "coords",
+    "crossOrigin",
+    "data",
+    "dateTime",
+    "default",
+    "defer",
+    "dir",
+    "disabled",
+    "download",
+    "draggable",
+    "dropzone",
+    "encType",
+    "enterKeyHint",
+    "for",
+    "form",
+    "formAction",
+    "formEncType",
+    "formMethod",
+    "formNoValidate",
+    "formTarget",
+    "frameBorder",
+    "headers",
+    "hidden",
+    "high",
+    "href",
+    "hrefLang",
+    "httpEquiv",
+    "icon",
+    "inputMode",
+    "isMap",
+    "itemId",
+    "itemProp",
+    "itemRef",
+    "itemScope",
+    "itemType",
+    "kind",
+    "label",
+    "lang",
+    "list",
+    "loop",
+    "manifest",
+    "max",
+    "maxLength",
+    "media",
+    "mediaGroup",
+    "method",
+    "min",
+    "minLength",
+    "multiple",
+    "muted",
+    "name",
+    "noValidate",
+    "open",
+    "optimum",
+    "pattern",
+    "ping",
+    "placeholder",
+    "poster",
+    "preload",
+    "radioGroup",
+    "referrerPolicy",
+    "readOnly",
+    "rel",
+    "required",
+    "rows",
+    "rowSpan",
+    "sandbox",
+    "scope",
+    "scoped",
+    "scrolling",
+    "seamless",
+    "selected",
+    "shape",
+    "size",
+    "sizes",
+    "slot",
+    "sortable",
+    "span",
+    "spellCheck",
+    "src",
+    "srcDoc",
+    "srcSet",
+    "start",
+    "step",
+    "target",
+    "translate",
+    "typeMustMatch",
+    "useMap",
+    "value",
+    "wmode",
+    "wrap"
+]);
+var DOMEventNames = /* @__PURE__ */ new Set([
+    "onCopy",
+    "onCut",
+    "onPaste",
+    "onLoad",
+    "onError",
+    "onWheel",
+    "onScroll",
+    "onCompositionEnd",
+    "onCompositionStart",
+    "onCompositionUpdate",
+    "onKeyDown",
+    "onKeyPress",
+    "onKeyUp",
+    "onFocus",
+    "onBlur",
+    "onChange",
+    "onInput",
+    "onSubmit",
+    "onClick",
+    "onContextMenu",
+    "onDoubleClick",
+    "onDrag",
+    "onDragEnd",
+    "onDragEnter",
+    "onDragExit",
+    "onDragLeave",
+    "onDragOver",
+    "onDragStart",
+    "onDrop",
+    "onMouseDown",
+    "onMouseEnter",
+    "onMouseLeave",
+    "onMouseMove",
+    "onMouseOut",
+    "onMouseOver",
+    "onMouseUp",
+    "onPointerDown",
+    "onPointerEnter",
+    "onPointerLeave",
+    "onPointerUp",
+    "onSelect",
+    "onTouchCancel",
+    "onTouchEnd",
+    "onTouchMove",
+    "onTouchStart",
+    "onAnimationStart",
+    "onAnimationEnd",
+    "onAnimationIteration",
+    "onTransitionEnd"
+]);
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RJKRL3AU.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "filterDOMProps",
+    ()=>filterDOMProps
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RFWDHYLZ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RFWDHYLZ.mjs [app-ssr] (ecmascript)");
+;
+// src/filter-dom-props.ts
+var propRe = /^(data-.*)$/;
+var ariaRe = /^(aria-.*)$/;
+var funcRe = /^(on[A-Z].*)$/;
+function filterDOMProps(props, opts = {}) {
+    let { labelable = true, enabled = true, propNames, omitPropNames, omitEventNames, omitDataProps, omitEventProps } = opts;
+    let filteredProps = {};
+    if (!enabled) {
+        return props;
+    }
+    for(const prop in props){
+        if (omitPropNames == null ? void 0 : omitPropNames.has(prop)) {
+            continue;
+        }
+        if ((omitEventNames == null ? void 0 : omitEventNames.has(prop)) && funcRe.test(prop)) {
+            continue;
+        }
+        if (funcRe.test(prop) && !__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RFWDHYLZ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DOMEventNames"].has(prop)) {
+            continue;
+        }
+        if (omitDataProps && propRe.test(prop)) {
+            continue;
+        }
+        if (omitEventProps && funcRe.test(prop)) {
+            continue;
+        }
+        if (Object.prototype.hasOwnProperty.call(props, prop) && (__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RFWDHYLZ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DOMPropNames"].has(prop) || labelable && ariaRe.test(prop) || (propNames == null ? void 0 : propNames.has(prop)) || propRe.test(prop)) || funcRe.test(prop)) {
+            filteredProps[prop] = props[prop];
+        }
+    }
+    return filteredProps;
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-25E6VDTZ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "AvatarIcon",
+    ()=>AvatarIcon
+]);
+// src/avatar-icon.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+var AvatarIcon = ()=>/* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("svg", {
+        "aria-hidden": "true",
+        fill: "none",
+        height: "80%",
+        role: "presentation",
+        viewBox: "0 0 24 24",
+        width: "80%",
+        children: [
+            /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("path", {
+                d: "M12 2C9.38 2 7.25 4.13 7.25 6.75C7.25 9.32 9.26 11.4 11.88 11.49C11.96 11.48 12.04 11.48 12.1 11.49C12.12 11.49 12.13 11.49 12.15 11.49C12.16 11.49 12.16 11.49 12.17 11.49C14.73 11.4 16.74 9.32 16.75 6.75C16.75 4.13 14.62 2 12 2Z",
+                fill: "currentColor"
+            }),
+            /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("path", {
+                d: "M17.0809 14.1489C14.2909 12.2889 9.74094 12.2889 6.93094 14.1489C5.66094 14.9989 4.96094 16.1489 4.96094 17.3789C4.96094 18.6089 5.66094 19.7489 6.92094 20.5889C8.32094 21.5289 10.1609 21.9989 12.0009 21.9989C13.8409 21.9989 15.6809 21.5289 17.0809 20.5889C18.3409 19.7389 19.0409 18.5989 19.0409 17.3589C19.0309 16.1289 18.3409 14.9889 17.0809 14.1489Z",
+                fill: "currentColor"
+            })
+        ]
+    });
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-JUJ53SJZ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "AvatarGroupProvider",
+    ()=>AvatarGroupProvider,
+    "useAvatarGroupContext",
+    ()=>useAvatarGroupContext
+]);
+// src/avatar-group-context.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-3XT5V4LF.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+var [AvatarGroupProvider, useAvatarGroupContext] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])({
+    name: "AvatarGroupContext",
+    strict: false
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-VWM2HFFA.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useAvatar",
+    ()=>useAvatar
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$JUJ53SJZ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-JUJ53SJZ.mjs [app-ssr] (ecmascript)");
+// src/use-avatar.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$D2DWF4OD$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-D2DWF4OD.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RJKRL3AU.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/focus/dist/useFocusRing.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$image$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-image/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useHover$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/useHover.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+function useAvatar(originalProps = {}) {
+    var _a, _b, _c, _d, _e, _f, _g, _h;
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const groupContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$JUJ53SJZ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAvatarGroupContext"])();
+    const isInGroup = !!groupContext;
+    const { as, ref, src, name, icon, classNames, fallback, alt = name || "avatar", imgRef: imgRefProp, color = (_a = groupContext == null ? void 0 : groupContext.color) != null ? _a : "default", radius = (_b = groupContext == null ? void 0 : groupContext.radius) != null ? _b : "full", size = (_c = groupContext == null ? void 0 : groupContext.size) != null ? _c : "md", isBordered = (_d = groupContext == null ? void 0 : groupContext.isBordered) != null ? _d : false, isDisabled = (_e = groupContext == null ? void 0 : groupContext.isDisabled) != null ? _e : false, isFocusable = false, getInitials = __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["safeInitials"], ignoreFallback = false, showFallback: showFallbackProp = false, ImgComponent = "img", imgProps, className, onError, disableAnimation: disableAnimationProp, ...otherProps } = originalProps;
+    const Component = as || "span";
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const imgRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(imgRefProp);
+    const { isFocusVisible, isFocused, focusProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useFocusRing"])();
+    const { isHovered, hoverProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useHover$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useHover"])({
+        isDisabled
+    });
+    const disableAnimation = (_f = disableAnimationProp != null ? disableAnimationProp : globalContext == null ? void 0 : globalContext.disableAnimation) != null ? _f : false;
+    const isHeroImage = (_h = typeof ImgComponent === "object" && ((_g = ImgComponent == null ? void 0 : ImgComponent.displayName) == null ? void 0 : _g.includes("HeroUI"))) != null ? _h : false;
+    const imageStatus = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$image$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useImage"])({
+        src,
+        onError,
+        ignoreFallback,
+        shouldBypassImageLoad: as !== void 0 || ImgComponent !== "img" && !isHeroImage
+    });
+    const isImgLoaded = imageStatus === "loaded";
+    const shouldFilterDOMProps = !isHeroImage;
+    const showFallback = (!src || !isImgLoaded) && showFallbackProp;
+    const slots = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        var _a2;
+        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$D2DWF4OD$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["avatar"])({
+            color,
+            radius,
+            size,
+            isBordered,
+            isDisabled,
+            isInGroup,
+            disableAnimation,
+            isInGridGroup: (_a2 = groupContext == null ? void 0 : groupContext.isGrid) != null ? _a2 : false
+        });
+    }, [
+        color,
+        radius,
+        size,
+        isBordered,
+        isDisabled,
+        disableAnimation,
+        isInGroup,
+        groupContext == null ? void 0 : groupContext.isGrid
+    ]);
+    const baseStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.base, className);
+    const canBeFocused = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        return isFocusable || as === "button";
+    }, [
+        isFocusable,
+        as
+    ]);
+    const getAvatarProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props = {})=>({
+            ref: domRef,
+            tabIndex: canBeFocused ? 0 : -1,
+            "data-hover": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isHovered),
+            "data-focus": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocused),
+            "data-focus-visible": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocusVisible),
+            className: slots.base({
+                class: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(baseStyles, props == null ? void 0 : props.className)
+            }),
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(otherProps, hoverProps, canBeFocused ? focusProps : {})
+        }), [
+        canBeFocused,
+        slots,
+        baseStyles,
+        focusProps,
+        otherProps
+    ]);
+    const getImageProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props = {})=>({
+            ref: imgRef,
+            src,
+            "data-loaded": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isImgLoaded),
+            className: slots.img({
+                class: classNames == null ? void 0 : classNames.img
+            }),
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(imgProps, props, (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["filterDOMProps"])({
+                disableAnimation
+            }, {
+                enabled: shouldFilterDOMProps
+            }))
+        }), [
+        slots,
+        isImgLoaded,
+        imgProps,
+        disableAnimation,
+        src,
+        imgRef,
+        shouldFilterDOMProps
+    ]);
+    return {
+        Component,
+        ImgComponent,
+        src,
+        alt,
+        icon,
+        name,
+        imgRef,
+        slots,
+        classNames,
+        fallback,
+        isImgLoaded,
+        showFallback,
+        ignoreFallback,
+        getInitials,
+        getAvatarProps,
+        getImageProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-DPUNBZPN.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "avatar_default",
+    ()=>avatar_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$25E6VDTZ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-25E6VDTZ.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$VWM2HFFA$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-VWM2HFFA.mjs [app-ssr] (ecmascript)");
+// src/avatar.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+var Avatar = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    const { Component, ImgComponent, src, icon = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$25E6VDTZ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AvatarIcon"], {}), alt, classNames, slots, name, showFallback, fallback: fallbackComponent, getInitials, getAvatarProps, getImageProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$VWM2HFFA$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAvatar"])({
+        ...props,
+        ref
+    });
+    const fallback = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (!showFallback && src) return null;
+        if (fallbackComponent) {
+            return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("div", {
+                "aria-label": alt,
+                className: slots.fallback({
+                    class: classNames == null ? void 0 : classNames.fallback
+                }),
+                role: "img",
+                children: fallbackComponent
+            });
+        }
+        return name ? /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+            "aria-label": alt,
+            className: slots.name({
+                class: classNames == null ? void 0 : classNames.name
+            }),
+            role: "img",
+            children: getInitials(name)
+        }) : /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+            "aria-label": alt,
+            className: slots.icon({
+                class: classNames == null ? void 0 : classNames.icon
+            }),
+            role: "img",
+            children: icon
+        });
+    }, [
+        showFallback,
+        src,
+        fallbackComponent,
+        name,
+        classNames
+    ]);
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(Component, {
+        ...getAvatarProps(),
+        children: [
+            src && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(ImgComponent, {
+                ...getImageProps(),
+                alt
+            }),
+            fallback
+        ]
+    });
+});
+Avatar.displayName = "HeroUI.Avatar";
+var avatar_default = Avatar;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-DPUNBZPN.mjs [app-ssr] (ecmascript) <export avatar_default as Avatar>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Avatar",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$DPUNBZPN$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["avatar_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$avatar$2f$dist$2f$chunk$2d$DPUNBZPN$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/avatar/dist/chunk-DPUNBZPN.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/use-safe-layout-effect/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/index.ts
+__turbopack_context__.s([
+    "useSafeLayoutEffect",
+    ()=>useSafeLayoutEffect
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+var useSafeLayoutEffect = Boolean(globalThis == null ? void 0 : globalThis.document) ? __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLayoutEffect"] : __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"];
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/use-image/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/index.ts
+__turbopack_context__.s([
+    "shouldShowFallbackImage",
+    ()=>shouldShowFallbackImage,
+    "useImage",
+    ()=>useImage
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$6UBKM7F3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-6UBKM7F3.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$safe$2d$layout$2d$effect$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-safe-layout-effect/dist/index.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+function useImage(props = {}) {
+    const { onLoad, onError, ignoreFallback, src, crossOrigin, srcSet, sizes, loading, shouldBypassImageLoad = false } = props;
+    const isHydrated = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$6UBKM7F3$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useIsHydrated"])();
+    const imageRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(isHydrated ? new Image() : null);
+    const [status, setStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("pending");
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (!imageRef.current) return;
+        imageRef.current.onload = (event)=>{
+            flush();
+            setStatus("loaded");
+            onLoad == null ? void 0 : onLoad(event);
+        };
+        imageRef.current.onerror = (error)=>{
+            flush();
+            setStatus("failed");
+            onError == null ? void 0 : onError(error);
+        };
+    }, [
+        imageRef.current
+    ]);
+    const flush = ()=>{
+        if (imageRef.current) {
+            imageRef.current.onload = null;
+            imageRef.current.onerror = null;
+            imageRef.current = null;
+        }
+    };
+    const load = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        if (!src) return "pending";
+        if (ignoreFallback || shouldBypassImageLoad) return "loaded";
+        const img = new Image();
+        img.src = src;
+        if (crossOrigin) img.crossOrigin = crossOrigin;
+        if (srcSet) img.srcset = srcSet;
+        if (sizes) img.sizes = sizes;
+        if (loading) img.loading = loading;
+        imageRef.current = img;
+        if (img.complete && img.naturalWidth) {
+            return "loaded";
+        }
+        return "loading";
+    }, [
+        src,
+        crossOrigin,
+        srcSet,
+        sizes,
+        onLoad,
+        onError,
+        loading,
+        shouldBypassImageLoad
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$safe$2d$layout$2d$effect$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSafeLayoutEffect"])(()=>{
+        if (isHydrated) {
+            setStatus(load());
+        }
+    }, [
+        isHydrated,
+        load
+    ]);
+    return ignoreFallback ? "loaded" : status;
+}
+var shouldShowFallbackImage = (status, fallbackStrategy)=>status !== "loaded" && fallbackStrategy === "beforeLoadOrError" || status === "failed" && fallbackStrategy === "onError";
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-BV7BCS3N.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "DropdownProvider",
+    ()=>DropdownProvider,
+    "useDropdownContext",
+    ()=>useDropdownContext
+]);
+// src/dropdown-context.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-3XT5V4LF.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+var [DropdownProvider, useDropdownContext] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])({
+    name: "DropdownContext",
+    errorMessage: "useDropdownContext: `context` is undefined. Seems you forgot to wrap all popover components within `<Dropdown />`"
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-RLCA5XPT.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useDropdown",
+    ()=>useDropdown
+]);
+// src/use-dropdown.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$menu$2f$dist$2f$useMenuTriggerState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-stately/menu/dist/useMenuTriggerState.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenuTrigger$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/menu/dist/useMenuTrigger.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$HN25UZIQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-HN25UZIQ.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$LGMZDQT5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-LGMZDQT5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+var getMenuItem = (props, key)=>{
+    if (props) {
+        const mergedChildren = Array.isArray(props.children) ? props.children : [
+            ...(props == null ? void 0 : props.items) || []
+        ];
+        if (mergedChildren && mergedChildren.length) {
+            const item = mergedChildren.find((item2)=>{
+                if (item2 && item2.key === key) {
+                    return item2;
+                }
+            }) || {};
+            return item;
+        }
+    }
+    return null;
+};
+var getCloseOnSelect = (props, key, item)=>{
+    const mergedItem = item || getMenuItem(props, key);
+    if (mergedItem && mergedItem.props && "closeOnSelect" in mergedItem.props) {
+        return mergedItem.props.closeOnSelect;
+    }
+    return props == null ? void 0 : props.closeOnSelect;
+};
+function useDropdown(props) {
+    var _a;
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const { as, triggerRef: triggerRefProp, isOpen, defaultOpen, onOpenChange, isDisabled, type = "menu", trigger = "press", placement = "bottom", closeOnSelect = true, shouldBlockScroll = true, classNames: classNamesProp, disableAnimation = (_a = globalContext == null ? void 0 : globalContext.disableAnimation) != null ? _a : false, onClose, className, ...otherProps } = props;
+    const Component = as || "div";
+    const triggerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const menuTriggerRef = triggerRefProp || triggerRef;
+    const menuRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const popoverRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const state = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$menu$2f$dist$2f$useMenuTriggerState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMenuTriggerState"])({
+        trigger,
+        isOpen,
+        defaultOpen,
+        onOpenChange: (isOpen2)=>{
+            onOpenChange == null ? void 0 : onOpenChange(isOpen2);
+            if (!isOpen2) {
+                onClose == null ? void 0 : onClose();
+            }
+        }
+    });
+    const { menuTriggerProps, menuProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenuTrigger$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMenuTrigger"])({
+        type,
+        trigger,
+        isDisabled
+    }, state, menuTriggerRef);
+    const styles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$HN25UZIQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dropdown"])({
+            className
+        }), [
+        className
+    ]);
+    const onMenuAction = (menuCloseOnSelect)=>{
+        if (menuCloseOnSelect !== void 0 && !menuCloseOnSelect) {
+            return;
+        }
+        if (closeOnSelect) {
+            state.close();
+        }
+    };
+    const getPopoverProps = (props2 = {})=>{
+        const popoverProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(otherProps, props2);
+        return {
+            state,
+            placement,
+            ref: popoverRef,
+            disableAnimation,
+            shouldBlockScroll,
+            scrollRef: menuRef,
+            triggerRef: menuTriggerRef,
+            ...popoverProps,
+            classNames: {
+                ...classNamesProp,
+                ...props2.classNames,
+                content: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(styles, classNamesProp == null ? void 0 : classNamesProp.content, props2.className)
+            }
+        };
+    };
+    const getMenuTriggerProps = (originalProps = {})=>{
+        const { onPress, onPressStart, ...otherMenuTriggerProps } = menuTriggerProps;
+        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(otherMenuTriggerProps, {
+            isDisabled
+        }, originalProps);
+    };
+    const getMenuProps = (props2, _ref = null)=>{
+        return {
+            ref: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$LGMZDQT5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeRefs"])(_ref, menuRef),
+            menuProps,
+            closeOnSelect,
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(props2, {
+                onAction: (key, item)=>{
+                    const closeOnSelect2 = getCloseOnSelect(props2, key, item);
+                    onMenuAction(closeOnSelect2);
+                },
+                onClose: state.close
+            })
+        };
+    };
+    return {
+        Component,
+        menuRef,
+        menuProps,
+        closeOnSelect,
+        onClose: state.close,
+        autoFocus: state.focusStrategy || true,
+        disableAnimation,
+        getPopoverProps,
+        getMenuProps,
+        getMenuTriggerProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-XHRYXXZA.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "dropdown_default",
+    ()=>dropdown_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$BV7BCS3N$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-BV7BCS3N.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$RLCA5XPT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-RLCA5XPT.mjs [app-ssr] (ecmascript)");
+// src/dropdown.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$QWTMPRXH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__popover_default__as__Popover$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-QWTMPRXH.mjs [app-ssr] (ecmascript) <export popover_default as Popover>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+var Dropdown = (props)=>{
+    const { children, ...otherProps } = props;
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$RLCA5XPT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDropdown"])(otherProps);
+    const [menuTrigger, menu] = __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].Children.toArray(children);
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$BV7BCS3N$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DropdownProvider"], {
+        value: context,
+        children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$QWTMPRXH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__popover_default__as__Popover$3e$__["Popover"], {
+            ...context.getPopoverProps(),
+            children: [
+                menuTrigger,
+                menu
+            ]
+        })
+    });
+};
+Dropdown.displayName = "HeroUI.Dropdown";
+var dropdown_default = Dropdown;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-XHRYXXZA.mjs [app-ssr] (ecmascript) <export dropdown_default as Dropdown>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Dropdown",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$XHRYXXZA$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dropdown_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$XHRYXXZA$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-XHRYXXZA.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-UIQ4674R.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "dropdown_menu_default",
+    ()=>dropdown_menu_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$BV7BCS3N$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-BV7BCS3N.mjs [app-ssr] (ecmascript)");
+// src/dropdown-menu.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$Z57F4COC$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__popover_content_default__as__PopoverContent$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-Z57F4COC.mjs [app-ssr] (ecmascript) <export popover_content_default as PopoverContent>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$FocusScope$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/focus/dist/FocusScope.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$QI3I5O2R$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__menu_default__as__Menu$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-QI3I5O2R.mjs [app-ssr] (ecmascript) <export menu_default as Menu>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+var DropdownMenu = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])(function DropdownMenu2(props, ref) {
+    const { getMenuProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$BV7BCS3N$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDropdownContext"])();
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$Z57F4COC$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__popover_content_default__as__PopoverContent$3e$__["PopoverContent"], {
+        children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$FocusScope$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FocusScope"], {
+            contain: true,
+            restoreFocus: true,
+            children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$QI3I5O2R$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__menu_default__as__Menu$3e$__["Menu"], {
+                ...getMenuProps(props, ref)
+            })
+        })
+    });
+});
+var dropdown_menu_default = DropdownMenu;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-UIQ4674R.mjs [app-ssr] (ecmascript) <export dropdown_menu_default as DropdownMenu>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "DropdownMenu",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$UIQ4674R$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dropdown_menu_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$UIQ4674R$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-UIQ4674R.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-4LJ2IKXJ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "dropdown_trigger_default",
+    ()=>dropdown_trigger_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$BV7BCS3N$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-BV7BCS3N.mjs [app-ssr] (ecmascript)");
+// src/dropdown-trigger.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$6FXDB7ZT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__popover_trigger_default__as__PopoverTrigger$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-6FXDB7ZT.mjs [app-ssr] (ecmascript) <export popover_trigger_default as PopoverTrigger>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+var DropdownTrigger = (props)=>{
+    const { getMenuTriggerProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$BV7BCS3N$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDropdownContext"])();
+    const { children, ...otherProps } = props;
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$6FXDB7ZT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__popover_trigger_default__as__PopoverTrigger$3e$__["PopoverTrigger"], {
+        ...getMenuTriggerProps(otherProps),
+        children
+    });
+};
+DropdownTrigger.displayName = "HeroUI.DropdownTrigger";
+var dropdown_trigger_default = DropdownTrigger;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-4LJ2IKXJ.mjs [app-ssr] (ecmascript) <export dropdown_trigger_default as DropdownTrigger>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "DropdownTrigger",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$4LJ2IKXJ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dropdown_trigger_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$dropdown$2f$dist$2f$chunk$2d$4LJ2IKXJ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/dropdown/dist/chunk-4LJ2IKXJ.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-CGIRYUEE.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "PopoverProvider",
+    ()=>PopoverProvider,
+    "usePopoverContext",
+    ()=>usePopoverContext
+]);
+// src/popover-context.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-3XT5V4LF.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+var [PopoverProvider, usePopoverContext] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])({
+    name: "PopoverContext",
+    errorMessage: "usePopoverContext: `context` is undefined. Seems you forgot to wrap all popover components within `<Popover />`"
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-7N5ZXA6H.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useReactAriaPopover",
+    ()=>useReactAriaPopover
+]);
+// src/use-aria-popover.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$YVW4JKAM$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/aria-utils/dist/chunk-YVW4JKAM.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/aria-utils/dist/chunk-WQVQ7P2I.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$useOverlayPosition$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/overlays/dist/useOverlayPosition.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$safe$2d$layout$2d$effect$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-safe-layout-effect/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$aria$2d$overlay$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-aria-overlay/dist/index.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+function useReactAriaPopover(props, state) {
+    const { groupRef, triggerRef, popoverRef, showArrow, offset = 7, crossOffset = 0, scrollRef, shouldFlip, boundaryElement, isDismissable = true, shouldCloseOnBlur = true, shouldCloseOnScroll = true, placement: placementProp = "top", containerPadding, shouldCloseOnInteractOutside, isNonModal: isNonModalProp, isKeyboardDismissDisabled, updatePositionDeps = [], ...otherProps } = props;
+    const isNonModal = isNonModalProp != null ? isNonModalProp : true;
+    const isSubmenu = otherProps["trigger"] === "SubmenuTrigger";
+    const { overlayProps, underlayProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$aria$2d$overlay$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAriaOverlay"])({
+        isOpen: state.isOpen,
+        onClose: state.close,
+        shouldCloseOnBlur,
+        isDismissable: isDismissable || isSubmenu,
+        isKeyboardDismissDisabled,
+        shouldCloseOnInteractOutside: shouldCloseOnInteractOutside || ((el)=>{
+            var _a;
+            return !((_a = triggerRef.current) == null ? void 0 : _a.contains(el));
+        }),
+        disableOutsideEvents: !isNonModal
+    }, popoverRef);
+    const { overlayProps: positionProps, arrowProps, placement, updatePosition, triggerAnchorPoint: origin } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$useOverlayPosition$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useOverlayPosition"])({
+        ...otherProps,
+        shouldFlip,
+        crossOffset,
+        targetRef: triggerRef,
+        overlayRef: popoverRef,
+        isOpen: state.isOpen,
+        scrollRef,
+        boundaryElement,
+        containerPadding,
+        placement: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toReactAriaPlacement"])(placementProp),
+        offset: showArrow ? offset + 3 : offset,
+        onClose: isNonModal && !isSubmenu && shouldCloseOnScroll ? state.close : ()=>{}
+    });
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$safe$2d$layout$2d$effect$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSafeLayoutEffect"])(()=>{
+        if (!updatePositionDeps.length) return;
+        updatePosition();
+    }, updatePositionDeps);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        var _a, _b;
+        if (state.isOpen && popoverRef.current) {
+            if (isNonModal) {
+                return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$YVW4JKAM$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["keepVisible"])((_a = groupRef == null ? void 0 : groupRef.current) != null ? _a : popoverRef.current);
+            } else {
+                return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$YVW4JKAM$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ariaHideOutside"])([
+                    (_b = groupRef == null ? void 0 : groupRef.current) != null ? _b : popoverRef.current
+                ]);
+            }
+        }
+    }, [
+        isNonModal,
+        state.isOpen,
+        popoverRef,
+        groupRef
+    ]);
+    return {
+        popoverProps: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(overlayProps, positionProps),
+        arrowProps,
+        underlayProps,
+        placement,
+        triggerAnchorPoint: origin
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-HGFRVVZK.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "usePopover",
+    ()=>usePopover
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$7N5ZXA6H$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-7N5ZXA6H.mjs [app-ssr] (ecmascript)");
+// src/use-popover.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$overlays$2f$dist$2f$useOverlayTriggerState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-stately/overlays/dist/useOverlayTriggerState.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/focus/dist/useFocusRing.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$useOverlayTrigger$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/overlays/dist/useOverlayTrigger.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$usePreventScroll$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/overlays/dist/usePreventScroll.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/aria-utils/dist/chunk-WQVQ7P2I.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$D2FF7S3A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-D2FF7S3A.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+var DEFAULT_PLACEMENT = "top";
+function usePopover(originalProps) {
+    var _a, _b, _c;
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const [props, variantProps] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mapPropsVariants"])(originalProps, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$D2FF7S3A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["popover"].variantKeys);
+    const { as, ref, children, state: stateProp, triggerRef: triggerRefProp, scrollRef, defaultOpen, onOpenChange, isOpen: isOpenProp, isNonModal = true, shouldFlip = true, containerPadding = 12, shouldBlockScroll = false, isDismissable = true, shouldCloseOnBlur, portalContainer, updatePositionDeps, dialogProps: dialogPropsProp, placement: placementProp = DEFAULT_PLACEMENT, triggerType = "dialog", showArrow = false, offset = 7, crossOffset = 0, boundaryElement, isKeyboardDismissDisabled, shouldCloseOnInteractOutside, shouldCloseOnScroll, triggerAnchorPoint, motionProps, className, classNames, onClose, ...otherProps } = props;
+    const Component = as || "div";
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const domTriggerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const wasTriggerPressedRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(false);
+    const triggerRef = triggerRefProp || domTriggerRef;
+    const disableAnimation = (_b = (_a = originalProps.disableAnimation) != null ? _a : globalContext == null ? void 0 : globalContext.disableAnimation) != null ? _b : false;
+    const innerState = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$overlays$2f$dist$2f$useOverlayTriggerState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useOverlayTriggerState"])({
+        isOpen: isOpenProp,
+        defaultOpen,
+        onOpenChange: (isOpen)=>{
+            onOpenChange == null ? void 0 : onOpenChange(isOpen);
+            if (!isOpen) {
+                onClose == null ? void 0 : onClose();
+            }
+        }
+    });
+    const state = stateProp || innerState;
+    const { popoverProps, underlayProps, placement: ariaPlacement } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$7N5ZXA6H$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useReactAriaPopover"])({
+        triggerRef,
+        isNonModal,
+        popoverRef: domRef,
+        placement: placementProp,
+        offset,
+        scrollRef,
+        isDismissable,
+        shouldCloseOnBlur,
+        boundaryElement,
+        crossOffset,
+        shouldFlip,
+        containerPadding,
+        updatePositionDeps,
+        isKeyboardDismissDisabled,
+        shouldCloseOnScroll,
+        shouldCloseOnInteractOutside,
+        triggerAnchorPoint
+    }, state);
+    const placement = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (!ariaPlacement) {
+            return null;
+        }
+        return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getShouldUseAxisPlacement"])(ariaPlacement, placementProp) ? ariaPlacement : placementProp;
+    }, [
+        ariaPlacement,
+        placementProp
+    ]);
+    const { triggerProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$useOverlayTrigger$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useOverlayTrigger"])({
+        type: triggerType
+    }, state, triggerRef);
+    const { isFocusVisible, isFocused, focusProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useFocusRing"])();
+    const slots = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$D2FF7S3A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["popover"])({
+            ...variantProps
+        }), [
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["objectToDeps"])(variantProps)
+    ]);
+    const baseStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.base, className);
+    const anchorStyles = {
+        "--trigger-anchor-point": triggerAnchorPoint ? `${triggerAnchorPoint.x}px ${triggerAnchorPoint.y}px` : void 0
+    };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$usePreventScroll$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePreventScroll"])({
+        isDisabled: !(shouldBlockScroll && state.isOpen)
+    });
+    const getPopoverProps = (props2 = {})=>({
+            ref: domRef,
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(popoverProps, otherProps, props2),
+            style: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(popoverProps.style, otherProps.style, props2.style)
+        });
+    const getDialogProps = (props2 = {})=>({
+            // `ref` and `dialogProps` from `useDialog` are passed from props
+            // if we use `useDialog` here, dialogRef won't be focused on mount
+            "data-slot": "base",
+            "data-open": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(state.isOpen),
+            "data-focus": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocused),
+            "data-arrow": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(showArrow),
+            "data-focus-visible": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocusVisible),
+            "data-placement": ariaPlacement ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getArrowPlacement"])(ariaPlacement, placementProp) : void 0,
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(focusProps, dialogPropsProp, props2),
+            className: slots.base({
+                class: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(baseStyles)
+            }),
+            style: {
+                // this prevent the dialog to have a default outline
+                outline: "none",
+                ...anchorStyles
+            }
+        });
+    const getContentProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props2 = {})=>({
+            "data-slot": "content",
+            "data-open": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(state.isOpen),
+            "data-arrow": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(showArrow),
+            "data-placement": ariaPlacement ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getArrowPlacement"])(ariaPlacement, placementProp) : void 0,
+            className: slots.content({
+                class: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.content, props2.className)
+            })
+        }), [
+        slots,
+        state.isOpen,
+        showArrow,
+        placement,
+        placementProp,
+        classNames,
+        ariaPlacement
+    ]);
+    const onPress = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+        var _a2;
+        let pressTimer;
+        if (e.pointerType === "touch" && ((originalProps == null ? void 0 : originalProps.backdrop) === "blur" || (originalProps == null ? void 0 : originalProps.backdrop) === "opaque")) {
+            pressTimer = setTimeout(()=>{
+                wasTriggerPressedRef.current = true;
+            }, 100);
+        } else {
+            wasTriggerPressedRef.current = true;
+        }
+        (_a2 = triggerProps.onPress) == null ? void 0 : _a2.call(triggerProps, e);
+        return ()=>{
+            clearTimeout(pressTimer);
+        };
+    }, [
+        triggerProps == null ? void 0 : triggerProps.onPress
+    ]);
+    const getTriggerProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props2 = {}, _ref = null)=>{
+        const { isDisabled, ...otherProps2 } = props2;
+        return {
+            "data-slot": "trigger",
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])({
+                "aria-haspopup": "dialog"
+            }, triggerProps, otherProps2),
+            onPress,
+            isDisabled,
+            className: slots.trigger({
+                class: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.trigger, props2.className),
+                // apply isDisabled class names to make the trigger child disabled
+                // e.g. for elements like div or HeroUI elements that don't have `isDisabled` prop
+                isTriggerDisabled: isDisabled
+            }),
+            ref: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeRefs"])(_ref, triggerRef)
+        };
+    }, [
+        state,
+        triggerProps,
+        onPress,
+        triggerRef
+    ]);
+    const getBackdropProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props2 = {})=>({
+            "data-slot": "backdrop",
+            className: slots.backdrop({
+                class: classNames == null ? void 0 : classNames.backdrop
+            }),
+            onClick: (e)=>{
+                if (!wasTriggerPressedRef.current) {
+                    e.preventDefault();
+                    return;
+                }
+                state.close();
+                wasTriggerPressedRef.current = false;
+            },
+            ...underlayProps,
+            ...props2
+        }), [
+        slots,
+        state.isOpen,
+        classNames,
+        underlayProps
+    ]);
+    return {
+        state,
+        Component,
+        children,
+        classNames,
+        showArrow,
+        triggerRef,
+        placement,
+        isNonModal,
+        popoverRef: domRef,
+        portalContainer,
+        isOpen: state.isOpen,
+        onClose: state.close,
+        disableAnimation,
+        shouldBlockScroll,
+        backdrop: (_c = originalProps.backdrop) != null ? _c : "transparent",
+        motionProps,
+        getBackdropProps,
+        getPopoverProps,
+        getTriggerProps,
+        getDialogProps,
+        getContentProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-QWTMPRXH.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "popover_default",
+    ()=>popover_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$CGIRYUEE$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-CGIRYUEE.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$HGFRVVZK$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-HGFRVVZK.mjs [app-ssr] (ecmascript)");
+// src/popover.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$Overlay$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/overlays/dist/Overlay.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+var Popover = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    const { children, ...otherProps } = props;
+    const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$HGFRVVZK$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePopover"])({
+        ...otherProps,
+        ref
+    });
+    const [trigger, content] = __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Children"].toArray(children);
+    const overlay = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$Overlay$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Overlay"], {
+        portalContainer: context.portalContainer,
+        children: content
+    });
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$CGIRYUEE$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PopoverProvider"], {
+        value: context,
+        children: [
+            trigger,
+            context.disableAnimation && context.isOpen ? overlay : /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
+                children: context.isOpen ? overlay : null
+            })
+        ]
+    });
+});
+Popover.displayName = "HeroUI.Popover";
+var popover_default = Popover;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-QWTMPRXH.mjs [app-ssr] (ecmascript) <export popover_default as Popover>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Popover",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$QWTMPRXH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["popover_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$QWTMPRXH$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-QWTMPRXH.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-Z57F4COC.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "popover_content_default",
+    ()=>popover_content_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$CGIRYUEE$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-CGIRYUEE.mjs [app-ssr] (ecmascript)");
+// src/popover-content.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$DismissButton$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/overlays/dist/DismissButton.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$framer$2d$utils$2f$dist$2f$chunk$2d$736YWA4T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/framer-utils/dist/chunk-736YWA4T.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/render/components/m/proxy.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/components/LazyMotion/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/aria-utils/dist/chunk-WQVQ7P2I.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$dialog$2f$dist$2f$useDialog$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/dialog/dist/useDialog.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+var domAnimation = ()=>__turbopack_context__.A("[project]/sistema-akaedem-ms/node_modules/@heroui/dom-animation/dist/index.mjs [app-ssr] (ecmascript, async loader)").then((res)=>res.default);
+var PopoverContent = (props)=>{
+    const { as, children, className, ...otherProps } = props;
+    const { Component: OverlayComponent, placement, backdrop, motionProps, disableAnimation, getPopoverProps, getDialogProps, getBackdropProps, getContentProps, isNonModal, onClose } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$CGIRYUEE$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePopoverContext"])();
+    const dialogRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const { dialogProps: ariaDialogProps, titleProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$dialog$2f$dist$2f$useDialog$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDialog"])({}, dialogRef);
+    const dialogProps = getDialogProps({
+        ref: dialogRef,
+        ...ariaDialogProps,
+        ...otherProps
+    });
+    const Component = as || OverlayComponent || "div";
+    const content = children && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: [
+            !isNonModal && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$DismissButton$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DismissButton"], {
+                onDismiss: onClose
+            }),
+            /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(Component, {
+                ...dialogProps,
+                children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("div", {
+                    ...getContentProps({
+                        className
+                    }),
+                    children: typeof children === "function" ? children(titleProps) : children
+                })
+            }),
+            /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$overlays$2f$dist$2f$DismissButton$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DismissButton"], {
+                onDismiss: onClose
+            })
+        ]
+    });
+    const backdropContent = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (backdrop === "transparent") {
+            return null;
+        }
+        if (disableAnimation) {
+            return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("div", {
+                ...getBackdropProps()
+            });
+        }
+        return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LazyMotion"], {
+            features: domAnimation,
+            children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["m"].div, {
+                animate: "enter",
+                exit: "exit",
+                initial: "exit",
+                variants: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$framer$2d$utils$2f$dist$2f$chunk$2d$736YWA4T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TRANSITION_VARIANTS"].fade,
+                ...getBackdropProps()
+            })
+        });
+    }, [
+        backdrop,
+        disableAnimation,
+        getBackdropProps
+    ]);
+    const style = placement ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$aria$2d$utils$2f$dist$2f$chunk$2d$WQVQ7P2I$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getTransformOrigins"])(placement === "center" ? "top" : placement) : void 0;
+    const contents = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: disableAnimation ? content : /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LazyMotion"], {
+            features: domAnimation,
+            children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["m"].div, {
+                animate: "enter",
+                exit: "exit",
+                initial: "initial",
+                style,
+                variants: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$framer$2d$utils$2f$dist$2f$chunk$2d$736YWA4T$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TRANSITION_VARIANTS"].scaleSpringOpacity,
+                ...motionProps,
+                children: content
+            })
+        })
+    });
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+        ...getPopoverProps(),
+        children: [
+            backdropContent,
+            contents
+        ]
+    });
+};
+PopoverContent.displayName = "HeroUI.PopoverContent";
+var popover_content_default = PopoverContent;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-Z57F4COC.mjs [app-ssr] (ecmascript) <export popover_content_default as PopoverContent>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "PopoverContent",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$Z57F4COC$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["popover_content_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$Z57F4COC$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-Z57F4COC.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-6FXDB7ZT.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "popover_trigger_default",
+    ()=>popover_trigger_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$CGIRYUEE$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-CGIRYUEE.mjs [app-ssr] (ecmascript)");
+// src/popover-trigger.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$WR7VNGRW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-WR7VNGRW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$aria$2d$button$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-aria-button/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$WBUKVQRU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__button_default__as__Button$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-WBUKVQRU.mjs [app-ssr] (ecmascript) <export button_default as Button>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+var PopoverTrigger = (props)=>{
+    var _a;
+    const { triggerRef, getTriggerProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$CGIRYUEE$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePopoverContext"])();
+    const { children, ...otherProps } = props;
+    const child = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (typeof children === "string") return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("p", {
+            children
+        });
+        return __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Children"].only(children);
+    }, [
+        children
+    ]);
+    const childRef = (_a = child.props.ref) != null ? _a : child.ref;
+    const { onPress, isDisabled, ...restProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        return getTriggerProps((0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(otherProps, child.props), childRef);
+    }, [
+        getTriggerProps,
+        child.props,
+        otherProps,
+        childRef
+    ]);
+    const [, triggerChildren] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$WR7VNGRW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["pickChildren"])(children, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$WBUKVQRU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__button_default__as__Button$3e$__["Button"]);
+    const { buttonProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$aria$2d$button$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAriaButton"])({
+        onPress,
+        isDisabled
+    }, triggerRef);
+    const hasHeroUIButton = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        return (triggerChildren == null ? void 0 : triggerChildren[0]) !== void 0;
+    }, [
+        triggerChildren
+    ]);
+    if (!hasHeroUIButton) {
+        delete restProps["preventFocusOnPress"];
+    }
+    return (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cloneElement"])(child, (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(restProps, hasHeroUIButton ? {
+        onPress,
+        isDisabled
+    } : buttonProps));
+};
+PopoverTrigger.displayName = "HeroUI.PopoverTrigger";
+var popover_trigger_default = PopoverTrigger;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-6FXDB7ZT.mjs [app-ssr] (ecmascript) <export popover_trigger_default as PopoverTrigger>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "PopoverTrigger",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$6FXDB7ZT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["popover_trigger_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$popover$2f$dist$2f$chunk$2d$6FXDB7ZT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/popover/dist/chunk-6FXDB7ZT.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/aria-utils/dist/chunk-YVW4JKAM.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ariaHideOutside",
+    ()=>ariaHideOutside,
+    "keepVisible",
+    ()=>keepVisible
+]);
+"use client";
+// src/overlays/ariaHideOutside.ts
+var refCountMap = /* @__PURE__ */ new WeakMap();
+var observerStack = [];
+function ariaHideOutside(targets, root = document.body) {
+    let visibleNodes = new Set(targets);
+    let hiddenNodes = /* @__PURE__ */ new Set();
+    let walk = (root2)=>{
+        for (let element of root2.querySelectorAll("[data-live-announcer], [data-react-aria-top-layer]")){
+            visibleNodes.add(element);
+        }
+        let acceptNode = (node)=>{
+            if (visibleNodes.has(node) || node.parentElement && hiddenNodes.has(node.parentElement) && node.parentElement.getAttribute("role") !== "row") {
+                return NodeFilter.FILTER_REJECT;
+            }
+            for (let target of visibleNodes){
+                if (node.contains(target)) {
+                    return NodeFilter.FILTER_SKIP;
+                }
+            }
+            return NodeFilter.FILTER_ACCEPT;
+        };
+        let walker = document.createTreeWalker(root2, NodeFilter.SHOW_ELEMENT, {
+            acceptNode
+        });
+        let acceptRoot = acceptNode(root2);
+        if (acceptRoot === NodeFilter.FILTER_ACCEPT) {
+            hide(root2);
+        }
+        if (acceptRoot !== NodeFilter.FILTER_REJECT) {
+            let node = walker.nextNode();
+            while(node != null){
+                hide(node);
+                node = walker.nextNode();
+            }
+        }
+    };
+    let hide = (node)=>{
+        var _a;
+        let refCount = (_a = refCountMap.get(node)) != null ? _a : 0;
+        if (node.getAttribute("aria-hidden") === "true" && refCount === 0) {
+            return;
+        }
+        if (refCount === 0) {
+            node.setAttribute("aria-hidden", "true");
+        }
+        hiddenNodes.add(node);
+        refCountMap.set(node, refCount + 1);
+    };
+    if (observerStack.length) {
+        observerStack[observerStack.length - 1].disconnect();
+    }
+    walk(root);
+    let observer = new MutationObserver((changes)=>{
+        for (let change of changes){
+            if (change.type !== "childList" || change.addedNodes.length === 0) {
+                continue;
+            }
+            if (![
+                ...visibleNodes,
+                ...hiddenNodes
+            ].some((node)=>node.contains(change.target))) {
+                for (let node of change.removedNodes){
+                    if (node instanceof Element) {
+                        visibleNodes.delete(node);
+                        hiddenNodes.delete(node);
+                    }
+                }
+                for (let node of change.addedNodes){
+                    if ((node instanceof HTMLElement || node instanceof SVGElement) && (node.dataset.liveAnnouncer === "true" || node.dataset.reactAriaTopLayer === "true")) {
+                        visibleNodes.add(node);
+                    } else if (node instanceof Element) {
+                        walk(node);
+                    }
+                }
+            }
+        }
+    });
+    observer.observe(root, {
+        childList: true,
+        subtree: true
+    });
+    let observerWrapper = {
+        visibleNodes,
+        hiddenNodes,
+        observe () {
+            observer.observe(root, {
+                childList: true,
+                subtree: true
+            });
+        },
+        disconnect () {
+            observer.disconnect();
+        }
+    };
+    observerStack.push(observerWrapper);
+    return ()=>{
+        observer.disconnect();
+        for (let node of hiddenNodes){
+            let count = refCountMap.get(node);
+            if (count == null) {
+                continue;
+            }
+            if (count === 1) {
+                node.removeAttribute("aria-hidden");
+                refCountMap.delete(node);
+            } else {
+                refCountMap.set(node, count - 1);
+            }
+        }
+        if (observerWrapper === observerStack[observerStack.length - 1]) {
+            observerStack.pop();
+            if (observerStack.length) {
+                observerStack[observerStack.length - 1].observe();
+            }
+        } else {
+            observerStack.splice(observerStack.indexOf(observerWrapper), 1);
+        }
+    };
+}
+function keepVisible(element) {
+    let observer = observerStack[observerStack.length - 1];
+    if (observer && !observer.visibleNodes.has(element)) {
+        observer.visibleNodes.add(element);
+        return ()=>{
+            observer.visibleNodes.delete(element);
+        };
+    }
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/aria-utils/dist/chunk-WQVQ7P2I.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "getArrowPlacement",
+    ()=>getArrowPlacement,
+    "getShouldUseAxisPlacement",
+    ()=>getShouldUseAxisPlacement,
+    "getTransformOrigins",
+    ()=>getTransformOrigins,
+    "toOverlayPlacement",
+    ()=>toOverlayPlacement,
+    "toReactAriaPlacement",
+    ()=>toReactAriaPlacement
+]);
+"use client";
+// src/overlays/utils.ts
+var getTransformOrigins = (placement)=>{
+    const origins = {
+        top: {
+            originY: 1
+        },
+        bottom: {
+            originY: 0
+        },
+        left: {
+            originX: 1
+        },
+        right: {
+            originX: 0
+        },
+        "top-start": {
+            originX: 0,
+            originY: 1
+        },
+        "top-end": {
+            originX: 1,
+            originY: 1
+        },
+        "bottom-start": {
+            originX: 0,
+            originY: 0
+        },
+        "bottom-end": {
+            originX: 1,
+            originY: 0
+        },
+        "right-start": {
+            originX: 0,
+            originY: 0
+        },
+        "right-end": {
+            originX: 0,
+            originY: 1
+        },
+        "left-start": {
+            originX: 1,
+            originY: 0
+        },
+        "left-end": {
+            originX: 1,
+            originY: 1
+        }
+    };
+    return (origins == null ? void 0 : origins[placement]) || {};
+};
+var toReactAriaPlacement = (placement)=>{
+    const mapPositions = {
+        top: "top",
+        bottom: "bottom",
+        left: "left",
+        right: "right",
+        "top-start": "top start",
+        "top-end": "top end",
+        "bottom-start": "bottom start",
+        "bottom-end": "bottom end",
+        "left-start": "left top",
+        "left-end": "left bottom",
+        "right-start": "right top",
+        "right-end": "right bottom"
+    };
+    return mapPositions[placement];
+};
+var toOverlayPlacement = (placement)=>{
+    const mapPositions = {
+        top: "top",
+        bottom: "bottom",
+        left: "left",
+        right: "right",
+        center: "top"
+    };
+    return mapPositions[placement];
+};
+var getShouldUseAxisPlacement = (axisPlacement, overlayPlacement)=>{
+    if (overlayPlacement.includes("-")) {
+        const [position] = overlayPlacement.split("-");
+        if (position.includes(axisPlacement)) {
+            return false;
+        }
+    }
+    return true;
+};
+var getArrowPlacement = (dynamicPlacement, placement)=>{
+    if (placement.includes("-")) {
+        const [, position] = placement.split("-");
+        return `${dynamicPlacement}-${position}`;
+    }
+    return dynamicPlacement;
+};
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/use-aria-overlay/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/index.ts
+__turbopack_context__.s([
+    "useAriaOverlay",
+    ()=>useAriaOverlay
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$FocusScope$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/focus/dist/FocusScope.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useFocusWithin$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/useFocusWithin.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useInteractOutside$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/useInteractOutside.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+;
+;
+var visibleOverlays = [];
+function useAriaOverlay(props, ref) {
+    const { disableOutsideEvents = true, isDismissable = false, isKeyboardDismissDisabled = false, isOpen, onClose, shouldCloseOnBlur, shouldCloseOnInteractOutside } = props;
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (isOpen && !visibleOverlays.includes(ref)) {
+            visibleOverlays.push(ref);
+            return ()=>{
+                let index = visibleOverlays.indexOf(ref);
+                if (index >= 0) {
+                    visibleOverlays.splice(index, 1);
+                }
+            };
+        }
+    }, [
+        isOpen,
+        ref
+    ]);
+    const onHide = ()=>{
+        if (visibleOverlays[visibleOverlays.length - 1] === ref && onClose) {
+            onClose();
+        }
+    };
+    const onInteractOutsideStart = (e)=>{
+        if (!shouldCloseOnInteractOutside || shouldCloseOnInteractOutside(e.target)) {
+            if (visibleOverlays[visibleOverlays.length - 1] === ref) {
+                if (disableOutsideEvents) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+            if (getOverlayInteractionType(ref) !== "pressEnd") {
+                onHide();
+            }
+        }
+    };
+    const onInteractOutside = (e)=>{
+        if (!shouldCloseOnInteractOutside || shouldCloseOnInteractOutside(e.target)) {
+            if (visibleOverlays[visibleOverlays.length - 1] === ref) {
+                if (disableOutsideEvents) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+            }
+            onHide();
+        }
+    };
+    const onKeyDown = (e)=>{
+        if (e.key === "Escape" && !isKeyboardDismissDisabled && !e.nativeEvent.isComposing) {
+            e.stopPropagation();
+            e.preventDefault();
+            onHide();
+        }
+    };
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useInteractOutside$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useInteractOutside"])({
+        isDisabled: !(isDismissable && isOpen),
+        onInteractOutside: isDismissable && isOpen ? onInteractOutside : void 0,
+        onInteractOutsideStart,
+        ref
+    });
+    const { focusWithinProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useFocusWithin$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useFocusWithin"])({
+        isDisabled: !shouldCloseOnBlur,
+        onBlurWithin: (e)=>{
+            if (!e.relatedTarget || (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$FocusScope$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isElementInChildOfActiveScope"])(e.relatedTarget)) {
+                return;
+            }
+            if (!shouldCloseOnInteractOutside || shouldCloseOnInteractOutside(e.relatedTarget)) {
+                onHide();
+            }
+        }
+    });
+    const onPointerDownUnderlay = (e)=>{
+        if (e.target === e.currentTarget) {
+            e.preventDefault();
+        }
+    };
+    function getOverlayInteractionType(ref2) {
+        const el = ref2.current;
+        if (!el) return "unknown";
+        const role = (el.getAttribute("role") || "").toLowerCase();
+        const ariaModalAttr = el.getAttribute("aria-modal");
+        if ((role === "dialog" || role === "alertdialog") && (ariaModalAttr === null || ariaModalAttr.toLowerCase() === "true")) {
+            return "pressEnd";
+        }
+        if ([
+            "listbox",
+            "menu",
+            "tree",
+            "grid",
+            "combobox"
+        ].includes(role)) {
+            return "pressStart";
+        }
+        return "unknown";
+    }
+    return {
+        overlayProps: {
+            onKeyDown,
+            ...focusWithinProps
+        },
+        underlayProps: {
+            onPointerDown: onPointerDownUnderlay
+        }
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-7C7K3AST.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "MenuSelectedIcon",
+    ()=>MenuSelectedIcon
+]);
+// src/menu-selected-icon.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+function MenuSelectedIcon(props) {
+    const { isSelected, disableAnimation, ...otherProps } = props;
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("svg", {
+        "aria-hidden": "true",
+        "data-selected": isSelected,
+        role: "presentation",
+        viewBox: "0 0 17 18",
+        ...otherProps,
+        children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("polyline", {
+            fill: "none",
+            points: "1 9 7 14 15 4",
+            stroke: "currentColor",
+            strokeDasharray: 22,
+            strokeDashoffset: isSelected ? 44 : 66,
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: 1.5,
+            style: !disableAnimation ? {
+                transition: "stroke-dashoffset 200ms ease"
+            } : {}
+        })
+    });
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-TQG5LBAQ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useMenuItem",
+    ()=>useMenuItem
+]);
+// src/use-menu-item.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CAM646RT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-CAM646RT.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/focus/dist/useFocusRing.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenuItem$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/menu/dist/useMenuItem.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useFocusVisible$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/useFocusVisible.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useHover$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/useHover.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$is$2d$mobile$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-is-mobile/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RJKRL3AU.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+function useMenuItem(originalProps) {
+    var _a, _b;
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const [props, variantProps] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mapPropsVariants"])(originalProps, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CAM646RT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menuItem"].variantKeys);
+    const { as, item, state, shortcut, description, startContent, endContent, isVirtualized, selectedIcon, className, classNames, onAction, autoFocus, onPress, onPressStart, onPressUp, onPressEnd, onPressChange, onHoverStart: hoverStartProp, onHoverChange, onHoverEnd, hideSelectedIcon = false, isReadOnly = false, closeOnSelect, onClose, onClick, ...otherProps } = props;
+    const disableAnimation = (_b = (_a = originalProps.disableAnimation) != null ? _a : globalContext == null ? void 0 : globalContext.disableAnimation) != null ? _b : false;
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const Component = as || ((otherProps == null ? void 0 : otherProps.href) ? "a" : "li");
+    const shouldFilterDOMProps = typeof Component === "string";
+    const { rendered, key } = item;
+    const isDisabledProp = state.disabledKeys.has(key) || originalProps.isDisabled;
+    const isSelectable = state.selectionManager.selectionMode !== "none";
+    const isMobile = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$is$2d$mobile$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useIsMobile"])();
+    const { isFocusVisible, focusProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useFocusRing"])({
+        autoFocus
+    });
+    const handlePress = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+        onClick == null ? void 0 : onClick(e);
+        onPress == null ? void 0 : onPress(e);
+    }, [
+        onClick,
+        onPress
+    ]);
+    const { isPressed, isFocused, isSelected, isDisabled, menuItemProps, labelProps, descriptionProps, keyboardShortcutProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenuItem$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMenuItem"])({
+        key,
+        onClose,
+        isDisabled: isDisabledProp,
+        onPress: handlePress,
+        onPressStart,
+        onPressUp,
+        onPressEnd,
+        onPressChange,
+        "aria-label": props["aria-label"],
+        closeOnSelect,
+        isVirtualized,
+        onAction
+    }, state, domRef);
+    let { hoverProps, isHovered } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useHover$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useHover"])({
+        isDisabled,
+        onHoverStart (e) {
+            if (!(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useFocusVisible$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isFocusVisible"])()) {
+                state.selectionManager.setFocused(true);
+                state.selectionManager.setFocusedKey(key);
+            }
+            hoverStartProp == null ? void 0 : hoverStartProp(e);
+        },
+        onHoverChange,
+        onHoverEnd
+    });
+    let itemProps = menuItemProps;
+    const slots = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CAM646RT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menuItem"])({
+            ...variantProps,
+            isDisabled,
+            disableAnimation,
+            hasTitleTextChild: typeof rendered === "string",
+            hasDescriptionTextChild: typeof description === "string"
+        }), [
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["objectToDeps"])(variantProps),
+        isDisabled,
+        disableAnimation,
+        rendered,
+        description
+    ]);
+    const baseStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.base, className);
+    if (isReadOnly) {
+        itemProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["removeEvents"])(itemProps);
+    }
+    const getItemProps = (props2 = {})=>({
+            ref: domRef,
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(isReadOnly ? {} : focusProps, (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["filterDOMProps"])(otherProps, {
+                enabled: shouldFilterDOMProps
+            }), itemProps, hoverProps, props2),
+            "data-focus": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocused),
+            "data-selectable": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isSelectable),
+            "data-hover": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isMobile ? isHovered || isPressed : isHovered),
+            "data-disabled": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isDisabled),
+            "data-selected": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isSelected),
+            "data-pressed": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isPressed),
+            "data-focus-visible": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocusVisible),
+            className: slots.base({
+                class: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(baseStyles, props2.className)
+            })
+        });
+    const getLabelProps = (props2 = {})=>({
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(labelProps, props2),
+            className: slots.title({
+                class: classNames == null ? void 0 : classNames.title
+            })
+        });
+    const getDescriptionProps = (props2 = {})=>({
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(descriptionProps, props2),
+            className: slots.description({
+                class: classNames == null ? void 0 : classNames.description
+            })
+        });
+    const getKeyboardShortcutProps = (props2 = {})=>({
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(keyboardShortcutProps, props2),
+            className: slots.shortcut({
+                class: classNames == null ? void 0 : classNames.shortcut
+            })
+        });
+    const getSelectedIconProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props2 = {})=>{
+        return {
+            "aria-hidden": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(true),
+            "data-disabled": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isDisabled),
+            className: slots.selectedIcon({
+                class: classNames == null ? void 0 : classNames.selectedIcon
+            }),
+            ...props2
+        };
+    }, [
+        isDisabled,
+        slots,
+        classNames
+    ]);
+    return {
+        Component,
+        domRef,
+        slots,
+        classNames,
+        isSelectable,
+        isSelected,
+        isDisabled,
+        rendered,
+        shortcut,
+        description,
+        startContent,
+        endContent,
+        selectedIcon,
+        disableAnimation,
+        getItemProps,
+        getLabelProps,
+        hideSelectedIcon,
+        getDescriptionProps,
+        getKeyboardShortcutProps,
+        getSelectedIconProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-PH6GUD27.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "menu_item_default",
+    ()=>menu_item_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$7C7K3AST$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-7C7K3AST.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$TQG5LBAQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-TQG5LBAQ.mjs [app-ssr] (ecmascript)");
+// src/menu-item.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+var MenuItem = (props)=>{
+    const { Component, slots, classNames, rendered, shortcut, description, isSelectable, isSelected, isDisabled, selectedIcon, startContent, endContent, disableAnimation, hideSelectedIcon, getItemProps, getLabelProps, getDescriptionProps, getKeyboardShortcutProps, getSelectedIconProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$TQG5LBAQ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMenuItem"])(props);
+    const selectedContent = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        const defaultIcon = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$7C7K3AST$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MenuSelectedIcon"], {
+            disableAnimation,
+            isSelected
+        });
+        if (typeof selectedIcon === "function") {
+            return selectedIcon({
+                icon: defaultIcon,
+                isSelected,
+                isDisabled
+            });
+        }
+        if (selectedIcon) return selectedIcon;
+        return defaultIcon;
+    }, [
+        selectedIcon,
+        isSelected,
+        isDisabled,
+        disableAnimation
+    ]);
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(Component, {
+        ...getItemProps(),
+        children: [
+            startContent,
+            description ? /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+                className: slots.wrapper({
+                    class: classNames == null ? void 0 : classNames.wrapper
+                }),
+                children: [
+                    /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                        ...getLabelProps(),
+                        children: rendered
+                    }),
+                    /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                        ...getDescriptionProps(),
+                        children: description
+                    })
+                ]
+            }) : /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                ...getLabelProps(),
+                children: rendered
+            }),
+            shortcut && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("kbd", {
+                ...getKeyboardShortcutProps(),
+                children: shortcut
+            }),
+            isSelectable && !hideSelectedIcon && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                ...getSelectedIconProps(),
+                children: selectedContent
+            }),
+            endContent
+        ]
+    });
+};
+MenuItem.displayName = "HeroUI.MenuItem";
+var menu_item_default = MenuItem;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-S2PFALES.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "menu_section_default",
+    ()=>menu_section_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$PH6GUD27$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-PH6GUD27.mjs [app-ssr] (ecmascript)");
+// src/menu-section.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CAM646RT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-CAM646RT.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenuSection$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/menu/dist/useMenuSection.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$IHO36JMK$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__divider_default__as__Divider$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-IHO36JMK.mjs [app-ssr] (ecmascript) <export divider_default as Divider>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+var MenuSection = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])(({ item, state, as, variant, color, disableAnimation, onAction, closeOnSelect, className, classNames, showDivider = false, hideSelectedIcon, dividerProps = {}, itemClasses, // removed title from props to avoid browsers showing a tooltip on hover
+// the title props is already inside the rendered prop
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+title, ...otherProps }, _)=>{
+    const Component = as || "li";
+    const slots = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CAM646RT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menuSection"])(), []);
+    const baseStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.base, className);
+    const dividerStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.divider, dividerProps == null ? void 0 : dividerProps.className);
+    const { itemProps, headingProps, groupProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenuSection$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMenuSection"])({
+        heading: item.rendered,
+        "aria-label": item["aria-label"]
+    });
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(Component, {
+        "data-slot": "base",
+        ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(itemProps, otherProps),
+        className: slots.base({
+            class: baseStyles
+        }),
+        children: [
+            item.rendered && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                ...headingProps,
+                className: slots.heading({
+                    class: classNames == null ? void 0 : classNames.heading
+                }),
+                "data-slot": "heading",
+                children: item.rendered
+            }),
+            /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("ul", {
+                ...groupProps,
+                className: slots.group({
+                    class: classNames == null ? void 0 : classNames.group
+                }),
+                "data-has-title": !!item.rendered,
+                "data-slot": "group",
+                children: [
+                    [
+                        ...item.childNodes
+                    ].map((node)=>{
+                        const { key: nodeKey, props: nodeProps } = node;
+                        let menuItem = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$PH6GUD27$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menu_item_default"], {
+                            classNames: itemClasses,
+                            closeOnSelect,
+                            color,
+                            disableAnimation,
+                            hideSelectedIcon,
+                            item: node,
+                            state,
+                            variant,
+                            onAction,
+                            ...nodeProps
+                        }, nodeKey);
+                        if (node.wrapper) {
+                            menuItem = node.wrapper(menuItem);
+                        }
+                        return menuItem;
+                    }),
+                    showDivider && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$IHO36JMK$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__divider_default__as__Divider$3e$__["Divider"], {
+                        as: "li",
+                        className: slots.divider({
+                            class: dividerStyles
+                        }),
+                        ...dividerProps
+                    })
+                ]
+            })
+        ]
+    });
+});
+MenuSection.displayName = "HeroUI.MenuSection";
+var menu_section_default = MenuSection;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-O3ZSXC63.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useMenu",
+    ()=>useMenu
+]);
+// src/use-menu.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenu$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/menu/dist/useMenu.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CAM646RT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-CAM646RT.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$tree$2f$dist$2f$useTreeState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-stately/tree/dist/useTreeState.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RJKRL3AU.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+function useMenu(props) {
+    var _a;
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const { as, ref, variant, color, children, disableAnimation = (_a = globalContext == null ? void 0 : globalContext.disableAnimation) != null ? _a : false, onAction, closeOnSelect, itemClasses, className, state: propState, topContent, bottomContent, hideEmptyContent = false, hideSelectedIcon = false, emptyContent = "No items.", menuProps: userMenuProps, onClose, classNames, ...otherProps } = props;
+    const Component = as || "ul";
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const shouldFilterDOMProps = typeof Component === "string";
+    const innerState = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$tree$2f$dist$2f$useTreeState$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useTreeState"])({
+        ...otherProps,
+        ...userMenuProps,
+        children
+    });
+    const state = propState || innerState;
+    const { menuProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$menu$2f$dist$2f$useMenu$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMenu"])({
+        ...otherProps,
+        ...userMenuProps,
+        onAction
+    }, state, domRef);
+    const slots = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CAM646RT$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menu"])({
+            className
+        }), [
+        className
+    ]);
+    const baseStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.base, className);
+    const getBaseProps = (props2 = {})=>{
+        return {
+            ref: domRef,
+            "data-slot": "base",
+            className: slots.base({
+                class: baseStyles
+            }),
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["filterDOMProps"])(otherProps, {
+                enabled: shouldFilterDOMProps
+            }),
+            ...props2
+        };
+    };
+    const getListProps = (props2 = {})=>{
+        return {
+            "data-slot": "list",
+            className: slots.list({
+                class: classNames == null ? void 0 : classNames.list
+            }),
+            ...menuProps,
+            ...props2
+        };
+    };
+    const getEmptyContentProps = (props2 = {})=>{
+        return {
+            children: emptyContent,
+            className: slots.emptyContent({
+                class: classNames == null ? void 0 : classNames.emptyContent
+            }),
+            ...props2
+        };
+    };
+    return {
+        Component,
+        state,
+        variant,
+        color,
+        disableAnimation,
+        onClose,
+        topContent,
+        bottomContent,
+        closeOnSelect,
+        className,
+        itemClasses,
+        getBaseProps,
+        getListProps,
+        hideEmptyContent,
+        hideSelectedIcon,
+        getEmptyContentProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-QI3I5O2R.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "menu_default",
+    ()=>menu_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$S2PFALES$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-S2PFALES.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$PH6GUD27$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-PH6GUD27.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$O3ZSXC63$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-O3ZSXC63.mjs [app-ssr] (ecmascript)");
+// src/menu.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CT4RPJWF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-CT4RPJWF.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+var Menu = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])(function Menu2(props, ref) {
+    const { Component, state, closeOnSelect, color, disableAnimation, hideSelectedIcon, hideEmptyContent, variant, onClose, topContent, bottomContent, itemClasses, getBaseProps, getListProps, getEmptyContentProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$O3ZSXC63$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMenu"])({
+        ...props,
+        ref
+    });
+    const content = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(Component, {
+        ...getListProps(),
+        children: [
+            !state.collection.size && !hideEmptyContent && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("li", {
+                children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("div", {
+                    ...getEmptyContentProps()
+                })
+            }),
+            [
+                ...state.collection
+            ].map((item)=>{
+                const itemProps = {
+                    closeOnSelect,
+                    color,
+                    disableAnimation,
+                    item,
+                    state,
+                    variant,
+                    onClose,
+                    hideSelectedIcon,
+                    ...item.props
+                };
+                const mergedItemClasses = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$CT4RPJWF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeClasses"])(itemClasses, itemProps == null ? void 0 : itemProps.classNames);
+                if (item.type === "section") {
+                    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$S2PFALES$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menu_section_default"], {
+                        ...itemProps,
+                        itemClasses: mergedItemClasses
+                    }, item.key);
+                }
+                let menuItem = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$PH6GUD27$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menu_item_default"], {
+                    ...itemProps,
+                    classNames: mergedItemClasses
+                }, item.key);
+                if (item.wrapper) {
+                    menuItem = item.wrapper(menuItem);
+                }
+                return menuItem;
+            })
+        ]
+    });
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+        ...getBaseProps(),
+        children: [
+            topContent,
+            content,
+            bottomContent
+        ]
+    });
+});
+var menu_default = Menu;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-QI3I5O2R.mjs [app-ssr] (ecmascript) <export menu_default as Menu>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Menu",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$QI3I5O2R$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menu_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$QI3I5O2R$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-QI3I5O2R.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-BIY4SM4Z.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "menu_item_base_default",
+    ()=>menu_item_base_default
+]);
+// src/base/menu-item-base.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$collections$2f$dist$2f$Item$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__Item__as__BaseItem$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-stately/collections/dist/Item.mjs [app-ssr] (ecmascript) <export Item as BaseItem>");
+"use client";
+;
+var MenuItemBase = __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$stately$2f$collections$2f$dist$2f$Item$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__Item__as__BaseItem$3e$__["BaseItem"];
+var menu_item_base_default = MenuItemBase;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-BIY4SM4Z.mjs [app-ssr] (ecmascript) <export menu_item_base_default as DropdownItem>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "DropdownItem",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$BIY4SM4Z$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["menu_item_base_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$menu$2f$dist$2f$chunk$2d$BIY4SM4Z$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/menu/dist/chunk-BIY4SM4Z.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/use-is-mobile/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/index.ts
+__turbopack_context__.s([
+    "useIsMobile",
+    ()=>useIsMobile
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$ssr$2f$dist$2f$SSRProvider$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/ssr/dist/SSRProvider.mjs [app-ssr] (ecmascript)");
+;
+var MOBILE_SCREEN_WIDTH = 700;
+function useIsMobile() {
+    let isSSR = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$ssr$2f$dist$2f$SSRProvider$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useIsSSR"])();
+    if ("TURBOPACK compile-time truthy", 1) {
+        return false;
+    }
+    //TURBOPACK unreachable
+    ;
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-D2EG5U3Q.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/use-separator.ts
+__turbopack_context__.s([
+    "useSeparator",
+    ()=>useSeparator
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RJKRL3AU.mjs [app-ssr] (ecmascript)");
+;
+function useSeparator(props) {
+    let domProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["filterDOMProps"])(props, {
+        enabled: typeof props.elementType === "string"
+    });
+    let ariaOrientation;
+    if (props.orientation === "vertical") {
+        ariaOrientation = "vertical";
+    }
+    if (props.elementType !== "hr") {
+        return {
+            separatorProps: {
+                ...domProps,
+                role: "separator",
+                "aria-orientation": ariaOrientation
+            }
+        };
+    }
+    return {
+        separatorProps: domProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-TS7K35D7.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useDivider",
+    ()=>useDivider
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$D2EG5U3Q$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-D2EG5U3Q.mjs [app-ssr] (ecmascript)");
+// src/use-divider.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$O5X46N53$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-O5X46N53.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+;
+;
+function useDivider(props) {
+    const { as, className, orientation, ...otherProps } = props;
+    let Component = as || "hr";
+    if (Component === "hr" && orientation === "vertical") {
+        Component = "div";
+    }
+    const { separatorProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$D2EG5U3Q$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSeparator"])({
+        elementType: typeof Component === "string" ? Component : "hr",
+        orientation
+    });
+    const styles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$O5X46N53$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["divider"])({
+            orientation,
+            className
+        }), [
+        orientation,
+        className
+    ]);
+    const getDividerProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props2 = {})=>({
+            className: styles,
+            role: "separator",
+            "data-orientation": orientation,
+            ...separatorProps,
+            ...otherProps,
+            ...props2
+        }), [
+        styles,
+        orientation,
+        separatorProps,
+        otherProps
+    ]);
+    return {
+        Component,
+        getDividerProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-IHO36JMK.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "divider_default",
+    ()=>divider_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$TS7K35D7$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-TS7K35D7.mjs [app-ssr] (ecmascript)");
+// src/divider.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+;
+;
+;
+var Divider = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    const { Component, getDividerProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$TS7K35D7$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDivider"])({
+        ...props
+    });
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(Component, {
+        ref,
+        ...getDividerProps()
+    });
+});
+Divider.displayName = "HeroUI.Divider";
+var divider_default = Divider;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-IHO36JMK.mjs [app-ssr] (ecmascript) <export divider_default as Divider>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Divider",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$IHO36JMK$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["divider_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$divider$2f$dist$2f$chunk$2d$IHO36JMK$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/divider/dist/chunk-IHO36JMK.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/use-aria-button/dist/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+// src/index.ts
+__turbopack_context__.s([
+    "useAriaButton",
+    ()=>useAriaButton
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$utils$2f$dist$2f$filterDOMProps$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/utils/dist/filterDOMProps.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$utils$2f$dist$2f$mergeProps$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/utils/dist/mergeProps.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useFocusable$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/useFocusable.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$usePress$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/usePress.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+function useAriaButton(props, ref) {
+    let { elementType = "button", isDisabled, onPress, onPressStart, onPressEnd, onPressUp, onPressChange, // @ts-ignore - undocumented
+    preventFocusOnPress, // @ts-ignore - undocumented
+    allowFocusWhenDisabled, onClick, href, target, rel, type = "button", allowTextSelectionOnPress } = props;
+    let additionalProps;
+    if (elementType === "button") {
+        additionalProps = {
+            type,
+            disabled: isDisabled
+        };
+    } else {
+        additionalProps = {
+            role: "button",
+            href: elementType === "a" && !isDisabled ? href : void 0,
+            target: elementType === "a" ? target : void 0,
+            type: elementType === "input" ? type : void 0,
+            disabled: elementType === "input" ? isDisabled : void 0,
+            "aria-disabled": !isDisabled || elementType === "input" ? void 0 : isDisabled,
+            rel: elementType === "a" ? rel : void 0
+        };
+    }
+    let { pressProps, isPressed } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$usePress$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["usePress"])({
+        onClick,
+        onPressStart,
+        onPressEnd,
+        onPressUp,
+        onPressChange,
+        onPress,
+        isDisabled,
+        preventFocusOnPress,
+        allowTextSelectionOnPress,
+        ref
+    });
+    let { focusableProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useFocusable$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useFocusable"])(props, ref);
+    if (allowFocusWhenDisabled) {
+        focusableProps.tabIndex = isDisabled ? -1 : focusableProps.tabIndex;
+    }
+    let buttonProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$utils$2f$dist$2f$mergeProps$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(focusableProps, pressProps, (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$utils$2f$dist$2f$filterDOMProps$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["filterDOMProps"])(props, {
+        labelable: true
+    }));
+    return {
+        isPressed,
+        // Used to indicate press state for visual
+        buttonProps: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$utils$2f$dist$2f$mergeProps$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(additionalProps, buttonProps, {
+            "aria-haspopup": props["aria-haspopup"],
+            "aria-expanded": props["aria-expanded"],
+            "aria-controls": props["aria-controls"],
+            "aria-pressed": props["aria-pressed"],
+            "aria-current": props["aria-current"]
+        })
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-3SAWKTTV.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ButtonGroupProvider",
+    ()=>ButtonGroupProvider,
+    "useButtonGroupContext",
+    ()=>useButtonGroupContext
+]);
+// src/button-group-context.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-3XT5V4LF.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+var [ButtonGroupProvider, useButtonGroupContext] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$3XT5V4LF$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createContext"])({
+    name: "ButtonGroupContext",
+    strict: false
+});
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-REKYGLAJ.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useButton",
+    ()=>useButton
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$3SAWKTTV$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-3SAWKTTV.mjs [app-ssr] (ecmascript)");
+// src/use-button.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/focus/dist/useFocusRing.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-utils/dist/chunk-BDGLNRCW.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/react-rsc-utils/dist/chunk-RJKRL3AU.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$ZQGNWTBN$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-ZQGNWTBN.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$aria$2d$button$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/use-aria-button/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useHover$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@react-aria/interactions/dist/useHover.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$ripple$2f$dist$2f$chunk$2d$6VC6TS2O$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/ripple/dist/chunk-6VC6TS2O.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+function useButton(props) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _i;
+    const groupContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$3SAWKTTV$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useButtonGroupContext"])();
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const isInGroup = !!groupContext;
+    const { ref, as, children, startContent: startContentProp, endContent: endContentProp, autoFocus, className, spinner, isLoading = false, disableRipple: disableRippleProp = false, fullWidth = (_a = groupContext == null ? void 0 : groupContext.fullWidth) != null ? _a : false, radius = groupContext == null ? void 0 : groupContext.radius, size = (_b = groupContext == null ? void 0 : groupContext.size) != null ? _b : "md", color = (_c = groupContext == null ? void 0 : groupContext.color) != null ? _c : "default", variant = (_d = groupContext == null ? void 0 : groupContext.variant) != null ? _d : "solid", disableAnimation = (_f = (_e = groupContext == null ? void 0 : groupContext.disableAnimation) != null ? _e : globalContext == null ? void 0 : globalContext.disableAnimation) != null ? _f : false, isDisabled: isDisabledProp = (_g = groupContext == null ? void 0 : groupContext.isDisabled) != null ? _g : false, isIconOnly = (_h = groupContext == null ? void 0 : groupContext.isIconOnly) != null ? _h : false, spinnerPlacement = "start", onPress, onClick, ...otherProps } = props;
+    const Component = as || "button";
+    const shouldFilterDOMProps = typeof Component === "string";
+    const domRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$utils$2f$dist$2f$chunk$2d$BDGLNRCW$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDOMRef"])(ref);
+    const disableRipple = (_i = disableRippleProp || (globalContext == null ? void 0 : globalContext.disableRipple)) != null ? _i : disableAnimation;
+    const { isFocusVisible, isFocused, focusProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$focus$2f$dist$2f$useFocusRing$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useFocusRing"])({
+        autoFocus
+    });
+    const isDisabled = isDisabledProp || isLoading;
+    const styles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$ZQGNWTBN$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["button"])({
+            size,
+            color,
+            variant,
+            radius,
+            fullWidth,
+            isDisabled,
+            isInGroup,
+            disableAnimation,
+            isIconOnly,
+            className
+        }), [
+        size,
+        color,
+        variant,
+        radius,
+        fullWidth,
+        isDisabled,
+        isInGroup,
+        isIconOnly,
+        disableAnimation,
+        className
+    ]);
+    const { onPress: onRipplePressHandler, onClear: onClearRipple, ripples } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$ripple$2f$dist$2f$chunk$2d$6VC6TS2O$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRipple"])();
+    const handlePress = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((e)=>{
+        if (disableRipple || isDisabled || disableAnimation) return;
+        domRef.current && onRipplePressHandler(e);
+    }, [
+        disableRipple,
+        isDisabled,
+        disableAnimation,
+        domRef,
+        onRipplePressHandler
+    ]);
+    const { buttonProps: ariaButtonProps, isPressed } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$use$2d$aria$2d$button$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAriaButton"])({
+        elementType: as,
+        isDisabled,
+        onPress: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["chain"])(onPress, handlePress),
+        onClick,
+        ...otherProps
+    }, domRef);
+    const { isHovered, hoverProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$react$2d$aria$2f$interactions$2f$dist$2f$useHover$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useHover"])({
+        isDisabled
+    });
+    const getButtonProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((props2 = {})=>({
+            "data-disabled": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isDisabled),
+            "data-focus": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocused),
+            "data-pressed": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isPressed),
+            "data-focus-visible": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isFocusVisible),
+            "data-hover": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isHovered),
+            "data-loading": (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["dataAttr"])(isLoading),
+            ...(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mergeProps"])(ariaButtonProps, focusProps, hoverProps, (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["filterDOMProps"])(otherProps, {
+                enabled: shouldFilterDOMProps
+            }), (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$react$2d$rsc$2d$utils$2f$dist$2f$chunk$2d$RJKRL3AU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["filterDOMProps"])(props2)),
+            className: styles
+        }), [
+        isLoading,
+        isDisabled,
+        isFocused,
+        isPressed,
+        shouldFilterDOMProps,
+        isFocusVisible,
+        isHovered,
+        ariaButtonProps,
+        focusProps,
+        hoverProps,
+        otherProps,
+        styles
+    ]);
+    const getIconClone = (icon)=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["isValidElement"])(icon) ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cloneElement"])(icon, {
+            // @ts-ignore
+            "aria-hidden": true,
+            focusable: false
+        }) : null;
+    const startContent = getIconClone(startContentProp);
+    const endContent = getIconClone(endContentProp);
+    const spinnerSize = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        const buttonSpinnerSizeMap = {
+            sm: "sm",
+            md: "sm",
+            lg: "md"
+        };
+        return buttonSpinnerSizeMap[size];
+    }, [
+        size
+    ]);
+    const getRippleProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>({
+            ripples,
+            onClear: onClearRipple
+        }), [
+        ripples,
+        onClearRipple
+    ]);
+    return {
+        Component,
+        children,
+        domRef,
+        spinner,
+        styles,
+        startContent,
+        endContent,
+        isLoading,
+        spinnerPlacement,
+        spinnerSize,
+        disableRipple,
+        getButtonProps,
+        getRippleProps,
+        isIconOnly
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-WBUKVQRU.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "button_default",
+    ()=>button_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$REKYGLAJ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-REKYGLAJ.mjs [app-ssr] (ecmascript)");
+// src/button.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$spinner$2f$dist$2f$chunk$2d$MSDKUXDP$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__spinner_default__as__Spinner$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/spinner/dist/chunk-MSDKUXDP.mjs [app-ssr] (ecmascript) <export spinner_default as Spinner>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$ripple$2f$dist$2f$chunk$2d$QHRCZSEO$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__ripple_default__as__Ripple$3e$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/ripple/dist/chunk-QHRCZSEO.mjs [app-ssr] (ecmascript) <export ripple_default as Ripple>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+var Button = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    const { Component, domRef, children, spinnerSize, spinner = /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$spinner$2f$dist$2f$chunk$2d$MSDKUXDP$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__spinner_default__as__Spinner$3e$__["Spinner"], {
+        color: "current",
+        size: spinnerSize
+    }), spinnerPlacement, startContent, endContent, isLoading, disableRipple, getButtonProps, getRippleProps, isIconOnly } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$REKYGLAJ$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useButton"])({
+        ...props,
+        ref
+    });
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])(Component, {
+        ref: domRef,
+        ...getButtonProps(),
+        children: [
+            startContent,
+            isLoading && spinnerPlacement === "start" && spinner,
+            isLoading && isIconOnly ? null : children,
+            isLoading && spinnerPlacement === "end" && spinner,
+            endContent,
+            !disableRipple && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$ripple$2f$dist$2f$chunk$2d$QHRCZSEO$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__ripple_default__as__Ripple$3e$__["Ripple"], {
+                ...getRippleProps()
+            })
+        ]
+    });
+});
+Button.displayName = "HeroUI.Button";
+var button_default = Button;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-WBUKVQRU.mjs [app-ssr] (ecmascript) <export button_default as Button>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Button",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$WBUKVQRU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["button_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$button$2f$dist$2f$chunk$2d$WBUKVQRU$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/button/dist/chunk-WBUKVQRU.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/ripple/dist/chunk-6VC6TS2O.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useRipple",
+    ()=>useRipple
+]);
+// src/use-ripple.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+function useRipple(props = {}) {
+    const [ripples, setRipples] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const onPress = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((event)=>{
+        const trigger = event.target;
+        const size = Math.max(trigger.clientWidth, trigger.clientHeight);
+        setRipples((prevRipples)=>[
+                ...prevRipples,
+                {
+                    key: (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getUniqueID"])(prevRipples.length.toString()),
+                    size,
+                    x: event.x - size / 2,
+                    y: event.y - size / 2
+                }
+            ]);
+    }, []);
+    const onClear = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((key)=>{
+        setRipples((prevState)=>prevState.filter((ripple)=>ripple.key !== key));
+    }, []);
+    return {
+        ripples,
+        onClear,
+        onPress,
+        ...props
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/ripple/dist/chunk-QHRCZSEO.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ripple_default",
+    ()=>ripple_default
+]);
+// src/ripple.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/render/components/m/proxy.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/framer-motion/dist/es/components/LazyMotion/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+var domAnimation = ()=>__turbopack_context__.A("[project]/sistema-akaedem-ms/node_modules/@heroui/dom-animation/dist/index.mjs [app-ssr] (ecmascript, async loader)").then((res)=>res.default);
+var Ripple = (props)=>{
+    const { ripples = [], motionProps, color = "currentColor", style, onClear } = props;
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+        children: ripples.map((ripple)=>{
+            const duration = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clamp"])(0.01 * ripple.size, 0.2, ripple.size > 100 ? 0.75 : 0.5);
+            return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$LazyMotion$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LazyMotion"], {
+                features: domAnimation,
+                children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnimatePresence"], {
+                    mode: "popLayout",
+                    children: /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])(__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$render$2f$components$2f$m$2f$proxy$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["m"].span, {
+                        animate: {
+                            transform: "scale(2)",
+                            opacity: 0
+                        },
+                        className: "heroui-ripple",
+                        exit: {
+                            opacity: 0
+                        },
+                        initial: {
+                            transform: "scale(0)",
+                            opacity: 0.35
+                        },
+                        style: {
+                            position: "absolute",
+                            backgroundColor: color,
+                            borderRadius: "100%",
+                            transformOrigin: "center",
+                            pointerEvents: "none",
+                            overflow: "hidden",
+                            inset: 0,
+                            zIndex: 0,
+                            top: ripple.y,
+                            left: ripple.x,
+                            width: `${ripple.size}px`,
+                            height: `${ripple.size}px`,
+                            ...style
+                        },
+                        transition: {
+                            duration
+                        },
+                        onAnimationComplete: ()=>{
+                            onClear(ripple.key);
+                        },
+                        ...motionProps
+                    })
+                })
+            }, ripple.key);
+        })
+    });
+};
+Ripple.displayName = "HeroUI.Ripple";
+var ripple_default = Ripple;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/ripple/dist/chunk-QHRCZSEO.mjs [app-ssr] (ecmascript) <export ripple_default as Ripple>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Ripple",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$ripple$2f$dist$2f$chunk$2d$QHRCZSEO$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ripple_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$ripple$2f$dist$2f$chunk$2d$QHRCZSEO$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/ripple/dist/chunk-QHRCZSEO.mjs [app-ssr] (ecmascript)");
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/spinner/dist/chunk-IKKYW34A.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useSpinner",
+    ()=>useSpinner
+]);
+// src/use-spinner.ts
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$SCJBZBCG$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/theme/dist/chunk-SCJBZBCG.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/shared-utils/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system/dist/chunk-Q3W45BN5.mjs [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+;
+;
+function useSpinner(originalProps) {
+    var _a, _b;
+    const [props, variantProps] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["mapPropsVariants"])(originalProps, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$SCJBZBCG$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["spinner"].variantKeys);
+    const globalContext = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2f$dist$2f$chunk$2d$Q3W45BN5$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useProviderContext"])();
+    const variant = (_b = (_a = originalProps == null ? void 0 : originalProps.variant) != null ? _a : globalContext == null ? void 0 : globalContext.spinnerVariant) != null ? _b : "default";
+    const { children, className, classNames, label: labelProp, ...otherProps } = props;
+    const slots = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$theme$2f$dist$2f$chunk$2d$SCJBZBCG$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["spinner"])({
+            ...variantProps
+        }), [
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["objectToDeps"])(variantProps)
+    ]);
+    const baseStyles = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$shared$2d$utils$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["clsx"])(classNames == null ? void 0 : classNames.base, className);
+    const label = labelProp || children;
+    const ariaLabel = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        if (label && typeof label === "string") {
+            return label;
+        }
+        return !otherProps["aria-label"] ? "Loading" : "";
+    }, [
+        children,
+        label,
+        otherProps["aria-label"]
+    ]);
+    const getSpinnerProps = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>({
+            "aria-label": ariaLabel,
+            className: slots.base({
+                class: baseStyles
+            }),
+            ...otherProps
+        }), [
+        ariaLabel,
+        slots,
+        baseStyles,
+        otherProps
+    ]);
+    return {
+        label,
+        slots,
+        classNames,
+        variant,
+        getSpinnerProps
+    };
+}
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/spinner/dist/chunk-MSDKUXDP.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "spinner_default",
+    ()=>spinner_default
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$spinner$2f$dist$2f$chunk$2d$IKKYW34A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/spinner/dist/chunk-IKKYW34A.mjs [app-ssr] (ecmascript)");
+// src/spinner.tsx
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/system-rsc/dist/chunk-YFAKJTDR.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-runtime.js [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+var Spinner = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$system$2d$rsc$2f$dist$2f$chunk$2d$YFAKJTDR$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["forwardRef"])((props, ref)=>{
+    const { slots, classNames, label, variant, getSpinnerProps } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$spinner$2f$dist$2f$chunk$2d$IKKYW34A$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSpinner"])({
+        ...props
+    });
+    if (variant === "wave" || variant === "dots") {
+        return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+            ref,
+            ...getSpinnerProps(),
+            children: [
+                /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("div", {
+                    className: slots.wrapper({
+                        class: classNames == null ? void 0 : classNames.wrapper
+                    }),
+                    children: [
+                        ...new Array(3)
+                    ].map((_, index)=>/* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("i", {
+                            className: slots.dots({
+                                class: classNames == null ? void 0 : classNames.dots
+                            }),
+                            style: {
+                                "--dot-index": index
+                            }
+                        }, `dot-${index}`))
+                }),
+                label && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                    className: slots.label({
+                        class: classNames == null ? void 0 : classNames.label
+                    }),
+                    children: label
+                })
+            ]
+        });
+    }
+    if (variant === "simple") {
+        return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+            ref,
+            ...getSpinnerProps(),
+            children: [
+                /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("svg", {
+                    className: slots.wrapper({
+                        class: classNames == null ? void 0 : classNames.wrapper
+                    }),
+                    fill: "none",
+                    viewBox: "0 0 24 24",
+                    children: [
+                        /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("circle", {
+                            className: slots.circle1({
+                                class: classNames == null ? void 0 : classNames.circle1
+                            }),
+                            cx: "12",
+                            cy: "12",
+                            r: "10",
+                            stroke: "currentColor",
+                            strokeWidth: "4"
+                        }),
+                        /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("path", {
+                            className: slots.circle2({
+                                class: classNames == null ? void 0 : classNames.circle2
+                            }),
+                            d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z",
+                            fill: "currentColor"
+                        })
+                    ]
+                }),
+                label && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                    className: slots.label({
+                        class: classNames == null ? void 0 : classNames.label
+                    }),
+                    children: label
+                })
+            ]
+        });
+    }
+    if (variant === "spinner") {
+        return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+            ref,
+            ...getSpinnerProps(),
+            children: [
+                /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("div", {
+                    className: slots.wrapper({
+                        class: classNames == null ? void 0 : classNames.wrapper
+                    }),
+                    children: [
+                        ...new Array(12)
+                    ].map((_, index)=>/* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("i", {
+                            className: slots.spinnerBars({
+                                class: classNames == null ? void 0 : classNames.spinnerBars
+                            }),
+                            style: {
+                                "--bar-index": index
+                            }
+                        }, `star-${index}`))
+                }),
+                label && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                    className: slots.label({
+                        class: classNames == null ? void 0 : classNames.label
+                    }),
+                    children: label
+                })
+            ]
+        });
+    }
+    return /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+        ref,
+        ...getSpinnerProps(),
+        children: [
+            /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxs"])("div", {
+                className: slots.wrapper({
+                    class: classNames == null ? void 0 : classNames.wrapper
+                }),
+                children: [
+                    /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("i", {
+                        className: slots.circle1({
+                            class: classNames == null ? void 0 : classNames.circle1
+                        })
+                    }),
+                    /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("i", {
+                        className: slots.circle2({
+                            class: classNames == null ? void 0 : classNames.circle2
+                        })
+                    })
+                ]
+            }),
+            label && /* @__PURE__ */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsx"])("span", {
+                className: slots.label({
+                    class: classNames == null ? void 0 : classNames.label
+                }),
+                children: label
+            })
+        ]
+    });
+});
+Spinner.displayName = "HeroUI.Spinner";
+var spinner_default = Spinner;
+;
+}),
+"[project]/sistema-akaedem-ms/node_modules/@heroui/spinner/dist/chunk-MSDKUXDP.mjs [app-ssr] (ecmascript) <export spinner_default as Spinner>", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Spinner",
+    ()=>__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$spinner$2f$dist$2f$chunk$2d$MSDKUXDP$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["spinner_default"]
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f40$heroui$2f$spinner$2f$dist$2f$chunk$2d$MSDKUXDP$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/@heroui/spinner/dist/chunk-MSDKUXDP.mjs [app-ssr] (ecmascript)");
+}),
+];
+
+//# sourceMappingURL=554f7_%40heroui_4ef394db._.js.map

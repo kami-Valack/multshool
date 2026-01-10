@@ -862,18 +862,18 @@ export default function HorariosPage() {
                               </div>
                             ) : (
                               disciplinas.map((d) => (
-                                <SelectItem
-                                  key={d.id}
+                              <SelectItem
+                                key={d.id}
                                   value={d.id}
-                                >
-                                  <div className="flex items-center gap-2">
-                                    <div
-                                      className="w-3 h-3 rounded-full"
-                                      style={{ backgroundColor: d.cor }}
-                                    ></div>
+                              >
+                                <div className="flex items-center gap-2">
+                                  <div
+                                    className="w-3 h-3 rounded-full"
+                                    style={{ backgroundColor: d.cor }}
+                                  ></div>
                                     {d.nome} {d.codigo && `(${d.codigo})`}
-                                  </div>
-                                </SelectItem>
+                                </div>
+                              </SelectItem>
                               ))
                             )}
                           </SelectContent>

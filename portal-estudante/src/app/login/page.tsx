@@ -242,10 +242,20 @@ export default function Welcome() {
         router.push(redirectUrl);
       }, 500);
     } catch (error: any) {
-      showToast(
-        error.message || "Erro ao fazer login. Verifique suas credenciais.",
-        "error"
-      );
+      // Extrair mensagem de erro de forma robusta
+      let errorMessage = "Credenciais inválidas. Verifique o utilizador e a palavra-passe.";
+      
+      if (error) {
+        if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error.status === 'error' && error.message) {
+          errorMessage = error.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      }
+      
+      showToast(errorMessage, "error");
     } finally {
       setIsLoading(false);
     }

@@ -9,11 +9,13 @@ import requests
 import json
 import sys
 import os
+import time
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
 # Configuração das APIs
-USERS_API_URL = "http://ec2-54-164-91-182.compute-1.amazonaws.com/:8000/api"
+USERS_API_URL = "https://paymente.reduaneamin.ct.ws/users/api/"
 
 # Cores para output
 class Colors:
@@ -103,6 +105,10 @@ def criar_estudante(name=None, email=None, password="senha123456"):
         if student_id:
             print_success(f"Student ID: {student_id}")
         
+        # Aguardar um pouco para garantir que o token foi criado no banco
+        print_info("Aguardando criação do token de verificação...")
+        time.sleep(2)
+        
         # 2. Obter token de verificação
         print_info("2. Obtendo token de verificação...")
         verification_token = obter_token_verificacao(email)
@@ -115,7 +121,6 @@ def criar_estudante(name=None, email=None, password="senha123456"):
             if script_path.exists():
                 print_info(f"Script encontrado: {script_path}")
                 try:
-                    import subprocess
                     result = subprocess.run(
                         ["php", str(script_path), email],
                         capture_output=True,
@@ -167,8 +172,15 @@ def criar_estudante(name=None, email=None, password="senha123456"):
         traceback.print_exc()
         return None
 
-def criar_escola(name=None, email=None, password="senha123456"):
-    """Cria uma conta de escola e retorna o token JWT"""
+def criar_escola(name=None, email=None, password="senha123456", institution_type="medio"):
+    """Cria uma conta de escola e retorna o token JWT
+    
+    Args:
+        name: Nome da escola
+        email: Email da escola
+        password: Senha da escola
+        institution_type: Tipo de instituição ('medio' ou 'superior')
+    """
     print_header("Criando Conta de Escola")
     
     if not name:
@@ -176,9 +188,15 @@ def criar_escola(name=None, email=None, password="senha123456"):
     if not email:
         email = f"escola.teste.{datetime.now().strftime('%Y%m%d%H%M%S')}@example.com"
     
+    # Validar institution_type
+    if institution_type not in ['medio', 'superior']:
+        print_warning(f"Tipo de instituição '{institution_type}' inválido. Usando 'medio' como padrão.")
+        institution_type = 'medio'
+    
     print_info(f"Nome: {name}")
     print_info(f"Email: {email}")
     print_info(f"Senha: {password}")
+    print_info(f"Tipo de Instituição: {institution_type}")
     print()
     
     try:
@@ -189,7 +207,8 @@ def criar_escola(name=None, email=None, password="senha123456"):
             json={
                 "name": name,
                 "email": email,
-                "password": password
+                "password": password,
+                "institution_type": institution_type
             },
             headers={"Content-Type": "application/json"},
             timeout=10
@@ -209,6 +228,10 @@ def criar_escola(name=None, email=None, password="senha123456"):
         
         print_success(f"Escola criada! ID: {user_id}")
         
+        # Aguardar um pouco para garantir que o token foi criado no banco
+        print_info("Aguardando criação do token de verificação...")
+        time.sleep(2)
+        
         # 2. Obter token de verificação
         print_info("2. Obtendo token de verificação...")
         verification_token = obter_token_verificacao_escola(email)
@@ -221,7 +244,6 @@ def criar_escola(name=None, email=None, password="senha123456"):
             if script_path.exists():
                 print_info(f"Script encontrado: {script_path}")
                 try:
-                    import subprocess
                     result = subprocess.run(
                         ["php", str(script_path), email],
                         capture_output=True,
@@ -330,50 +352,57 @@ def fazer_login(email, password, role):
         print_error(f"Erro ao fazer login: {e}")
         return None
 
-def obter_token_verificacao(email):
-    """Obtém token de verificação do banco de dados via script PHP"""
-    try:
-        # Tentar usar o script PHP se existir
-        script_path = Path(__file__).parent / "ms-users-api-laravel" / "obter_token_verificacao.php"
-        if script_path.exists():
-            import subprocess
+def obter_token_verificacao(email, max_attempts=3):
+    """Obtém token de verificação do banco de dados via script PHP
+    
+    Tenta várias vezes com delay entre tentativas para lidar com timing issues.
+    """
+    # Normalizar email (lowercase, trim)
+    email = email.lower().strip()
+    
+    script_path = Path(__file__).parent / "ms-users-api-laravel" / "obter_token_verificacao.php"
+    if not script_path.exists():
+        return None
+    
+    for attempt in range(1, max_attempts + 1):
+        try:
             result = subprocess.run(
                 ["php", str(script_path), email],
                 capture_output=True,
                 text=True,
                 timeout=10
             )
+            
             if result.returncode == 0:
                 # O script retorna apenas o token
                 token = result.stdout.strip()
                 if token and len(token) > 10:  # Token válido deve ter mais de 10 caracteres
                     return token
-        return None
-    except Exception as e:
-        print_warning(f"Erro ao obter token via PHP: {e}")
-        return None
+            else:
+                # Se não encontrou, aguardar um pouco e tentar novamente
+                if attempt < max_attempts:
+                    print_info(f"Tentativa {attempt}/{max_attempts} falhou. Aguardando...")
+                    if result.stderr:
+                        error_msg = result.stderr.strip()
+                        if "não encontrado" in error_msg.lower() or "not found" in error_msg.lower():
+                            time.sleep(2)  # Aguardar 2 segundos antes de tentar novamente
+                            continue
+                    time.sleep(1)
+        except Exception as e:
+            if attempt < max_attempts:
+                print_warning(f"Erro na tentativa {attempt}: {e}. Tentando novamente...")
+                time.sleep(1)
+            else:
+                print_warning(f"Erro ao obter token via PHP: {e}")
+    
+    return None
 
 def obter_token_verificacao_escola(email):
-    """Obtém token de verificação de escola do banco de dados via script PHP"""
-    try:
-        # Usar o script genérico (funciona para ambos)
-        script_path = Path(__file__).parent / "ms-users-api-laravel" / "obter_token_verificacao.php"
-        if script_path.exists():
-            import subprocess
-            result = subprocess.run(
-                ["php", str(script_path), email],
-                capture_output=True,
-                text=True,
-                timeout=10
-            )
-            if result.returncode == 0:
-                token = result.stdout.strip()
-                if token and len(token) > 10:
-                    return token
-        return None
-    except Exception as e:
-        print_warning(f"Erro ao obter token via PHP: {e}")
-        return None
+    """Obtém token de verificação de escola do banco de dados via script PHP
+    
+    Usa a mesma função genérica que funciona para estudantes e escolas.
+    """
+    return obter_token_verificacao(email)
 
 def salvar_tokens(estudante_data, escola_data):
     """Salva os tokens em arquivo JSON"""

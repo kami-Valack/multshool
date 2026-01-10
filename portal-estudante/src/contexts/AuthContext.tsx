@@ -45,7 +45,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const profile = await studentService.getProfile();
       setUser(profile);
     } catch (error: any) {
-      throw error;
+      // Garantir que a mensagem de erro seja propagada corretamente
+      let errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+      
+      if (error) {
+        if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error.status === 'error' && error.message) {
+          errorMessage = error.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      }
+      
+      // Criar um novo erro com a mensagem extraída
+      const loginError: any = {
+        status: 'error',
+        message: errorMessage,
+      };
+      throw loginError;
     }
   };
 

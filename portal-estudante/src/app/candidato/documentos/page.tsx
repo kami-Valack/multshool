@@ -188,7 +188,7 @@ const DocumentosScreen: React.FC = () => {
     }
     router.back();
   };
-  
+
   // Função para armazenar arquivo selecionado
   const handleFileSelect = (type: string, file: File | null) => {
     if (!file) return;

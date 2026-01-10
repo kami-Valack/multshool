@@ -207,22 +207,11 @@ const sendVerificationCode = async (
         break;
 
       case 1:
-        if (!formData.idDocument) {
-          newErrors.idDocument = "Documento de identidade é obrigatório";
-        }
-        if (!formData.photo) {
-          newErrors.photo = "Fotografia é obrigatória";
-        }
-        if (!formData.gradesDeclaration) {
-          newErrors.gradesDeclaration = "Declaração de notas é obrigatória";
-        }
+        // Etapa de escolha do método de verificação (opcional, pois tem valor padrão)
         break;
 
       case 2:
-        // Nova etapa - validação do método (opcional, pois tem valor padrão)
-        break;
-
-      case 3:
+        // Etapa de verificação de código (opcional - atualmente não usado)
         if (
           !formData.verificationCode ||
           formData.verificationCode.length !== 4
@@ -353,16 +342,14 @@ const sendVerificationCode = async (
       return;
     }
 
-    // Etapa 0: Dados pessoais -> Etapa 1: Documentos
+    // Etapa 0: Dados pessoais -> Submeter registro diretamente (sem pedir documentos antes)
     if (currentStep === 0) {
-      setCurrentStep(1);
-    } 
-    // Etapa 1: Documentos -> Submeter registro (pular verificação SMS)
-    else if (currentStep === 1) {
       await submitRegistration();
+      return;
     }
-    // Se ainda houver etapas de verificação SMS (opcional)
-    else if (currentStep === 2) {
+    
+    // Se ainda houver etapas de verificação SMS (opcional - atualmente não usado, mas mantido para compatibilidade)
+    else if (currentStep === 1) {
       setIsSendingCode(true);
       const codeSent = await sendVerificationCode(
         formData.phoneNumber,
@@ -371,9 +358,9 @@ const sendVerificationCode = async (
       setIsSendingCode(false);
 
       if (codeSent) {
-        setCurrentStep(currentStep + 1);
+        setCurrentStep(2);
       }
-    } else if (currentStep === 3) {
+    } else if (currentStep === 2) {
       await submitRegistration();
     }
   };
@@ -412,10 +399,6 @@ const sendVerificationCode = async (
     {
       title: "Dê o primeiro passo, crie a sua conta!",
       subtitle: "Junte-se à nossa comunidade e comece a sua jornada connosco",
-    },
-    {
-      title: "Estás quase lá, precisamos de mais algumas informações!",
-      subtitle: "Anexe os documentos correctamente",
     },
     {
       title: "Escolha como receber o código de verificação",
@@ -528,61 +511,6 @@ const sendVerificationCode = async (
       case 1:
         return (
           <>
-            <SectionTitle>Documentação</SectionTitle>
-
-            <DocumentsContainer>
-              <div>
-                <CustomInput
-                  fileInputSize="custom"
-                  fileInputHeight="80px"
-                  fileInputWidth="90%"
-                  label="Bilhete de identidade ou passaporte"
-                  placeholder="O anexo deve incluir frente e verso"
-                  variant="file"
-                  accept="image/*,.pdf"
-                  onChange={handleFileChange("idDocument")}
-                />
-                {errors.idDocument && (
-                  <ErrorText>{errors.idDocument}</ErrorText>
-                )}
-              </div>
-
-              <div>
-                <CustomInput
-                  fileInputSize="custom"
-                  fileInputHeight="80px"
-                  fileInputWidth="90%"
-                  label="Fotografia (tipo: passe)"
-                  placeholder="Clique para fazer o upload"
-                  variant="file"
-                  accept="image/*"
-                  onChange={handleFileChange("photo")}
-                />
-                {errors.photo && <ErrorText>{errors.photo}</ErrorText>}
-              </div>
-
-              <div>
-                <CustomInput
-                  fileInputSize="custom"
-                  fileInputHeight="80px"
-                  fileInputWidth="90%"
-                  label="Declaração com notas"
-                  placeholder="O anexo deve incluir frente e verso"
-                  variant="file"
-                  accept=".pdf,image/*"
-                  onChange={handleFileChange("gradesDeclaration")}
-                />
-                {errors.gradesDeclaration && (
-                  <ErrorText>{errors.gradesDeclaration}</ErrorText>
-                )}
-              </div>
-            </DocumentsContainer>
-          </>
-        );
-
-      case 2:
-        return (
-          <>
             <SectionTitle>Método de verificação</SectionTitle>
             <VerificationText>
               Escolha como deseja receber o código de confirmação no seu número:{" "}
@@ -596,7 +524,7 @@ const sendVerificationCode = async (
           </>
         );
 
-      case 3:
+      case 2:
         return (
           <>
             <SectionTitle>Verificação de conta</SectionTitle>
@@ -723,24 +651,24 @@ const sendVerificationCode = async (
   };
 
   const getButtonText = () => {
-    if (currentStep === 2 && isSendingCode) {
+    if (currentStep === 1 && isSendingCode) {
       return "Enviando código...";
     }
-    if (currentStep === 3 && isLoading) {
+    if (currentStep === 2 && isLoading) {
       return "Verificando...";
     }
-    if (currentStep === 2 && smsStatus !== "sent") {
+    if (currentStep === 1 && smsStatus !== "sent") {
       return "Enviar código";
     }
     if (isLoading) {
-      return "Processando...";
+      return "Criando conta...";
     }
     return "Continuar";
   };
 
   const isButtonDisabled = () => {
     if (isSendingCode || isLoading) return true;
-    if (currentStep === 2 && smsStatus !== "sent") return false;
+    if (currentStep === 1 && smsStatus !== "sent") return false;
     return false;
   };
 

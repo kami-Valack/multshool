@@ -121,11 +121,21 @@ const menuItems = [
 
 export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
 
   const handleItemClick = (itemId: string) => {
+    // Verificar autenticação antes de processar clique
+    if (!isAuthenticated) {
+      router.push("/login");
+      onClose();
+      return;
+    }
+
     console.log(`Clicou em: ${itemId}`);
     onClose();
+    
+    // Redirecionar para as rotas apropriadas baseado no item clicado
+    // Por enquanto, apenas fechar o menu pois as rotas ainda não estão implementadas
   };
 
   const handleLogout = async () => {

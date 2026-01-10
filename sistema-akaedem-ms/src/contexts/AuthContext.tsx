@@ -177,7 +177,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error: any) {
       console.error('AuthContext.login - Erro no login:', error);
-      throw error;
+      console.error('AuthContext.login - Tipo do erro:', typeof error);
+      console.error('AuthContext.login - Erro completo:', JSON.stringify(error, null, 2));
+      
+      // Extrair mensagem de erro de forma robusta
+      let errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+      
+      if (error) {
+        if (error instanceof Error) {
+          // Se for uma instância de Error, usar a mensagem diretamente
+          errorMessage = error.message || errorMessage;
+        } else if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error.message) {
+          errorMessage = error.message;
+        } else if (error.status === 401 || (error.status && error.status === 401)) {
+          errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+        }
+      }
+      
+      // Garantir que a mensagem não está vazia
+      if (!errorMessage || errorMessage.trim() === '') {
+        errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
+      }
+      
+      // Criar um novo Error com a mensagem extraída para garantir que seja propagado corretamente
+      const loginError = new Error(errorMessage);
+      throw loginError;
     }
   };
 
