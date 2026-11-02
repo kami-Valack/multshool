@@ -1,1 +1,11 @@
-{}
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/comunicacao/anuncios/page": "app/admin/comunicacao/anuncios/page.js",
+  "/admin/comunicacao/mensagens/page": "app/admin/comunicacao/mensagens/page.js",
+  "/admin/definicoes/logs/page": "app/admin/definicoes/logs/page.js",
+  "/admin/definicoes/permissoes/page": "app/admin/definicoes/permissoes/page.js",
+  "/admin/financeiro/pagamentos/page": "app/admin/financeiro/pagamentos/page.js",
+  "/admin/financeiro/propinas/page": "app/admin/financeiro/propinas/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/page": "app/page.js"
+}

@@ -59,7 +59,7 @@ def check_api_health():
     except:
         return False
 
-def criar_estudante(name=None, email=None, password="senha123456"):
+def criar_estudante(name=None, email=None, password="123456"):
     """Cria uma conta de estudante e retorna o token JWT"""
     print_header("Criando Conta de Estudante")
     

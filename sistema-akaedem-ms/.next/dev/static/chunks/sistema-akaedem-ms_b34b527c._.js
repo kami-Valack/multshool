@@ -15,11 +15,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$
 ;
 function ThemeProvider(t0) {
     const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(7);
-    if ($[0] !== "53b782a6d583967dda0d6516c4bad14c45f7604819df3871250d423c09200d8b") {
+    if ($[0] !== "a76c19da875744f0d25585c4191790640e0e65088e8e3bd199fc63302aeb5f38") {
         for(let $i = 0; $i < 7; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "53b782a6d583967dda0d6516c4bad14c45f7604819df3871250d423c09200d8b";
+        $[0] = "a76c19da875744f0d25585c4191790640e0e65088e8e3bd199fc63302aeb5f38";
     }
     let children;
     let props;
@@ -71,10 +71,10 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 var __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/sistema-akaedem-ms/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 const API_CONFIG = {
     // URLs das APIs (podem ser configuradas via variáveis de ambiente)
-    USERS_API_URL: ("TURBOPACK compile-time value", "http://localhost:8000/api") || 'http://localhost:8001/api',
-    SCHOOL_API_URL: ("TURBOPACK compile-time value", "http://localhost:8003/api") || 'http://localhost:8002/api',
-    STUDENT_API_URL: ("TURBOPACK compile-time value", "http://localhost:8001/api") || 'http://localhost:8003/api',
-    ADMIN_API_URL: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_ADMIN_API_URL || 'http://localhost:8004/api',
+    USERS_API_URL: ("TURBOPACK compile-time value", "http://98.89.20.199:8000/api") || 'http://localhost:8001/api',
+    SCHOOL_API_URL: ("TURBOPACK compile-time value", "http://98.89.20.199:8003/api") || 'http://localhost:8002/api',
+    STUDENT_API_URL: ("TURBOPACK compile-time value", "http://98.89.20.199:8001/api") || 'http://localhost:8003/api',
+    ADMIN_API_URL: ("TURBOPACK compile-time value", "http://98.89.20.199:8002/api") || 'http://localhost:8004/api',
     // API Secret para comunicação entre serviços
     API_SECRET: __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].env.NEXT_PUBLIC_API_SECRET || '',
     // Timeout padrão para requisições (em ms)
@@ -156,6 +156,59 @@ const API_ENDPOINTS = {
         UPLOAD_LOGO: '/profile/upload-logo',
         UPLOAD_PHOTOS: '/profile/upload-photos',
         UPLOAD_VIDEO: '/profile/upload-video'
+    },
+    // Financeiro
+    TUITION_PLANS: {
+        LIST: '/tuition-plans',
+        SHOW: (id)=>`/tuition-plans/${id}`,
+        CREATE: '/tuition-plans',
+        UPDATE: (id)=>`/tuition-plans/${id}`,
+        DELETE: (id)=>`/tuition-plans/${id}`
+    },
+    ADDITIONAL_FEES: {
+        LIST: '/additional-fees',
+        CREATE: '/additional-fees',
+        UPDATE: (id)=>`/additional-fees/${id}`,
+        DELETE: (id)=>`/additional-fees/${id}`
+    },
+    FEE_CHARGES: {
+        LIST: '/fee-charges',
+        CREATE: '/fee-charges',
+        UPDATE: (id)=>`/fee-charges/${id}`,
+        DELETE: (id)=>`/fee-charges/${id}`,
+        MARK_PAID: (id)=>`/fee-charges/${id}/mark-paid`
+    },
+    PAYMENTS: {
+        LIST: '/payments',
+        CREATE: '/payments',
+        UPDATE: (id)=>`/payments/${id}`,
+        DELETE: (id)=>`/payments/${id}`
+    },
+    INVOICES: {
+        LIST: '/invoices',
+        CREATE: '/invoices',
+        UPDATE: (id)=>`/invoices/${id}`,
+        DELETE: (id)=>`/invoices/${id}`
+    },
+    FINANCE_REPORTS: {
+        SUMMARY: '/finance/reports/summary'
+    },
+    // Comunicação
+    ANNOUNCEMENTS: {
+        LIST: '/announcements',
+        CREATE: '/announcements',
+        UPDATE: (id)=>`/announcements/${id}`,
+        DELETE: (id)=>`/announcements/${id}`
+    },
+    // Definições
+    ACTIVITY_LOGS: {
+        LIST: '/activity-logs'
+    },
+    PERMISSION_PROFILES: {
+        LIST: '/permission-profiles',
+        CREATE: '/permission-profiles',
+        UPDATE: (id)=>`/permission-profiles/${id}`,
+        DELETE: (id)=>`/permission-profiles/${id}`
     }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -210,7 +263,7 @@ class ApiClient {
    */ getHeaders(customHeaders, useAuth = true) {
         const headers = {
             ...this.defaultHeaders,
-            ...customHeaders
+            ...customHeaders || {}
         };
         if (useAuth) {
             const token = this.getAuthToken();
@@ -685,7 +738,7 @@ class ProfileService {
             headers['Authorization'] = `Bearer ${token}`;
         }
         try {
-            const response = await fetch(`${("TURBOPACK compile-time value", "http://localhost:8003/api") || 'http://localhost:8003/api'}${__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$config$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_ENDPOINTS"].PROFILE.UPLOAD_PHOTOS}`, {
+            const response = await fetch(`${("TURBOPACK compile-time value", "http://98.89.20.199:8003/api") || 'http://localhost:8003/api'}${__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$config$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["API_ENDPOINTS"].PROFILE.UPLOAD_PHOTOS}`, {
                 method: 'POST',
                 headers,
                 body: formData
@@ -739,230 +792,242 @@ var _s = __turbopack_context__.k.signature(), _s1 = __turbopack_context__.k.sign
 ;
 ;
 ;
+const USER_CACHE_KEY = "auth_user_cache";
+const SCHOOL_CACHE_KEY = "auth_school_cache";
 const AuthContext = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createContext"])(undefined);
+function readCache(key) {
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
+    try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+    } catch  {
+        return null;
+    }
+}
+function writeCache(key, value) {
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch  {
+    // ignore quota errors
+    }
+}
+function clearSessionCaches() {
+    if ("TURBOPACK compile-time falsy", 0) //TURBOPACK unreachable
+    ;
+    localStorage.removeItem(USER_CACHE_KEY);
+    localStorage.removeItem(SCHOOL_CACHE_KEY);
+    localStorage.removeItem("user_role");
+}
 function AuthProvider({ children }) {
     _s();
     const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [schoolProfile, setSchoolProfile] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [profileComplete, setProfileComplete] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [profileStatus, setProfileStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
-    /**
-   * Verifica autenticação ao carregar
-   */ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
-        "AuthProvider.useEffect": ()=>{
-            checkAuth();
-        }
-    }["AuthProvider.useEffect"], []);
-    const checkAuth = async ()=>{
-        try {
-            if (__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].isAuthenticated()) {
-                // Buscar dados completos do usuário
-                // A role já está no localStorage e será usada pelo useRoleCheck enquanto aguarda
-                const userData = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].getMe();
-                setUser(userData);
-                // Se for escola, verificar perfil completo
-                if (userData.role === 'school') {
-                    await checkProfileCompletion();
+    const profileCheckInFlight = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(false);
+    const hydrated = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(false);
+    const persistUser = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "AuthProvider.useCallback[persistUser]": (next)=>{
+            setUser(next);
+            if (next) {
+                writeCache(USER_CACHE_KEY, next);
+                if (("TURBOPACK compile-time value", "object") !== "undefined" && next.role) {
+                    localStorage.setItem("user_role", next.role);
+                }
+            } else {
+                if ("TURBOPACK compile-time truthy", 1) {
+                    localStorage.removeItem(USER_CACHE_KEY);
                 }
             }
-        } catch (error) {
-            console.error('Erro ao verificar autenticação:', error);
-            // Limpa tokens e role inválidos
-            if ("TURBOPACK compile-time truthy", 1) {
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('refresh_token');
-                localStorage.removeItem('user_role');
-            }
-        } finally{
-            setLoading(false);
         }
-    };
-    /**
-   * Verifica se o perfil está completo (apenas para escolas)
-   */ const checkProfileCompletion = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+    }["AuthProvider.useCallback[persistUser]"], []);
+    const persistSchool = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "AuthProvider.useCallback[persistSchool]": (next)=>{
+            setSchoolProfile(next);
+            if (next) writeCache(SCHOOL_CACHE_KEY, next);
+            else if ("TURBOPACK compile-time truthy", 1) localStorage.removeItem(SCHOOL_CACHE_KEY);
+        }
+    }["AuthProvider.useCallback[persistSchool]"], []);
+    const loadSchoolProfile = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "AuthProvider.useCallback[loadSchoolProfile]": async ()=>{
+            try {
+                const profile = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$profile$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["profileService"].getProfile();
+                if (profile) {
+                    persistSchool(profile);
+                    // Manter o nome da escola no user para sidebar/navbar
+                    setUser({
+                        "AuthProvider.useCallback[loadSchoolProfile]": (prev)=>{
+                            if (!prev) return prev;
+                            const merged = {
+                                ...prev,
+                                name: profile.name || prev.name,
+                                school: {
+                                    ...prev.school || {},
+                                    ...profile,
+                                    name: profile.name || prev.school?.name,
+                                    logo_path: profile.logo_path || prev.school?.logo_path
+                                }
+                            };
+                            writeCache(USER_CACHE_KEY, merged);
+                            return merged;
+                        }
+                    }["AuthProvider.useCallback[loadSchoolProfile]"]);
+                }
+            } catch (error) {
+                console.warn("[AuthContext] Não foi possível carregar perfil da escola:", error);
+            }
+        }
+    }["AuthProvider.useCallback[loadSchoolProfile]"], [
+        persistSchool
+    ]);
+    const checkProfileCompletion = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "AuthProvider.useCallback[checkProfileCompletion]": async (userToCheck)=>{
+            if (profileCheckInFlight.current) return;
+            profileCheckInFlight.current = true;
             try {
                 const userToVerify = userToCheck || user;
-                if (userToVerify?.role !== 'school') {
-                    setProfileComplete(true); // Não é escola, não precisa verificar
+                if (userToVerify?.role !== "school") {
+                    setProfileComplete(true);
                     return;
                 }
-                const status_0 = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$profile$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["profileService"].checkCompletion();
-                setProfileStatus(status_0);
-                setProfileComplete(status_0.is_complete);
-            } catch (error_0) {
-                // Se o erro for INCOMPLETE_PROFILE (403) com código específico, significa que o perfil está incompleto
-                if (error_0.error_code === 'INCOMPLETE_PROFILE' || error_0.status === 403 && error_0.message?.includes('obrigatório preencher')) {
+                const status = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$profile$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["profileService"].checkCompletion();
+                setProfileStatus(status);
+                setProfileComplete(status.is_complete);
+            } catch (error) {
+                if (error.error_code === "INCOMPLETE_PROFILE" || error.status === 403 && error.message?.includes("obrigatório preencher")) {
                     setProfileComplete(false);
-                    // Tentar extrair dados do erro
-                    if (error_0.missing_fields) {
+                    if (error.missing_fields) {
                         setProfileStatus({
                             is_complete: false,
-                            missing_fields: error_0.missing_fields,
+                            missing_fields: error.missing_fields,
                             completion_percentage: 0,
-                            message: error_0.message || 'Perfil incompleto'
+                            message: error.message || "Perfil incompleto"
                         });
-                    } else {
-                        // Se não tiver missing_fields no erro, tentar buscar do endpoint
-                        try {
-                            const status = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$profile$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["profileService"].checkCompletion();
-                            setProfileStatus(status);
-                            setProfileComplete(status.is_complete);
-                        } catch (innerError) {
-                            // Se falhar novamente, verificar se é realmente INCOMPLETE_PROFILE
-                            if (innerError.error_code === 'INCOMPLETE_PROFILE' || innerError.status === 403 && innerError.message?.includes('obrigatório preencher')) {
-                                setProfileComplete(false);
-                            } else {
-                                // Se for outro tipo de erro (rede, servidor, etc), não assumir incompleto
-                                // Manter o estado atual ou assumir completo para não bloquear acesso
-                                console.warn('Erro ao verificar perfil (não é INCOMPLETE_PROFILE):', innerError);
-                            // Não alterar profileComplete para não bloquear acesso indevidamente
-                            }
-                        }
                     }
                 } else {
-                    console.warn('[AuthContext] Erro ao verificar perfil (não relacionado a perfil incompleto):', error_0);
-                    // Em caso de erro que não seja INCOMPLETE_PROFILE, não assumir que está incompleto
-                    // Isso evita bloquear acesso por erros de rede ou servidor
-                    // Se profileComplete ainda não foi setado (null), assumir true para não bloquear acesso
-                    if (profileComplete === null) {
-                        console.log('[AuthContext] Erro na verificação de perfil, assumindo completo para não bloquear acesso');
-                        setProfileComplete(true);
-                    } else {
-                        // Se já foi setado antes, manter o valor atual (não alterar)
-                        console.log('[AuthContext] Mantendo estado atual de profileComplete:', profileComplete);
-                    }
+                    console.warn("[AuthContext] Erro ao verificar perfil:", error);
+                    setProfileComplete({
+                        "AuthProvider.useCallback[checkProfileCompletion]": (prev)=>prev === null ? true : prev
+                    }["AuthProvider.useCallback[checkProfileCompletion]"]);
                 }
+            } finally{
+                profileCheckInFlight.current = false;
             }
         }
     }["AuthProvider.useCallback[checkProfileCompletion]"], [
         user
     ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "AuthProvider.useEffect": ()=>{
+            if (hydrated.current) return;
+            hydrated.current = true;
+            const cachedUser = readCache(USER_CACHE_KEY);
+            const cachedSchool = readCache(SCHOOL_CACHE_KEY);
+            if (cachedUser) setUser(cachedUser);
+            if (cachedSchool) setSchoolProfile(cachedSchool);
+            const boot = {
+                "AuthProvider.useEffect.boot": async ()=>{
+                    try {
+                        if (!__TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].isAuthenticated()) {
+                            persistUser(null);
+                            persistSchool(null);
+                            setProfileComplete(null);
+                            setProfileStatus(null);
+                            return;
+                        }
+                        const userData = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].getMe();
+                        persistUser(userData);
+                        if (userData.role === "school") {
+                            await Promise.all([
+                                checkProfileCompletion(userData),
+                                loadSchoolProfile()
+                            ]);
+                        } else {
+                            setProfileComplete(true);
+                        }
+                    } catch (error) {
+                        console.error("Erro ao verificar autenticação:", error);
+                        if ("TURBOPACK compile-time truthy", 1) {
+                            localStorage.removeItem("auth_token");
+                            localStorage.removeItem("refresh_token");
+                        }
+                        clearSessionCaches();
+                        persistUser(null);
+                        persistSchool(null);
+                    } finally{
+                        setLoading(false);
+                    }
+                }
+            }["AuthProvider.useEffect.boot"];
+            void boot();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }
+    }["AuthProvider.useEffect"], []);
     const login = async (credentials)=>{
-        try {
-            console.log('AuthContext.login - Iniciando login...');
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].login(credentials);
-            console.log('AuthContext.login - Resposta do login:', {
-                hasProfile: !!response.profile,
-                profile: response.profile,
-                user: response.user
-            });
-            // Usar o user da resposta do login ao invés de chamar getMe() novamente
-            // Isso garante que temos os dados corretos e evita uma requisição extra
-            const userData_0 = {
-                id: response.user.id,
-                name: response.user.name,
-                email: response.user.email,
-                role: response.user.role,
-                email_verified: response.user.email_verified || false,
-                is_active: true
-            };
-            console.log('AuthContext.login - Dados do usuário:', {
-                role: userData_0.role
-            });
-            // Salvar role no localStorage para acesso imediato
-            if (("TURBOPACK compile-time value", "object") !== 'undefined' && userData_0.role) {
-                localStorage.setItem('user_role', userData_0.role);
-                console.log('[AuthContext] Role salva no localStorage após login:', userData_0.role);
-            }
-            setUser(userData_0);
-            // Se for escola, usar informações de perfil da resposta do login
-            if (userData_0.role === 'school') {
-                console.log('AuthContext.login - É escola, verificando perfil...');
-                // Se a resposta do login já contém informações de perfil, usar diretamente
-                if (response.profile) {
-                    const profileInfo = response.profile;
-                    console.log('AuthContext.login - Perfil recebido da API:', profileInfo);
-                    console.log('AuthContext.login - is_complete:', profileInfo.is_complete);
-                    setProfileComplete(profileInfo.is_complete);
-                    setProfileStatus({
-                        is_complete: profileInfo.is_complete,
-                        missing_fields: profileInfo.missing_fields || [],
-                        completion_percentage: profileInfo.completion_percentage || 0,
-                        message: profileInfo.message || 'Perfil incompleto'
-                    });
-                    console.log('AuthContext.login - profileComplete setado para:', profileInfo.is_complete);
-                } else {
-                    // Se não tiver na resposta, verificar manualmente (fallback)
-                    console.log('AuthContext.login - Perfil não veio na resposta, verificando manualmente...');
-                    await checkProfileCompletion(userData_0);
-                }
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].login(credentials);
+        const userData = {
+            id: response.user.id,
+            name: response.user.name,
+            email: response.user.email,
+            role: response.user.role,
+            email_verified: response.user.email_verified || false,
+            is_active: true
+        };
+        persistUser(userData);
+        if (userData.role === "school") {
+            if (response.profile) {
+                const profileInfo = response.profile;
+                setProfileComplete(profileInfo.is_complete);
+                setProfileStatus({
+                    is_complete: profileInfo.is_complete,
+                    missing_fields: profileInfo.missing_fields || [],
+                    completion_percentage: profileInfo.completion_percentage || 0,
+                    message: profileInfo.message || "Perfil incompleto"
+                });
             } else {
-                console.log('AuthContext.login - Não é escola, setando profileComplete = true');
-                setProfileComplete(true); // Não é escola, não precisa verificar
+                await checkProfileCompletion(userData);
             }
-        } catch (error_1) {
-            console.error('AuthContext.login - Erro no login:', error_1);
-            console.error('AuthContext.login - Tipo do erro:', typeof error_1);
-            console.error('AuthContext.login - Erro completo:', JSON.stringify(error_1, null, 2));
-            // Extrair mensagem de erro de forma robusta
-            let errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
-            if (error_1) {
-                if (error_1 instanceof Error) {
-                    // Se for uma instância de Error, usar a mensagem diretamente
-                    errorMessage = error_1.message || errorMessage;
-                } else if (typeof error_1 === 'string') {
-                    errorMessage = error_1;
-                } else if (error_1.message) {
-                    errorMessage = error_1.message;
-                } else if (error_1.status === 401 || error_1.status && error_1.status === 401) {
-                    errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
-                }
-            }
-            // Garantir que a mensagem não está vazia
-            if (!errorMessage || errorMessage.trim() === '') {
-                errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
-            }
-            // Criar um novo Error com a mensagem extraída para garantir que seja propagado corretamente
-            const loginError = new Error(errorMessage);
-            throw loginError;
+            await loadSchoolProfile();
+        } else {
+            setProfileComplete(true);
         }
     };
     const logout = async ()=>{
         try {
             await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].logout();
-            // Limpar estados
-            setUser(null);
+        } catch (error) {
+            console.error("Erro ao fazer logout:", error);
+        } finally{
+            persistUser(null);
+            persistSchool(null);
             setProfileComplete(null);
             setProfileStatus(null);
-            // Limpar role do localStorage
+            clearSessionCaches();
             if ("TURBOPACK compile-time truthy", 1) {
-                localStorage.removeItem('user_role');
-            }
-            // Redirecionar para login
-            if ("TURBOPACK compile-time truthy", 1) {
-                window.location.href = '/';
-            }
-        } catch (error_2) {
-            console.error('Erro ao fazer logout:', error_2);
-            // Mesmo com erro, limpar estados e redirecionar
-            setUser(null);
-            setProfileComplete(null);
-            setProfileStatus(null);
-            if ("TURBOPACK compile-time truthy", 1) {
-                localStorage.removeItem('user_role');
-                window.location.href = '/';
+                window.location.href = "/";
             }
         }
     };
     const refreshUser = async ()=>{
-        try {
-            const userData_1 = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].getMe();
-            setUser(userData_1);
-            // Se for escola, verificar perfil completo após atualizar
-            if (userData_1.role === 'school') {
-                await checkProfileCompletion();
-            }
-        } catch (error_3) {
-            console.error('Erro ao atualizar dados do usuário:', error_3);
-            throw error_3;
+        const userData = await __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$src$2f$lib$2f$api$2f$services$2f$auth$2e$service$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["authService"].getMe();
+        persistUser(userData);
+        if (userData.role === "school") {
+            await Promise.all([
+                checkProfileCompletion(userData),
+                loadSchoolProfile()
+            ]);
         }
     };
-    // isAuthenticated deve ser true apenas se user existir E não estiver carregando
-    const isAuthenticated = !!user && !loading;
+    // Manter autenticação estável: não depender de `loading`, para o nome não desaparecer
+    const isAuthenticated = !!user;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(AuthContext.Provider, {
         value: {
             user,
+            schoolProfile,
             loading,
             isAuthenticated,
             profileComplete,
@@ -975,20 +1040,20 @@ function AuthProvider({ children }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/sistema-akaedem-ms/src/contexts/AuthContext.tsx",
-        lineNumber: 250,
+        lineNumber: 231,
         columnNumber: 10
     }, this);
 }
-_s(AuthProvider, "gOQlQYuvkpM8NbzV4lsrk2lSgAU=");
+_s(AuthProvider, "uJLCouF0CVc5MRGu4Rcqjxk+vr4=");
 _c = AuthProvider;
 function useAuth() {
     _s1();
     const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(1);
-    if ($[0] !== "9866efdf6122bdccacffbd0d06c97d68329d7b5b48e750056d183f6ecccd581b") {
+    if ($[0] !== "fd7b169c675857bdad53fa521439111785c0bc528ea5b32a178f8226fdc43550") {
         for(let $i = 0; $i < 1; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "9866efdf6122bdccacffbd0d06c97d68329d7b5b48e750056d183f6ecccd581b";
+        $[0] = "fd7b169c675857bdad53fa521439111785c0bc528ea5b32a178f8226fdc43550";
     }
     const context = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useContext"])(AuthContext);
     if (context === undefined) {
@@ -1029,11 +1094,11 @@ var _s = __turbopack_context__.k.signature();
 const Toaster = (t0)=>{
     _s();
     const $ = (0, __TURBOPACK__imported__module__$5b$project$5d2f$sistema$2d$akaedem$2d$ms$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$compiler$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["c"])(8);
-    if ($[0] !== "69cb7d23f2b39fd9ba84d00dcf98243777ba2df6eb302dff71ffe3525b279d31") {
+    if ($[0] !== "ae2fd88d93db5e9da9382c7df95f136113a8317419cb37858f975153ab6ae907") {
         for(let $i = 0; $i < 8; $i += 1){
             $[$i] = Symbol.for("react.memo_cache_sentinel");
         }
-        $[0] = "69cb7d23f2b39fd9ba84d00dcf98243777ba2df6eb302dff71ffe3525b279d31";
+        $[0] = "ae2fd88d93db5e9da9382c7df95f136113a8317419cb37858f975153ab6ae907";
     }
     let props;
     if ($[1] !== t0) {

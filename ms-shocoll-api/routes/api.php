@@ -107,6 +107,20 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class, 'role:school'])-
     Route::prefix('students')->group(function () {
         Route::get('/{studentId}/teachers', [\App\Http\Controllers\SchoolTeacherStudentController::class, 'listTeachers']);
     });
+
+    // Financeiro
+    Route::apiResource('tuition-plans', \App\Http\Controllers\TuitionPlanController::class);
+    Route::apiResource('additional-fees', \App\Http\Controllers\AdditionalFeeController::class);
+    Route::apiResource('fee-charges', \App\Http\Controllers\FeeChargeController::class)->except(['show']);
+    Route::post('fee-charges/{id}/mark-paid', [\App\Http\Controllers\FeeChargeController::class, 'markPaid']);
+    Route::apiResource('payments', \App\Http\Controllers\PaymentController::class);
+    Route::apiResource('invoices', \App\Http\Controllers\InvoiceController::class);
+    Route::get('finance/reports/summary', [\App\Http\Controllers\FinanceReportController::class, 'summary']);
+
+    // Comunicação e configurações
+    Route::apiResource('announcements', \App\Http\Controllers\AnnouncementController::class);
+    Route::get('activity-logs', [\App\Http\Controllers\ActivityLogController::class, 'index']);
+    Route::apiResource('permission-profiles', \App\Http\Controllers\PermissionProfileController::class);
     });
 });
 

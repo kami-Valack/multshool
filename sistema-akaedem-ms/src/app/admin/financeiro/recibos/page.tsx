@@ -60,15 +60,30 @@ import {
   Upload,
   Send,
   Check,
+  Loader2,
+  Trash2,
 } from "lucide-react";
 import QRCode from "qrcode";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { financeService } from "@/lib/api/services/finance.service";
+import type { Invoice } from "@/lib/api/services/finance.service";
 
-// === Formatação ===
-const formatarData = (date: Date): string => {
-  const dia = String(date.getDate()).padStart(2, "0");
-  const mes = String(date.getMonth() + 1).padStart(2, "0");
-  const ano = date.getFullYear();
+// === Formatação (datas como strings ISO YYYY-MM-DD) ===
+const paraISO = (value?: string | null): string =>
+  value ? String(value).slice(0, 10) : "";
+
+const hojeISO = (): string => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
+};
+
+const formatarData = (value: string): string => {
+  const s = paraISO(value);
+  if (!s) return "-";
+  const [ano, mes, dia] = s.split("-");
   return `${dia}/${mes}/${ano}`;
 };
 
@@ -76,16 +91,9 @@ const formatarMoeda = (valor: number, moeda: string = "AOA"): string => {
   return `${valor.toLocaleString("pt-AO")} ${moeda}`;
 };
 
-const formatarDataInput = (date: Date): string => {
-  const ano = date.getFullYear();
-  const mes = String(date.getMonth() + 1).padStart(2, "0");
-  const dia = String(date.getDate()).padStart(2, "0");
-  return `${ano}-${mes}-${dia}`;
-};
-
 // Tipos
 type TipoDocumento = "fatura" | "recibo";
-type EstadoDocumento = "pago" | "pendente" | "anulado" | "reemitido";
+type EstadoDocumento = "pago" | "pendente" | "anulado" | "atrasado";
 
 interface ItemFatura {
   descricao: string;
@@ -101,8 +109,8 @@ interface Documento {
   estudanteId: string;
   estudanteNome: string;
   estudanteNIF?: string;
-  dataEmissao: Date;
-  dataVencimento?: Date;
+  dataEmissao: string;
+  dataVencimento?: string;
   itens: ItemFatura[];
   subtotal: number;
   desconto?: number;
@@ -132,11 +140,59 @@ const instituicaoInicial: Instituicao = {
   email: "",
 };
 
-const documentosIniciais: Documento[] = [];
+const mapEstado = (status: Invoice["status"]): EstadoDocumento =>
+  status === "cancelado" ? "anulado" : (status as EstadoDocumento);
+
+const mapDocumento = (inv: Invoice): Documento => {
+  const subtotal = Number(inv.subtotal) || 0;
+  const total = Number(inv.total) || 0;
+  const desconto = subtotal > total ? subtotal - total : undefined;
+  return {
+    id: inv.id,
+    numero: inv.number,
+    tipo: inv.doc_type,
+    estudanteId: inv.student_id || "",
+    estudanteNome: inv.student_name,
+    estudanteNIF: inv.student_nif || undefined,
+    dataEmissao: paraISO(inv.issue_date),
+    dataVencimento: inv.due_date ? paraISO(inv.due_date) : undefined,
+    itens: (inv.items || []).map((i) => {
+      const quantidade = Number(i.quantity) || 0;
+      const valorUnitario = Number(i.unit_price) || 0;
+      return {
+        descricao: i.description,
+        quantidade,
+        valorUnitario,
+        total: i.total != null ? Number(i.total) : quantidade * valorUnitario,
+      };
+    }),
+    subtotal,
+    desconto,
+    total,
+    estado: mapEstado(inv.status),
+    metodoPagamento: inv.payment_method || undefined,
+    qrCode: true,
+    qrData: inv.qr_data || inv.number,
+  };
+};
+
+const formVazio = (): Partial<Documento> & { itens: ItemFatura[] } => ({
+  tipo: "fatura",
+  estudanteNome: "",
+  estudanteNIF: "",
+  dataEmissao: hojeISO(),
+  dataVencimento: hojeISO(),
+  itens: [{ descricao: "", quantidade: 1, valorUnitario: 0, total: 0 }],
+  subtotal: 0,
+  total: 0,
+  estado: "pendente",
+  qrCode: true,
+});
 
 export default function FaturasRecibosPage() {
-  const [documentos, setDocumentos] =
-    React.useState<Documento[]>(documentosIniciais);
+  const [documentos, setDocumentos] = React.useState<Documento[]>([]);
+  const [carregando, setCarregando] = React.useState(true);
+  const [salvando, setSalvando] = React.useState(false);
   const [instituicao, setInstituicao] =
     React.useState<Instituicao>(instituicaoInicial);
   const [filtro, setFiltro] = React.useState("");
@@ -159,18 +215,22 @@ export default function FaturasRecibosPage() {
   // Formulário nova fatura
   const [formFatura, setFormFatura] = React.useState<
     Partial<Documento> & { itens: ItemFatura[] }
-  >({
-    tipo: "fatura",
-    estudanteNome: "",
-    estudanteNIF: "",
-    dataEmissao: new Date(),
-    dataVencimento: new Date(),
-    itens: [{ descricao: "", quantidade: 1, valorUnitario: 0, total: 0 }],
-    subtotal: 0,
-    total: 0,
-    estado: "pendente",
-    qrCode: true,
-  });
+  >(formVazio());
+
+  const carregarDocumentos = React.useCallback(async () => {
+    try {
+      const lista = await financeService.listInvoices();
+      setDocumentos(lista.map(mapDocumento));
+    } catch (err: any) {
+      toast.error(err?.message || "Erro ao carregar documentos");
+    } finally {
+      setCarregando(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    carregarDocumentos();
+  }, [carregarDocumentos]);
 
   React.useEffect(() => {
     const subtotal = formFatura.itens.reduce(
@@ -207,47 +267,69 @@ export default function FaturasRecibosPage() {
     });
   };
 
-  const handleEmitirFatura = () => {
-    const novoDoc: Documento = {
-      id: Date.now().toString(),
-      numero: `${formFatura.tipo === "fatura" ? "FAT" : "REC"}-2025-${String(
-        documentos.filter((d) => d.tipo === formFatura.tipo).length + 1
-      ).padStart(4, "0")}`,
-      tipo: formFatura.tipo || "fatura",
-      estudanteId: "temp",
-      estudanteNome: formFatura.estudanteNome || "",
-      estudanteNIF: formFatura.estudanteNIF,
-      dataEmissao: formFatura.dataEmissao || new Date(),
-      dataVencimento: formFatura.dataVencimento,
-      itens: formFatura.itens,
-      subtotal: formFatura.subtotal || 0,
-      desconto: formFatura.desconto,
-      total: formFatura.total || 0,
-      estado: formFatura.estado || "pendente",
-      qrCode: formFatura.qrCode,
-      qrData: `https://portal.ispl.ao/verificar?doc=${
-        formFatura.numero || "NOVO"
-      }`,
-    };
+  const handleEmitirFatura = async () => {
+    const nome = (formFatura.estudanteNome || "").trim();
+    const itensValidos = formFatura.itens.filter((i) => i.descricao.trim());
 
-    setDocumentos((prev) => [...prev, novoDoc]);
-    setDialogAberto(false);
-    resetFormFatura();
+    if (!nome) {
+      toast.error("Indique o nome do estudante");
+      return;
+    }
+    if (itensValidos.length === 0) {
+      toast.error("Adicione pelo menos um item com descrição");
+      return;
+    }
+    if (!formFatura.dataEmissao) {
+      toast.error("Indique a data de emissão");
+      return;
+    }
+
+    setSalvando(true);
+    try {
+      await financeService.createInvoice({
+        doc_type: formFatura.tipo || "fatura",
+        student_name: nome,
+        student_nif: (formFatura.estudanteNIF || "").trim() || null,
+        issue_date: formFatura.dataEmissao,
+        due_date: formFatura.dataVencimento || null,
+        items: itensValidos.map((i) => ({
+          description: i.descricao.trim(),
+          quantity: Number(i.quantidade) || 0,
+          unit_price: Number(i.valorUnitario) || 0,
+          total: Number(i.total) || 0,
+        })),
+        subtotal: Number(formFatura.subtotal) || 0,
+        total: Number(formFatura.total) || 0,
+        status: formFatura.tipo === "recibo" ? "pago" : "pendente",
+      });
+      toast.success(
+        formFatura.tipo === "recibo"
+          ? "Recibo emitido com sucesso"
+          : "Fatura emitida com sucesso"
+      );
+      setDialogAberto(false);
+      resetFormFatura();
+      await carregarDocumentos();
+    } catch (err: any) {
+      toast.error(err?.message || "Erro ao emitir documento");
+    } finally {
+      setSalvando(false);
+    }
+  };
+
+  const handleEliminarDocumento = async (doc: Documento) => {
+    if (!window.confirm(`Eliminar o documento ${doc.numero}?`)) return;
+    try {
+      await financeService.deleteInvoice(doc.id);
+      toast.success("Documento eliminado");
+      await carregarDocumentos();
+    } catch (err: any) {
+      toast.error(err?.message || "Erro ao eliminar documento");
+    }
   };
 
   const resetFormFatura = () => {
-    setFormFatura({
-      tipo: "fatura",
-      estudanteNome: "",
-      estudanteNIF: "",
-      dataEmissao: new Date(),
-      dataVencimento: new Date(),
-      itens: [{ descricao: "", quantidade: 1, valorUnitario: 0, total: 0 }],
-      subtotal: 0,
-      total: 0,
-      estado: "pendente",
-      qrCode: true,
-    });
+    setFormFatura(formVazio());
   };
 
   // Filtros
@@ -452,10 +534,10 @@ export default function FaturasRecibosPage() {
   const handleAbrirEmail = (doc: Documento) => {
     setEmailAberto(doc);
     setEmailForm({
-      para: `${doc.estudanteNome
-        .toLowerCase()
-        .replace(/\s+/g, ".")}@estudante.ispl.ao`,
-      assunto: `Seu ${doc.tipo} Nº ${doc.numero} - ISPL`,
+      para: "",
+      assunto: `Seu ${doc.tipo} Nº ${doc.numero}${
+        instituicao.nome ? ` - ${instituicao.nome}` : ""
+      }`,
       mensagem: `Prezado(a) ${doc.estudanteNome},
 
 Segue em anexo o seu ${doc.tipo} referente ao pagamento realizado.
@@ -473,11 +555,13 @@ ${instituicao.email}`,
 
   const handleEnviarEmail = async () => {
     if (!emailAberto) return;
-    setEnviando(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setEnviando(false);
+    if (!emailForm.para.trim()) {
+      toast.error("Indique o email do destinatário");
+      return;
+    }
+    // Ainda não existe endpoint de envio de documentos por email.
     setEmailAberto(null);
-    alert(`Email enviado com sucesso para ${emailForm.para}!`);
+    toast.info("O envio de documentos por email ainda não está disponível.");
   };
 
   // Estatísticas
@@ -485,15 +569,21 @@ ${instituicao.email}`,
   const totalPago = documentos
     .filter((d) => d.estado === "pago")
     .reduce((acc, d) => acc + d.total, 0);
-  const mesAtual = new Date().getMonth();
+  const mesAtualISO = hojeISO().slice(0, 7);
   const emitidoEsteMes = documentos
-    .filter((d) => d.dataEmissao.getMonth() === mesAtual)
+    .filter((d) => d.dataEmissao.slice(0, 7) === mesAtualISO)
     .reduce((acc, d) => acc + d.total, 0);
 
+  if (carregando) {
+    return (
+      <div className="p-6 flex items-center justify-center py-24 text-muted-foreground">
+        <Loader2 className="mr-2 h-5 w-5 animate-spin" /> A carregar documentos...
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-<div className="p-6">
+    <div className="p-6">
               <div className="mb-6 flex items-center justify-between">
                 <div>
                   <h1 className="text-3xl font-bold tracking-tight">
@@ -586,15 +676,11 @@ ${instituicao.email}`,
                             <Label>Data de Emissão</Label>
                             <Input
                               type="date"
-                              value={
-                                formFatura.dataEmissao
-                                  ? formatarDataInput(formFatura.dataEmissao)
-                                  : ""
-                              }
+                              value={formFatura.dataEmissao || ""}
                               onChange={(e) =>
                                 setFormFatura((prev) => ({
                                   ...prev,
-                                  dataEmissao: new Date(e.target.value),
+                                  dataEmissao: e.target.value,
                                 }))
                               }
                             />
@@ -603,15 +689,11 @@ ${instituicao.email}`,
                             <Label>Data de Vencimento</Label>
                             <Input
                               type="date"
-                              value={
-                                formFatura.dataVencimento
-                                  ? formatarDataInput(formFatura.dataVencimento)
-                                  : ""
-                              }
+                              value={formFatura.dataVencimento || ""}
                               onChange={(e) =>
                                 setFormFatura((prev) => ({
                                   ...prev,
-                                  dataVencimento: new Date(e.target.value),
+                                  dataVencimento: e.target.value,
                                 }))
                               }
                             />
@@ -720,8 +802,11 @@ ${instituicao.email}`,
                         >
                           Cancelar
                         </Button>
-                        <Button onClick={handleEmitirFatura}>
-                          Emitir Fatura
+                        <Button onClick={handleEmitirFatura} disabled={salvando}>
+                          {salvando && (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          )}
+                          Emitir {formFatura.tipo === "recibo" ? "Recibo" : "Fatura"}
                         </Button>
                       </DialogFooter>
                     </DialogContent>
@@ -836,6 +921,16 @@ ${instituicao.email}`,
                         </TableRow>
                       </TableHeader>
                       <TableBody>
+                        {documentosFiltrados.length === 0 && (
+                          <TableRow>
+                            <TableCell
+                              colSpan={7}
+                              className="text-center py-8 text-muted-foreground"
+                            >
+                              Nenhum documento encontrado.
+                            </TableCell>
+                          </TableRow>
+                        )}
                         {documentosFiltrados.map((doc) => (
                           <TableRow key={doc.id}>
                             <TableCell className="font-medium">
@@ -909,6 +1004,13 @@ ${instituicao.email}`,
                                   }}
                                 >
                                   <Printer className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => handleEliminarDocumento(doc)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
                                 </Button>
                               </div>
                             </TableCell>
@@ -1254,8 +1356,6 @@ ${instituicao.email}`,
                   </div>
                 </SheetContent>
               </Sheet>
-            </div>
-          </div>
-        </div>
-      );
+    </div>
+  );
 }

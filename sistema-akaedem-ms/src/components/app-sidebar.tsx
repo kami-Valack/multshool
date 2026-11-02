@@ -169,7 +169,7 @@ const data = {
         },
         {
           title: "Anúncios e comunicados",
-          url: "#",
+          url: "/admin/comunicacao/anuncios",
         },
       ],
     },
@@ -180,11 +180,11 @@ const data = {
       items: [
         {
           title: "Perfis e permissões",
-          url: "#",
+          url: "/admin/definicoes/permissoes",
         },
         {
           title: "Logs de actividade",
-          url: "#",
+          url: "/admin/definicoes/logs",
         },
       ],
     },
@@ -192,12 +192,12 @@ const data = {
   atalhos: [
     {
       name: "Assistente de IA",
-      url: "#",
+      url: "/admin/relatorios/assistencia",
       icon: BotIcon,
     },
     {
       name: "Anúncios e comunicados",
-      url: "#",
+      url: "/admin/comunicacao/anuncios",
       icon: Bell,
     },
   ],

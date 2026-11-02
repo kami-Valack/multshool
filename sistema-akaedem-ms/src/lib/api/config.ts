@@ -105,5 +105,61 @@ export const API_ENDPOINTS = {
     UPLOAD_PHOTOS: '/profile/upload-photos',
     UPLOAD_VIDEO: '/profile/upload-video',
   },
+
+  // Financeiro
+  TUITION_PLANS: {
+    LIST: '/tuition-plans',
+    SHOW: (id: string) => `/tuition-plans/${id}`,
+    CREATE: '/tuition-plans',
+    UPDATE: (id: string) => `/tuition-plans/${id}`,
+    DELETE: (id: string) => `/tuition-plans/${id}`,
+  },
+  ADDITIONAL_FEES: {
+    LIST: '/additional-fees',
+    CREATE: '/additional-fees',
+    UPDATE: (id: string) => `/additional-fees/${id}`,
+    DELETE: (id: string) => `/additional-fees/${id}`,
+  },
+  FEE_CHARGES: {
+    LIST: '/fee-charges',
+    CREATE: '/fee-charges',
+    UPDATE: (id: string) => `/fee-charges/${id}`,
+    DELETE: (id: string) => `/fee-charges/${id}`,
+    MARK_PAID: (id: string) => `/fee-charges/${id}/mark-paid`,
+  },
+  PAYMENTS: {
+    LIST: '/payments',
+    CREATE: '/payments',
+    UPDATE: (id: string) => `/payments/${id}`,
+    DELETE: (id: string) => `/payments/${id}`,
+  },
+  INVOICES: {
+    LIST: '/invoices',
+    CREATE: '/invoices',
+    UPDATE: (id: string) => `/invoices/${id}`,
+    DELETE: (id: string) => `/invoices/${id}`,
+  },
+  FINANCE_REPORTS: {
+    SUMMARY: '/finance/reports/summary',
+  },
+
+  // Comunicação
+  ANNOUNCEMENTS: {
+    LIST: '/announcements',
+    CREATE: '/announcements',
+    UPDATE: (id: string) => `/announcements/${id}`,
+    DELETE: (id: string) => `/announcements/${id}`,
+  },
+
+  // Definições
+  ACTIVITY_LOGS: {
+    LIST: '/activity-logs',
+  },
+  PERMISSION_PROFILES: {
+    LIST: '/permission-profiles',
+    CREATE: '/permission-profiles',
+    UPDATE: (id: string) => `/permission-profiles/${id}`,
+    DELETE: (id: string) => `/permission-profiles/${id}`,
+  },
 };
 

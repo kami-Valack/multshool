@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/admin/layout,_N_T_/admin/definicoes/layout,_N_T_/admin/definicoes/permissoes/layout,_N_T_/admin/definicoes/permissoes/page,_N_T_/admin/definicoes/permissoes"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/admin/definicoes/permissoes/__PAGE__",
+    "/admin/definicoes/permissoes",
+    "/admin/definicoes",
+    "/admin",
+    "/_index",
+    "/_head"
+  ]
+}
