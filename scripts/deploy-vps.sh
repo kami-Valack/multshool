@@ -72,6 +72,9 @@ if ! command -v docker >/dev/null 2>&1; then
 fi
 sudo systemctl enable --now docker || true
 
+echo '==> Clear stale Next.js caches (avoid dev/prod .next mismatch on VPS)'
+rm -rf "$REMOTE_DIR/sistema-akaedem-ms/.next" "$REMOTE_DIR/portal-estudante/.next" 2>/dev/null || true
+
 echo '==> docker compose up --build -d'
 cd "$REMOTE_DIR"
 sudo docker compose up --build -d
@@ -103,3 +106,5 @@ sudo docker compose ps
 EOF
 
 echo "==> Done. Frontends: http://$PUBLIC_HOST:3000 and http://$PUBLIC_HOST:3001"
+
+PUBLIC_HOST=98.89.20.199 .venv-e2e/bin/python scripts/e2e_api_replication_test.py

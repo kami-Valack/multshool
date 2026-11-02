@@ -1,0 +1,51 @@
+"use client";
+
+import { useEffect } from "react";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "2rem",
+        fontFamily: "system-ui, sans-serif",
+        textAlign: "center",
+      }}
+    >
+      <h1 style={{ fontSize: "1.25rem", marginBottom: "0.5rem" }}>
+        Ocorreu um erro
+      </h1>
+      <p style={{ color: "#666", maxWidth: 480, marginBottom: "1.5rem" }}>
+        {error.message || "Não foi possível carregar esta página."}
+      </p>
+      <button
+        type="button"
+        onClick={() => reset()}
+        style={{
+          padding: "0.75rem 1.25rem",
+          borderRadius: 8,
+          border: "none",
+          background: "#6C5F8D",
+          color: "#fff",
+          cursor: "pointer",
+        }}
+      >
+        Tentar novamente
+      </button>
+    </div>
+  );
+}

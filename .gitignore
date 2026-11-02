@@ -35,6 +35,8 @@ coverage/
 
 # Arquivos de build
 node_modules/
+**/.next/
+.next/
 /public/build
 /public/hot
 
