@@ -127,8 +127,9 @@ export default function PaymentReferenceScreen() {
     if (!intentId) return;
 
     const stored = sessionStorage.getItem(BILLING_MOBILE_STORAGE_KEY(intentId));
-    if (stored && stored.startsWith("244")) {
-      setMobileLocal(stored.slice(3));
+    if (stored) {
+      const nine = normalizeAngolaMobile(stored);
+      if (nine) setMobileLocal(nine);
     }
 
     let cancelled = false;

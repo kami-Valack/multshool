@@ -159,7 +159,7 @@ class FaciPayClient
      * @return array{success: bool, data?: array, error?: string, status?: int}
      */
     public function sendCharge(
-        string $mobileDigits244,
+        string $mobileNineDigits,
         string $recipientName,
         int $idFpReferencia,
         int $quantity = 1
@@ -169,7 +169,7 @@ class FaciPayClient
                 'success' => true,
                 'data' => [
                     'mock' => true,
-                    'dsTelemovelDestinatario' => $mobileDigits244,
+                    'dsTelemovelDestinatario' => $mobileNineDigits,
                     'idFpReferencia' => $idFpReferencia,
                 ],
             ];
@@ -183,7 +183,8 @@ class FaciPayClient
         }
 
         $body = [
-            'dsTelemovelDestinatario' => $mobileDigits244,
+            // GPO: número nacional (9 dígitos), sem prefixo 244
+            'dsTelemovelDestinatario' => $mobileNineDigits,
             'noDestinatario' => $recipientName,
             'referenciaIn' => json_encode([
                 ['idFpReferencia' => $idFpReferencia, 'nuQuantidade' => $quantity],
@@ -215,15 +216,16 @@ class FaciPayClient
         ];
     }
 
+    /** Número nacional para GPO: 9 dígitos (ex.: 923456789), sem 244. */
     public static function normalizeAngolaMobile(string $input): ?string
     {
         $digits = preg_replace('/\D+/', '', $input) ?? '';
 
-        if (strlen($digits) === 9 && str_starts_with($digits, '9')) {
-            return '244'.$digits;
+        if (strlen($digits) === 12 && str_starts_with($digits, '244')) {
+            $digits = substr($digits, 3);
         }
 
-        if (strlen($digits) === 12 && str_starts_with($digits, '244')) {
+        if (strlen($digits) === 9 && str_starts_with($digits, '9')) {
             return $digits;
         }
 

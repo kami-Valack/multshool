@@ -204,7 +204,7 @@ class PaymentIntentController extends Controller
         if (!$mobile) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Número inválido. Use 9 dígitos (ex.: 923456789) ou 244923456789.',
+                'message' => 'Número inválido. Use 9 dígitos (ex.: 923456789).',
             ], 422);
         }
 
