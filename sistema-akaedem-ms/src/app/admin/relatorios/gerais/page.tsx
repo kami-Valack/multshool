@@ -223,9 +223,8 @@ export default function Relatorios() {
   };
 
   return (
-    <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-<div className="p-6">
+    <>
+      <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h1 className="text-3xl font-bold tracking-tight">Relatórios e Estatísticas</h1>
@@ -463,9 +462,7 @@ export default function Relatorios() {
                   </Card>
                 </TabsContent>
               </Tabs>
-            </div>
-          </div>
-        </div>
+      </div>
 
         {/* Modal de Pré-visualização */}
         {previewOpen && currentReport?.data && (
@@ -613,5 +610,6 @@ export default function Relatorios() {
             </Card>
           </div>
         )}
-      );
+    </>
+  );
 }

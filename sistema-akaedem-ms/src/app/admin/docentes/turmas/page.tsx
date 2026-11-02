@@ -430,8 +430,8 @@ export default function Academica() {
   };
 
   return (
-    <div className="flex flex-1 flex-col">
-<div className="p-6 space-y-6">
+    <>
+      <div className="p-6 space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">
@@ -810,8 +810,7 @@ export default function Academica() {
                 </Card>
               </TabsContent>
             </Tabs>
-          </div>
-        </div>
+      </div>
 
         {/* DIALOG */}
         <Dialog open={open} onOpenChange={setOpen}>
@@ -1008,5 +1007,6 @@ export default function Academica() {
             </div>
           </DialogContent>
         </Dialog>
-      );
+    </>
+  );
 }

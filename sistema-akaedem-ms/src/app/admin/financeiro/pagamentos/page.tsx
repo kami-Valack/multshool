@@ -143,9 +143,9 @@ export default function Pagamentos() {
   };
 
   return (
-    <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:p-6">
-<div className="flex items-center justify-between">
+    <>
+      <div className="flex flex-col gap-4 p-4 md:p-6">
+            <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold tracking-tight">Pagamentos</h1>
               <Button onClick={abrirNovoPagamento}>
                 <Plus className="mr-2 h-4 w-4" />
@@ -287,8 +287,7 @@ export default function Pagamentos() {
                 </CardContent>
               </Card>
             </div>
-          </div>
-        </div>
+      </div>
 
         {/* Modal: Novo Pagamento */}
         <Dialog open={modalNovoOpen} onOpenChange={setModalNovoOpen}>
@@ -529,5 +528,6 @@ export default function Pagamentos() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      );
+    </>
+  );
 }

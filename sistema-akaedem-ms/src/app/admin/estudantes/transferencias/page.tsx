@@ -205,9 +205,8 @@ export default function TransferenciasRecorrencias() {
   };
 
   return (
-    <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-<div className="p-6 space-y-6">
+    <>
+      <div className="p-6 space-y-6">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Transferências e Recorrências</h1>
                 <p className="text-muted-foreground">Gestão de transferências, reintegrações e mudanças de curso/turma</p>
@@ -330,9 +329,7 @@ export default function TransferenciasRecorrencias() {
                   </CardContent>
                 </Card>
               </Tabs>
-            </div>
-          </div>
-        </div>
+      </div>
 
         {/* Drawer com PDF embutido */}
         <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -450,5 +447,6 @@ export default function TransferenciasRecorrencias() {
             )}
           </DrawerContent>
         </Drawer>
-      );
+    </>
+  );
 }

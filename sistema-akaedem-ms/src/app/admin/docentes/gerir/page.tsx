@@ -503,7 +503,6 @@ const GestaoDocentes = () => {
                 )}
               </div>
       </div>
-      </div>
 
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
