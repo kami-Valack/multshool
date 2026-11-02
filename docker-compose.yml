@@ -260,7 +260,7 @@ services:
       STUDENT_API_SECRET: ${STUDENT_API_SECRET}
       STUDENT_API_URL: http://ms-student:8001/api
       FACI_MOCK: ${FACI_MOCK:-true}
-      FACI_API_BASE_URL: ${FACI_API_BASE_URL:-}
+      FACI_API_BASE_URL: ${FACI_API_BASE_URL:-https://gpo.drip.infinityfree.me}
       FACI_API_KEY: ${FACI_API_KEY:-}
       FACI_DEFAULT_ENTITY: ${FACI_DEFAULT_ENTITY:-99999}
     volumes:

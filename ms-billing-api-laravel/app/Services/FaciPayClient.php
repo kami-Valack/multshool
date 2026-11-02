@@ -60,12 +60,15 @@ class FaciPayClient
             ];
         }
 
-        $data = $response->json();
-        if (!is_array($data)) {
-            $data = [];
+        $payload = $response->json();
+        if (!is_array($payload)) {
+            $payload = [];
         }
 
-        return ['success' => true, 'data' => $this->normalizeReferenceResponse($data, $amount, $type)];
+        return [
+            'success' => true,
+            'data' => $this->normalizeReferenceResponse($this->unwrapGpoPayload($payload), $amount, $type),
+        ];
     }
 
     /**
@@ -117,10 +120,26 @@ class FaciPayClient
             ];
         }
 
-        $data = $response->json();
-        $paid = (bool) ($data['paid'] ?? $data['pago'] ?? false);
+        $payload = $response->json();
+        if (!is_array($payload)) {
+            $payload = [];
+        }
+        $data = $this->unwrapGpoPayload($payload);
+        $paid = (bool) ($data['paid'] ?? $data['pago'] ?? $payload['paid'] ?? false);
 
-        return ['success' => true, 'paid' => $paid, 'data' => is_array($data) ? $data : []];
+        return ['success' => true, 'paid' => $paid, 'data' => array_merge($payload, $data)];
+    }
+
+    /**
+     * GPO at gpo.drip.infinityfree.me wraps payloads in { "result": { ... } }.
+     */
+    private function unwrapGpoPayload(array $payload): array
+    {
+        if (isset($payload['result']) && is_array($payload['result'])) {
+            return $payload['result'];
+        }
+
+        return $payload;
     }
 
     private function normalizeReferenceResponse(array $data, float $amount, string $type): array
