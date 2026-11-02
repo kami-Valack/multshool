@@ -2,44 +2,6 @@ x-php-build: &php-build
   context: ./docker/php
   dockerfile: Dockerfile
 
-x-laravel-env: &laravel-env
-  APP_ENV: ${APP_ENV:-local}
-  APP_DEBUG: ${APP_DEBUG:-true}
-  APP_KEY: ${APP_KEY:-}
-  DB_CONNECTION: mysql
-  DB_HOST: mysql
-  DB_PORT: 3306
-  DB_USERNAME: ${MYSQL_USER:-multshool}
-  DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
-  REDIS_CLIENT: phpredis
-  REDIS_HOST: redis
-  REDIS_PORT: 6379
-  REDIS_PASSWORD: ${REDIS_PASSWORD:-}
-  CACHE_STORE: ${CACHE_STORE:-database}
-  QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
-  JWT_SECRET: ${JWT_SECRET}
-  JWT_ALGO: ${JWT_ALGO:-HS256}
-  RABBITMQ_HOST: rabbitmq
-  RABBITMQ_PORT: 5672
-  RABBITMQ_USER: ${RABBITMQ_USER:-admin}
-  RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-admin123}
-  RABBITMQ_VHOST: ${RABBITMQ_VHOST:-/}
-  RABBITMQ_QUEUE: ${RABBITMQ_QUEUE:-default}
-  RABBITMQ_EMAIL_EXCHANGE: ${RABBITMQ_EMAIL_EXCHANGE:-email_exchange}
-  RABBITMQ_EMAIL_QUEUE: ${RABBITMQ_EMAIL_QUEUE:-email_queue}
-  RABBITMQ_USER_EVENTS_EXCHANGE: ${RABBITMQ_USER_EVENTS_EXCHANGE:-user_events}
-  RABBITMQ_USER_EVENTS_QUEUE: ${RABBITMQ_USER_EVENTS_QUEUE:-user_replication_queue}
-  RABBITMQ_USER_EVENTS_ROUTING_KEY: ${RABBITMQ_USER_EVENTS_ROUTING_KEY:-#}
-  AMQP_CONNECTION: ${AMQP_CONNECTION:-default}
-  API_SECRET: ${API_SECRET}
-  USERS_API_SECRET: ${USERS_API_SECRET}
-  STUDENT_API_SECRET: ${STUDENT_API_SECRET}
-  SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
-  USERS_API_URL: http://ms-users:8000/api
-  STUDENT_API_URL: http://ms-student:8001/api
-  SCHOOL_API_URL: http://ms-school:8003/api
-  AUTO_VERIFY_EMAILS: ${AUTO_VERIFY_EMAILS:-true}
-
 services:
   mysql:
     image: mysql:8.0
@@ -51,13 +13,11 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_USER: ${MYSQL_USER:-multshool}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-multshool}
-      # Default DB created by image; init.sql creates the four app DBs
       MYSQL_DATABASE: ${MYSQL_DATABASE:-ms-users-api}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      # $$ so the container expands MYSQL_ROOT_PASSWORD (not Compose at parse time)
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
@@ -112,11 +72,17 @@ services:
     working_dir: /var/www/html
     ports:
       - "8000:8000"
+    env_file:
+      - .env
+      - ./docker/env/laravel.env
     environment:
-      <<: *laravel-env
       APP_NAME: MS-Users-API
       APP_URL: http://localhost:8000
+      DB_HOST: mysql
+      DB_PORT: "3306"
       DB_DATABASE: ms-users-api
+      DB_USERNAME: ${MYSQL_USER:-multshool}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
     volumes:
       - ./ms-users-api-laravel:/var/www/html
       - ms_users_vendor:/var/www/html/vendor
@@ -139,11 +105,17 @@ services:
     working_dir: /var/www/html
     ports:
       - "8001:8001"
+    env_file:
+      - .env
+      - ./docker/env/laravel.env
     environment:
-      <<: *laravel-env
       APP_NAME: MS-Student-API
       APP_URL: http://localhost:8001
+      DB_HOST: mysql
+      DB_PORT: "3306"
       DB_DATABASE: ms-student-api
+      DB_USERNAME: ${MYSQL_USER:-multshool}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
     volumes:
       - ./ms-stundent-api-laravel-temp:/var/www/html
       - ms_student_vendor:/var/www/html/vendor
@@ -168,11 +140,17 @@ services:
     working_dir: /var/www/html
     ports:
       - "8002:8002"
+    env_file:
+      - .env
+      - ./docker/env/laravel.env
     environment:
-      <<: *laravel-env
       APP_NAME: MS-Admin-System
       APP_URL: http://localhost:8002
+      DB_HOST: mysql
+      DB_PORT: "3306"
       DB_DATABASE: ms-admin-api
+      DB_USERNAME: ${MYSQL_USER:-multshool}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
     volumes:
       - ./ms-admin-system:/var/www/html
       - ms_admin_vendor:/var/www/html/vendor
@@ -197,12 +175,18 @@ services:
     working_dir: /var/www/html
     ports:
       - "8003:8003"
+    env_file:
+      - .env
+      - ./docker/env/laravel.env
     environment:
-      <<: *laravel-env
       APP_NAME: MS-School-API
       APP_URL: http://localhost:8003
-      APP_PORT: 8003
+      APP_PORT: "8003"
+      DB_HOST: mysql
+      DB_PORT: "3306"
       DB_DATABASE: ms-school-api
+      DB_USERNAME: ${MYSQL_USER:-multshool}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
     volumes:
       - ./ms-shocoll-api:/var/www/html
       - ms_school_vendor:/var/www/html/vendor
@@ -225,11 +209,17 @@ services:
     container_name: multshool-ms-student-consumer
     restart: unless-stopped
     working_dir: /var/www/html
+    env_file:
+      - .env
+      - ./docker/env/laravel.env
     environment:
-      <<: *laravel-env
       APP_NAME: MS-Student-API
       APP_URL: http://localhost:8001
+      DB_HOST: mysql
+      DB_PORT: "3306"
       DB_DATABASE: ms-student-api
+      DB_USERNAME: ${MYSQL_USER:-multshool}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
       SKIP_MIGRATE: "1"
     volumes:
       - ./ms-stundent-api-laravel-temp:/var/www/html
@@ -249,11 +239,17 @@ services:
     container_name: multshool-ms-school-consumer
     restart: unless-stopped
     working_dir: /var/www/html
+    env_file:
+      - .env
+      - ./docker/env/laravel.env
     environment:
-      <<: *laravel-env
       APP_NAME: MS-School-API
       APP_URL: http://localhost:8003
+      DB_HOST: mysql
+      DB_PORT: "3306"
       DB_DATABASE: ms-school-api
+      DB_USERNAME: ${MYSQL_USER:-multshool}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
       SKIP_MIGRATE: "1"
     volumes:
       - ./ms-shocoll-api:/var/www/html
@@ -276,7 +272,7 @@ services:
     working_dir: /app
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      PORT: 3002
+      PORT: "3002"
       RABBITMQ_URL: amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-admin123}@rabbitmq:5672
       RABBITMQ_QUEUE: ${RABBITMQ_EMAIL_QUEUE:-email_queue}
       RABBITMQ_EXCHANGE: ${RABBITMQ_EMAIL_EXCHANGE:-email_exchange}
@@ -335,7 +331,7 @@ services:
       NEXT_PUBLIC_ADMIN_API_URL: ${NEXT_PUBLIC_ADMIN_API_URL:-http://localhost:8002/api}
       NEXT_PUBLIC_BILLING_API_URL: ${NEXT_PUBLIC_BILLING_API_URL:-http://localhost:8004/api}
       USERS_API_URL: http://ms-users:8000/api
-      USERS_API_SECRET: ${USERS_API_SECRET}
+      USERS_API_SECRET: ${USERS_API_SECRET:-}
     volumes:
       - ./sistema-akaedem-ms:/app
       - akaedem_node_modules:/app/node_modules

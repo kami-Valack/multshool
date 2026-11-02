@@ -29,11 +29,14 @@ if [ -z "${APP_KEY:-}" ]; then
   fi
 fi
 
-if [ "${SKIP_MIGRATE:-0}" != "1" ]; then
-  php artisan config:clear --no-interaction || true
-  php artisan route:clear --no-interaction || true
-  php artisan view:clear --no-interaction || true
+# Always clear cached config so DB_HOST from Docker wins over stale cache
+php artisan config:clear --no-interaction || true
+php artisan route:clear --no-interaction || true
+php artisan view:clear --no-interaction || true
 
+echo "[entrypoint] DB target: ${DB_CONNECTION:-?}://${DB_USERNAME:-?}@${DB_HOST:-?}:${DB_PORT:-?}/${DB_DATABASE:-?}"
+
+if [ "${SKIP_MIGRATE:-0}" != "1" ]; then
   echo "[entrypoint] Running migrations..."
   php artisan migrate --force --no-interaction || {
     echo "[entrypoint] WARNING: migrate failed (retrying once)..."
@@ -42,6 +45,11 @@ if [ "${SKIP_MIGRATE:-0}" != "1" ]; then
   }
 else
   echo "[entrypoint] SKIP_MIGRATE=1 — skipping migrations."
+fi
+
+# Remove empty APP_KEY from the environment so Laravel can use .env APP_KEY
+if [ -z "${APP_KEY:-}" ]; then
+  unset APP_KEY || true
 fi
 
 echo "[entrypoint] Starting: $*"
