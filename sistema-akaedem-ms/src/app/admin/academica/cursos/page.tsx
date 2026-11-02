@@ -779,19 +779,19 @@ export default function Academica() {
                     {admissionExams.map((exam) => (
                       <div
                         key={exam.id}
-                        className="flex items-start justify-between gap-2 rounded-md border p-3 text-sm"
+                        className="flex items-start justify-between gap-2 rounded-md border border-border bg-card p-3 text-sm text-card-foreground"
                       >
                         <div>
                           <p className="font-medium">{exam.name}</p>
-                          <p className="text-gray-600">
+                          <p className="text-muted-foreground">
                             Taxa:{" "}
-                            {(exam.exam_fee ?? 0).toLocaleString("pt-AO", {
+                            {Number(exam.exam_fee ?? 0).toLocaleString("pt-AO", {
                               style: "currency",
                               currency: "AOA",
                             })}
                           </p>
                           {exam.exam_date && (
-                            <p className="text-gray-500">
+                            <p className="text-muted-foreground">
                               Data:{" "}
                               {new Date(exam.exam_date).toLocaleDateString("pt-PT")}
                             </p>
@@ -809,53 +809,77 @@ export default function Academica() {
                     ))}
                   </div>
                 )}
-                <div className="space-y-2 rounded-md border p-3 bg-gray-50">
-                  <p className="text-sm font-medium">Novo exame</p>
-                  <Input
-                    placeholder="Nome do exame"
-                    value={examForm.name}
-                    onChange={(e) => setExamForm({ ...examForm, name: e.target.value })}
-                  />
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-3 rounded-md border border-border p-4 bg-muted/40">
+                  <p className="text-sm font-medium text-foreground">Novo exame</p>
+                  <div className="space-y-2">
+                    <Label htmlFor="exam_name">Nome do exame</Label>
                     <Input
-                      type="datetime-local"
-                      value={examForm.exam_date}
-                      onChange={(e) =>
-                        setExamForm({ ...examForm, exam_date: e.target.value })
-                      }
-                    />
-                    <Input
-                      type="datetime-local"
-                      placeholder="Prazo inscrição"
-                      value={examForm.registration_deadline}
-                      onChange={(e) =>
-                        setExamForm({
-                          ...examForm,
-                          registration_deadline: e.target.value,
-                        })
-                      }
+                      id="exam_name"
+                      className="bg-background text-foreground"
+                      placeholder="Ex.: Exame de Admissão 2026"
+                      value={examForm.name}
+                      onChange={(e) => setExamForm({ ...examForm, name: e.target.value })}
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      placeholder="Taxa (AOA)"
-                      value={examForm.exam_fee}
-                      onChange={(e) =>
-                        setExamForm({ ...examForm, exam_fee: e.target.value })
-                      }
-                    />
-                    <Input
-                      type="number"
-                      min="1"
-                      placeholder="Máx. candidatos"
-                      value={examForm.max_candidates}
-                      onChange={(e) =>
-                        setExamForm({ ...examForm, max_candidates: e.target.value })
-                      }
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="exam_date">Data do exame</Label>
+                      <Input
+                        id="exam_date"
+                        type="datetime-local"
+                        className="bg-background text-foreground dark:[color-scheme:dark]"
+                        value={examForm.exam_date}
+                        onChange={(e) =>
+                          setExamForm({ ...examForm, exam_date: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="exam_deadline">Prazo de inscrição</Label>
+                      <Input
+                        id="exam_deadline"
+                        type="datetime-local"
+                        className="bg-background text-foreground dark:[color-scheme:dark]"
+                        value={examForm.registration_deadline}
+                        onChange={(e) =>
+                          setExamForm({
+                            ...examForm,
+                            registration_deadline: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="exam_fee">Taxa (AOA)</Label>
+                      <Input
+                        id="exam_fee"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        className="bg-background text-foreground"
+                        placeholder="Ex.: 5000"
+                        value={examForm.exam_fee}
+                        onChange={(e) =>
+                          setExamForm({ ...examForm, exam_fee: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="exam_max">Máx. candidatos (opcional)</Label>
+                      <Input
+                        id="exam_max"
+                        type="number"
+                        min="1"
+                        className="bg-background text-foreground"
+                        placeholder="Ex.: 100"
+                        value={examForm.max_candidates}
+                        onChange={(e) =>
+                          setExamForm({ ...examForm, max_candidates: e.target.value })
+                        }
+                      />
+                    </div>
                   </div>
                   <Button
                     type="button"
