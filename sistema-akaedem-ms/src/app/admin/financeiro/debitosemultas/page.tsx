@@ -73,42 +73,7 @@ interface EstudanteDebito {
   multas: Multa[];
 }
 
-// === Dados de exemplo ===
-const dadosExemplo: EstudanteDebito[] = [
-  {
-    id: "1",
-    nome: "Maria José Silva",
-    numero: "2023001",
-    curso: "Engenharia Informática",
-    parcelas: [
-      { id: "p1", valor: 45000, dataVencimento: new Date(2025, 9, 15), pago: false, motivo: "Propina - Outubro" },
-      { id: "p2", valor: 45000, dataVencimento: new Date(2025, 8, 10), pago: false, motivo: "Propina - Setembro" },
-    ],
-    multas: [
-      { id: "m1", tipo: "Atraso", valor: 5000, dataAplicacao: new Date(2025, 9, 20), dataVencimento: new Date(2025, 10, 5), motivo: "Atraso > 5 dias" },
-    ],
-  },
-  {
-    id: "2",
-    nome: "João Pedro Mendes",
-    numero: "2023002",
-    curso: "Direito",
-    parcelas: [
-      { id: "p3", valor: 35000, dataVencimento: new Date(2025, 9, 30), pago: false, motivo: "Propina - Outubro" },
-    ],
-    multas: [],
-  },
-  {
-    id: "3",
-    nome: "Ana Luísa Costa",
-    numero: "2023003",
-    curso: "Medicina",
-    parcelas: [],
-    multas: [
-      { id: "m2", tipo: "Documento", valor: 10000, dataAplicacao: new Date(2025, 10, 1), dataVencimento: new Date(2025, 11, 1), motivo: "Perda de cartão de estudante" },
-    ],
-  },
-];
+const dadosExemplo: EstudanteDebito[] = [];
 
 // Taxa de juros por dia de atraso
 const TAXA_JUROS_DIA = 0.005; // 0.5% ao dia

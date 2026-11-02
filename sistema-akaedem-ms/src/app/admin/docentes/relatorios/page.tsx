@@ -64,33 +64,13 @@ import {
 } from "lucide-react"
 import { useState } from "react"
 
-// -------------------------------------------------
-// Dados fictícios (substitua por API depois)
-// -------------------------------------------------
-const avaliacoes = [
-  { id: 1, docente: "Ana Silva", criterio: "Pontualidade", nota: 4.8, semestre: "2025/1", data: "2025-10-20" },
-  { id: 2, docente: "João Mendes", criterio: "Desempenho", nota: 4.2, semestre: "2025/1", data: "2025-10-18" },
-  { id: 3, docente: "Maria Costa", criterio: "Pontualidade", nota: 4.9, semestre: "2025/1", data: "2025-10-15" },
-  { id: 4, docente: "Pedro Santos", criterio: "Desempenho", nota: 3.9, semestre: "2025/1", data: "2025-10-12" },
-]
+const avaliacoes: { id: number; docente: string; criterio: string; nota: number; semestre: string; data: string }[] = []
 
-const relatorioDocente = [
-  { mes: "Jan", aulas: 28, notasLancadas: 100, aprovacao: 88 },
-  { mes: "Fev", aulas: 24, notasLancadas: 95, aprovacao: 92 },
-  { mes: "Mar", aulas: 30, notasLancadas: 98, aprovacao: 85 },
-  { mes: "Abr", aulas: 22, notasLancadas: 100, aprovacao: 90 },
-]
+const relatorioDocente: { mes: string; aulas: number; notasLancadas: number; aprovacao: number }[] = []
 
-const ranking = [
-  { pos: 1, docente: "Ana Silva", media: 4.8, badge: "gold" },
-  { pos: 2, docente: "Maria Costa", media: 4.6, badge: "silver" },
-  { pos: 3, docente: "Pedro Santos", media: 4.5, badge: "bronze" },
-]
+const ranking: { pos: number; docente: string; media: number; badge: string }[] = []
 
-const pieData = [
-  { name: "Aprovados", value: 78, color: "#22c55e" },
-  { name: "Reprovados", value: 22, color: "#ef4444" },
-]
+const pieData: { name: string; value: number; color: string }[] = []
 
 // -------------------------------------------------
 // Componente principal

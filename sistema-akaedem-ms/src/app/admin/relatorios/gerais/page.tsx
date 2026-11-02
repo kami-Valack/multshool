@@ -59,19 +59,8 @@ export default function Relatorios() {
   // Ref para impressão
   const printRef = useRef<HTMLDivElement>(null);
 
-  // Histórico
-  const [history, setHistory] = useState<Report[]>([
-    {
-      id: "1",
-      name: "Relatório de Propinas - 1º Trimestre",
-      type: "Financeiro",
-      date: new Date(2025, 10, 4),
-      responsible: "Ana Silva",
-      status: "Emitido",
-    },
-  ]);
+  const [history, setHistory] = useState<Report[]>([]);
 
-  // Dados simulados por tipo
   const generateReportData = (): Report | null => {
     if (!reportType) return null;
 
@@ -88,14 +77,10 @@ export default function Relatorios() {
       return {
         ...base,
         data: {
-          title: "Desempenho Académico - 12ª Classe",
-          period: "2º Semestre 2025",
-          stats: { approved: 42, failed: 8, total: 50, average: 14.2 },
-          students: [
-            { name: "João Pedro", grade: 16, status: "Aprovado" },
-            { name: "Maria Santos", grade: 12, status: "Reprovado" },
-            { name: "Ana Costa", grade: 18, status: "Aprovado" },
-          ],
+          title: "Desempenho Académico",
+          period: "—",
+          stats: { approved: 0, failed: 0, total: 0, average: 0 },
+          students: [],
         },
       };
     }
@@ -105,12 +90,9 @@ export default function Relatorios() {
         ...base,
         data: {
           title: "Relatório de Propinas",
-          period: "Novembro 2025",
-          stats: { paid: 45000, pending: 12000, total: 57000 },
-          payments: [
-            { student: "Carlos Mendes", value: 5000, status: "Pago" },
-            { student: "Luísa Ferreira", value: 5000, status: "Pendente" },
-          ],
+          period: "—",
+          stats: { paid: 0, pending: 0, total: 0 },
+          payments: [],
         },
       };
     }
@@ -120,12 +102,9 @@ export default function Relatorios() {
         ...base,
         data: {
           title: "Frequência Docente",
-          period: "Novembro 2025",
-          stats: { present: 28, absent: 2, total: 30 },
-          teachers: [
-            { name: "Prof. Manuel", classes: 20, absences: 0 },
-            { name: "Prof. Isabel", classes: 18, absences: 1 },
-          ],
+          period: "—",
+          stats: { present: 0, absent: 0, total: 0 },
+          teachers: [],
         },
       };
     }

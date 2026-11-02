@@ -119,28 +119,7 @@ interface Exam {
 }
 
 export default function AccessExams() {
-  const [exams, setExams] = useState<Exam[]>([
-    {
-      id: '1',
-      nome: 'Exame de Matemática',
-      data: '2025-11-15',
-      hora: '09:00',
-      local: 'Campus Principal - Sala 101',
-      vagas: 50,
-      inscritos: 42,
-      status: 'agendado'
-    },
-    {
-      id: '2',
-      nome: 'Exame de Português',
-      data: '2025-11-16',
-      hora: '14:00',
-      local: 'Campus Principal - Sala 102',
-      vagas: 50,
-      inscritos: 38,
-      status: 'agendado'
-    }
-  ]);
+  const [exams, setExams] = useState<Exam[]>([]);
 
   const [newExam, setNewExam] = useState({
     nome: '',

@@ -15,6 +15,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  type ChartConfig,
 } from "@/components/ui/chart";
 import {
   Select,
@@ -24,18 +25,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { approvalChartData, chartConfig } from "@/mocks/aprovalmock";
 
-const courses = ["Engenharia", "Direito", "Medicina", "Gestão", "Informática"];
-const courseColors = [
-  "--chart-1",
-  "--chart-2",
-  "--chart-3",
-  "--chart-4",
-  "--chart-5",
-];
+const chartConfig = {
+  aprovacao: { label: "Aprovação", color: "var(--chart-1)" },
+} satisfies ChartConfig;
 
-export function ChartAreaInteractive() {
+type ApprovalPoint = { date: string; aprovacao: number };
+
+export function ChartAreaInteractive({
+  data = [],
+}: {
+  data?: ApprovalPoint[];
+}) {
   const isMobile = useIsMobile();
   const [timeRange, setTimeRange] = React.useState("30d");
 
@@ -43,29 +44,30 @@ export function ChartAreaInteractive() {
     if (isMobile) setTimeRange("7d");
   }, [isMobile]);
 
-  const filteredData = approvalChartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-10");
-    let daysToSubtract = timeRange === "7d" ? 7 : timeRange === "30d" ? 30 : 90;
+  const filteredData = React.useMemo(() => {
+    if (!data.length) return [];
+    const referenceDate = new Date();
+    const daysToSubtract = timeRange === "7d" ? 7 : timeRange === "30d" ? 30 : 90;
     const startDate = new Date(referenceDate);
     startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+    return data.filter((item) => new Date(item.date) >= startDate);
+  }, [data, timeRange]);
 
   return (
     <Card className="@container/card">
       <CardHeader className="relative">
-        <CardTitle>Taxa de Aprovação por Curso</CardTitle>
+        <CardTitle>Taxa de Aprovação</CardTitle>
         <CardDescription>
-          <span className="@[540px]/card:block hidden">Últimos 3 meses</span>
-          <span className="@[540px]/card:hidden">Últimos 3 meses</span>
+          {filteredData.length === 0
+            ? "Sem dados disponíveis"
+            : "Evolução recente"}
         </CardDescription>
 
         <div className="absolute right-4 top-4">
           <ToggleGroup
             type="single"
             value={timeRange}
-            onValueChange={setTimeRange}
+            onValueChange={(v) => v && setTimeRange(v)}
             variant="outline"
             className="@[767px]/card:flex hidden"
           >
@@ -103,76 +105,68 @@ export function ChartAreaInteractive() {
       </CardHeader>
 
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
-        >
-          <AreaChart data={filteredData}>
-            <defs>
-              {courses.map((course, idx) => (
-                <linearGradient
-                  key={course}
-                  id={`fill${course}`}
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
+        {filteredData.length === 0 ? (
+          <div className="flex h-[250px] items-center justify-center text-sm text-muted-foreground">
+            Ainda não há dados de aprovação para mostrar.
+          </div>
+        ) : (
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[250px] w-full"
+          >
+            <AreaChart data={filteredData}>
+              <defs>
+                <linearGradient id="fillAprovacao" x1="0" y1="0" x2="0" y2="1">
                   <stop
                     offset="5%"
-                    stopColor={`var(${courseColors[idx]})`}
+                    stopColor="var(--color-aprovacao)"
                     stopOpacity={0.8}
                   />
                   <stop
                     offset="95%"
-                    stopColor={`var(${courseColors[idx]})`}
+                    stopColor="var(--color-aprovacao)"
                     stopOpacity={0.1}
                   />
                 </linearGradient>
-              ))}
-            </defs>
-
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) =>
-                new Date(value).toLocaleDateString("pt-PT", {
-                  month: "short",
-                  day: "numeric",
-                })
-              }
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) =>
-                    new Date(value).toLocaleDateString("pt-PT", {
-                      month: "short",
-                      day: "numeric",
-                    })
-                  }
-                  indicator="dot"
-                />
-              }
-            />
-            {courses.map((course, idx) => (
-              <Area
-                key={course}
-                dataKey={course}
-                type="monotone" // curva suave
-                fill={`url(#fill${course})`}
-                stroke={`var(${courseColors[idx]})`}
-                strokeWidth={2}
-                stackId={undefined} // sem empilhamento
+              </defs>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) =>
+                  new Date(value).toLocaleDateString("pt-PT", {
+                    month: "short",
+                    day: "numeric",
+                  })
+                }
               />
-            ))}
-          </AreaChart>
-        </ChartContainer>
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) =>
+                      new Date(value).toLocaleDateString("pt-PT", {
+                        month: "short",
+                        day: "numeric",
+                      })
+                    }
+                    indicator="dot"
+                  />
+                }
+              />
+              <Area
+                dataKey="aprovacao"
+                type="monotone"
+                fill="url(#fillAprovacao)"
+                stroke="var(--color-aprovacao)"
+                strokeWidth={2}
+              />
+            </AreaChart>
+          </ChartContainer>
+        )}
       </CardContent>
     </Card>
   );

@@ -52,57 +52,11 @@ interface Pagamento {
   observacoes?: string;
 }
 
-// Mock de dados
-const mockEstudantes: Estudante[] = [
-  { id: "1", nome: "Maria Santos", curso: "Engenharia Informática", turma: "EI-2023-A", numero: "2023001" },
-  { id: "2", nome: "João Mendes", curso: "Gestão", turma: "GES-2024-B", numero: "2024002" },
-  { id: "3", nome: "Ana Costa", curso: "Direito", turma: "DIR-2022-A", numero: "2022003" },
-];
+const mockEstudantes: Estudante[] = [];
 
-const mockDividas: Record<string, Divida[]> = {
-  "1": [
-    { id: "d1", tipo: "propina", descricao: "Propina - 1º Semestre 2025", valor: 45000, dataVencimento: "2025-01-15", paga: false },
-    { id: "d2", tipo: "exame", descricao: "Taxa de Exame Final", valor: 8000, dataVencimento: "2025-06-30", paga: true },
-  ],
-  "2": [
-    { id: "d3", tipo: "propina", descricao: "Propina - 2º Semestre 2025", valor: 45000, dataVencimento: "2025-07-01", paga: false },
-  ],
-  "3": [
-    { id: "d4", tipo: "declaracao", descricao: "Declaração de Matrícula", valor: 3000, dataVencimento: "2025-11-10", paga: true },
-  ],
-};
+const mockDividas: Record<string, Divida[]> = {};
 
-const mockPagamentos: Pagamento[] = [
-  {
-    id: "1",
-    recibo: "REC2025-001",
-    estudanteId: "1",
-    estudanteNome: "Maria Santos",
-    curso: "Engenharia Informática",
-    turma: "EI-2023-A",
-    tipo: "propina",
-    valor: 45000,
-    metodo: "online",
-    estado: "pago",
-    data: "2025-11-05",
-    comprovativo: "/comprovativos/rec001.pdf",
-  },
-  {
-    id: "2",
-    recibo: "REC2025-002",
-    estudanteId: "2",
-    estudanteNome: "João Mendes",
-    curso: "Gestão",
-    turma: "GES-2024-B",
-    tipo: "exame",
-    valor: 8000,
-    metodo: "transferencia",
-    estado: "pendente",
-    data: "2025-11-06",
-    comprovativo: "/comprovativos/rec002.jpg",
-    observacoes: "Aguardando confirmação bancária",
-  },
-];
+const mockPagamentos: Pagamento[] = [];
 
 const formatarData = (isoString: string): string => {
   const date = new Date(isoString);

@@ -132,68 +132,6 @@ interface DynamicTableProps {
   }
 }
 
-const mockData: DataItem[] = [
-  {
-    id: 1,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maria",
-    name: "Maria Silva Santos",
-    enrollmentNumber: "2024001",
-    course: "Engenharia Informática",
-    class: "EI-3A",
-    enrollmentDate: "2024-11-01",
-    status: "Ativa",
-    phone: "+244 923 456 789",
-    email: "maria.santos@email.com",
-  },
-  {
-    id: 2,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Joao",
-    name: "João Pedro Mendes",
-    enrollmentNumber: "2024002",
-    course: "Gestão de Empresas",
-    class: "GE-2B",
-    enrollmentDate: "2024-11-02",
-    status: "Pendente",
-    phone: "+244 924 567 890",
-    email: "joao.mendes@email.com",
-  },
-  {
-    id: 3,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ana",
-    name: "Ana Carolina Ferreira",
-    enrollmentNumber: "2024003",
-    course: "Medicina",
-    class: "MED-1A",
-    enrollmentDate: "2024-11-03",
-    status: "Ativa",
-    phone: "+244 925 678 901",
-    email: "ana.ferreira@email.com",
-  },
-  {
-    id: 4,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carlos",
-    name: "Carlos Alberto Costa",
-    enrollmentNumber: "2024004",
-    course: "Direito",
-    class: "DIR-4C",
-    enrollmentDate: "2024-11-03",
-    status: "Ativa",
-    phone: "+244 926 789 012",
-    email: "carlos.costa@email.com",
-  },
-  {
-    id: 5,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Patricia",
-    name: "Patrícia Lopes Oliveira",
-    enrollmentNumber: "2024005",
-    course: "Arquitectura",
-    class: "ARQ-2A",
-    enrollmentDate: "2024-11-04",
-    status: "Pendente",
-    phone: "+244 927 890 123",
-    email: "patricia.oliveira@email.com",
-  },
-]
 
 function DragHandle({ id }: { id: number }) {
   const { attributes, listeners } = useSortable({ id })
@@ -963,33 +901,6 @@ export default function DynamicTable({
   )
 }
 
-// Exemplo de uso do componente original
-export function ExampleUsage() {
-  return (
-    <>
-      {/* Exemplo 1: Candidaturas */}
-      <DynamicTable
-        title="Candidaturas Recentes"
-        description="Gerencie e visualize as inscrições mais recentes"
-        addButtonText="Nova Candidatura"
-        searchPlaceholder="Buscar por nome ou candidatura..."
-        data={mockData}
-        fieldLabels={{
-          name: "Nome Completo",
-          enrollmentNumber: "Nº Candidatura",
-          course: "Curso",
-          class: "Turma",
-          enrollmentDate: "Data de Candidatura",
-          status: "Estado",
-          phone: "Telefone",
-          email: "Email"
-        }}
-        onAddNew={() => console.log("Nova candidatura")}
-      />
-      {/* Outros exemplos comentados como no original */}
-    </>
-  )
-}
 
 // ==================== TABELA VARIANTE (para Docentes) ====================
 
@@ -1027,68 +938,6 @@ interface DynamicDocentesTableProps {
   }
 }
 
-const mockDocentesData: DocenteItem[] = [
-  {
-    id: 1,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=MariaDocente",
-    name: "Maria Silva Santos",
-    employeeNumber: "DOC-001",
-    department: "Engenharia Informática",
-    role: "Professor Assistente",
-    hireDate: "2024-09-01",
-    status: "Ativo",
-    phone: "+244 923 456 789",
-    email: "maria.santos@universidade.edu.ao",
-  },
-  {
-    id: 2,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=JoaoDocente",
-    name: "João Pedro Mendes",
-    employeeNumber: "DOC-002",
-    department: "Gestão de Empresas",
-    role: "Professor Coordenador",
-    hireDate: "2023-08-15",
-    status: "Ativo",
-    phone: "+244 924 567 890",
-    email: "joao.mendes@universidade.edu.ao",
-  },
-  {
-    id: 3,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=AnaDocente",
-    name: "Ana Carolina Ferreira",
-    employeeNumber: "DOC-003",
-    department: "Medicina",
-    role: "Professora Auxiliar",
-    hireDate: "2024-10-01",
-    status: "Pendente",
-    phone: "+244 925 678 901",
-    email: "ana.ferreira@universidade.edu.ao",
-  },
-  {
-    id: 4,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=CarlosDocente",
-    name: "Carlos Alberto Costa",
-    employeeNumber: "DOC-004",
-    department: "Direito",
-    role: "Professor Titular",
-    hireDate: "2022-07-20",
-    status: "Ativo",
-    phone: "+244 926 789 012",
-    email: "carlos.costa@universidade.edu.ao",
-  },
-  {
-    id: 5,
-    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=PatriciaDocente",
-    name: "Patrícia Lopes Oliveira",
-    employeeNumber: "DOC-005",
-    department: "Arquitectura",
-    role: "Professora Convidada",
-    hireDate: "2024-11-01",
-    status: "Ativo",
-    phone: "+244 927 890 123",
-    email: "patricia.oliveira@universidade.edu.ao",
-  },
-]
 
 function DocenteViewerSheet({
   item,
@@ -1766,26 +1615,3 @@ export function DynamicDocentesTable({
   )
 }
 
-// Exemplo de uso do componente para docentes
-export function ExampleDocentesUsage() {
-  return (
-    <DynamicDocentesTable
-      title="Gestão de Docentes"
-      description="Gerencie e visualize o quadro docente da instituição"
-      addButtonText="Novo Docente"
-      searchPlaceholder="Buscar por nome ou departamento..."
-      data={mockDocentesData}
-      fieldLabels={{
-        name: "Nome Completo",
-        employeeNumber: "Nº Funcionário",
-        department: "Departamento",
-        role: "Cargo",
-        hireDate: "Data de Admissão",
-        status: "Estado",
-        phone: "Telefone",
-        email: "Email Institucional"
-      }}
-      onAddNew={() => console.log("Novo docente adicionado")}
-    />
-  )
-}

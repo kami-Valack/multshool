@@ -74,36 +74,13 @@ const documentTypes = [
 
 const quickSuggestions = [
   "Gerar relatório de propinas em atraso",
-  "Criar declaração de matrícula para João Silva",
-  "Mostrar notas do 12º A",
+  "Criar declaração de matrícula",
+  "Mostrar notas por turma",
   "Análise de desempenho por curso",
 ];
 
 export default function AssistenteIA() {
-  const [conversations, setConversations] = useState<Conversation[]>([
-    {
-      id: "1",
-      title: "Relatório de propinas",
-      lastMessage: "Mostra alunos com dívidas...",
-      timestamp: new Date(),
-      messages: [
-        {
-          id: "m1",
-          role: "user",
-          content: "Mostra alunos com propinas em atraso",
-          timestamp: new Date(),
-        },
-        {
-          id: "m2",
-          role: "assistant",
-          content:
-            "Aqui tens os alunos com dívidas:\n\n| Aluno | Valor | Data |\n|-------|-------|------|\n| Ana Silva | 15.000 Kz | 01/10 |\n| João Mendes | 8.500 Kz | 15/09 |",
-          timestamp: new Date(),
-          type: "table",
-        },
-      ],
-    },
-  ]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
 
   const [currentConversation, setCurrentConversation] =
     useState<Conversation | null>(null);
@@ -186,20 +163,16 @@ export default function AssistenteIA() {
       );
     }
 
-    // Simulação de resposta
     setTimeout(() => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content:
-          `Compreendido! Aqui tens o resultado para: "${input}"\n\n` +
-          `> **Tabela de exemplo:**\n` +
-          `| Nome | Curso | Média |\n` +
-          `|------|-------|-------|\n` +
-          `| Maria | Informática | 17.3 |\n` +
-          `| Pedro | Contabilidade | 15.8 |\n`,
+          `Recebi o pedido: "${input}"\n\n` +
+          `Ainda não há integração com a API para gerar este resultado. ` +
+          `Quando os dados reais estiverem disponíveis, aparecerão aqui.`,
         timestamp: new Date(),
-        type: "table",
+        type: "text",
       };
 
       const finalMessages = [...updatedMessages, assistantMessage];

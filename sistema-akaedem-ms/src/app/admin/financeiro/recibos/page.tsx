@@ -127,92 +127,15 @@ interface Instituicao {
   logoUrl?: string;
 }
 
-// Dados
 const instituicaoInicial: Instituicao = {
-  nome: "Instituto Superior Politécnico de Luanda",
-  nif: "500000000",
-  morada: "Rua Principal, Luanda, Angola",
-  telefone: "+244 923 456 789",
-  email: "financeiro@ispl.ao",
+  nome: "",
+  nif: "",
+  morada: "",
+  telefone: "",
+  email: "",
 };
 
-const documentosIniciais: Documento[] = [
-  {
-    id: "1",
-    numero: "FAT-2025-0001",
-    tipo: "fatura",
-    estudanteId: "1",
-    estudanteNome: "Maria Santos",
-    estudanteNIF: "003456789LA047",
-    dataEmissao: new Date(2025, 8, 10),
-    dataVencimento: new Date(2025, 8, 25),
-    itens: [
-      {
-        descricao: "Propina - 1ª Parcela",
-        quantidade: 1,
-        valorUnitario: 225000,
-        total: 225000,
-      },
-      {
-        descricao: "Taxa de Matrícula",
-        quantidade: 1,
-        valorUnitario: 25000,
-        total: 25000,
-      },
-    ],
-    subtotal: 250000,
-    total: 250000,
-    estado: "pago",
-    metodoPagamento: "Transferência Bancária",
-    comprovativoAnexado: true,
-    qrCode: true,
-    qrData: "https://portal.ispl.ao/verificar?doc=FAT-2025-0001",
-  },
-  {
-    id: "2",
-    numero: "REC-2025-0001",
-    tipo: "recibo",
-    estudanteId: "2",
-    estudanteNome: "João Pedro",
-    dataEmissao: new Date(2025, 8, 15),
-    itens: [
-      {
-        descricao: "Pagamento Propina - Parcela 1",
-        quantidade: 1,
-        valorUnitario: 200000,
-        total: 200000,
-      },
-    ],
-    subtotal: 200000,
-    total: 200000,
-    estado: "pago",
-    metodoPagamento: "Multicaixa",
-    qrCode: true,
-    qrData: "https://portal.ispl.ao/verificar?doc=REC-2025-0001",
-  },
-  {
-    id: "3",
-    numero: "FAT-2025-0002",
-    tipo: "fatura",
-    estudanteId: "3",
-    estudanteNome: "Ana Lima",
-    dataEmissao: new Date(2025, 9, 1),
-    dataVencimento: new Date(2025, 9, 15),
-    itens: [
-      {
-        descricao: "Declaração Académica",
-        quantidade: 1,
-        valorUnitario: 3000,
-        total: 3000,
-      },
-    ],
-    subtotal: 3000,
-    total: 3000,
-    estado: "pendente",
-    qrCode: true,
-    qrData: "https://portal.ispl.ao/verificar?doc=FAT-2025-0002",
-  },
-];
+const documentosIniciais: Documento[] = [];
 
 export default function FaturasRecibosPage() {
   const [documentos, setDocumentos] =

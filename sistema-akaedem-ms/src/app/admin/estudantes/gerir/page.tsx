@@ -3,12 +3,12 @@
 
 import * as React from "react";
 import {
-  mockStudents,
-  mockPayments,
-  mockDocuments,
-  mockGrades,
-  mockHistory,
-} from "@/lib/mock-data";
+  type Student,
+  type Payment,
+  type Document,
+  type Grade,
+  type HistoryEvent,
+} from "@/lib/student-types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -110,8 +110,6 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import NavbarH from "@/components/ui/heroui/navbar";
 
-type Student = (typeof mockStudents)[0];
-
 const formatDate = (date: string) => new Date(date).toLocaleDateString("pt-AO");
 
 // === COMPONENTES AUXILIARES ===
@@ -196,7 +194,11 @@ const DraggableRow = React.memo(({ row }: { row: Row<Student> }) => {
 });
 
 export default function GerirEstudantes() {
-  const [students] = React.useState(mockStudents);
+  const [students] = React.useState<Student[]>([]);
+  const payments: Payment[] = [];
+  const documents: Document[] = [];
+  const grades: Grade[] = [];
+  const history: HistoryEvent[] = [];
   const [search, setSearch] = React.useState("");
   const [selectedCourse, setSelectedCourse] = React.useState("all");
   const [selectedClass, setSelectedClass] = React.useState("all");
@@ -765,7 +767,7 @@ export default function GerirEstudantes() {
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                  {mockPayments.map((p) => (
+                                  {payments.map((p) => (
                                     <TableRow key={p.id}>
                                       <TableCell>{p.description}</TableCell>
                                       <TableCell>
@@ -823,7 +825,7 @@ export default function GerirEstudantes() {
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                  {mockDocuments.map((d) => (
+                                  {documents.map((d) => (
                                     <TableRow key={d.id}>
                                       <TableCell>{d.name}</TableCell>
                                       <TableCell>{d.type}</TableCell>
@@ -856,7 +858,7 @@ export default function GerirEstudantes() {
                                     </TableRow>
                                   </TableHeader>
                                   <TableBody>
-                                    {mockGrades.map((g, i) => (
+                                    {grades.map((g, i) => (
                                       <TableRow key={i}>
                                         <TableCell>{g.subject}</TableCell>
                                         <TableCell>{g.grade}/20</TableCell>
@@ -870,7 +872,7 @@ export default function GerirEstudantes() {
                               </div>
                               <div>
                                 <h4 className="font-medium mb-2">Eventos</h4>
-                                {mockHistory.map((h) => (
+                                {history.map((h) => (
                                   <div
                                     key={h.id}
                                     className="flex items-center gap-2 text-sm py-1"

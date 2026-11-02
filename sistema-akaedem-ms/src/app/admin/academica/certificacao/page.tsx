@@ -105,89 +105,9 @@ type Emissao = {
   responsavelEmissao?: string;
 };
 
-const pedidosMock: Pedido[] = [
-  {
-    id: "1",
-    numeroPedido: "REQ-001",
-    nomeEstudante: "João Silva",
-    matricula: "2023001",
-    tipo: "Certificado de frequência",
-    curso: "Engenharia Informática",
-    turma: "EI-3A",
-    dataPedido: new Date("2025-10-15"),
-    estado: "pendente",
-    observacoes: "Solicitado para emprego.",
-    telefone: "+244 923 456 789",
-    email: "joao.silva@email.com",
-    motivoSolicitacao:
-      "Necessário para processo de candidatura a estágio internacional",
-    dataLimiteNecessaria: new Date("2025-11-30"),
-  },
-  {
-    id: "2",
-    numeroPedido: "REQ-002",
-    nomeEstudante: "Maria Santos",
-    matricula: "2023002",
-    tipo: "Diploma final",
-    curso: "Medicina",
-    turma: "MED-6B",
-    dataPedido: new Date("2025-11-01"),
-    estado: "pendente",
-    telefone: "+244 924 567 890",
-    email: "maria.santos@email.com",
-    motivoSolicitacao: "Conclusão do curso",
-  },
-  {
-    id: "3",
-    numeroPedido: "REQ-003",
-    nomeEstudante: "Carlos Mendes",
-    matricula: "2023003",
-    tipo: "Histórico escolar",
-    curso: "Direito",
-    turma: "DIR-2A",
-    dataPedido: new Date("2025-11-03"),
-    estado: "recusado",
-    telefone: "+244 925 678 901",
-    email: "carlos.mendes@email.com",
-    observacoes:
-      "Rejeitado: Documentação incompleta - faltam comprovantes de pagamento",
-  },
-];
+const pedidosMock: Pedido[] = [];
 
-const emissoesMock: Emissao[] = [
-  {
-    id: "1",
-    numeroDocumento: "DOC-2025-001",
-    codigoVerificacao: "VER-ABC123XYZ",
-    nomeEstudante: "João Silva",
-    matricula: "2023001",
-    curso: "Engenharia Informática",
-    tipo: "Certificado de frequência",
-    dataEmissao: new Date("2025-10-20"),
-    estadoEntrega: "entregue",
-    assinaturaDigital: "SHA256:a1b2c3d4e5f6...",
-    pdfUrl:
-      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-    observacoes: "Documento entregue pessoalmente",
-    responsavelEmissao: "Dr. António Costa",
-  },
-  {
-    id: "2",
-    numeroDocumento: "DOC-2025-002",
-    codigoVerificacao: "VER-DEF456ABC",
-    nomeEstudante: "Maria Santos",
-    matricula: "2023002",
-    curso: "Medicina",
-    tipo: "Diploma final",
-    dataEmissao: new Date("2025-11-03"),
-    estadoEntrega: "digital",
-    assinaturaDigital: "SHA256:g7h8i9j0k1l2...",
-    pdfUrl:
-      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-    observacoes: "Enviado por email",
-    responsavelEmissao: "Dra. Isabel Ferreira",
-  },
-];
+const emissoesMock: Emissao[] = [];
 
 export default function Certificacoes() {
   const [pedidos, setPedidos] = useState(pedidosMock);

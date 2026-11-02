@@ -3,11 +3,10 @@
 import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { getInitials } from "@/lib/getInitials";
-import { UserData } from "@/mocks/dashboard";
+import { useAuth } from "@/hooks/useAuth";
 
 import { cn } from "@/lib/utils";
 
-/* Radix Avatar primitives wrapped with shadcn-style Tailwind classes */
 function Avatar({
   className,
   ...props
@@ -53,7 +52,6 @@ function AvatarFallback({
   );
 }
 
-/* Componente pronto para uso com os mocks (exibe foto se houver, senão iniciais) */
 export default function UserAvatar({
   size = "md",
   className,
@@ -61,23 +59,22 @@ export default function UserAvatar({
   size?: "sm" | "md" | "lg";
   className?: string;
 }) {
+  const { user } = useAuth();
   const sizeClass =
     size === "sm" ? "h-6 w-6" : size === "lg" ? "h-10 w-10" : "h-8 w-8";
 
-  // UserData vindo do teu mock; adapta se o nome da exportação for diferente
-  const name = UserData?.name ?? "";
-  const avatarUrl = UserData?.avatar ?? undefined;
+  const name = user?.name ?? "";
+  const avatarUrl = user?.school?.logo_path || undefined;
 
   return (
     <Avatar className={cn(sizeClass, className)}>
       {avatarUrl ? (
         <AvatarImage src={avatarUrl} alt={name} />
       ) : (
-        <AvatarFallback>{getInitials(name)}</AvatarFallback>
+        <AvatarFallback>{getInitials(name || "?")}</AvatarFallback>
       )}
     </Avatar>
   );
 }
 
-/* também exporto as primitives caso queiras usá-las diretamente */
 export { Avatar, AvatarImage, AvatarFallback };

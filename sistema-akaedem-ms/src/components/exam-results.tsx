@@ -148,48 +148,7 @@ export default function ExamResults() {
   const [statusFilter, setStatusFilter] = useState("todos");
   const [examFilter, setExamFilter] = useState("todos");
 
-  const results: ExamResult[] = [
-    {
-      id: "1",
-      candidatoNome: "João Silva",
-      candidatoBI: "123456789LA",
-      exame: "Exame de Matemática",
-      nota: 16.5,
-      notaMaxima: 20,
-      status: "aprovado",
-      data: "2025-11-15",
-    },
-    {
-      id: "2",
-      candidatoNome: "Maria Santos",
-      candidatoBI: "987654321LA",
-      exame: "Exame de Matemática",
-      nota: 14.0,
-      notaMaxima: 20,
-      status: "aprovado",
-      data: "2025-11-15",
-    },
-    {
-      id: "3",
-      candidatoNome: "Pedro Costa",
-      candidatoBI: "456789123LA",
-      exame: "Exame de Português",
-      nota: 8.5,
-      notaMaxima: 20,
-      status: "reprovado",
-      data: "2025-11-16",
-    },
-    {
-      id: "4",
-      candidatoNome: "Ana Oliveira",
-      candidatoBI: "321654987LA",
-      exame: "Exame de Português",
-      nota: 0,
-      notaMaxima: 20,
-      status: "pendente",
-      data: "2025-11-16",
-    },
-  ];
+  const results: ExamResult[] = [];
 
   const filteredResults = results.filter((result) => {
     const matchesSearch =

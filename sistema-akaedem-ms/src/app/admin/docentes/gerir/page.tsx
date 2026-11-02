@@ -91,31 +91,7 @@ const GestaoDocentes = () => {
     };
   };
 
-  // Usar dados da API se disponíveis, senão usar dados mock
-  const docentesFromAPI = teachers.map(convertTeacherToDocente);
-  
-  // Dados mock como fallback
-  const mockDocentes: Docente[] = [
-    {
-      id: '1',
-      nome: 'Dr. João Silva',
-      email: 'joao.silva@univ.ao',
-      telefone: '+244 923 456 789',
-      curso: 'Engenharia Informática',
-      departamento: 'Ciências Exatas',
-      cargo: 'Professor Auxiliar',
-      contrato: 'Efetivo',
-      estado: 'ativo',
-      dataEntrada: '2020-03-15',
-      ultimoAcesso: '2025-11-05 14:30',
-      morada: 'Luanda, Talatona',
-      bi: '004567891LA042',
-      permissoes: ['Docente', 'Orientador']
-    },
-  ];
-
-  // Usar dados da API se houver, senão usar mock
-  const docentes = docentesFromAPI.length > 0 ? docentesFromAPI : mockDocentes;
+  const docentes = teachers.map(convertTeacherToDocente);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCurso, setFilterCurso] = useState('todos');

@@ -20,13 +20,7 @@ import {
 
 export const description = "A multiple bar chart with approved and failed students"
 
-const chartData = [
-  { course: "Engenharia", approved: 120, failed: 30 },
-  { course: "Direito", approved: 95, failed: 50 },
-  { course: "Medicina", approved: 80, failed: 20 },
-  { course: "Gestão", approved: 70, failed: 40 },
-  { course: "Informática", approved: 60, failed: 25 },
-]
+const chartData: { course: string; approved: number; failed: number }[] = []
 
 const chartConfig = {
   approved: { label: "Aprovados", color: "var(--chart-1)" },

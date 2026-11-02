@@ -52,55 +52,7 @@ export default function TransferenciasRecorrencias() {
   const [actionNotes, setActionNotes] = useState("");
   const printRef = useRef<HTMLDivElement>(null);
 
-  const mockRequests: Request[] = [
-    {
-      id: "TRF-001",
-      studentName: "Maria Santos",
-      type: "transfer_in",
-      status: "pending",
-      origin: "Universidade Agostinho Neto",
-      destination: "Instituto Superior Politécnico",
-      course: "Engenharia Informática",
-      date: new Date(2025, 9, 15),
-      reason: "Mudança de residência familiar",
-      documents: ["carta_motivacao.pdf", "historico.pdf", "certificado.pdf"],
-    },
-    {
-      id: "TRF-002",
-      studentName: "João Mendes",
-      type: "transfer_out",
-      status: "approved",
-      origin: "Instituto Superior Politécnico",
-      destination: "Universidade Católica de Angola",
-      course: "Gestão",
-      date: new Date(2025, 8, 20),
-      reason: "Aproximação ao local de trabalho",
-      documents: ["declaracao.pdf"],
-      observations: "Transferência aprovada com equivalência de 3 disciplinas",
-    },
-    {
-      id: "REC-001",
-      studentName: "Ana Costa",
-      type: "recurrence",
-      status: "pending",
-      course: "Direito",
-      class: "2º Ano - Turma B",
-      date: new Date(2025, 10, 1),
-      reason: "Retorno após interrupção por motivos de saúde",
-      documents: ["requerimento.pdf", "comprovativo_medico.pdf"],
-    },
-    {
-      id: "MUD-001",
-      studentName: "Pedro Silva",
-      type: "course_change",
-      status: "rejected",
-      course: "De: Contabilidade → Para: Gestão",
-      date: new Date(2025, 9, 10),
-      reason: "Interesse profissional",
-      documents: ["plano_estudos.pdf"],
-      observations: "Rejeitado: média insuficiente para mudança",
-    },
-  ];
+  const mockRequests: Request[] = [];
 
   const getStatusBadge = (status: RequestStatus) => {
     switch (status) {

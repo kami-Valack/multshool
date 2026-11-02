@@ -91,35 +91,11 @@ const moedas: Moeda[] = ["AOA", "USD", "EUR"];
 const periodos: Periodo[] = ["mensal", "trimestral", "semestral", "anual"];
 const tiposEstudante: TipoEstudante[] = ["novo", "recorrente", "transferido"];
 
-const planosIniciais: PlanoPropina[] = [
-  {
-    id: "1",
-    nome: "Plano Anual - Licenciatura",
-    periodo: "anual",
-    valorTotal: 450000,
-    numeroParcelas: 1,
-    parcelas: [{ numero: 1, valor: 450000, dataVencimento: new Date(2025, 8, 15) }],
-    moeda: "AOA",
-    dataInicio: new Date(2025, 8, 1),
-    dataFim: new Date(2026, 7, 31),
-    cursosAssociados: ["Licenciatura em Informática"],
-    turmasAssociadas: ["INFO-2025-A"],
-    anosLetivos: ["2025/2026"],
-    tiposEstudante: ["novo", "recorrente"]
-  }
-];
+const planosIniciais: PlanoPropina[] = [];
 
-const estudantesIniciais: Estudante[] = [
-  { id: "1", nome: "Maria Santos", numero: "2025001", curso: "Licenciatura em Informática", turma: "INFO-2025-A", anoLetivo: "2025/2026", tipo: "novo", planoId: "1", estado: "em dia", valorPago: 450000, valorPendente: 0 },
-  { id: "2", nome: "João Pedro", numero: "2025002", curso: "Licenciatura em Informática", turma: "INFO-2025-A", anoLetivo: "2025/2026", tipo: "recorrente", planoId: "1", estado: "em atraso", valorPago: 200000, valorPendente: 250000, atrasoDias: 15 },
-  { id: "3", nome: "Ana Lima", numero: "2025003", curso: "Licenciatura em Informática", turma: "INFO-2025-A", anoLetivo: "2025/2026", tipo: "novo", planoId: "1", estado: "bolseiro", valorPago: 0, valorPendente: 0 },
-];
+const estudantesIniciais: Estudante[] = [];
 
-const taxasAdicionaisIniciais: TaxaAdicional[] = [
-  { id: "1", nome: "Matrícula", valor: 25000, moeda: "AOA" },
-  { id: "2", nome: "Cartão de Estudante", valor: 5000, moeda: "AOA" },
-  { id: "3", nome: "Declaração", valor: 3000, moeda: "AOA" },
-];
+const taxasAdicionaisIniciais: TaxaAdicional[] = [];
 
 export default function PropinasPage() {
   const [planos, setPlanos] = React.useState<PlanoPropina[]>(planosIniciais);
