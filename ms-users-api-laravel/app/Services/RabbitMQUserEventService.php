@@ -4,29 +4,25 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitMQUserEventService
 {
+    private const ROUTING_USER_VERIFIED = 'user.verified';
+    private const ROUTING_SCHOOL_CREATE = 'school.create';
+
     private ?AMQPStreamConnection $connection = null;
     private ?AMQPChannel $channel = null;
     private string $exchange;
-    private string $queue;
-    private string $routingKey = 'user.verified';
-    private bool $exchangeInitialized = false;
-    private bool $queueInitialized = false;
+    private bool $topologyInitialized = false;
 
     public function __construct()
     {
         $this->exchange = config('rabbitmq.user_events_exchange', 'user_events');
-        $this->queue = config('rabbitmq.user_events_queue', 'user_replication_queue');
     }
 
-    /**
-     * Ensure connection is established.
-     */
     private function ensureConnection(): void
     {
         if ($this->connection === null || !$this->connection->isConnected()) {
@@ -42,64 +38,63 @@ class RabbitMQUserEventService
     }
 
     /**
-     * Initialize exchange and queue.
+     * Declara exchange direct + filas dos consumers com routing keys exactas.
+     * (Exchange direct NÃO trata "#" como wildcard.)
      */
-    private function initializeExchangeAndQueue(): void
+    private function initializeTopology(): void
     {
-        if (!$this->exchangeInitialized) {
-            // Enable publisher confirms
-            $this->channel->confirm_select();
-            
-            $this->channel->exchange_declare(
-                $this->exchange,
-                'direct',
-                false,
-                true,
-                false
-            );
-            $this->exchangeInitialized = true;
-            Log::info("Exchange '{$this->exchange}' criada/verificada");
+        if ($this->topologyInitialized) {
+            return;
         }
 
-        if (!$this->queueInitialized) {
-            $this->channel->queue_declare(
-                $this->queue,
-                false,
-                true,
-                false,
-                false
-            );
+        $this->channel->confirm_select();
 
-            $this->channel->queue_bind(
-                $this->queue,
-                $this->exchange,
-                $this->routingKey
-            );
+        $this->channel->exchange_declare(
+            $this->exchange,
+            'direct',
+            false,
+            true,
+            false
+        );
 
-            $this->queueInitialized = true;
-            Log::info("Fila '{$this->queue}' criada e vinculada ao exchange '{$this->exchange}' (routing key: '{$this->routingKey}')");
+        // Filas conhecidas dos consumers — garante binding mesmo se o consumer ainda não subiu
+        $bindings = [
+            // legacy / publisher mirror
+            [config('rabbitmq.user_events_queue', 'user_replication_queue'), self::ROUTING_USER_VERIFIED],
+            // ms-student consumer
+            ['ms-student-api.user.verified', self::ROUTING_USER_VERIFIED],
+            // ms-school consumers
+            ['ms-school-api.user.verified', self::ROUTING_USER_VERIFIED],
+            ['ms-school-api.school.create', self::ROUTING_SCHOOL_CREATE],
+        ];
+
+        foreach ($bindings as [$queue, $routingKey]) {
+            if ($routingKey === '#' || $routingKey === '') {
+                Log::warning('Routing key inválida para exchange direct — ignorada', [
+                    'queue' => $queue,
+                    'routing_key' => $routingKey,
+                ]);
+                continue;
+            }
+
+            $this->channel->queue_declare($queue, false, true, false, false);
+            $this->channel->queue_bind($queue, $this->exchange, $routingKey);
         }
+
+        $this->topologyInitialized = true;
+
+        Log::info("RabbitMQ topology pronta", [
+            'exchange' => $this->exchange,
+            'type' => 'direct',
+            'bindings' => $bindings,
+        ]);
     }
 
-    /**
-     * Emit user verified event.
-     */
     public function emitUserVerifiedEvent(User $user): void
     {
         try {
-            Log::info("Tentando emitir evento de usuário verificado", [
-                'user_id' => $user->id,
-                'exchange' => $this->exchange,
-                'queue' => $this->queue,
-                'host' => config('rabbitmq.host'),
-                'port' => config('rabbitmq.port'),
-            ]);
-
             $this->ensureConnection();
-            Log::info("Conexão RabbitMQ estabelecida");
-            
-            $this->initializeExchangeAndQueue();
-            Log::info("Exchange e Queue inicializados");
+            $this->initializeTopology();
 
             $event = [
                 'type' => 'user.verified',
@@ -133,66 +128,29 @@ class RabbitMQUserEventService
             $this->channel->basic_publish(
                 $message,
                 $this->exchange,
-                $this->routingKey
+                self::ROUTING_USER_VERIFIED
             );
 
-            // Flush to ensure message is sent
             $this->channel->getConnection()->checkHeartBeat();
 
-            Log::info("Evento de usuário verificado emitido com sucesso", [
+            Log::info('Evento user.verified emitido', [
                 'user_id' => $user->id,
-                'email' => $user->email,
-                'exchange' => $this->exchange,
-                'routing_key' => $this->routingKey,
+                'role' => $user->role,
+                'routing_key' => self::ROUTING_USER_VERIFIED,
             ]);
-        } catch (\PhpAmqpLib\Exception\AMQPConnectionException $e) {
-            Log::error('Erro de conexão RabbitMQ ao emitir evento', [
-                'user_id' => $user->id,
-                'error' => $e->getMessage(),
-                'host' => config('rabbitmq.host'),
-                'port' => config('rabbitmq.port'),
-                'trace' => $e->getTraceAsString(),
-            ]);
-            // Não lança erro para não quebrar o fluxo de verificação
-        } catch (\Exception $e) {
-            Log::error('Erro ao emitir evento de usuário verificado', [
+        } catch (\Throwable $e) {
+            Log::error('Erro ao emitir user.verified', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ]);
-            // Não lança erro para não quebrar o fluxo de verificação
         }
     }
 
-    /**
-     * Emit school created event.
-     */
     public function emitSchoolCreatedEvent(User $user): void
     {
         try {
-            Log::info("Tentando emitir evento de escola criada", [
-                'user_id' => $user->id,
-                'exchange' => $this->exchange,
-                'host' => config('rabbitmq.host'),
-                'port' => config('rabbitmq.port'),
-            ]);
-
             $this->ensureConnection();
-            Log::info("Conexão RabbitMQ estabelecida para evento school.create");
-            
-            // Initialize exchange (queue will be created by consumer)
-            if (!$this->exchangeInitialized) {
-                $this->channel->confirm_select();
-                $this->channel->exchange_declare(
-                    $this->exchange,
-                    'direct',
-                    false,
-                    true,
-                    false
-                );
-                $this->exchangeInitialized = true;
-                Log::info("Exchange '{$this->exchange}' criada/verificada");
-            }
+            $this->initializeTopology();
 
             $event = [
                 'type' => 'school.create',
@@ -202,7 +160,7 @@ class RabbitMQUserEventService
                     'email' => $user->email,
                     'name' => $user->name,
                     'role' => $user->role,
-                    'institution_type' => $user->institution_type, // 'medio' ou 'superior'
+                    'institution_type' => $user->institution_type,
                     'emailVerified' => $user->email_verified,
                     'isActive' => $user->is_active,
                     'createdAt' => $user->created_at->toIso8601String(),
@@ -223,56 +181,33 @@ class RabbitMQUserEventService
                 ]
             );
 
-            // Publish with routing key 'school.create'
             $this->channel->basic_publish(
                 $message,
                 $this->exchange,
-                'school.create'
+                self::ROUTING_SCHOOL_CREATE
             );
 
-            // Flush to ensure message is sent
             $this->channel->getConnection()->checkHeartBeat();
 
-            Log::info("Evento de escola criada emitido com sucesso", [
+            Log::info('Evento school.create emitido', [
                 'user_id' => $user->id,
-                'email' => $user->email,
-                'exchange' => $this->exchange,
-                'routing_key' => 'school.create',
+                'routing_key' => self::ROUTING_SCHOOL_CREATE,
             ]);
-        } catch (\PhpAmqpLib\Exception\AMQPConnectionException $e) {
-            Log::error('Erro de conexão RabbitMQ ao emitir evento school.create', [
+        } catch (\Throwable $e) {
+            Log::error('Erro ao emitir school.create', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
-                'host' => config('rabbitmq.host'),
-                'port' => config('rabbitmq.port'),
-                'trace' => $e->getTraceAsString(),
             ]);
-            // Não lança erro para não quebrar o fluxo
-        } catch (\Exception $e) {
-            Log::error('Erro ao emitir evento de escola criada', [
-                'user_id' => $user->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-            // Não lança erro para não quebrar o fluxo
         }
     }
 
-    /**
-     * Close connection.
-     */
     public function close(): void
     {
-        // Não fechar conexão imediatamente - deixar para o garbage collector
-        // ou fechar manualmente quando necessário
+        // no-op — conexão reutilizada
     }
 
-    /**
-     * Destructor to ensure connection is closed.
-     */
     public function __destruct()
     {
-        // Não fechar no destructor para evitar fechar antes da mensagem ser enviada
+        // no-op
     }
 }
-

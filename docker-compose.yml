@@ -271,6 +271,11 @@ services:
       SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
       USERS_API_SECRET: ${USERS_API_SECRET}
       STUDENT_API_SECRET: ${STUDENT_API_SECRET}
+      RABBITMQ_USER_EVENTS_EXCHANGE: user_events
+      RABBITMQ_USER_EVENTS_QUEUE: ms-school-api.user.verified
+      RABBITMQ_USER_EVENTS_ROUTING_KEY: user.verified
+      RABBITMQ_SCHOOL_EVENTS_QUEUE: ms-school-api.school.create
+      RABBITMQ_SCHOOL_EVENTS_ROUTING_KEY: school.create
       SKIP_MIGRATE: "1"
     volumes:
       - ./ms-shocoll-api:/var/www/html

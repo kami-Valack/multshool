@@ -25,8 +25,10 @@ return [
     |
     */
 
+    // Exchange direct → routing key TEM de ser exacta (nunca "#")
     'user_events_exchange' => env('RABBITMQ_USER_EVENTS_EXCHANGE', 'user_events'),
     'user_events_queue' => env('RABBITMQ_USER_EVENTS_QUEUE', 'ms-student-api.user.verified'),
     'user_events_routing_key' => env('RABBITMQ_USER_EVENTS_ROUTING_KEY', 'user.verified'),
 ];
+
 

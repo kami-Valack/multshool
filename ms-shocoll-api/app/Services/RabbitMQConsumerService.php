@@ -20,7 +20,11 @@ class RabbitMQConsumerService
     {
         $this->exchange = config('rabbitmq.user_events_exchange', 'user_events');
         $this->queue = config('rabbitmq.user_events_queue', 'ms-school-api.user.verified');
-        $this->routingKey = config('rabbitmq.user_events_routing_key', 'user.verified');
+        // Exchange é "direct": "#" NÃO é wildcard — forçar routing key exacta
+        $routingKey = (string) config('rabbitmq.user_events_routing_key', 'user.verified');
+        $this->routingKey = ($routingKey === '' || $routingKey === '#')
+            ? 'user.verified'
+            : $routingKey;
     }
 
     /**
@@ -105,7 +109,10 @@ class RabbitMQConsumerService
 
         // Declare and bind queue for school.create
         $schoolQueue = config('rabbitmq.school_events_queue', 'ms-school-api.school.create');
-        $schoolRoutingKey = config('rabbitmq.school_events_routing_key', 'school.create');
+        $schoolRoutingKey = (string) config('rabbitmq.school_events_routing_key', 'school.create');
+        if ($schoolRoutingKey === '' || $schoolRoutingKey === '#') {
+            $schoolRoutingKey = 'school.create';
+        }
         
         $this->channel->queue_declare(
             $schoolQueue,

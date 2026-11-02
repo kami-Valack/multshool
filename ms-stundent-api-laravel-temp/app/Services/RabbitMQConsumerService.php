@@ -20,7 +20,11 @@ class RabbitMQConsumerService
     {
         $this->exchange = config('rabbitmq.user_events_exchange', 'user_events');
         $this->queue = config('rabbitmq.user_events_queue', 'ms-student-api.user.verified');
-        $this->routingKey = config('rabbitmq.user_events_routing_key', 'user.verified');
+        // Exchange é "direct": "#" NÃO é wildcard — forçar routing key exacta
+        $routingKey = (string) config('rabbitmq.user_events_routing_key', 'user.verified');
+        $this->routingKey = ($routingKey === '' || $routingKey === '#')
+            ? 'user.verified'
+            : $routingKey;
     }
 
     /**

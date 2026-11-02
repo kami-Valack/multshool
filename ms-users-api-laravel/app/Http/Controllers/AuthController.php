@@ -546,16 +546,16 @@ class AuthController extends Controller
             // Se for escola, verificar perfil completo na API de escola
             if ($user->role === User::ROLE_SCHOOL) {
                 try {
-                    $schoolApiUrl = env('SCHOOL_API_URL', 'http://localhost:8003');
+                    $schoolApiUrl = $this->schoolApiBaseUrl();
                     $schoolApiSecret = env('SCHOOL_API_SECRET', env('API_SECRET', ''));
-                    
+
                     if ($schoolApiUrl && $schoolApiSecret) {
                         // Fazer requisição para verificar perfil completo
                         $profileCheckResponse = Http::withHeaders([
                             'Authorization' => 'Bearer ' . $tokenPair['accessToken'],
                             'X-API-Secret' => $schoolApiSecret,
                             'Accept' => 'application/json',
-                        ])->timeout(5)->get("{$schoolApiUrl}/api/profile/check-completion");
+                        ])->timeout(5)->get("{$schoolApiUrl}/profile/check-completion");
 
                         if ($profileCheckResponse->successful()) {
                             $profileData = $profileCheckResponse->json();
@@ -1182,12 +1182,25 @@ class AuthController extends Controller
     }
 
     /**
+     * Base URL da School API já com /api (evita /api/api/... quando SCHOOL_API_URL já inclui /api).
+     */
+    private function schoolApiBaseUrl(): string
+    {
+        $url = rtrim((string) env('SCHOOL_API_URL', 'http://localhost:8003/api'), '/');
+        if (!str_ends_with($url, '/api')) {
+            $url .= '/api';
+        }
+
+        return $url;
+    }
+
+    /**
      * Replicate teacher directly to ms-shocoll-api via HTTP (fallback when RabbitMQ is not available).
      */
     private function replicateTeacherDirectly(User $user): void
     {
         try {
-            $schoolApiUrl = env('SCHOOL_API_URL', 'http://localhost:8003');
+            $schoolApiUrl = $this->schoolApiBaseUrl();
             $schoolApiSecret = env('SCHOOL_API_SECRET', env('API_SECRET', ''));
             
             if (!$schoolApiUrl || !$schoolApiSecret) {
@@ -1199,7 +1212,7 @@ class AuthController extends Controller
             $response = Http::withHeaders([
                 'X-API-Secret' => $schoolApiSecret,
                 'Content-Type' => 'application/json',
-            ])->post("{$schoolApiUrl}/api/admin/teachers/replicate", [
+            ])->post("{$schoolApiUrl}/admin/teachers/replicate", [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
