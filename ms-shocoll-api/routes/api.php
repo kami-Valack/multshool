@@ -57,7 +57,8 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class, 'role:school'])-
     
     // Exames de Admissão
     Route::prefix('courses/{courseId}')->group(function () {
-        Route::apiResource('admission-exams', \App\Http\Controllers\AdmissionExamController::class);
+        Route::apiResource('admission-exams', \App\Http\Controllers\AdmissionExamController::class)
+            ->parameters(['admission-exams' => 'examId']);
         Route::get('/admission-exams/{examId}/registrations', [\App\Http\Controllers\AdmissionExamController::class, 'registrations']);
     });
     

@@ -86,6 +86,8 @@ export default function Academica() {
     max_candidates: "",
     description: "",
   });
+  const [examToDelete, setExamToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [deletingExam, setDeletingExam] = useState(false);
 
   // Estados
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -283,14 +285,19 @@ export default function Academica() {
     }
   };
 
-  const handleDeleteExam = async (examId: string) => {
-    if (!formData.id) return;
+  const handleDeleteExam = async () => {
+    if (!formData.id || !examToDelete) return;
+    setDeletingExam(true);
     try {
-      await courseService.deleteAdmissionExam(formData.id, examId);
+      await courseService.deleteAdmissionExam(formData.id, examToDelete.id);
+      setAdmissionExams((prev) => prev.filter((e) => e.id !== examToDelete.id));
       toast.success("Exame removido");
+      setExamToDelete(null);
       await loadCourseExams(formData.id);
     } catch (error: any) {
       toast.error(error.message || "Erro ao remover exame");
+    } finally {
+      setDeletingExam(false);
     }
   };
 
@@ -801,7 +808,9 @@ export default function Academica() {
                           type="button"
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDeleteExam(exam.id)}
+                          onClick={() =>
+                            setExamToDelete({ id: exam.id, name: exam.name })
+                          }
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -941,6 +950,32 @@ export default function Academica() {
           </SheetFooter>
         </SheetContent>
       </Sheet>
+
+      <AlertDialog open={!!examToDelete} onOpenChange={() => !deletingExam && setExamToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Eliminar exame?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {examToDelete
+                ? `O exame «${examToDelete.name}» será removido da lista. Se já houver inscrições, será apenas desactivado.`
+                : ""}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deletingExam}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDeleteExam();
+              }}
+              disabled={deletingExam}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {deletingExam ? "A eliminar..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Dialog de Confirmação de Exclusão */}
       <AlertDialog open={!!cursoToDelete} onOpenChange={() => setCursoToDelete(null)}>

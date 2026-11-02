@@ -124,7 +124,7 @@ class CourseService {
    */
   async getAdmissionExams(courseId: string): Promise<AdmissionExam[]> {
     const response = await schoolApiClient.get<{ exams: AdmissionExam[] }>(
-      API_ENDPOINTS.COURSES.ADMISSION_EXAMS(courseId)
+      `${API_ENDPOINTS.COURSES.ADMISSION_EXAMS(courseId)}?is_active=true`
     );
 
     if (response.status === 'success' && response.data) {
@@ -171,12 +171,13 @@ class CourseService {
   }
 
   async deleteAdmissionExam(courseId: string, examId: string): Promise<void> {
-    const response = await schoolApiClient.delete(
+    const response = await schoolApiClient.delete<{ status?: string; message?: string }>(
       `${API_ENDPOINTS.COURSES.ADMISSION_EXAMS(courseId)}/${examId}`
     );
 
-    if (response.status !== 'success') {
-      throw new Error(response.message || 'Erro ao eliminar exame');
+    const body = response.data as { status?: string; message?: string } | undefined;
+    if (response.status !== 'success' && body?.status !== 'success') {
+      throw new Error(response.message || body?.message || 'Erro ao eliminar exame');
     }
   }
 

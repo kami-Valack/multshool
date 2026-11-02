@@ -61,6 +61,9 @@ class AdmissionExamController extends Controller
         
         if ($request->has('is_active')) {
             $query->where('is_active', filter_var($request->is_active, FILTER_VALIDATE_BOOLEAN));
+        } elseif ($request->user() && !$request->boolean('include_inactive')) {
+            // Painel da escola: por defeito só exames activos (eliminar = desactivar)
+            $query->where('is_active', true);
         }
         
         $exams = $query->withCount('registrations')->get();
@@ -314,13 +317,25 @@ class AdmissionExamController extends Controller
         $course = Course::where('school_id', $school->id)->findOrFail($courseId);
         
         $exam = AdmissionExam::where('course_id', $course->id)
+            ->withCount('registrations')
             ->findOrFail($examId);
-        
-        $exam->update(['is_active' => false]);
-        
+
+        if ($exam->registrations_count > 0) {
+            $exam->update(['is_active' => false]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Exame desactivado (existem inscrições associadas).',
+                'deactivated' => true,
+            ]);
+        }
+
+        $exam->delete();
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Exame de admissão desativado com sucesso',
+            'message' => 'Exame eliminado com sucesso',
+            'deleted' => true,
         ]);
     }
 
