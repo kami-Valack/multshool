@@ -20,7 +20,7 @@ docker compose exec ms-billing php artisan migrate --force
 | `FACI_API_KEY` | Header `X-API-Key` |
 | `FACI_DEFAULT_ENTITY` | Entidade exibida em mock ou fallback |
 
-O billing usa `STUDENT_API_URL` / `STUDENT_API_SECRET` (Compose) para validar propinas e marcar `paid`.
+O billing usa `STUDENT_API_URL` / `STUDENT_API_SECRET` (Compose) para validar propinas e marcar `paid`, e `SCHOOL_API_URL` / `SCHOOL_API_SECRET` para confirmar taxas de exame de admissão.
 
 ## FACIPAY em produção
 
@@ -32,7 +32,7 @@ Sem sessão carteira, a API devolve **401**; o portal mostra mensagem de erro ao
 
 ## Endpoints (JWT estudante)
 
-- `POST /api/payment-intents` — `{ "fee_id": "uuid" }`
+- `POST /api/payment-intents` — `{ "fee_id": "uuid" }` ou `{ "admission_exam_id": "uuid", "course_id": "uuid", "student_name": "..." }`
 - `POST /api/payment-intents/{id}/reference` — gera referência FACIPAY
 - `GET /api/payment-intents/{id}/status` — consulta pagamento e marca propina se `paid`
 - `POST /api/payment-intents/{id}/simulate-paid` — só com `APP_DEBUG=true` e `FACI_MOCK`

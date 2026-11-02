@@ -5,7 +5,12 @@ import styled from "styled-components";
 import { createGlobalStyle } from "styled-components";
 import bgHero from "@/assets/backgrounds/instituicoes/impal_default.png";
 import Button from "@/components/ui/Button";
-import { studentService, Course as ApiCourse, StudentProfile, Document } from "@/services/studentService";
+import {
+  studentService,
+  Course as ApiCourse,
+  StudentProfile,
+  ExamFeeStatus,
+} from "@/services/studentService";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
 // Types
@@ -561,8 +566,30 @@ const CourseDetailPage: React.FC = () => {
   const [profile, setProfile] = useState<StudentProfile | null>(null);
   const [documents, setDocuments] = useState<any[]>([]);
   const [checkingDocuments, setCheckingDocuments] = useState(false);
+  const [examFeeStatus, setExamFeeStatus] = useState<ExamFeeStatus | null>(null);
+  const [selectedAdmissionExamId, setSelectedAdmissionExamId] = useState<string | null>(
+    null
+  );
+  const [loadingExamFee, setLoadingExamFee] = useState(false);
 
   const courseId = params.id as string;
+
+  const paidExamsMap = React.useMemo(() => {
+    const map: Record<string, boolean> = {};
+    examFeeStatus?.exams?.forEach((e) => {
+      map[e.id] = e.fee_paid;
+    });
+    return map;
+  }, [examFeeStatus]);
+
+  const selectedExamPaid =
+    selectedAdmissionExamId != null
+      ? paidExamsMap[selectedAdmissionExamId] === true
+      : false;
+
+  const examFeeRequired = examFeeStatus?.required === true;
+  const canEnrollAfterExamFee =
+    !examFeeRequired || (selectedAdmissionExamId != null && selectedExamPaid);
 
   // Buscar curso da API
   useEffect(() => {
@@ -615,6 +642,32 @@ const CourseDetailPage: React.FC = () => {
 
     loadProfileAndDocuments();
   }, [isAuthenticated, user]);
+
+  useEffect(() => {
+    const loadExamFeeStatus = async () => {
+      if (!isAuthenticated || !apiCourse?.id) {
+        setExamFeeStatus(null);
+        setSelectedAdmissionExamId(null);
+        return;
+      }
+      setLoadingExamFee(true);
+      try {
+        const status = await studentService.getExamFeeStatus(apiCourse.id);
+        setExamFeeStatus(status);
+        if (status.exams?.length === 1) {
+          setSelectedAdmissionExamId(status.exams[0].id);
+        } else if (status.admission_exam_id) {
+          setSelectedAdmissionExamId(status.admission_exam_id);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar estado da taxa de exame:", err);
+      } finally {
+        setLoadingExamFee(false);
+      }
+    };
+
+    loadExamFeeStatus();
+  }, [isAuthenticated, apiCourse?.id]);
 
   if (isLoading) {
     return (
@@ -712,11 +765,24 @@ const CourseDetailPage: React.FC = () => {
       return;
     }
 
+    if (examFeeRequired) {
+      if (!selectedAdmissionExamId) {
+        showToast("Selecione o exame de admissão antes de se matricular.", "warning");
+        return;
+      }
+      if (!selectedExamPaid) {
+        showToast("Pague a taxa de exame de admissão antes de se matricular.", "warning");
+        return;
+      }
+    }
+
     setIsEnrolling(true);
 
     try {
-      // Criar matrícula na API
-      const enrollment = await studentService.createEnrollment(apiCourse.id);
+      const enrollment = await studentService.createEnrollment(
+        apiCourse.id,
+        selectedAdmissionExamId || undefined
+      );
       
       showToast("Matrícula realizada com sucesso! Aguarde aprovação da escola.", "success");
       
@@ -739,7 +805,10 @@ const CourseDetailPage: React.FC = () => {
         }
       }
       
-      showToast(errorMessage, "error");
+      showToast(
+        errorMessage,
+        typeof error === "object" && error.code === "exam_fee_unpaid" ? "warning" : "error"
+      );
     } finally {
       setIsEnrolling(false);
     }
@@ -840,12 +909,39 @@ const CourseDetailPage: React.FC = () => {
           {apiCourse?.admission_exams && apiCourse.admission_exams.length > 0 && (
             <ExamsSection>
               <ExamsTitle>Exames de Admissão</ExamsTitle>
-              {apiCourse.admission_exams.map((exam: any) => {
+              {examFeeRequired && isAuthenticated && examFeeStatus!.exams.length > 1 && (
+                <p style={{ fontSize: 14, marginBottom: 12, color: "#495057" }}>
+                  Selecione o exame para o qual vai pagar a taxa e candidatar-se:
+                </p>
+              )}
+              {(examFeeStatus?.exams?.length
+                ? examFeeStatus.exams
+                : apiCourse.admission_exams
+              ).map((exam: any) => {
                 const examDate = exam.exam_date ? new Date(exam.exam_date) : null;
                 const registrationDeadline = exam.registration_deadline ? new Date(exam.registration_deadline) : null;
-                
+                const feePaid = paidExamsMap[exam.id] === true;
+                const feeAmount =
+                  exam.exam_fee ??
+                  apiCourse.admission_exams?.find((e: any) => e.id === exam.id)?.exam_fee;
+                const showSelect =
+                  examFeeRequired &&
+                  isAuthenticated &&
+                  (examFeeStatus?.exams?.length ?? 0) > 1;
+
                 return (
                   <ExamCard key={exam.id}>
+                    {showSelect && (
+                      <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                        <input
+                          type="radio"
+                          name="admission_exam"
+                          checked={selectedAdmissionExamId === exam.id}
+                          onChange={() => setSelectedAdmissionExamId(exam.id)}
+                        />
+                        <span style={{ fontSize: 13 }}>Usar este exame</span>
+                      </label>
+                    )}
                     <ExamName>{exam.name}</ExamName>
                     <ExamInfo>
                       {exam.description && <div>{exam.description}</div>}
@@ -873,9 +969,21 @@ const CourseDetailPage: React.FC = () => {
                           })}
                         </div>
                       )}
-                      {exam.exam_fee && (
+                      {feeAmount != null && Number(feeAmount) > 0 && (
                         <div>
-                          <strong>Taxa de exame:</strong> {exam.exam_fee.toLocaleString('pt-PT')} kz
+                          <strong>Taxa de exame:</strong>{" "}
+                          {Number(feeAmount).toLocaleString("pt-PT")} kz
+                          {isAuthenticated && examFeeRequired && (
+                            <span
+                              style={{
+                                marginLeft: 8,
+                                color: feePaid ? "#28a745" : "#dc3545",
+                                fontWeight: 600,
+                              }}
+                            >
+                              {feePaid ? "Paga" : "Por pagar"}
+                            </span>
+                          )}
                         </div>
                       )}
                       {exam.max_candidates && (
@@ -936,31 +1044,74 @@ const CourseDetailPage: React.FC = () => {
             
             {/* Mostrar botão de matrícula apenas se o usuário estiver autenticado */}
             {isAuthenticated && user ? (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleEnroll();
-                }}
-                disabled={isEnrolling || checkingDocuments}
-                style={{
-                  width: "100%",
-                  padding: "13px 24px",
-                  borderRadius: "16px",
-                  fontSize: "14px",
-                  fontWeight: 500,
-                  backgroundColor: "#6B46C1",
-                  color: "#FFFFFF",
-                  border: "none",
-                  cursor: (isEnrolling || checkingDocuments) ? "not-allowed" : "pointer",
-                  opacity: (isEnrolling || checkingDocuments) ? 0.6 : 1,
-                  position: "relative",
-                  zIndex: 10,
-                }}
-              >
-                {(isEnrolling || checkingDocuments) ? "Processando..." : "Fazer matrícula"}
-              </button>
+              <>
+                {examFeeRequired &&
+                  selectedAdmissionExamId &&
+                  !selectedExamPaid &&
+                  !loadingExamFee && (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        router.push(
+                          `/estudante/cartoes/credito/pagamentos/exame/${selectedAdmissionExamId}?courseId=${apiCourse?.id}`
+                        )
+                      }
+                      style={{
+                        width: "100%",
+                        padding: "13px 24px",
+                        borderRadius: "16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        backgroundColor: "#059669",
+                        color: "#FFFFFF",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Pagar taxa de exame
+                    </button>
+                  )}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleEnroll();
+                  }}
+                  disabled={
+                    isEnrolling ||
+                    checkingDocuments ||
+                    loadingExamFee ||
+                    !canEnrollAfterExamFee
+                  }
+                  style={{
+                    width: "100%",
+                    padding: "13px 24px",
+                    borderRadius: "16px",
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    backgroundColor: "#6B46C1",
+                    color: "#FFFFFF",
+                    border: "none",
+                    cursor:
+                      isEnrolling || checkingDocuments || !canEnrollAfterExamFee
+                        ? "not-allowed"
+                        : "pointer",
+                    opacity:
+                      isEnrolling || checkingDocuments || !canEnrollAfterExamFee
+                        ? 0.6
+                        : 1,
+                    position: "relative",
+                    zIndex: 10,
+                  }}
+                >
+                  {(isEnrolling || checkingDocuments)
+                    ? "Processando..."
+                    : examFeeRequired && !canEnrollAfterExamFee
+                      ? "Pague a taxa de exame para matricular"
+                      : "Fazer matrícula"}
+                </button>
+              </>
             ) : (
               <button
                 type="button"

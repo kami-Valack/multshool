@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\AdmissionExam;
 use App\Models\ExamRegistration;
+use App\Services\AdmissionExamFeeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -113,6 +114,89 @@ class ExamRegistrationController extends Controller
             'message' => 'Inscrição realizada com sucesso',
             'registration' => $registration->load(['admissionExam.course']),
         ], 201);
+    }
+
+    public function courseFeeStatus(Request $request, string $courseId): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'student_id' => 'required|uuid',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $status = app(AdmissionExamFeeService::class)->paymentStatusForStudent(
+            $courseId,
+            $request->student_id
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'exam_fee_status' => $status,
+        ]);
+    }
+
+    public function showExam(Request $request, string $admissionExamId): JsonResponse
+    {
+        $exam = AdmissionExam::with('course')->findOrFail($admissionExamId);
+
+        return response()->json([
+            'status' => 'success',
+            'exam' => [
+                'id' => $exam->id,
+                'course_id' => $exam->course_id,
+                'course_name' => $exam->course?->name,
+                'name' => $exam->name,
+                'exam_fee' => (float) ($exam->exam_fee ?? 0),
+                'is_active' => $exam->is_active,
+            ],
+        ]);
+    }
+
+    public function confirmFeePayment(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'student_id' => 'required|uuid',
+            'student_email' => 'required|email',
+            'student_name' => 'required|string',
+            'admission_exam_id' => 'required|uuid|exists:admission_exams,id',
+            'payment_reference' => 'nullable|string|max:64',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $exam = AdmissionExam::findOrFail($request->admission_exam_id);
+        if (!$exam->is_active) {
+            return response()->json(['status' => 'error', 'message' => 'Exame indisponível'], 400);
+        }
+        if (!$exam->exam_fee || $exam->exam_fee <= 0) {
+            return response()->json(['status' => 'error', 'message' => 'Este exame não tem taxa'], 422);
+        }
+
+        $registration = app(AdmissionExamFeeService::class)->confirmExamFeePayment(
+            $request->student_id,
+            $request->student_email,
+            $request->student_name,
+            $request->admission_exam_id,
+            $request->payment_reference
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Taxa de exame confirmada',
+            'registration' => $registration,
+        ]);
     }
 }
 

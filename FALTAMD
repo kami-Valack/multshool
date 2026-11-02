@@ -1,0 +1,186 @@
+# Análise de gaps: Portal Estudante vs Backend
+
+**Fontes:** `portal-estudante/src/{app,services,hooks,contexts,mocks}`, `ms-stundent-api-laravel-temp/routes/api.php`, `ms-users-api-laravel/routes/api.php`, `ms-shocoll-api/routes/api.php`.  
+**Nota:** não existe `ms-billing*` no workspace; `schoolApiClient` / `billingApiClient` em `apiClient.ts` **não são usados** por nenhuma página.
+
+---
+
+## 1. Mapa do portal (por área)
+
+### Auth
+| Rota | Classificação | Evidência |
+|------|---------------|-----------|
+| `/login` | **REAL** | `authService.login` + `studentService.getProfile` |
+| `/registo` | **REAL** | `authService.register` |
+| `/reset` | **REAL** | `authService.requestPasswordReset` |
+| `/reset-password` | **REAL** | `authService.resetPassword` |
+| `/`, `/welcome`, `/explore`, `/tips` | **N/A (UI estática)** | sem API |
+
+### Curso / instituições (descoberta)
+| Rota | Classificação | Evidência |
+|------|---------------|-----------|
+| `/instituicoes/[tipo]` | **MIXED** | API + fallback mock inline |
+| `/instituicoes/[tipo]/[id]` | **MIXED** | API + fallback `institutionDetails` |
+| `/curso/[id]` | **REAL** | `getCourse`, `getProfile`, `getDocuments`, `createEnrollment` |
+
+### Candidato
+| Rota | Classificação | Evidência |
+|------|---------------|-----------|
+| `/candidato/documentos` | **REAL** | `GET /documents`, `POST /documents/upload`, `GET /me` |
+| `/candidato/onboarding` | **N/A (UI)** | slides estáticos |
+| `/candidato/home` | **MOCK** | `mockData` inline |
+| `/candidato/details` | **MOCK** | `candidateData` hardcoded |
+| `/candidato/exame_acesso` | **MOCK** | opções hardcoded; sem `createExamRegistration` |
+| `/candidato/pagamento` | **MOCK** | ISPTEC/valores hardcoded |
+| `/candidato/nota-exame` | **MOCK** | `@/mocks/student`, `inscricao`, `exam` |
+| `/candidato/preparatorio` (+ tarefas, exames-passados, ficha-exercicios, topicos-exame) | **MOCK** | dados inline / UI estática |
+
+### Estudante (geral)
+| Rota | Classificação | Evidência |
+|------|---------------|-----------|
+| `/estudante/dashboard` | **MIXED** | enrollments/docs/fees/exam-regs REAL; `getGrades` chamado mas rota JWT **não existe** |
+| `/estudante/perfil` | **REAL** | `getEnrollments` + AuthContext |
+| `/estudante/multibot` | **MOCK** | histórico chat local |
+
+### Cartões
+| Rota | Classificação | Evidência |
+|------|---------------|-----------|
+| `/estudante/cartoes` | **REAL** | `getEnrollments` |
+| `/estudante/cartoes/estudante` | **REAL** | `getEnrollments` |
+| `.../curso/horarios` | **REAL** | `getSchedules` |
+| `.../curso/calendarios` | **REAL** | `getEnrollments` + `getCalendarEvents` |
+| `.../curso/notas` | **MOCK** | `mockGradesData` local |
+| `.../curso/materiais` | **MOCK** | `mockMaterialsData` local |
+| `.../curso/aulasonline` | **MOCK** | UI local; só `useAuth` para nome |
+| `.../estudante/movimentos` | **MOCK** | `movimentosData` local |
+
+### Crédito / pagamentos
+| Rota | Classificação | Evidência |
+|------|---------------|-----------|
+| `/estudante/cartoes/credito` | **MOCK** | `mockCreditCard` (`mocks/contaMS`) |
+| `.../carteira`, `.../carteira/recarregar` | **MOCK** | saldo mock |
+| `.../propinas` | **REAL** | `getFees` |
+| `.../propinas/adiantamento*` | **MOCK** | `mockStudents` |
+| `.../pagamentos` e subrotas (method, qrcode, ref, transferencias, receipt, report, confirmar) | **MOCK** | `pagamentosMock`, `mockPayments`, `mockReceipts`, `mockStudents` |
+| `.../movimentos` | **MOCK** | `useMovimentos` + `mockStudents` |
+| `.../creditosms*` | **MOCK** | dados inline |
+| `.../instituicao` | **MOCK** | `mockInstitutions[0]` |
+| `.../confirmacao*` | **MOCK** | `mockStudents` |
+| `.../informacoes` | **MIXED** | titular de `useAuth`; nº conta/ref/consumo hardcoded |
+
+### Serviços
+| Rota | Classificação | Evidência |
+|------|---------------|-----------|
+| `/estudante/servicos` | **MOCK** | candidaturas hardcoded |
+| `/estudante/servicos/[id]` | **MOCK** | bolsas/créditos/estágios mock |
+
+---
+
+## 2. Endpoints que o frontend já chama
+
+### `authService` → `USERS_API` (`ms-users-api-laravel`)
+
+| Método | Path | Ficheiro |
+|--------|------|----------|
+| POST | `/auth/register` | `portal-estudante/src/services/authService.ts` |
+| POST | `/auth/login` | idem |
+| POST | `/auth/logout` | idem |
+| POST | `/auth/refresh-token` | idem (+ `apiClient.ts`) |
+| GET | `/auth/me` | definido; AuthContext usa `studentService.getProfile` em vez deste |
+| POST | `/auth/password-reset/request` | idem |
+| POST | `/auth/password-reset/reset` | idem |
+| POST | `/auth/verify-email` | definido; **sem página** a chamar |
+
+### `studentService` → `STUDENT_API` (`ms-stundent-api-laravel-temp`)
+
+| Método | Path | Usado em |
+|--------|------|----------|
+| GET | `/me` | AuthContext, dashboard, documentos, curso |
+| GET | `/documents` | documentos, curso, dashboard |
+| POST | `/documents/upload` | documentos (`studentApiClient.upload`) |
+| GET | `/documents/check-first-access` | só no service (**páginas não chamam**) |
+| GET | `/institutions` (+ query) | `instituicoes/[tipo]` |
+| GET | `/institutions/{id}?include_courses=` | `instituicoes/[tipo]/[id]` |
+| GET | `/courses/{id}?include_subjects=&include_exams=` | `curso/[id]` |
+| GET | `/enrollments` | dashboard, cartões, perfil, calendários |
+| POST | `/enrollments` | `curso/[id]` |
+| GET | `/exam-registrations` | dashboard |
+| POST | `/exam-registrations` | só no service (**UI exame_acesso não chama**) |
+| GET | `/fees` | dashboard, propinas |
+| GET | `/schedules` | horários |
+| GET | `/schedules?type=exam` | calendários |
+| GET | `/grades` | dashboard (**rota JWT ausente no backend**) |
+
+**Não usados:** `schoolApiClient`, `billingApiClient`. SMS: rota Next local `/api/sms/send` (Twilio), não Laravel.
+
+---
+
+## 3. Dados que faltam da API (áreas mock)
+
+| Área UI | O que a UI precisa | Backend hoje | Prioridade |
+|---------|-------------------|--------------|------------|
+| **Notas do curso** (`.../curso/notas`) | Notas por disciplina/semestre | Modelo `Grade` + **só** `GET /api/student/{studentId}/grades` (API Secret). TODO explícito: `GET /api/grades` JWT em `routes/api.php` L129–130. Frontend já chama `/grades`. | **Alta** |
+| **Inscrição exame acesso** (`exame_acesso`, `pagamento`, `details`) | Listar exames, criar inscrição, dados da prova (sala/data), taxa | `POST/GET /exam-registrations` JWT existem; `createExamRegistration` **não ligado**. Resultado exame: **sem rota**. | **Alta** |
+| **Nota exame** (`nota-exame`) | Resultado + estado matrícula | Sem rota de results; `mocks/exam.ts` | **Alta** |
+| **Lista pagamentos / fluxo pagamento** | Fees pendentes, métodos, confirmação, recibo | `GET /fees` existe; **sem** pay/confirm/receipt no student API. School tem `payments`/`invoices`/`fee-charges` mas **só role school**, portal não chama. | **Alta** |
+| **Carteira / saldo / recarga / crédito SMS** | Saldo, movimentos, recarga, credores | **Sem rotas** student; sem billing API no repo | **Alta** (produto) |
+| **Bolsas / estágios / créditos** (`servicos`) | Catálogo + candidatura | TODO `GET/POST /scholarships` em `routes/api.php` L131–132; mock `bolsa-estudo.ts` não usado na página | **Média** |
+| **Pré-paratorio / materiais / tarefas** | PDFs, exercícios, tópicos | **Sem rotas** | **Média** |
+| **Materiais de curso** | Lista ficheiros | **Sem rotas** | **Média** |
+| **Aulas online** | Links/sessões | **Sem rotas** | **Baixa** |
+| **Movimentos cartão estudante** (campus/cantina) | Eventos de acesso | **Sem rotas** | **Baixa** |
+| **Home candidato** | Atividades/agenda candidatura | Parcialmente cobrível com enrollments/exam-regs; UI ainda mock | **Média** |
+| **Info conta MS** (nº conta, ref, consumo) | Dados financeiros da “conta” | **Sem rotas**; só titular via auth | **Média** |
+| **Adiantamento propina** | Simulação + pedido | Sem POST de adiantamento; fees só leitura | **Média** |
+| **Instituição no cartão crédito** | Escola da matrícula | Pode usar enrollments/`getInstitution` já existentes; página usa mock | **Baixa** (wiring FE) |
+| **MultiBot** | Chat/histórico | **Sem API** | **Baixa** |
+
+---
+
+## 4. Cobertura backend `ms-student` (`ms-stundent-api-laravel-temp`)
+
+### Público
+- `GET /health`
+- `GET /institutions`, `GET /institutions/{id}`
+- `GET /courses/{id}`
+
+### JWT (`AuthenticateApi`)
+- `GET /me`
+- `GET/POST /documents` (+ `check-first-access`, `upload`)
+- `GET/POST /enrollments`
+- `GET/POST /exam-registrations`
+- `GET /fees`
+- `GET /schedules` (proxy para school `GET /student/schedules`)
+
+### API Secret (inter-serviço)
+- `GET /student/{studentId}`
+- `GET /student/{studentId}/grades`
+- `GET /student/{studentId}/fees`
+- `POST /student/{studentId}/fees/bulk`
+
+### Explicitamente em falta (comentário no código)
+- `GET /api/grades` (JWT)
+- `GET/POST /api/scholarships`
+
+### Inexistente no student API (UI mock depende)
+Pagamentos/carteira/recibos, materiais/LMS, aulas online, movimentos campus, resultado de exame de acesso, adiantamento, crédito SMS, MultiBot.
+
+### School API (`ms-shocoll-api`) — relevante, mas **não chamada pelo portal**
+Portal só chega a school **via** student API (institutions/courses/enrollments/schedules). Rotas school úteis a estudantes via secret:  
+`/student/enrollments`, `/student/exam-registrations`, `/student/schedules`.  
+Financeiro school (`payments`, `invoices`, `fee-charges`, `tuition-plans`) é **admin escola**, não portal.
+
+### Users API — alinhado com auth do portal
+Register/login/refresh/logout/me/password-reset/verify-email cobertos; portal usa o subconjunto listado na secção 2.
+
+---
+
+## Síntese
+
+| Camada | Estado |
+|--------|--------|
+| Auth + docs + explorar instituição/curso + matrícula + fees leitura + horários/calendário | **Integrado** |
+| Fluxo candidato (exame → pagamento → nota) + cartão crédito/pagamentos + serviços + preparatório + notas UI | **Mock / lacuna de API** |
+| Maior gap técnico imediato | Expor **`GET /grades` JWT** (modelo já existe; FE já chama) |
+| Maior gap de produto | **Pagamentos/carteira** (sem billing; school finance inacessível ao student JWT) |
+| Clientes mortos no FE | `schoolApiClient`, `billingApiClient`

@@ -123,15 +123,61 @@ class CourseService {
    * Lista exames de admissão de um curso
    */
   async getAdmissionExams(courseId: string): Promise<AdmissionExam[]> {
-    const response = await schoolApiClient.get<AdmissionExam[]>(
+    const response = await schoolApiClient.get<{ exams: AdmissionExam[] }>(
       API_ENDPOINTS.COURSES.ADMISSION_EXAMS(courseId)
     );
 
     if (response.status === 'success' && response.data) {
-      return response.data;
+      const data = response.data as { exams?: AdmissionExam[] };
+      return data.exams ?? [];
     }
 
     throw new Error(response.message || 'Erro ao listar exames');
+  }
+
+  async createAdmissionExam(
+    courseId: string,
+    data: Omit<AdmissionExam, 'id' | 'course_id'> & { status?: string; is_active?: boolean }
+  ): Promise<AdmissionExam> {
+    const response = await schoolApiClient.post<{ exam: AdmissionExam }>(
+      API_ENDPOINTS.COURSES.ADMISSION_EXAMS(courseId),
+      data
+    );
+
+    if (response.status === 'success' && response.data) {
+      const payload = response.data as { exam: AdmissionExam };
+      return payload.exam;
+    }
+
+    throw new Error(response.message || 'Erro ao criar exame');
+  }
+
+  async updateAdmissionExam(
+    courseId: string,
+    examId: string,
+    data: Partial<AdmissionExam> & { status?: string; is_active?: boolean }
+  ): Promise<AdmissionExam> {
+    const response = await schoolApiClient.put<{ exam: AdmissionExam }>(
+      `${API_ENDPOINTS.COURSES.ADMISSION_EXAMS(courseId)}/${examId}`,
+      data
+    );
+
+    if (response.status === 'success' && response.data) {
+      const payload = response.data as { exam: AdmissionExam };
+      return payload.exam;
+    }
+
+    throw new Error(response.message || 'Erro ao atualizar exame');
+  }
+
+  async deleteAdmissionExam(courseId: string, examId: string): Promise<void> {
+    const response = await schoolApiClient.delete(
+      `${API_ENDPOINTS.COURSES.ADMISSION_EXAMS(courseId)}/${examId}`
+    );
+
+    if (response.status !== 'success') {
+      throw new Error(response.message || 'Erro ao eliminar exame');
+    }
   }
 
   /**

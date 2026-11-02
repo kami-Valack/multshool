@@ -133,6 +133,7 @@ class EnrollmentController extends Controller
                 return response()->json([
                     'status' => 'error',
                     'message' => $errorData['message'] ?? 'Erro ao criar matrícula',
+                    'code' => $errorData['code'] ?? null,
                 ], $response->status());
             }
 

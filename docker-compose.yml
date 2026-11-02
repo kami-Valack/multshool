@@ -259,6 +259,8 @@ services:
       BILLING_API_SECRET: ${BILLING_API_SECRET:-${STUDENT_API_SECRET}}
       STUDENT_API_SECRET: ${STUDENT_API_SECRET}
       STUDENT_API_URL: http://ms-student:8001/api
+      SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
+      SCHOOL_API_URL: http://ms-school:8003/api
       FACI_MOCK: ${FACI_MOCK:-true}
       FACI_API_BASE_URL: ${FACI_API_BASE_URL:-https://gpo.drip.infinityfree.me}
       FACI_API_KEY: ${FACI_API_KEY:-}

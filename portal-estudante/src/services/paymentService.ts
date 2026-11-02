@@ -11,10 +11,21 @@ export type PaymentReference = {
   issued_at?: string | null;
 };
 
+export type CreatePaymentIntentInput =
+  | { fee_id: string; student_name?: string }
+  | {
+      admission_exam_id: string;
+      course_id: string;
+      student_name?: string;
+    };
+
 export type PaymentIntent = {
   id: string;
   student_id: string;
-  fee_id: string;
+  payable_type?: 'fee' | 'exam_fee';
+  fee_id?: string | null;
+  admission_exam_id?: string | null;
+  course_id?: string | null;
   amount: number;
   currency: string;
   description?: string | null;
@@ -33,10 +44,10 @@ export type PaymentStatusResponse = {
 };
 
 class PaymentService {
-  async createPaymentIntent(feeId: string): Promise<PaymentIntent> {
+  async createPaymentIntent(input: CreatePaymentIntentInput): Promise<PaymentIntent> {
     const response = await billingApiClient.post<
       ApiResponse & { payment_intent: PaymentIntent }
-    >('/payment-intents', { fee_id: feeId });
+    >('/payment-intents', input);
 
     if (response.status !== 'success' || !response.payment_intent) {
       throw new Error(response.message || 'Erro ao iniciar pagamento');

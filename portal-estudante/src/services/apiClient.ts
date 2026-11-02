@@ -11,6 +11,7 @@ export interface ApiError {
   status: 'error';
   message: string;
   errors?: Record<string, string[]>;
+  code?: string;
 }
 
 class ApiClient {
@@ -139,6 +140,7 @@ class ApiClient {
           status: 'error',
           message: errorMessage,
           errors: data.errors,
+          code: data.code,
         };
         throw error;
       }

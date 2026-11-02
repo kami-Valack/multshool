@@ -14,6 +14,23 @@ export interface StudentProfile {
   first_access: boolean;
 }
 
+export interface ExamFeeStatusExam {
+  id: string;
+  name: string;
+  exam_fee: number;
+  exam_date?: string | null;
+  registration_deadline?: string | null;
+  fee_paid: boolean;
+}
+
+export interface ExamFeeStatus {
+  required: boolean;
+  paid: boolean;
+  admission_exam_id?: string | null;
+  exam_fee?: number | null;
+  exams: ExamFeeStatusExam[];
+}
+
 export interface Enrollment {
   id: string;
   student_id: string;
@@ -327,6 +344,18 @@ class StudentService {
     return [];
   }
 
+  async getExamFeeStatus(courseId: string): Promise<ExamFeeStatus> {
+    const response = await studentApiClient.get<
+      ApiResponse & { exam_fee_status: ExamFeeStatus }
+    >(`/courses/${courseId}/exam-fee-status`);
+
+    if (response.status === 'success' && response.exam_fee_status) {
+      return response.exam_fee_status;
+    }
+
+    throw new Error(response.message || 'Erro ao verificar taxa de exame');
+  }
+
   async createEnrollment(
     courseId: string,
     admissionExamId?: string
@@ -356,6 +385,7 @@ class StudentService {
           status: 'error',
           message: response.message || 'Erro ao criar matrícula',
           errors: response.errors,
+          code: response.code,
         };
       }
 

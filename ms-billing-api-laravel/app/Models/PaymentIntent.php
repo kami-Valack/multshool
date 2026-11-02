@@ -14,10 +14,16 @@ class PaymentIntent extends Model
     public const STATUS_FAILED = 'failed';
     public const STATUS_EXPIRED = 'expired';
 
+    public const PAYABLE_FEE = 'fee';
+    public const PAYABLE_EXAM_FEE = 'exam_fee';
+
     protected $fillable = [
         'id',
         'student_id',
+        'payable_type',
         'fee_id',
+        'admission_exam_id',
+        'course_id',
         'amount',
         'currency',
         'description',

@@ -101,7 +101,7 @@ export default function PagamentoDetalhe() {
         }
 
         setFee(feeData);
-        const intentData = await paymentService.createPaymentIntent(feeId);
+        const intentData = await paymentService.createPaymentIntent({ fee_id: feeId });
         if (!cancelled) {
           setIntent(intentData);
         }

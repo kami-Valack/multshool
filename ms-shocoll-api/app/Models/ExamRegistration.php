@@ -25,10 +25,15 @@ class ExamRegistration extends Model
         'score',
         'notes',
         'completed_at',
+        'fee_paid',
+        'fee_paid_at',
+        'payment_reference',
     ];
 
     protected $casts = [
         'score' => 'decimal:2',
+        'fee_paid' => 'boolean',
+        'fee_paid_at' => 'datetime',
         'completed_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -36,6 +41,7 @@ class ExamRegistration extends Model
 
     protected $attributes = [
         'status' => self::STATUS_REGISTERED,
+        'fee_paid' => false,
     ];
 
     public $incrementing = false;

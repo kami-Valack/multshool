@@ -28,4 +28,9 @@ return [
         'secret' => env('STUDENT_API_SECRET', env('API_SECRET')),
     ],
 
+    'school_api' => [
+        'url' => rtrim(env('SCHOOL_API_URL', 'http://localhost:8003/api'), '/'),
+        'secret' => env('SCHOOL_API_SECRET', env('API_SECRET')),
+    ],
+
 ];

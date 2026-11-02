@@ -10,6 +10,7 @@ class PaymentCompletionService
 {
     public function __construct(
         private readonly StudentFeeClient $studentFeeClient,
+        private readonly SchoolExamClient $schoolExamClient,
         private readonly FaciPayClient $faciPayClient,
     ) {
     }
@@ -29,27 +30,39 @@ class PaymentCompletionService
 
             $reference = $intent->latestReference;
             $receipt = $intent->receipt_number ?? $this->faciPayClient->generateReceiptNumber();
+            $meta = $intent->metadata ?? [];
 
-            $result = $this->studentFeeClient->markFeePaid(
-                $intent->student_id,
-                $intent->fee_id,
-                $reference?->nu_referencia,
-                $intent->id
-            );
+            if ($intent->payable_type === PaymentIntent::PAYABLE_EXAM_FEE) {
+                $result = $this->schoolExamClient->confirmExamFeePayment(
+                    $intent->student_id,
+                    (string) ($meta['student_email'] ?? ''),
+                    (string) ($meta['student_name'] ?? 'Estudante'),
+                    (string) $intent->admission_exam_id,
+                    $reference?->nu_referencia
+                );
+            } else {
+                $result = $this->studentFeeClient->markFeePaid(
+                    $intent->student_id,
+                    (string) $intent->fee_id,
+                    $reference?->nu_referencia,
+                    $intent->id
+                );
+            }
 
             if (!$result['success']) {
-                Log::error('Falha ao marcar propina paga na student API', [
+                Log::error('Falha ao concluir pagamento', [
                     'intent_id' => $intent->id,
+                    'payable_type' => $intent->payable_type,
                     'error' => $result['error'] ?? null,
                 ]);
-                throw new \RuntimeException($result['error'] ?? 'Erro ao sincronizar propina');
+                throw new \RuntimeException($result['error'] ?? 'Erro ao sincronizar pagamento');
             }
 
             $intent->update([
                 'status' => PaymentIntent::STATUS_PAID,
                 'paid_at' => now(),
                 'receipt_number' => $receipt,
-                'metadata' => array_merge($intent->metadata ?? [], [
+                'metadata' => array_merge($meta, [
                     'faci_status' => $faciPayload,
                 ]),
             ]);

@@ -137,6 +137,9 @@ Route::middleware([\App\Http\Middleware\AuthenticateTeacher::class])->prefix('te
 Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('student')->group(function () {
     Route::apiResource('enrollments', \App\Http\Controllers\Student\EnrollmentController::class)->only(['index', 'store']);
     Route::apiResource('exam-registrations', \App\Http\Controllers\Student\ExamRegistrationController::class)->only(['index', 'store']);
+    Route::get('/courses/{courseId}/exam-fee-status', [\App\Http\Controllers\Student\ExamRegistrationController::class, 'courseFeeStatus']);
+    Route::get('/admission-exams/{admissionExamId}', [\App\Http\Controllers\Student\ExamRegistrationController::class, 'showExam']);
+    Route::post('/exam-registrations/confirm-fee-payment', [\App\Http\Controllers\Student\ExamRegistrationController::class, 'confirmFeePayment']);
     // Horários do estudante - busca por class_id das matrículas
     Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'indexForStudent']);
 });

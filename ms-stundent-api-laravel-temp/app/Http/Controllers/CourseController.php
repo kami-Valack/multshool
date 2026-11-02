@@ -143,5 +143,40 @@ class CourseController extends Controller
             ], 500);
         }
     }
+
+    public function examFeeStatus(Request $request, string $id): JsonResponse
+    {
+        try {
+            $student = $request->user();
+            $schoolApiUrl = config('services.school_api.url', env('SCHOOL_API_URL', 'http://localhost:8003/api'));
+            $apiSecret = config('services.school_api.secret', env('SCHOOL_API_SECRET', ''));
+
+            $response = Http::withHeaders([
+                'X-API-Secret' => $apiSecret,
+            ])->get($schoolApiUrl . '/student/courses/' . $id . '/exam-fee-status', [
+                'student_id' => $student->id,
+            ]);
+
+            if (!$response->successful()) {
+                $errorData = $response->json();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $errorData['message'] ?? 'Erro ao verificar taxa de exame',
+                ], $response->status());
+            }
+
+            return response()->json($response->json());
+        } catch (\Exception $e) {
+            Log::error('Erro ao verificar taxa de exame', [
+                'course_id' => $id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao verificar taxa de exame',
+            ], 500);
+        }
+    }
 }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Enrollment;
+use App\Services\AdmissionExamFeeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -106,6 +107,19 @@ class EnrollmentController extends Controller
                 'status' => 'error',
                 'message' => 'Este curso não está disponível para matrícula',
             ], 400);
+        }
+
+        $feeError = app(AdmissionExamFeeService::class)->assertEnrollmentAllowed(
+            $course,
+            $request->student_id,
+            $request->admission_exam_id
+        );
+        if ($feeError) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $feeError,
+                'code' => 'exam_fee_unpaid',
+            ], 402);
         }
 
         $enrollment = Enrollment::create([

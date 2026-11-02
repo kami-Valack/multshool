@@ -39,7 +39,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Search, BookOpen, Users, Loader2 } from "lucide-react";
 import { useCourses } from "@/hooks/useCourses";
-import { courseService, Course, CourseSubject } from "@/lib/api/services/course.service";
+import {
+  courseService,
+  Course,
+  CourseSubject,
+  AdmissionExam,
+} from "@/lib/api/services/course.service";
 import { toast } from "sonner";
 
 // Tipos adaptados para a API
@@ -70,6 +75,17 @@ export default function Academica() {
   const { courses, loading: coursesLoading, error: coursesError, fetchCourses } = useCourses();
   const [subjectsMap, setSubjectsMap] = useState<Record<string, CourseSubject[]>>({});
   const [loadingSubjects, setLoadingSubjects] = useState<Record<string, boolean>>({});
+  const [admissionExams, setAdmissionExams] = useState<AdmissionExam[]>([]);
+  const [loadingExams, setLoadingExams] = useState(false);
+  const [savingExam, setSavingExam] = useState(false);
+  const [examForm, setExamForm] = useState({
+    name: "",
+    exam_date: "",
+    registration_deadline: "",
+    exam_fee: "",
+    max_candidates: "",
+    description: "",
+  });
 
   // Estados
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -100,6 +116,19 @@ export default function Academica() {
   });
 
   // Carregar disciplinas de um curso
+  const loadCourseExams = async (courseId: string) => {
+    setLoadingExams(true);
+    try {
+      const exams = await courseService.getAdmissionExams(courseId);
+      setAdmissionExams(exams);
+    } catch (error: any) {
+      toast.error(`Erro ao carregar exames: ${error.message}`);
+      setAdmissionExams([]);
+    } finally {
+      setLoadingExams(false);
+    }
+  };
+
   const loadCourseSubjects = async (courseId: string) => {
     if (subjectsMap[courseId] || loadingSubjects[courseId]) return;
     
@@ -182,6 +211,15 @@ export default function Academica() {
       faculty: '',
       is_active: true,
     });
+    setAdmissionExams([]);
+    setExamForm({
+      name: "",
+      exam_date: "",
+      registration_deadline: "",
+      exam_fee: "",
+      max_candidates: "",
+      description: "",
+    });
     setIsSheetOpen(true);
   };
 
@@ -192,7 +230,68 @@ export default function Academica() {
     if (!subjectsMap[curso.id]) {
       loadCourseSubjects(curso.id);
     }
+    loadCourseExams(curso.id);
     setIsSheetOpen(true);
+  };
+
+  const handleAddExam = async () => {
+    if (!formData.id) return;
+    if (!examForm.name.trim()) {
+      toast.error("Informe o nome do exame");
+      return;
+    }
+    if (!examForm.exam_date) {
+      toast.error("Informe a data do exame");
+      return;
+    }
+    const fee = parseFloat(examForm.exam_fee);
+    if (Number.isNaN(fee) || fee < 0) {
+      toast.error("Informe a taxa de exame (0 se gratuita)");
+      return;
+    }
+
+    setSavingExam(true);
+    try {
+      await courseService.createAdmissionExam(formData.id, {
+        name: examForm.name.trim(),
+        exam_date: new Date(examForm.exam_date).toISOString(),
+        registration_deadline: examForm.registration_deadline
+          ? new Date(examForm.registration_deadline).toISOString()
+          : new Date(examForm.exam_date).toISOString(),
+        exam_fee: fee,
+        max_candidates: examForm.max_candidates
+          ? parseInt(examForm.max_candidates, 10)
+          : undefined,
+        description: examForm.description || undefined,
+        status: "scheduled",
+        is_active: true,
+      });
+      toast.success("Exame de admissão criado");
+      setExamForm({
+        name: "",
+        exam_date: "",
+        registration_deadline: "",
+        exam_fee: "",
+        max_candidates: "",
+        description: "",
+      });
+      await loadCourseExams(formData.id);
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao criar exame");
+    } finally {
+      setSavingExam(false);
+    }
+  };
+
+  const handleDeleteExam = async (examId: string) => {
+    if (!formData.id) return;
+    try {
+      await courseService.deleteAdmissionExam(formData.id, examId);
+      toast.success("Exame removido");
+      await loadCourseExams(formData.id);
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao remover exame");
+    }
   };
 
   const handleSaveCurso = async () => {
@@ -660,6 +759,123 @@ export default function Academica() {
                 </SelectContent>
               </Select>
             </div>
+
+            {isEditing && formData.id && (
+              <div className="space-y-3 border-t pt-4">
+                <Label>Exames de admissão</Label>
+                <p className="text-sm text-gray-500">
+                  Defina a taxa de exame exigida antes da matrícula no portal do estudante.
+                </p>
+                {loadingExams ? (
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    A carregar exames...
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {admissionExams.length === 0 && (
+                      <p className="text-sm text-gray-500">Nenhum exame configurado.</p>
+                    )}
+                    {admissionExams.map((exam) => (
+                      <div
+                        key={exam.id}
+                        className="flex items-start justify-between gap-2 rounded-md border p-3 text-sm"
+                      >
+                        <div>
+                          <p className="font-medium">{exam.name}</p>
+                          <p className="text-gray-600">
+                            Taxa:{" "}
+                            {(exam.exam_fee ?? 0).toLocaleString("pt-AO", {
+                              style: "currency",
+                              currency: "AOA",
+                            })}
+                          </p>
+                          {exam.exam_date && (
+                            <p className="text-gray-500">
+                              Data:{" "}
+                              {new Date(exam.exam_date).toLocaleDateString("pt-PT")}
+                            </p>
+                          )}
+                        </div>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDeleteExam(exam.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="space-y-2 rounded-md border p-3 bg-gray-50">
+                  <p className="text-sm font-medium">Novo exame</p>
+                  <Input
+                    placeholder="Nome do exame"
+                    value={examForm.name}
+                    onChange={(e) => setExamForm({ ...examForm, name: e.target.value })}
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      type="datetime-local"
+                      value={examForm.exam_date}
+                      onChange={(e) =>
+                        setExamForm({ ...examForm, exam_date: e.target.value })
+                      }
+                    />
+                    <Input
+                      type="datetime-local"
+                      placeholder="Prazo inscrição"
+                      value={examForm.registration_deadline}
+                      onChange={(e) =>
+                        setExamForm({
+                          ...examForm,
+                          registration_deadline: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      placeholder="Taxa (AOA)"
+                      value={examForm.exam_fee}
+                      onChange={(e) =>
+                        setExamForm({ ...examForm, exam_fee: e.target.value })
+                      }
+                    />
+                    <Input
+                      type="number"
+                      min="1"
+                      placeholder="Máx. candidatos"
+                      value={examForm.max_candidates}
+                      onChange={(e) =>
+                        setExamForm({ ...examForm, max_candidates: e.target.value })
+                      }
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    disabled={savingExam}
+                    onClick={handleAddExam}
+                  >
+                    {savingExam ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        A guardar...
+                      </>
+                    ) : (
+                      "Adicionar exame"
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )}
 
             {isEditing && formData.subjects && formData.subjects.length > 0 && (
               <div className="space-y-2">
