@@ -122,6 +122,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
 
     // Propinas/Fees
     Route::get('/fees', [\App\Http\Controllers\FeeController::class, 'index']);
+    Route::get('/fees/{id}', [\App\Http\Controllers\FeeController::class, 'show']);
 
     // Horários do estudante
     Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'index']);
@@ -138,5 +139,6 @@ Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('
     Route::get('/{studentId}/grades', [\App\Http\Controllers\StudentGradeController::class, 'getGradesByStudentId']);
     Route::get('/{studentId}/fees', [\App\Http\Controllers\FeeController::class, 'getByStudentId']);
     Route::post('/{studentId}/fees/bulk', [\App\Http\Controllers\FeeController::class, 'bulkCreate']);
+    Route::post('/{studentId}/fees/{feeId}/mark-paid', [\App\Http\Controllers\FeeController::class, 'markPaid']);
 });
 

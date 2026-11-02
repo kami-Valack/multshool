@@ -236,6 +236,47 @@ services:
     networks:
       - multshool-network
 
+  ms-billing:
+    build: *php-build
+    image: multshool-php:8.2
+    container_name: multshool-ms-billing
+    restart: unless-stopped
+    working_dir: /var/www/html
+    ports:
+      - "8004:8004"
+    env_file:
+      - ./docker/env/laravel.env
+    environment:
+      APP_NAME: MS-Billing-API
+      APP_URL: http://localhost:8004
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_DATABASE: ms-billing-api
+      DB_USERNAME: ${MYSQL_USER:-multshool}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      JWT_SECRET: ${JWT_SECRET}
+      API_SECRET: ${BILLING_API_SECRET:-${STUDENT_API_SECRET}}
+      BILLING_API_SECRET: ${BILLING_API_SECRET:-${STUDENT_API_SECRET}}
+      STUDENT_API_SECRET: ${STUDENT_API_SECRET}
+      STUDENT_API_URL: http://ms-student:8001/api
+      FACI_MOCK: ${FACI_MOCK:-true}
+      FACI_API_BASE_URL: ${FACI_API_BASE_URL:-}
+      FACI_API_KEY: ${FACI_API_KEY:-}
+      FACI_DEFAULT_ENTITY: ${FACI_DEFAULT_ENTITY:-99999}
+    volumes:
+      - ./ms-billing-api-laravel:/var/www/html
+      - ms_billing_vendor:/var/www/html/vendor
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8004"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      ms-student:
+        condition: service_started
+    networks:
+      - multshool-network
+
   ms-student-consumer:
     build: *php-build
     image: multshool-php:8.2
@@ -364,6 +405,7 @@ services:
       - ms-users
       - ms-student
       - ms-school
+      - ms-billing
     networks:
       - multshool-network
 
@@ -418,6 +460,7 @@ volumes:
   ms_student_vendor:
   ms_admin_vendor:
   ms_school_vendor:
+  ms_billing_vendor:
   ms_message_node_modules:
   portal_node_modules:
   akaedem_node_modules:

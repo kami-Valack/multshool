@@ -6,6 +6,7 @@ import BottomMenu from "@/components/ui/BottomMenu";
 import { CreditCard } from "@/components/ui/Cards";
 import Button from "@/components/ui/Button";
 import { useNavigation } from "@/hooks/navigation";
+import { useSearchParams } from "next/navigation";
 
 const Container = styled.div`
   width: 100%;
@@ -29,9 +30,27 @@ const Card = styled.div`
   margin: 20px auto 0 auto;
 `;
 
-
 export default function EscolherMetodoPagamento() {
   const { navigateTo } = useNavigation();
+  const searchParams = useSearchParams();
+  const intentId = searchParams.get("intentId");
+
+  const qs = intentId ? `?intentId=${intentId}` : "";
+
+  if (!intentId) {
+    return (
+      <>
+        <Header variant="withBack" title="Pagamentos" />
+        <Container>
+          <p style={{ padding: 24, textAlign: "center" }}>
+            Sessão de pagamento inválida. Volte às propinas e seleccione uma
+            cobrança.
+          </p>
+          <BottomMenu />
+        </Container>
+      </>
+    );
+  }
 
   return (
     <>
@@ -49,7 +68,9 @@ export default function EscolherMetodoPagamento() {
             text="Pagamento por referência"
             hasBorder={true}
             onClick={() => {
-              navigateTo(`/estudante/cartoes/credito/pagamentos/method/ref`);
+              navigateTo(
+                `/estudante/cartoes/credito/pagamentos/method/ref${qs}`
+              );
             }}
           />
           <Button
@@ -58,7 +79,9 @@ export default function EscolherMetodoPagamento() {
             text="Pagamento via QR code"
             hasBorder={true}
             onClick={() => {
-              navigateTo(`/estudante/cartoes/credito/pagamentos/method/qrcode`);
+              navigateTo(
+                `/estudante/cartoes/credito/pagamentos/method/qrcode${qs}`
+              );
             }}
           />
         </ButtonGroup>

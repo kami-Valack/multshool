@@ -19,6 +19,7 @@ class Fee extends Model
         'due_date',
         'status',
         'description',
+        'external_payment_ref',
     ];
 
     protected $casts = [

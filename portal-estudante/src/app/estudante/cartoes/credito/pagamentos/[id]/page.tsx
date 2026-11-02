@@ -1,18 +1,17 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
 import CreditCard from "@/components/ui/Cards";
-import { pagamentosMock } from "@/mocks/pagamentosPendentes";
-import { calcularTotalPagamentos } from "@/utils/pagamentos";
-import { PaymentCard } from "@/components/ActivityCard";
 import Button from "@/components/ui/Button";
 import { useNavigation } from "@/hooks/navigation";
-import { gerarCodigoRecibo } from "@/utils/receipt";
+import { studentService, Fee } from "@/services/studentService";
+import { paymentService, PaymentIntent } from "@/services/paymentService";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
-// Styled Components
 const Container = styled.div`
   width: 100%;
   min-height: auto;
@@ -40,10 +39,7 @@ const DetailsP = styled.div`
   align-items: center;
   margin-top: 10px;
   border-radius: 10px;
-`;
-
-const ListaPagamentos = styled.div`
-  width: 97%;
+  padding: 16px 0 24px;
 `;
 
 const Title = styled.p`
@@ -53,7 +49,7 @@ const Title = styled.p`
 
 const Paragraph = styled.p`
   font-size: 13px;
-  padding: 0 30px 30px 30px;
+  padding: 0 30px;
   text-align: center;
   color: ${(props) => props.theme.colors.foreground};
 `;
@@ -61,6 +57,7 @@ const Paragraph = styled.p`
 const Total = styled.p`
   font-weight: ${(props) => props.theme.fonts.weight.bold};
   color: ${(props) => props.theme.colors.sucess};
+  margin-top: 12px;
 `;
 
 const ButtonGroup = styled.div`
@@ -74,11 +71,65 @@ const ButtonGroup = styled.div`
 export default function PagamentoDetalhe() {
   const { navigateTo } = useNavigation();
   const { id } = useParams();
-  const pagamentosAluno = pagamentosMock.filter((p) => p.alunoId === id);
-  const total = calcularTotalPagamentos(pagamentosAluno);
+  const feeId = String(id);
 
-  if (pagamentosAluno.length === 0) {
-    return (
+  const [fee, setFee] = useState<Fee | null>(null);
+  const [intent, setIntent] = useState<PaymentIntent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      setError(null);
+      try {
+        const feeData = await studentService.getFee(feeId);
+        if (cancelled) return;
+
+        if (!feeData) {
+          setError("Propina não encontrada.");
+          return;
+        }
+
+        if (feeData.status === "paid") {
+          setError("Esta propina já está paga.");
+          setFee(feeData);
+          return;
+        }
+
+        setFee(feeData);
+        const intentData = await paymentService.createPaymentIntent(feeId);
+        if (!cancelled) {
+          setIntent(intentData);
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setError(e instanceof Error ? e.message : "Erro ao preparar pagamento");
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [feeId]);
+
+  const handleContinue = async () => {
+    if (!intent) return;
+    setSubmitting(true);
+    navigateTo(
+      `/estudante/cartoes/credito/pagamentos/method?intentId=${intent.id}`
+    );
+  };
+
+  return (
+    <ProtectedRoute>
       <Container>
         <Top>
           <Header variant="withBack" title="Pagamentos" />
@@ -88,57 +139,44 @@ export default function PagamentoDetalhe() {
         </CardS>
 
         <DetailsP>
-          <Title>Confirmar pagamento</Title>
-          <Paragraph>Nenhum pagamento encontrado para este aluno.</Paragraph>
+          <Title>Confirmar o pagamento</Title>
+
+          {loading && <Paragraph>A carregar...</Paragraph>}
+          {error && <Paragraph>{error}</Paragraph>}
+
+          {!loading && fee && !error && (
+            <>
+              <Paragraph>{fee.description || "Propina"}</Paragraph>
+              <Paragraph>
+                Vencimento:{" "}
+                {fee.due_date
+                  ? new Date(fee.due_date).toLocaleDateString("pt-PT")
+                  : "-"}
+              </Paragraph>
+              <Total>
+                Total:{" "}
+                {Number(fee.amount).toLocaleString("pt-AO", {
+                  minimumFractionDigits: 0,
+                })}{" "}
+                Kz
+              </Total>
+            </>
+          )}
         </DetailsP>
+
+        <ButtonGroup>
+          <Button
+            bgColor="primary"
+            textColor="#FFFFFF"
+            text={submitting ? "A processar..." : "Continuar"}
+            hasBorder={true}
+            onClick={handleContinue}
+            disabled={!intent || !!error || loading}
+          />
+        </ButtonGroup>
+
         <BottomMenu />
       </Container>
-    );
-  }
-
-  return (
-    <Container>
-      <Top>
-        <Header variant="withBack" title="Pagamentos" />
-      </Top>
-
-      <CardS>
-        <CreditCard />
-      </CardS>
-
-      <DetailsP>
-        <Title>Confirmar o pagamento</Title>
-
-        <ListaPagamentos>
-          {pagamentosAluno.map((payment) => (
-            <div key={payment.id} style={{ marginBottom: "8px" }}>
-              <PaymentCard
-                title={payment.nome}
-                date={payment.data}
-                amount={`${payment.valor.toLocaleString("pt-AO")} kz`}
-                onClick={() => console.log("Pagamento clicado")}
-              />
-            </div>
-          ))}
-        </ListaPagamentos>
-
-        <Total>Total: {total.toLocaleString()} Kz</Total>
-      </DetailsP>
-
-      <ButtonGroup>
-        <Button
-          bgColor="primary"
-          textColor="#FFFFFF"
-          text="Continuar"
-          hasBorder={true}
-          onClick={() => {
-            const codigo = gerarCodigoRecibo();
-            navigateTo(`/estudante/cartoes/credito/pagamentos/receipt/${codigo}`);
-          }}
-        />
-      </ButtonGroup>
-
-      <BottomMenu />
-    </Container>
+    </ProtectedRoute>
   );
 }

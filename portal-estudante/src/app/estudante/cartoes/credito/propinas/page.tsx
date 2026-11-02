@@ -168,8 +168,10 @@ export default function Propinas() {
   const propinasPendentes = propinasData.filter(p => !p.isPaid);
 
   const handlePropinasClick = (propina: (typeof propinasData)[number]) => {
-    // Implementar navegação para detalhes da propina se necessário
-    console.log("Propina clicada:", propina);
+    if (propina.isPaid) return;
+    router.push(
+      `/estudante/cartoes/credito/pagamentos/${propina.id}`
+    );
   };
 
   // Obter informações da instituição do estudante (se houver matrícula)

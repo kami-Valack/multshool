@@ -301,6 +301,85 @@ class FeeController extends Controller
     }
 
     /**
+     * Detalhe de uma propina do estudante autenticado.
+     */
+    public function show(Request $request, string $id): JsonResponse
+    {
+        $student = $request->user();
+        $fee = Fee::where('student_id', $student->id)->find($id);
+
+        if (!$fee) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Propina não encontrada',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'fee' => $this->serializeFee($fee),
+        ]);
+    }
+
+    /**
+     * Marcar propina como paga (billing / inter-serviço).
+     */
+    public function markPaid(Request $request, string $studentId, string $feeId): JsonResponse
+    {
+        $fee = Fee::where('student_id', $studentId)->find($feeId);
+
+        if (!$fee) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Propina não encontrada',
+            ], 404);
+        }
+
+        if ($fee->status === Fee::STATUS_PAID) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Propina já estava paga',
+                'fee' => $this->serializeFee($fee),
+            ]);
+        }
+
+        $validated = Validator::make($request->all(), [
+            'paid_at' => 'nullable|date',
+            'payment_reference' => 'nullable|string|max:64',
+            'external_id' => 'nullable|string|max:64',
+        ])->validate();
+
+        $fee->update([
+            'status' => Fee::STATUS_PAID,
+            'external_payment_ref' => $validated['payment_reference'] ?? $fee->external_payment_ref,
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Propina marcada como paga',
+            'fee' => $this->serializeFee($fee->fresh()),
+        ]);
+    }
+
+    private function serializeFee(Fee $fee): array
+    {
+        return [
+            'id' => $fee->id,
+            'student_id' => $fee->student_id,
+            'enrollment_id' => $fee->enrollment_id,
+            'course_id' => $fee->course_id,
+            'amount' => (float) $fee->amount,
+            'due_date' => $fee->due_date?->format('Y-m-d'),
+            'status' => $fee->status,
+            'description' => $fee->description,
+            'external_payment_ref' => $fee->external_payment_ref,
+            'created_at' => $fee->created_at?->toIso8601String(),
+            'updated_at' => $fee->updated_at?->toIso8601String(),
+        ];
+    }
+
+    /**
      * Criar fees automaticamente baseado nos cursos do estudante (não depende de aprovação)
      */
     private function createFeesForApprovedEnrollments(string $studentId): void

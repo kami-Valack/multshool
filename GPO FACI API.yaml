@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  title: GPO FACI API
+  version: 1.0.0
+  description: |-
+    API FACIPAY — gere referências, consulte pagamentos e envie cobranças.
+
+    **Autenticação:** header `X-API-Key` com a chave gerada no painel.
+
+    **Pré-requisito:** login na carteira (UI) para sessão FACIPAY activa.
+paths:
+  /api/reference/:
+    post:
+      operationId: api_gerar_referencia
+      description: Cria referência no FACIPAY. Requer **X-API-Key** e carteira com
+        sessão activa (login na carteira na UI). `idFpConta` e `nuQuantidade` são
+        opcionais — a conta vem da carteira do utilizador; quantidade por defeito
+        é 1.
+      summary: Gerar Referência
+      tags:
+      - Referências
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dsReferencia:
+                  type: string
+                  example: Pagamento de fatura
+                vlReferencia:
+                  type: number
+                  example: 50.0
+                tpFpReferencia:
+                  type: string
+                  example: PER
+                  description: Opcional — default PER
+                idFpConta:
+                  type: integer
+                  description: Opcional — usa conta da carteira se omitido ou 0
+                nuQuantidade:
+                  type: integer
+                  example: 1
+                  description: Opcional — default 1
+              required:
+              - dsReferencia
+              - vlReferencia
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Referência criada
+        '401':
+          description: API key inválida ou sem sessão carteira
+        '422':
+          description: Dados inválidos
+  /api/reference/status/:
+    get:
+      operationId: api_estado_referencia
+      description: Consulta no FACIPAY se a referência foi paga. Indique `nuReferencia`
+        (número público) ou `idFpReferencia`.
+      summary: Estado de Pagamento
+      parameters:
+      - in: query
+        name: idFpReferencia
+        schema:
+          type: integer
+        description: ID interno FACIPAY
+      - in: query
+        name: nuReferencia
+        schema:
+          type: string
+        description: 'Número da referência (ex: 109021562)'
+      tags:
+      - Referências
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: paid=true/false, vlTransacao, vlTaxa, etc.
+        '401':
+          description: API key inválida ou sem sessão carteira
+        '422':
+          description: Parâmetros em falta
+    post:
+      operationId: api_estado_referencia_post
+      description: Verificar se uma referência foi paga.
+      summary: Estado de Pagamento (POST)
+      tags:
+      - Referências
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nuReferencia:
+                  type: string
+                  example: '109021562'
+                idFpReferencia:
+                  type: integer
+                  example: 19010
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Estado da referência
+  /api/requester/:
+    post:
+      operationId: api_cobrar
+      description: Envia cobrança para o telemóvel do destinatário. Requer **X-API-Key**.
+      summary: Cobrar
+      tags:
+      - Cobranças
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dsTelemovelDestinatario:
+                  type: string
+                  example: '244933123456'
+                noDestinatario:
+                  type: string
+                  example: João Silva
+                referenciaIn:
+                  type: string
+                  example: '[{"idFpReferencia": 18921, "nuQuantidade": 1}]'
+                idFpContaSelecionada:
+                  type: integer
+                  description: Opcional — conta da carteira se omitido
+              required:
+              - dsTelemovelDestinatario
+              - noDestinatario
+              - referenciaIn
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Cobrança enviada
+        '401':
+          description: API key inválida
+        '422':
+          description: Dados inválidos
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key gerada em Configuração → API Keys

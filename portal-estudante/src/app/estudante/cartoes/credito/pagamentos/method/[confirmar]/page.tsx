@@ -1,14 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "@/components/ui/HeaderGeneral";
 import Button from "@/components/ui/Button";
 import { useNavigation } from "@/hooks/navigation";
-import { useParams } from "next/navigation";
-import { mockPayments } from "@/mocks/confirmarPagamento";
-import { calcularTotalPagamentos } from "@/utils/pagamentos";
+import { useParams, useSearchParams } from "next/navigation";
 import BottomMenu from "@/components/ui/BottomMenu";
+import { paymentService, PaymentIntent } from "@/services/paymentService";
 
 const Container = styled.div`
   width: 100%;
@@ -18,65 +17,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const InstitutionCard = styled.div`
-  border-radius: 16px;
-  padding: 11px;
-  margin-bottom: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-`;
-
-const InstitutionImage = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  border: 5px solid #f59e0b;
-  overflow: hidden;
-  flex-shrink: 0;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const InstitutionImagePlaceholder = styled.div`
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &::before {
-    content: "🏫";
-    font-size: 24px;
-  }
-`;
-
-const InstitutionInfo = styled.div`
-  flex: 1;
-`;
-
-const InstitutionName = styled.h3`
-  font-size: 14px;
-  font-weight: ${(props) => props.theme.fonts.weight.semibold};
-  color: ${(props) => props.theme.colors.textBlack};
-  margin: 0 0 8px 0;
-  line-height: 1.3;
-`;
-
-const InstitutionAddress = styled.p`
-  font-size: 13px;
-  color: ${(props) => props.theme.colors.primary};
-  margin: 0;
-  font-weight: ${(props) => props.theme.fonts.weight.regular};
 `;
 
 const PaymentDetails = styled.div`
@@ -101,16 +41,11 @@ const PaymentItem = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
 `;
 
 const PaymentLabel = styled.span`
   font-size: 15px;
   color: ${(props) => props.theme.colors.textBlack};
-  font-weight: 400;
 `;
 
 const PaymentValue = styled.span`
@@ -125,13 +60,6 @@ const TotalSection = styled.div`
   border-top: 1px solid #e5e7eb;
 `;
 
-const TotalLabel = styled.div`
-  text-align: center;
-  font-size: 14px;
-  color: ${(props) => props.theme.colors.foreground};
-  margin-bottom: 8px;
-`;
-
 const TotalValue = styled.div`
   text-align: center;
   font-size: 22px;
@@ -141,7 +69,7 @@ const TotalValue = styled.div`
 
 const ConfirmButton = styled.div`
   width: 100%;
-  margin-bottom: 80px
+  margin-bottom: 80px;
 `;
 
 const Top = styled.div`
@@ -149,48 +77,84 @@ const Top = styled.div`
   background: #f5f7ff;
 `;
 
-export default function PaymentScreen() {
+const Message = styled.p`
+  text-align: center;
+  padding: 24px;
+  color: ${(props) => props.theme.colors.foreground};
+`;
+
+export default function PaymentConfirmScreen() {
   const { navigateTo } = useNavigation();
-  const { confirmar } = useParams();
+  const searchParams = useSearchParams();
+  const intentId = searchParams.get("intentId");
+  const receiptCode = searchParams.get("code");
 
-  const payment = mockPayments.find((item) => item.referencia === confirmar);
+  const [intent, setIntent] = useState<PaymentIntent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!payment) {
+  useEffect(() => {
+    if (!intentId) {
+      setLoading(false);
+      return;
+    }
+
+    paymentService
+      .getPaymentIntent(intentId)
+      .then(setIntent)
+      .catch((e) =>
+        setError(e instanceof Error ? e.message : "Erro ao carregar pagamento")
+      )
+      .finally(() => setLoading(false));
+  }, [intentId]);
+
+  if (!intentId) {
     return (
       <>
         <Top>
           <Header variant="receipt" title="Detalhes" />
         </Top>
-
         <Container>
-          <PaymentDetails>
-            <PaymentTitle>Confirmar o pagamento</PaymentTitle>
-
-            <PaymentItem style={{ display: "flex", textAlign: "center" }}>
-              Pagamento não encontrado!
-            </PaymentItem>
-          </PaymentDetails>
-
-          <ConfirmButton>
-            <Button
-              bgColor="primary"
-              textColor="#FFFFFF"
-              text="Confirmar"
-              hasBorder={false}
-              onClick={() =>
-                navigateTo(
-                  `/estudante/cartoes/credito/pagamentos/report/${confirmar}`
-                )
-              }
-            />
-          </ConfirmButton>
+          <Message>Pagamento não encontrado.</Message>
           <BottomMenu />
         </Container>
       </>
     );
   }
 
-  const total = calcularTotalPagamentos(payment.itens);
+  if (loading) {
+    return (
+      <>
+        <Top>
+          <Header variant="receipt" title="Detalhes" />
+        </Top>
+        <Container>
+          <Message>A carregar...</Message>
+          <BottomMenu />
+        </Container>
+      </>
+    );
+  }
+
+  if (error || !intent) {
+    return (
+      <>
+        <Top>
+          <Header variant="receipt" title="Detalhes" />
+        </Top>
+        <Container>
+          <Message>{error || "Pagamento não encontrado."}</Message>
+          <BottomMenu />
+        </Container>
+      </>
+    );
+  }
+
+  const code =
+    receiptCode ||
+    intent.receipt_number ||
+    intent.reference?.nu_referencia ||
+    intent.id;
 
   return (
     <>
@@ -199,41 +163,25 @@ export default function PaymentScreen() {
       </Top>
 
       <Container>
-        <InstitutionCard>
-          <InstitutionImage>
-            {payment.instituicao.image ? (
-              <img
-                src={payment.instituicao.image}
-                alt={payment.instituicao.nome}
-              />
-            ) : (
-              <InstitutionImagePlaceholder />
-            )}
-          </InstitutionImage>
-
-          <InstitutionInfo>
-            <InstitutionName>{payment.instituicao.nome}</InstitutionName>
-            <InstitutionAddress>
-              {payment.instituicao.endereco}
-            </InstitutionAddress>
-          </InstitutionInfo>
-        </InstitutionCard>
-
         <PaymentDetails>
-          <PaymentTitle>Confirmar o pagamento</PaymentTitle>
+          <PaymentTitle>Pagamento confirmado</PaymentTitle>
 
-          {payment.itens.map((item, index) => (
-            <PaymentItem key={index}>
-              <PaymentLabel>{item.descricao}</PaymentLabel>
-              <PaymentValue>
-                {item.valor.toLocaleString("pt-PT")} kz
-              </PaymentValue>
+          <PaymentItem>
+            <PaymentLabel>Descrição</PaymentLabel>
+            <PaymentValue>{intent.description || "Propina"}</PaymentValue>
+          </PaymentItem>
+
+          {intent.reference?.nu_referencia && (
+            <PaymentItem>
+              <PaymentLabel>Referência</PaymentLabel>
+              <PaymentValue>{intent.reference.nu_referencia}</PaymentValue>
             </PaymentItem>
-          ))}
+          )}
 
           <TotalSection>
-            <TotalLabel>Total</TotalLabel>
-            <TotalValue>{total.toLocaleString("pt-PT")} kz</TotalValue>
+            <TotalValue>
+              {intent.amount.toLocaleString("pt-AO")} {intent.currency || "Kz"}
+            </TotalValue>
           </TotalSection>
         </PaymentDetails>
 
@@ -241,11 +189,11 @@ export default function PaymentScreen() {
           <Button
             bgColor="primary"
             textColor="#FFFFFF"
-            text="Confirmar"
+            text="Ver recibo"
             hasBorder={false}
             onClick={() =>
               navigateTo(
-                `/estudante/cartoes/credito/pagamentos/receipt/${confirmar}`
+                `/estudante/cartoes/credito/pagamentos/receipt/${encodeURIComponent(code)}?intentId=${intentId}`
               )
             }
           />

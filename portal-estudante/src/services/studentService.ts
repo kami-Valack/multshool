@@ -412,6 +412,23 @@ class StudentService {
     }
   }
 
+  async getFee(feeId: string): Promise<Fee | null> {
+    try {
+      const response = await studentApiClient.get<ApiResponse & { fee: Fee }>(
+        `/fees/${feeId}`
+      );
+
+      if (response.status === 'success' && response.fee) {
+        return response.fee;
+      }
+
+      return null;
+    } catch (error) {
+      console.warn('Erro ao carregar propina:', error);
+      return null;
+    }
+  }
+
   // Propinas/Fees - se disponível via API
   async getFees(): Promise<Fee[]> {
     try {

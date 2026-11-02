@@ -1,11 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import styled from "styled-components";
 import Header from "@/components/ui/HeaderGeneral";
 import BottomMenu from "@/components/ui/BottomMenu";
-import { mockReceipts } from "@/mocks/receipt";
 import { useNavigation } from "@/hooks/navigation";
+import { paymentService, PaymentIntent } from "@/services/paymentService";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Container = styled.div`
   width: 100%;
@@ -193,19 +195,67 @@ const ReportSubtitle = styled.span`
 
 export default function ReciboPage() {
   const { code } = useParams();
+  const searchParams = useSearchParams();
+  const intentId = searchParams.get("intentId");
   const { navigateTo } = useNavigation();
+  const { user } = useAuth();
 
-  // Buscar o recibo no mock com base na referência
-  const receipt = mockReceipts.find((r) => r.reference === code);
+  const [intent, setIntent] = useState<PaymentIntent | null>(null);
+  const [loading, setLoading] = useState(!!intentId);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!receipt) {
+  useEffect(() => {
+    if (!intentId) return;
+    paymentService
+      .getPaymentIntent(intentId)
+      .then(setIntent)
+      .catch((e) =>
+        setError(e instanceof Error ? e.message : "Recibo não encontrado")
+      )
+      .finally(() => setLoading(false));
+  }, [intentId]);
+
+  const receiptCode = decodeURIComponent(String(code));
+
+  if (loading) {
+    return (
+      <Container>
+        <Top>
+          <Header variant="receipt" title="Recibo" />
+        </Top>
+        <p style={{ marginTop: "50px", color: "#777" }}>A carregar recibo...</p>
+      </Container>
+    );
+  }
+
+  if (intentId && (error || !intent)) {
     return (
       <Container>
         <Top>
           <Header variant="receipt" title="Recibo" />
         </Top>
         <p style={{ marginTop: "50px", color: "#777" }}>
-          ⚠️ Recibo não encontrado.
+          {error || "Recibo não encontrado."}
+        </p>
+      </Container>
+    );
+  }
+
+  const amount = intent?.amount ?? 0;
+  const reference =
+    intent?.reference?.nu_referencia || intent?.receipt_number || receiptCode;
+  const paidAt = intent?.paid_at
+    ? new Date(intent.paid_at).toLocaleString("pt-PT")
+    : new Date().toLocaleString("pt-PT");
+
+  if (!intentId) {
+    return (
+      <Container>
+        <Top>
+          <Header variant="receipt" title="Recibo" />
+        </Top>
+        <p style={{ marginTop: "50px", color: "#777" }}>
+          Recibo não encontrado.
         </p>
       </Container>
     );
@@ -235,7 +285,7 @@ export default function ReciboPage() {
             </CheckIcon>
           </CheckIconWrapper>
           <SuccessText>Pagamento efectuado com sucesso!</SuccessText>
-          <AmountText>{receipt.amount.toLocaleString()} kz</AmountText>
+          <AmountText>{amount.toLocaleString("pt-AO")} kz</AmountText>
         </SuccessCard>
 
         <DetailsCard>
@@ -244,28 +294,33 @@ export default function ReciboPage() {
           </DetailsHeader>
 
           <DetailRow>
+            <DetailLabel>Recibo</DetailLabel>
+            <DetailValue>{intent?.receipt_number || receiptCode}</DetailValue>
+          </DetailRow>
+
+          <DetailRow>
             <DetailLabel>Referência</DetailLabel>
-            <DetailValue>{receipt.reference}</DetailValue>
+            <DetailValue>{reference}</DetailValue>
           </DetailRow>
 
           <DetailRow>
             <DetailLabel>Estado do pagamento</DetailLabel>
-            <StatusBadge>{receipt.status}</StatusBadge>
+            <StatusBadge>Pago</StatusBadge>
           </DetailRow>
 
           <DetailRow>
             <DetailLabel>Data</DetailLabel>
-            <DetailValue>{receipt.date}</DetailValue>
+            <DetailValue>{paidAt}</DetailValue>
           </DetailRow>
 
           <DetailRow>
-            <DetailLabel>Destinatário</DetailLabel>
-            <DetailValue>{receipt.recipient}</DetailValue>
+            <DetailLabel>Estudante</DetailLabel>
+            <DetailValue>{user?.name || "—"}</DetailValue>
           </DetailRow>
 
           <DetailRow>
             <DetailLabel>Valor Total</DetailLabel>
-            <TotalValue>{receipt.total.toLocaleString()} kz</TotalValue>
+            <TotalValue>{amount.toLocaleString("pt-AO")} kz</TotalValue>
           </DetailRow>
         </DetailsCard>
 
