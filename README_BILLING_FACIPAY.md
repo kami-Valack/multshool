@@ -16,7 +16,7 @@ docker compose exec ms-billing php artisan migrate --force
 | `NEXT_PUBLIC_BILLING_API_URL` | URL exposta ao portal (ex.: `http://localhost:8004/api`) |
 | `BILLING_API_SECRET` | Secret inbound do billing (opcional; alinhado com student por defeito) |
 | `FACI_MOCK` | `true` — referências fictícias e fluxo local sem carteira FACIPAY |
-| `FACI_API_BASE_URL` | Base URL do painel FACIPAY (sem `/api/reference` no fim) |
+| `FACI_API_BASE_URL` | Base URL GPO (ex.: `https://gpo.drip.infinityfree.me`, sem `/api/reference` no fim) |
 | `FACI_API_KEY` | Header `X-API-Key` |
 | `FACI_DEFAULT_ENTITY` | Entidade exibida em mock ou fallback |
 
