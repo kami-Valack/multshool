@@ -1,0 +1,9 @@
+FROM node:20-bookworm
+
+WORKDIR /app
+
+COPY docker-entrypoint-message.sh /usr/local/bin/docker-entrypoint-message.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint-message.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint-message.sh"]
+CMD ["npm", "run", "dev"]

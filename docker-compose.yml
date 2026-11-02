@@ -1,30 +1,377 @@
-version: '3.8'
+x-php-build: &php-build
+  context: ./docker/php
+  dockerfile: Dockerfile
+
+x-laravel-env: &laravel-env
+  APP_ENV: ${APP_ENV:-local}
+  APP_DEBUG: ${APP_DEBUG:-true}
+  APP_KEY: ${APP_KEY:-}
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_USERNAME: ${MYSQL_USER:-multshool}
+  DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+  REDIS_CLIENT: phpredis
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+  CACHE_STORE: ${CACHE_STORE:-database}
+  QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
+  JWT_SECRET: ${JWT_SECRET}
+  JWT_ALGO: ${JWT_ALGO:-HS256}
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_PORT: 5672
+  RABBITMQ_USER: ${RABBITMQ_USER:-admin}
+  RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-admin123}
+  RABBITMQ_VHOST: ${RABBITMQ_VHOST:-/}
+  RABBITMQ_QUEUE: ${RABBITMQ_QUEUE:-default}
+  RABBITMQ_EMAIL_EXCHANGE: ${RABBITMQ_EMAIL_EXCHANGE:-email_exchange}
+  RABBITMQ_EMAIL_QUEUE: ${RABBITMQ_EMAIL_QUEUE:-email_queue}
+  RABBITMQ_USER_EVENTS_EXCHANGE: ${RABBITMQ_USER_EVENTS_EXCHANGE:-user_events}
+  RABBITMQ_USER_EVENTS_QUEUE: ${RABBITMQ_USER_EVENTS_QUEUE:-user_replication_queue}
+  RABBITMQ_USER_EVENTS_ROUTING_KEY: ${RABBITMQ_USER_EVENTS_ROUTING_KEY:-#}
+  AMQP_CONNECTION: ${AMQP_CONNECTION:-default}
+  API_SECRET: ${API_SECRET}
+  USERS_API_SECRET: ${USERS_API_SECRET}
+  STUDENT_API_SECRET: ${STUDENT_API_SECRET}
+  SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
+  USERS_API_URL: http://ms-users:8000/api
+  STUDENT_API_URL: http://ms-student:8001/api
+  SCHOOL_API_URL: http://ms-school:8003/api
+  AUTO_VERIFY_EMAILS: ${AUTO_VERIFY_EMAILS:-true}
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: multshool-mysql
+    restart: unless-stopped
+    ports:
+      - "${MYSQL_HOST_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${MYSQL_USER:-multshool}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      # Default DB created by image; init.sql creates the four app DBs
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ms-users-api}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - multshool-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: multshool-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_HOST_PORT:-6379}:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - multshool-network
+
   rabbitmq:
     image: rabbitmq:3.12-management-alpine
-    container_name: video-processing-rabbitmq
+    container_name: multshool-rabbitmq
+    restart: unless-stopped
     ports:
-      - "5672:5672"   # Porta AMQP
-      - "15672:15672" # Porta Management UI
+      - "${RABBITMQ_HOST_PORT:-5672}:5672"
+      - "${RABBITMQ_MGMT_PORT:-15672}:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin123
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-admin}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-admin123}
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q ping
-      interval: 30s
+      interval: 15s
       timeout: 10s
-      retries: 5
+      retries: 8
+      start_period: 20s
     networks:
-      - video-processing-network
+      - multshool-network
+
+  ms-users:
+    build: *php-build
+    image: multshool-php:8.2
+    container_name: multshool-ms-users
+    restart: unless-stopped
+    working_dir: /var/www/html
+    ports:
+      - "8000:8000"
+    environment:
+      <<: *laravel-env
+      APP_NAME: MS-Users-API
+      APP_URL: http://localhost:8000
+      DB_DATABASE: ms-users-api
+    volumes:
+      - ./ms-users-api-laravel:/var/www/html
+      - ms_users_vendor:/var/www/html/vendor
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - multshool-network
+
+  ms-student:
+    build: *php-build
+    image: multshool-php:8.2
+    container_name: multshool-ms-student
+    restart: unless-stopped
+    working_dir: /var/www/html
+    ports:
+      - "8001:8001"
+    environment:
+      <<: *laravel-env
+      APP_NAME: MS-Student-API
+      APP_URL: http://localhost:8001
+      DB_DATABASE: ms-student-api
+    volumes:
+      - ./ms-stundent-api-laravel-temp:/var/www/html
+      - ms_student_vendor:/var/www/html/vendor
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8001"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      ms-users:
+        condition: service_started
+    networks:
+      - multshool-network
+
+  ms-admin:
+    build: *php-build
+    image: multshool-php:8.2
+    container_name: multshool-ms-admin
+    restart: unless-stopped
+    working_dir: /var/www/html
+    ports:
+      - "8002:8002"
+    environment:
+      <<: *laravel-env
+      APP_NAME: MS-Admin-System
+      APP_URL: http://localhost:8002
+      DB_DATABASE: ms-admin-api
+    volumes:
+      - ./ms-admin-system:/var/www/html
+      - ms_admin_vendor:/var/www/html/vendor
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8002"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      ms-users:
+        condition: service_started
+    networks:
+      - multshool-network
+
+  ms-school:
+    build: *php-build
+    image: multshool-php:8.2
+    container_name: multshool-ms-school
+    restart: unless-stopped
+    working_dir: /var/www/html
+    ports:
+      - "8003:8003"
+    environment:
+      <<: *laravel-env
+      APP_NAME: MS-School-API
+      APP_URL: http://localhost:8003
+      APP_PORT: 8003
+      DB_DATABASE: ms-school-api
+    volumes:
+      - ./ms-shocoll-api:/var/www/html
+      - ms_school_vendor:/var/www/html/vendor
+    command: ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8003"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      ms-users:
+        condition: service_started
+    networks:
+      - multshool-network
+
+  ms-student-consumer:
+    build: *php-build
+    image: multshool-php:8.2
+    container_name: multshool-ms-student-consumer
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      <<: *laravel-env
+      APP_NAME: MS-Student-API
+      APP_URL: http://localhost:8001
+      DB_DATABASE: ms-student-api
+      SKIP_MIGRATE: "1"
+    volumes:
+      - ./ms-stundent-api-laravel-temp:/var/www/html
+      - ms_student_vendor:/var/www/html/vendor
+    command: ["php", "artisan", "rabbitmq:consume-user-events"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      ms-student:
+        condition: service_started
+    networks:
+      - multshool-network
+
+  ms-school-consumer:
+    build: *php-build
+    image: multshool-php:8.2
+    container_name: multshool-ms-school-consumer
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      <<: *laravel-env
+      APP_NAME: MS-School-API
+      APP_URL: http://localhost:8003
+      DB_DATABASE: ms-school-api
+      SKIP_MIGRATE: "1"
+    volumes:
+      - ./ms-shocoll-api:/var/www/html
+      - ms_school_vendor:/var/www/html/vendor
+    command: ["php", "artisan", "rabbitmq:consume-user-events"]
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      ms-school:
+        condition: service_started
+    networks:
+      - multshool-network
+
+  ms-message-api:
+    build:
+      context: ./docker/node
+      dockerfile: Dockerfile.message
+    container_name: multshool-ms-message
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3002
+      RABBITMQ_URL: amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-admin123}@rabbitmq:5672
+      RABBITMQ_QUEUE: ${RABBITMQ_EMAIL_QUEUE:-email_queue}
+      RABBITMQ_EXCHANGE: ${RABBITMQ_EMAIL_EXCHANGE:-email_exchange}
+      POSTMARK_API_TOKEN: ${POSTMARK_API_TOKEN:-}
+      POSTMARK_FROM_EMAIL: ${POSTMARK_FROM_EMAIL:-noreply@example.com}
+      POSTMARK_FROM_NAME: ${POSTMARK_FROM_NAME:-MultiShol}
+    volumes:
+      - ./ms-message-api:/app
+      - ms_message_node_modules:/app/node_modules
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - multshool-network
+
+  portal-estudante:
+    build:
+      context: ./docker/node
+      dockerfile: Dockerfile.next
+    container_name: multshool-portal-estudante
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      NEXT_PUBLIC_USERS_API_URL: ${NEXT_PUBLIC_USERS_API_URL:-http://localhost:8000/api}
+      NEXT_PUBLIC_STUDENT_API_URL: ${NEXT_PUBLIC_STUDENT_API_URL:-http://localhost:8001/api}
+      NEXT_PUBLIC_SCHOOL_API_URL: ${NEXT_PUBLIC_SCHOOL_API_URL:-http://localhost:8003/api}
+      NEXT_PUBLIC_BILLING_API_URL: ${NEXT_PUBLIC_BILLING_API_URL:-http://localhost:8004/api}
+    volumes:
+      - ./portal-estudante:/app
+      - portal_node_modules:/app/node_modules
+    command: ["npm", "run", "dev", "--", "-H", "0.0.0.0", "-p", "3001"]
+    depends_on:
+      - ms-users
+      - ms-student
+      - ms-school
+    networks:
+      - multshool-network
+
+  sistema-akaedem-ms:
+    build:
+      context: ./docker/node
+      dockerfile: Dockerfile.next
+    container_name: multshool-sistema-akaedem
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      NEXT_PUBLIC_USERS_API_URL: ${NEXT_PUBLIC_USERS_API_URL:-http://localhost:8000/api}
+      NEXT_PUBLIC_STUDENT_API_URL: ${NEXT_PUBLIC_STUDENT_API_URL:-http://localhost:8001/api}
+      NEXT_PUBLIC_SCHOOL_API_URL: ${NEXT_PUBLIC_SCHOOL_API_URL:-http://localhost:8003/api}
+      NEXT_PUBLIC_ADMIN_API_URL: ${NEXT_PUBLIC_ADMIN_API_URL:-http://localhost:8002/api}
+      NEXT_PUBLIC_BILLING_API_URL: ${NEXT_PUBLIC_BILLING_API_URL:-http://localhost:8004/api}
+      USERS_API_URL: http://ms-users:8000/api
+      USERS_API_SECRET: ${USERS_API_SECRET}
+    volumes:
+      - ./sistema-akaedem-ms:/app
+      - akaedem_node_modules:/app/node_modules
+    command: ["npm", "run", "dev", "--", "-H", "0.0.0.0", "-p", "3000"]
+    depends_on:
+      - ms-users
+      - ms-admin
+      - ms-school
+    networks:
+      - multshool-network
+
+  static-html:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    container_name: multshool-static-html
+    restart: unless-stopped
+    ports:
+      - "${STATIC_HTML_PORT:-8080}:80"
+    volumes:
+      - ./painel_admin.html:/usr/share/nginx/html/painel_admin.html:ro
+      - ./registrar_escolas_professores.html:/usr/share/nginx/html/registrar_escolas_professores.html:ro
+    networks:
+      - multshool-network
 
 volumes:
+  mysql_data:
+  redis_data:
   rabbitmq_data:
-    driver: local
+  ms_users_vendor:
+  ms_student_vendor:
+  ms_admin_vendor:
+  ms_school_vendor:
+  ms_message_node_modules:
+  portal_node_modules:
+  akaedem_node_modules:
 
 networks:
-  video-processing-network:
+  multshool-network:
     driver: bridge
-

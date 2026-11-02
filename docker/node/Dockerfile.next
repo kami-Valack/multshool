@@ -1,0 +1,12 @@
+FROM node:20-bookworm
+
+WORKDIR /app
+
+# Dependencies installed at runtime if missing (bind-mounted source)
+COPY docker-entrypoint-next.sh /usr/local/bin/docker-entrypoint-next.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint-next.sh
+
+EXPOSE 3000
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint-next.sh"]
+CMD ["npm", "run", "dev", "--", "-H", "0.0.0.0"]
