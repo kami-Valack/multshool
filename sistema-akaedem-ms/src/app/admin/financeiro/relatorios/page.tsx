@@ -56,14 +56,7 @@ export default function RelatoriosFinanceiros() {
     if (manual) setAtualizando(true);
     try {
       const data = await financeService.getSummary();
-      setResumo({
-        payments_total: Number(data.payments_total) || 0,
-        payments_count: Number(data.payments_count) || 0,
-        pending_charges_total: Number(data.pending_charges_total) || 0,
-        overdue_charges_total: Number(data.overdue_charges_total) || 0,
-        charges_count: Number(data.charges_count) || 0,
-        invoices_count: Number(data.invoices_count) || 0,
-      });
+      setResumo(data);
       if (manual) toast.success("Relatório actualizado");
     } catch (err: any) {
       toast.error(err?.message || "Erro ao carregar relatório financeiro");
