@@ -1,9 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -204,21 +201,8 @@ export default function AssistenteIA() {
   };
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="sidebar" />
-
-      <SidebarInset>
-        <div className="flex flex-col h-screen">
-          <NavbarH />
-
-          {/* Cabeçalho */}
+    <div className="flex flex-col h-screen">
+{/* Cabeçalho */}
           <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mt-12">
             <div className="container flex items-center justify-between py-4 px-6">
               <div>
@@ -626,7 +610,5 @@ export default function AssistenteIA() {
             </DialogContent>
           </Dialog>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

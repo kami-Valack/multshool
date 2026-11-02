@@ -1,9 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { useTeacherAssignments } from "@/hooks/useTeacherAssignments";
 import { useTeachers } from "@/hooks/useTeachers";
 import { useCourses } from "@/hooks/useCourses";
@@ -433,19 +430,8 @@ export default function Academica() {
   };
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="sidebar" />
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
-          <NavbarH />
-          <div className="p-6 space-y-6">
+    <div className="flex flex-1 flex-col">
+<div className="p-6 space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">
@@ -1022,7 +1008,5 @@ export default function Academica() {
             </div>
           </DialogContent>
         </Dialog>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

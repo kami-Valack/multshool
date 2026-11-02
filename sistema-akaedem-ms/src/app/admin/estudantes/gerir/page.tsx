@@ -106,10 +106,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
-
 const formatDate = (date: string) => new Date(date).toLocaleDateString("pt-AO");
 
 // === COMPONENTES AUXILIARES ===
@@ -380,22 +376,10 @@ export default function GerirEstudantes() {
 
   return (
     <>
-      <SidebarProvider
-        style={
-          {
-            "--sidebar-width": "calc(var(--spacing) * 72)",
-            "--header-height": "calc(var(--spacing) * 12)",
-          } as React.CSSProperties
-        }
-      >
-        <AppSidebar variant="sidebar" />
-
-        <SidebarInset>
-          {/* <SiteHeader /> */}
+      {/* <SiteHeader /> */}
           <div className="flex flex-1 flex-col">
             <div className="@container/main flex flex-1 flex-col gap-2">
-              <NavbarH />
-              <div className="flex-1 p-6 space-y-6">
+<div className="flex-1 p-6 space-y-6">
                 {/* HEADER */}
                 <div>
                   <h1 className="text-3xl font-bold">Gerir Estudantes</h1>
@@ -1002,8 +986,6 @@ export default function GerirEstudantes() {
               </div>
             </div>
           </div>
-        </SidebarInset>
-      </SidebarProvider>
-    </>
+        </>
   );
 }

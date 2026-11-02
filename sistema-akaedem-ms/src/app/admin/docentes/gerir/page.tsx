@@ -37,9 +37,6 @@ import {
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { useTeachers } from "@/hooks/useTeachers";
 import { Teacher } from "@/lib/api/services/teacher.service";
 import { useCourses } from "@/hooks/useCourses";
@@ -254,20 +251,9 @@ const GestaoDocentes = () => {
   };
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar variant="sidebar" />
-
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="flex flex-1 flex-col gap-2">
-            <NavbarH />
-            
-            <div className="min-h-screen  p-6">
+<div className="min-h-screen  p-6">
               <div className="max-w-7xl mx-auto space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -873,9 +859,7 @@ const GestaoDocentes = () => {
             )}
           </SheetContent>
         </Sheet>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 };
 
 export default GestaoDocentes;

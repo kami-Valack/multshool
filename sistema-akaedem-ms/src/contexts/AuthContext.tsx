@@ -1,262 +1,288 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import { authService, User, LoginCredentials, ProfileInfo } from '@/lib/api/services/auth.service';
-import { profileService, ProfileCompletionStatus } from '@/lib/api/services/profile.service';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  ReactNode,
+} from "react";
+import {
+  authService,
+  User,
+  LoginCredentials,
+  ProfileInfo,
+} from "@/lib/api/services/auth.service";
+import {
+  profileService,
+  ProfileCompletionStatus,
+} from "@/lib/api/services/profile.service";
+
+const USER_CACHE_KEY = "auth_user_cache";
+const SCHOOL_CACHE_KEY = "auth_school_cache";
+
+export type SchoolProfile = {
+  name?: string;
+  acronym?: string;
+  logo_path?: string;
+  [key: string]: any;
+};
 
 interface AuthContextType {
   user: User | null;
+  schoolProfile: SchoolProfile | null;
   loading: boolean;
   isAuthenticated: boolean;
-  profileComplete: boolean | null; // null = não verificado ainda, true/false = verificado
+  profileComplete: boolean | null;
   profileStatus: ProfileCompletionStatus | null;
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
-  checkProfileCompletion: () => Promise<void>;
+  checkProfileCompletion: (userToCheck?: User | null) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function readCache<T>(key: string): T | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeCache(key: string, value: unknown) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // ignore quota errors
+  }
+}
+
+function clearSessionCaches() {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(USER_CACHE_KEY);
+  localStorage.removeItem(SCHOOL_CACHE_KEY);
+  localStorage.removeItem("user_role");
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [schoolProfile, setSchoolProfile] = useState<SchoolProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [profileComplete, setProfileComplete] = useState<boolean | null>(null);
-  const [profileStatus, setProfileStatus] = useState<ProfileCompletionStatus | null>(null);
+  const [profileStatus, setProfileStatus] = useState<ProfileCompletionStatus | null>(
+    null
+  );
+  const profileCheckInFlight = useRef(false);
+  const hydrated = useRef(false);
 
-  /**
-   * Verifica autenticação ao carregar
-   */
-  useEffect(() => {
-    checkAuth();
+  const persistUser = useCallback((next: User | null) => {
+    setUser(next);
+    if (next) {
+      writeCache(USER_CACHE_KEY, next);
+      if (typeof window !== "undefined" && next.role) {
+        localStorage.setItem("user_role", next.role);
+      }
+    } else {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(USER_CACHE_KEY);
+      }
+    }
   }, []);
 
-  const checkAuth = async () => {
+  const persistSchool = useCallback((next: SchoolProfile | null) => {
+    setSchoolProfile(next);
+    if (next) writeCache(SCHOOL_CACHE_KEY, next);
+    else if (typeof window !== "undefined") localStorage.removeItem(SCHOOL_CACHE_KEY);
+  }, []);
+
+  const loadSchoolProfile = useCallback(async () => {
     try {
-      if (authService.isAuthenticated()) {
-        // Buscar dados completos do usuário
-        // A role já está no localStorage e será usada pelo useRoleCheck enquanto aguarda
-        const userData = await authService.getMe();
-        setUser(userData);
-        
-        // Se for escola, verificar perfil completo
-        if (userData.role === 'school') {
-          await checkProfileCompletion();
-        }
+      const profile = await profileService.getProfile();
+      if (profile) {
+        persistSchool(profile);
+        // Manter o nome da escola no user para sidebar/navbar
+        setUser((prev) => {
+          if (!prev) return prev;
+          const merged: User = {
+            ...prev,
+            name: profile.name || prev.name,
+            school: {
+              ...(prev.school || {}),
+              ...profile,
+              name: profile.name || prev.school?.name,
+              logo_path: profile.logo_path || prev.school?.logo_path,
+            },
+          };
+          writeCache(USER_CACHE_KEY, merged);
+          return merged;
+        });
       }
     } catch (error) {
-      console.error('Erro ao verificar autenticação:', error);
-      // Limpa tokens e role inválidos
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('refresh_token');
-        localStorage.removeItem('user_role');
-      }
-    } finally {
-      setLoading(false);
+      console.warn("[AuthContext] Não foi possível carregar perfil da escola:", error);
     }
-  };
+  }, [persistSchool]);
 
-  /**
-   * Verifica se o perfil está completo (apenas para escolas)
-   */
-  const checkProfileCompletion = useCallback(async (userToCheck?: User | null) => {
-    try {
-      const userToVerify = userToCheck || user;
-      
-      if (userToVerify?.role !== 'school') {
-        setProfileComplete(true); // Não é escola, não precisa verificar
-        return;
-      }
+  const checkProfileCompletion = useCallback(
+    async (userToCheck?: User | null) => {
+      if (profileCheckInFlight.current) return;
+      profileCheckInFlight.current = true;
+      try {
+        const userToVerify = userToCheck || user;
 
-      const status = await profileService.checkCompletion();
-      setProfileStatus(status);
-      setProfileComplete(status.is_complete);
-    } catch (error: any) {
-      // Se o erro for INCOMPLETE_PROFILE (403) com código específico, significa que o perfil está incompleto
-      if (error.error_code === 'INCOMPLETE_PROFILE' || (error.status === 403 && error.message?.includes('obrigatório preencher'))) {
-        setProfileComplete(false);
-        // Tentar extrair dados do erro
-        if (error.missing_fields) {
-          setProfileStatus({
-            is_complete: false,
-            missing_fields: error.missing_fields,
-            completion_percentage: 0,
-            message: error.message || 'Perfil incompleto',
-          });
-        } else {
-          // Se não tiver missing_fields no erro, tentar buscar do endpoint
-          try {
-            const status = await profileService.checkCompletion();
-            setProfileStatus(status);
-            setProfileComplete(status.is_complete);
-          } catch (innerError: any) {
-            // Se falhar novamente, verificar se é realmente INCOMPLETE_PROFILE
-            if (innerError.error_code === 'INCOMPLETE_PROFILE' || (innerError.status === 403 && innerError.message?.includes('obrigatório preencher'))) {
-              setProfileComplete(false);
-            } else {
-              // Se for outro tipo de erro (rede, servidor, etc), não assumir incompleto
-              // Manter o estado atual ou assumir completo para não bloquear acesso
-              console.warn('Erro ao verificar perfil (não é INCOMPLETE_PROFILE):', innerError);
-              // Não alterar profileComplete para não bloquear acesso indevidamente
-            }
-          }
-        }
-      } else {
-        console.warn('[AuthContext] Erro ao verificar perfil (não relacionado a perfil incompleto):', error);
-        // Em caso de erro que não seja INCOMPLETE_PROFILE, não assumir que está incompleto
-        // Isso evita bloquear acesso por erros de rede ou servidor
-        // Se profileComplete ainda não foi setado (null), assumir true para não bloquear acesso
-        if (profileComplete === null) {
-          console.log('[AuthContext] Erro na verificação de perfil, assumindo completo para não bloquear acesso');
+        if (userToVerify?.role !== "school") {
           setProfileComplete(true);
-        } else {
-          // Se já foi setado antes, manter o valor atual (não alterar)
-          console.log('[AuthContext] Mantendo estado atual de profileComplete:', profileComplete);
+          return;
         }
+
+        const status = await profileService.checkCompletion();
+        setProfileStatus(status);
+        setProfileComplete(status.is_complete);
+      } catch (error: any) {
+        if (
+          error.error_code === "INCOMPLETE_PROFILE" ||
+          (error.status === 403 && error.message?.includes("obrigatório preencher"))
+        ) {
+          setProfileComplete(false);
+          if (error.missing_fields) {
+            setProfileStatus({
+              is_complete: false,
+              missing_fields: error.missing_fields,
+              completion_percentage: 0,
+              message: error.message || "Perfil incompleto",
+            });
+          }
+        } else {
+          console.warn("[AuthContext] Erro ao verificar perfil:", error);
+          setProfileComplete((prev) => (prev === null ? true : prev));
+        }
+      } finally {
+        profileCheckInFlight.current = false;
       }
-    }
-  }, [user]);
+    },
+    [user]
+  );
+
+  useEffect(() => {
+    if (hydrated.current) return;
+    hydrated.current = true;
+
+    const cachedUser = readCache<User>(USER_CACHE_KEY);
+    const cachedSchool = readCache<SchoolProfile>(SCHOOL_CACHE_KEY);
+    if (cachedUser) setUser(cachedUser);
+    if (cachedSchool) setSchoolProfile(cachedSchool);
+
+    const boot = async () => {
+      try {
+        if (!authService.isAuthenticated()) {
+          persistUser(null);
+          persistSchool(null);
+          setProfileComplete(null);
+          setProfileStatus(null);
+          return;
+        }
+
+        const userData = await authService.getMe();
+        persistUser(userData);
+
+        if (userData.role === "school") {
+          await Promise.all([
+            checkProfileCompletion(userData),
+            loadSchoolProfile(),
+          ]);
+        } else {
+          setProfileComplete(true);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("refresh_token");
+        }
+        clearSessionCaches();
+        persistUser(null);
+        persistSchool(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void boot();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const login = async (credentials: LoginCredentials) => {
-    try {
-      console.log('AuthContext.login - Iniciando login...');
-      const response = await authService.login(credentials);
-      console.log('AuthContext.login - Resposta do login:', { 
-        hasProfile: !!response.profile, 
-        profile: response.profile,
-        user: response.user
-      });
-      
-      // Usar o user da resposta do login ao invés de chamar getMe() novamente
-      // Isso garante que temos os dados corretos e evita uma requisição extra
-      const userData: User = {
-        id: response.user.id,
-        name: response.user.name,
-        email: response.user.email,
-        role: response.user.role,
-        email_verified: response.user.email_verified || false,
-        is_active: true,
-      };
-      
-      console.log('AuthContext.login - Dados do usuário:', { role: userData.role });
-      
-      // Salvar role no localStorage para acesso imediato
-      if (typeof window !== 'undefined' && userData.role) {
-        localStorage.setItem('user_role', userData.role);
-        console.log('[AuthContext] Role salva no localStorage após login:', userData.role);
-      }
-      
-      setUser(userData);
-      
-      // Se for escola, usar informações de perfil da resposta do login
-      if (userData.role === 'school') {
-        console.log('AuthContext.login - É escola, verificando perfil...');
-        
-        // Se a resposta do login já contém informações de perfil, usar diretamente
-        if (response.profile) {
-          const profileInfo = response.profile;
-          console.log('AuthContext.login - Perfil recebido da API:', profileInfo);
-          console.log('AuthContext.login - is_complete:', profileInfo.is_complete);
-          setProfileComplete(profileInfo.is_complete);
-          setProfileStatus({
-            is_complete: profileInfo.is_complete,
-            missing_fields: profileInfo.missing_fields || [],
-            completion_percentage: profileInfo.completion_percentage || 0,
-            message: profileInfo.message || 'Perfil incompleto',
-          });
-          console.log('AuthContext.login - profileComplete setado para:', profileInfo.is_complete);
-        } else {
-          // Se não tiver na resposta, verificar manualmente (fallback)
-          console.log('AuthContext.login - Perfil não veio na resposta, verificando manualmente...');
-          await checkProfileCompletion(userData);
-        }
+    const response = await authService.login(credentials);
+
+    const userData: User = {
+      id: response.user.id,
+      name: response.user.name,
+      email: response.user.email,
+      role: response.user.role,
+      email_verified: response.user.email_verified || false,
+      is_active: true,
+    };
+
+    persistUser(userData);
+
+    if (userData.role === "school") {
+      if (response.profile) {
+        const profileInfo = response.profile as ProfileInfo;
+        setProfileComplete(profileInfo.is_complete);
+        setProfileStatus({
+          is_complete: profileInfo.is_complete,
+          missing_fields: profileInfo.missing_fields || [],
+          completion_percentage: profileInfo.completion_percentage || 0,
+          message: profileInfo.message || "Perfil incompleto",
+        });
       } else {
-        console.log('AuthContext.login - Não é escola, setando profileComplete = true');
-        setProfileComplete(true); // Não é escola, não precisa verificar
+        await checkProfileCompletion(userData);
       }
-    } catch (error: any) {
-      console.error('AuthContext.login - Erro no login:', error);
-      console.error('AuthContext.login - Tipo do erro:', typeof error);
-      console.error('AuthContext.login - Erro completo:', JSON.stringify(error, null, 2));
-      
-      // Extrair mensagem de erro de forma robusta
-      let errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
-      
-      if (error) {
-        if (error instanceof Error) {
-          // Se for uma instância de Error, usar a mensagem diretamente
-          errorMessage = error.message || errorMessage;
-        } else if (typeof error === 'string') {
-          errorMessage = error;
-        } else if (error.message) {
-          errorMessage = error.message;
-        } else if (error.status === 401 || (error.status && error.status === 401)) {
-          errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
-        }
-      }
-      
-      // Garantir que a mensagem não está vazia
-      if (!errorMessage || errorMessage.trim() === '') {
-        errorMessage = 'Credenciais inválidas. Verifique o utilizador e a palavra-passe.';
-      }
-      
-      // Criar um novo Error com a mensagem extraída para garantir que seja propagado corretamente
-      const loginError = new Error(errorMessage);
-      throw loginError;
+      await loadSchoolProfile();
+    } else {
+      setProfileComplete(true);
     }
   };
 
   const logout = async () => {
     try {
       await authService.logout();
-      // Limpar estados
-      setUser(null);
-      setProfileComplete(null);
-      setProfileStatus(null);
-      // Limpar role do localStorage
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('user_role');
-      }
-      // Redirecionar para login
-      if (typeof window !== 'undefined') {
-        window.location.href = '/';
-      }
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
-      // Mesmo com erro, limpar estados e redirecionar
-      setUser(null);
+      console.error("Erro ao fazer logout:", error);
+    } finally {
+      persistUser(null);
+      persistSchool(null);
       setProfileComplete(null);
       setProfileStatus(null);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('user_role');
-        window.location.href = '/';
+      clearSessionCaches();
+      if (typeof window !== "undefined") {
+        window.location.href = "/";
       }
     }
   };
 
   const refreshUser = async () => {
-    try {
-      const userData = await authService.getMe();
-      setUser(userData);
-      
-      // Se for escola, verificar perfil completo após atualizar
-      if (userData.role === 'school') {
-        await checkProfileCompletion();
-      }
-    } catch (error) {
-      console.error('Erro ao atualizar dados do usuário:', error);
-      throw error;
+    const userData = await authService.getMe();
+    persistUser(userData);
+    if (userData.role === "school") {
+      await Promise.all([checkProfileCompletion(userData), loadSchoolProfile()]);
     }
   };
 
-  // isAuthenticated deve ser true apenas se user existir E não estiver carregando
-  const isAuthenticated = !!user && !loading;
+  // Manter autenticação estável: não depender de `loading`, para o nome não desaparecer
+  const isAuthenticated = !!user;
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        schoolProfile,
         loading,
         isAuthenticated,
         profileComplete,
@@ -275,8 +301,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
   }
   return context;
 }
-

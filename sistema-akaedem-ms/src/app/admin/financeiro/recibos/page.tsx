@@ -1,9 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import {
   Card,
   CardContent,
@@ -494,22 +491,9 @@ ${instituicao.email}`,
     .reduce((acc, d) => acc + d.total, 0);
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="sidebar" />
-
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <NavbarH />
-
-            <div className="p-6">
+<div className="p-6">
               <div className="mb-6 flex items-center justify-between">
                 <div>
                   <h1 className="text-3xl font-bold tracking-tight">
@@ -1273,7 +1257,5 @@ ${instituicao.email}`,
             </div>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

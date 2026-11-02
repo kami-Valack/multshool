@@ -2,9 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import {
   Card,
   CardContent,
@@ -202,20 +199,9 @@ export default function RelatoriosFinanceiros() {
   };
 
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="sidebar" />
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <NavbarH />
-            <div className="p-6 space-y-6">
+<div className="p-6 space-y-6">
               {/* Filtros Globais */}
               <div className="flex flex-wrap gap-4 items-end">
                 <div className="space-y-1">
@@ -639,7 +625,5 @@ export default function RelatoriosFinanceiros() {
             </div>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

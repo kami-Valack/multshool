@@ -1,9 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import DynamicTable from "@/components/data-table";
 import AccessExams from "@/components/access-exams";
 import ExamResults from "@/components/exam-results";
@@ -130,20 +127,9 @@ export default function Candidaturas() {
 
   return (
     <>
-      <SidebarProvider
-        style={
-          {
-            "--sidebar-width": "calc(var(--spacing) * 72)",
-            "--header-height": "calc(var(--spacing) * 12)",
-          } as React.CSSProperties
-        }
-      >
-        <AppSidebar variant="sidebar" />
-        <SidebarInset>
-          <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col">
             <div className="@container/main flex flex-1 flex-col gap-2">
-              <NavbarH />
-              {/* Conteúdo Principal com Tabs */}
+{/* Conteúdo Principal com Tabs */}
               <div className="flex-1 p-6">
                 <Tabs defaultValue="candidatos" className="w-full">
                   <TabsList className="grid w-full grid-cols-4 mb-6">
@@ -243,10 +229,7 @@ export default function Candidaturas() {
               </div>
             </div>
           </div>
-        </SidebarInset>
-      </SidebarProvider>
-      
-      {/* Diálogo de Rejeição */}
+        {/* Diálogo de Rejeição */}
       <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
         <DialogContent>
           <DialogHeader>

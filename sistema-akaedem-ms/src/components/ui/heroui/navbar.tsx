@@ -1,4 +1,6 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from "@heroui/navbar";
+"use client";
+
+import { Navbar, NavbarBrand, NavbarContent } from "@heroui/navbar";
 import { Avatar } from "@heroui/avatar";
 import {
   Dropdown,
@@ -6,7 +8,8 @@ import {
   DropdownItem,
   DropdownTrigger,
 } from "@heroui/dropdown";
-import { Link } from "@heroui/link";
+import { useAuth } from "@/hooks/useAuth";
+import { getInitials } from "@/lib/getInitials";
 
 export const AcmeLogo = () => {
   return (
@@ -22,11 +25,28 @@ export const AcmeLogo = () => {
 };
 
 export default function NavbarH() {
+  const { user, schoolProfile, logout } = useAuth();
+
+  const displayName =
+    schoolProfile?.name || user?.school?.name || user?.name || "Instituição";
+  const displayEmail = user?.email || "";
+  const avatarSrc = schoolProfile?.logo_path || user?.school?.logo_path || undefined;
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
+
   return (
-    <Navbar>
+    <Navbar maxWidth="full" className="border-b border-border/60 bg-background/80 backdrop-blur">
       <NavbarBrand>
         <AcmeLogo />
-        <p className="font-bold text-inherit">kaedem Multischool</p>
+        <p className="font-bold text-inherit ml-2 truncate max-w-[240px]">
+          {displayName}
+        </p>
       </NavbarBrand>
 
       <NavbarContent justify="end">
@@ -37,24 +57,18 @@ export default function NavbarH() {
               as="button"
               className="transition-transform"
               color="secondary"
-              name="Jason Hughes"
+              name={getInitials(displayName)}
               size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src={avatarSrc}
             />
           </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+          <DropdownMenu aria-label="Acções do perfil">
+            <DropdownItem key="profile" className="h-14 gap-2" textValue={displayEmail}>
+              <p className="font-semibold">Sessão</p>
+              <p className="font-semibold text-default-500 truncate">{displayEmail}</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
-              Log Out
+            <DropdownItem key="logout" color="danger" onPress={handleLogout}>
+              Terminar sessão
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

@@ -1,9 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -208,20 +205,9 @@ export default function TransferenciasRecorrencias() {
   };
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar variant="sidebar" />
-
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <NavbarH />
-            
-            <div className="p-6 space-y-6">
+<div className="p-6 space-y-6">
               <div>
                 <h1 className="text-3xl font-bold tracking-tight">Transferências e Recorrências</h1>
                 <p className="text-muted-foreground">Gestão de transferências, reintegrações e mudanças de curso/turma</p>
@@ -464,7 +450,5 @@ export default function TransferenciasRecorrencias() {
             )}
           </DrawerContent>
         </Drawer>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

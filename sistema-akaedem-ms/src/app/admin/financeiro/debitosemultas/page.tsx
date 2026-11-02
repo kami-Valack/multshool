@@ -17,9 +17,6 @@ import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { Search, Bell, Download, Plus, AlertCircle, Clock, CheckCircle } from "lucide-react";
 
 // === Funções de data sem date-fns ===
@@ -154,19 +151,9 @@ export default function DebitosEMultas() {
   };
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar variant="sidebar" />
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:p-6">
-            <NavbarH />
-
-            <div className="flex flex-col gap-6">
+<div className="flex flex-col gap-6">
               {/* Título */}
               <div>
                 <h1 className="text-2xl font-bold tracking-tight">Débitos e Multas</h1>
@@ -470,7 +457,5 @@ export default function DebitosEMultas() {
             </div>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

@@ -1,8 +1,5 @@
 "use client"
 
-import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import NavbarH from "@/components/ui/heroui/navbar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Card,
@@ -80,17 +77,8 @@ export default function AvaliacaoRelatorios() {
   const [openModal, setOpenModal] = useState(false)
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar variant="sidebar" />
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
-          <NavbarH />
-          <main className="flex-1 p-6 bg-muted/40">
+    <div className="flex flex-1 flex-col">
+<main className="flex-1 p-6 bg-muted/40">
             <div className="mx-auto max-w-7xl space-y-6">
 
               {/* ---------- Header ---------- */}
@@ -423,7 +411,5 @@ export default function AvaliacaoRelatorios() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </SidebarInset>
-    </SidebarProvider>
-  )
+      )
 }

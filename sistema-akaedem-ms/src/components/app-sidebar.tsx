@@ -27,15 +27,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/useAuth";
 
-// This is sample data.
 const data = {
-  company: [
-    {
-      name: "Akaedem Multischool",
-      logo: GalleryVerticalEnd,
-      plan: "Instituições",
-    },
-  ],
   navMain: [
     {
       title: "Gestão académica",
@@ -212,23 +204,29 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useAuth();
-  
-  // Usar dados reais do usuário ou fallback
-  const userData = user ? {
-    name: user.name || 'Usuário',
-    email: user.email || '',
-    avatar: user.school?.logo_path || '',
-  } : {
-    name: 'Usuário',
-    email: '',
-    avatar: '',
+  const { user, schoolProfile } = useAuth();
+
+  const schoolName =
+    schoolProfile?.name || user?.school?.name || user?.name || "Instituição";
+
+  const userData = {
+    name: schoolName,
+    email: user?.email || "",
+    avatar: schoolProfile?.logo_path || user?.school?.logo_path || "",
   };
+
+  const company = [
+    {
+      name: schoolName,
+      logo: GalleryVerticalEnd,
+      plan: schoolProfile?.acronym || "Instituição",
+    },
+  ];
 
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.company} />
+        <TeamSwitcher teams={company} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

@@ -1,9 +1,6 @@
 "use client"
 
 import React, { useState } from 'react';
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -298,20 +295,9 @@ export default function Academica() {
   });
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar variant="sidebar" />
-
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <NavbarH />
-            
-            {/* Conteúdo Principal */}
+{/* Conteúdo Principal */}
             <div className="flex-1 p-6 space-y-6">
               {/* Header */}
               <div className="flex justify-between items-center">
@@ -497,8 +483,6 @@ export default function Academica() {
             </div>
           </div>
         </div>
-      </SidebarInset>
-
       {/* Sheet de Criação/Edição */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent className="sm:max-w-xl overflow-y-auto">
@@ -741,6 +725,5 @@ export default function Academica() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </SidebarProvider>
-  );
+    );
 }

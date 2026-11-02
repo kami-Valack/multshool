@@ -47,9 +47,6 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { useSchedules } from "@/hooks/useSchedules";
 import { useClasses } from "@/hooks/useClasses";
 import { useCourses } from "@/hooks/useCourses";
@@ -665,21 +662,10 @@ export default function HorariosPage() {
     </div>
   );
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar variant="sidebar" />
-      <SidebarInset>
-        {/* <SiteHeader /> */}
+    {/* <SiteHeader /> */}
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <NavbarH />
-            <div className="min-h-screen from-slate-50 to-slate-100 p-6">
+<div className="min-h-screen from-slate-50 to-slate-100 p-6">
               <div>
                 <h1 className="text-4xl font-bold text-gray mb-2 flex items-center gap-3 ">
                   Gestão de Horários
@@ -1176,7 +1162,5 @@ export default function HorariosPage() {
             </div>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

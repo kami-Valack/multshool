@@ -15,7 +15,7 @@ Fluxo:
 
 Uso (na VPS ou Mac com portas publicadas):
   python3 scripts/e2e_api_replication_test.py
-  PUBLIC_HOST=54.196.176.24 python3 scripts/e2e_api_replication_test.py
+  PUBLIC_HOST=98.89.20.199 python3 scripts/e2e_api_replication_test.py
   python3 scripts/e2e_api_replication_test.py --skip-demo
 """
 

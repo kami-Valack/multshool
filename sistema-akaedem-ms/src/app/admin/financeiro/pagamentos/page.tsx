@@ -3,9 +3,6 @@
 import { useState, useMemo } from "react";
 import { Search, Filter, MoreVertical, Check, X, Eye, FileText, Receipt, Plus, User } from "lucide-react";
 
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
@@ -146,20 +143,9 @@ export default function Pagamentos() {
   };
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar variant="sidebar" />
-
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-4 p-4 md:p-6">
-            <NavbarH />
-
-            <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold tracking-tight">Pagamentos</h1>
               <Button onClick={abrirNovoPagamento}>
                 <Plus className="mr-2 h-4 w-4" />
@@ -543,7 +529,5 @@ export default function Pagamentos() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }

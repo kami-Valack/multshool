@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { profileService } from '@/lib/api/services/profile.service';
 import { toast } from 'sonner';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -314,7 +313,6 @@ export default function CompletarPerfilPage() {
   const missingFields = profileStatus?.missing_fields || [];
 
   return (
-    <ProtectedRoute requireCompleteProfile={false}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
         <div className="max-w-4xl mx-auto" key="profile-form-container">
           <Card key="profile-card">
@@ -594,7 +592,6 @@ export default function CompletarPerfilPage() {
           </Card>
         </div>
       </div>
-    </ProtectedRoute>
   );
 }
 

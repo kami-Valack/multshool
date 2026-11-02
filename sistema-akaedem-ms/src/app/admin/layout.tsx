@@ -1,25 +1,45 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar"
-import { ProtectedRoute } from "@/components/ProtectedRoute"
+import { AppSidebar } from "@/components/app-sidebar";
+import NavbarH from "@/components/ui/heroui/navbar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  // Verificar se está na página de completar perfil
-  const isCompletingProfile = pathname?.includes('/completar-perfil') || false;
-  
+  const isCompletingProfile = pathname?.includes("/completar-perfil") || false;
+
   return (
-    <ProtectedRoute 
-      requireCompleteProfile={!isCompletingProfile} // Não requer perfil completo na página de completar perfil
-      allowedRoles={['school']} // Apenas escolas podem acessar o admin
+    <ProtectedRoute
+      requireCompleteProfile={!isCompletingProfile}
+      allowedRoles={["school"]}
     >
-      <SidebarProvider>
-        <SidebarInset className="p-4">
-          {!isCompletingProfile && <SidebarTrigger />}
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
+      {isCompletingProfile ? (
+        children
+      ) : (
+        <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "calc(var(--spacing) * 72)",
+              "--header-height": "calc(var(--spacing) * 12)",
+            } as React.CSSProperties
+          }
+        >
+          <AppSidebar variant="sidebar" />
+          <SidebarInset>
+            <div className="flex flex-1 flex-col min-h-svh">
+              <div className="flex items-center gap-2 border-b px-2">
+                <SidebarTrigger />
+                <div className="flex-1">
+                  <NavbarH />
+                </div>
+              </div>
+              <div className="@container/main flex flex-1 flex-col">{children}</div>
+            </div>
+          </SidebarInset>
+        </SidebarProvider>
+      )}
     </ProtectedRoute>
-  )
+  );
 }

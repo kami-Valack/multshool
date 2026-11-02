@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 # Deploy Multshool stack to VPS and run a smoke check.
-# Usage:
-#   ./scripts/deploy-vps.sh ubuntu@18.205.17.161 /Users/valack/Downloads/ms-academy-system-key.pem
+# Usage (from repo root):
+#   ./scripts/deploy-vps.sh
+#   ./scripts/deploy-vps.sh ec2-user@98.89.20.199 /Users/valack/Downloads/nova.pem
 set -euo pipefail
 
-REMOTE="${1:-ubuntu@18.205.17.161}"
-KEY="${2:-$HOME/Downloads/ms-academy-system-key.pem}"
-REMOTE_DIR="${3:-/home/ubuntu/multshool}"
-PUBLIC_HOST="${PUBLIC_HOST:-${REMOTE#*@}}"
+REMOTE="${1:-ec2-user@98.89.20.199}"
+KEY="${2:-$HOME/Downloads/nova.pem}"
+REMOTE_DIR="${3:-/home/ec2-user/multshool}"
+PUBLIC_HOST="${PUBLIC_HOST:-98.89.20.199}"
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 if [ ! -f "$KEY" ]; then
@@ -22,8 +23,11 @@ SSH=(ssh -i "$KEY" -o StrictHostKeyChecking=accept-new -o IdentitiesOnly=yes)
 
 echo "==> Syncing project to $REMOTE:$REMOTE_DIR"
 "${SSH[@]}" "$REMOTE" "mkdir -p '$REMOTE_DIR'"
-rsync -az --delete \
+# No --delete: remote Laravel storage/logs and uploads are owned by www-data in Docker.
+rsync -az \
   --exclude '.git' \
+  --exclude '.env' \
+  --exclude '.venv-e2e' \
   --exclude 'node_modules' \
   --exclude '*/node_modules' \
   --exclude 'vendor' \
@@ -31,6 +35,12 @@ rsync -az --delete \
   --exclude '.next' \
   --exclude '*/.next' \
   --exclude '__pycache__' \
+  --exclude '*/storage/logs/*' \
+  --exclude '*/storage/framework/cache/*' \
+  --exclude '*/storage/framework/sessions/*' \
+  --exclude '*/storage/framework/views/*' \
+  --exclude '*/storage/app/public/*' \
+  --exclude '*/bootstrap/cache/*' \
   -e "ssh -i $KEY -o StrictHostKeyChecking=accept-new -o IdentitiesOnly=yes" \
   "$ROOT/" "$REMOTE:$REMOTE_DIR/"
 
@@ -53,13 +63,12 @@ sed -i.bak \
   -e "s|^NEXT_PUBLIC_BILLING_API_URL=.*|NEXT_PUBLIC_BILLING_API_URL=http://$PUBLIC_HOST:8004/api|" \
   .env || true
 
-# Ensure PUBLIC_HOST line exists
 grep -q '^PUBLIC_HOST=' .env || echo "PUBLIC_HOST=$PUBLIC_HOST" >> .env
 
 if ! command -v docker >/dev/null 2>&1; then
   echo 'Docker not found — installing...'
   curl -fsSL https://get.docker.com | sudo sh
-  sudo usermod -aG docker ubuntu || true
+  sudo usermod -aG docker ec2-user || true
 fi
 sudo systemctl enable --now docker || true
 

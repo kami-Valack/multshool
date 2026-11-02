@@ -1,9 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import NavbarH from "@/components/ui/heroui/navbar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -210,20 +207,9 @@ export default function PropinasPage() {
   const taxaInadimplencia = estudantes.length > 0 ? ((emAtraso / estudantes.length) * 100).toFixed(1) : "0";
 
   return (
-    <SidebarProvider
-      style={{
-        "--sidebar-width": "calc(var(--spacing) * 72)",
-        "--header-height": "calc(var(--spacing) * 12)",
-      } as React.CSSProperties}
-    >
-      <AppSidebar variant="sidebar" />
-
-      <SidebarInset>
-        <div className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
-            <NavbarH />
-            
-            <div className="p-6">
+<div className="p-6">
               <div className="mb-6">
                 <h1 className="text-3xl font-bold tracking-tight">Gestão de Propinas</h1>
                 <p className="text-muted-foreground">Configure planos, acompanhe pagamentos e gere relatórios.</p>
@@ -662,7 +648,5 @@ export default function PropinasPage() {
             </div>
           </div>
         </div>
-      </SidebarInset>
-    </SidebarProvider>
-  );
+      );
 }
