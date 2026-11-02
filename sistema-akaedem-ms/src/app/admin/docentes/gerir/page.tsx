@@ -251,9 +251,8 @@ const GestaoDocentes = () => {
   };
 
   return (
-    <div className="flex flex-1 flex-col">
-          <div className="flex flex-1 flex-col gap-2">
-<div className="min-h-screen  p-6">
+    <>
+      <div className="min-h-screen p-6">
               <div className="max-w-7xl mx-auto space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -503,9 +502,8 @@ const GestaoDocentes = () => {
                   </Card>
                 )}
               </div>
-            </div>
-          </div>
-        </div>
+      </div>
+      </div>
 
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -859,7 +857,8 @@ const GestaoDocentes = () => {
             )}
           </SheetContent>
         </Sheet>
-      );
+    </>
+  );
 };
 
 export default GestaoDocentes;

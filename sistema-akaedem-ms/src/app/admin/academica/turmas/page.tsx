@@ -409,10 +409,8 @@ export default function Academica() {
   );
 
   return (
-    {/* <SiteHeader /> */}
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-<div className="min-h-screen">
+    <>
+      <div className="min-h-screen">
               <div className="max-w-7xl mx-auto p-6 space-y-6">
                 <div className="flex justify-between items-center">
                   <div>
@@ -1139,8 +1137,8 @@ export default function Academica() {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </div>
-          </div>
-        </div>
-      );
+      </div>
+      </div>
+    </>
+  );
 }

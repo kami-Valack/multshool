@@ -77,8 +77,8 @@ export default function AvaliacaoRelatorios() {
   const [openModal, setOpenModal] = useState(false)
 
   return (
-    <div className="flex flex-1 flex-col">
-<main className="flex-1 p-6 bg-muted/40">
+    <>
+      <main className="flex-1 p-6 bg-muted/40">
             <div className="mx-auto max-w-7xl space-y-6">
 
               {/* ---------- Header ---------- */}
@@ -344,7 +344,6 @@ export default function AvaliacaoRelatorios() {
               </Tabs>
             </div>
           </main>
-        </div>
 
         {/* ---------- Modal Gerar Relatório ---------- */}
         <Dialog open={openModal} onOpenChange={setOpenModal}>
@@ -411,5 +410,6 @@ export default function AvaliacaoRelatorios() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      )
+    </>
+  );
 }

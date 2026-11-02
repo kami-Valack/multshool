@@ -293,10 +293,8 @@ export default function Certificacoes() {
   };
 
   return (
-    {/* <SiteHeader /> */}
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-<div className="flex-1 p-6">
+    <>
+      <div className="flex-1 p-6">
               <div className="mb-6">
                 <h1 className="text-3xl font-bold tracking-tight mb-2">
                   Gestão de Certificações
@@ -1222,8 +1220,7 @@ export default function Certificacoes() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-            </div>
-          </div>
-        </div>
-      );
+      </div>
+    </>
+  );
 }

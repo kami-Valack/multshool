@@ -295,10 +295,8 @@ export default function Academica() {
   });
 
   return (
-    <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-{/* Conteúdo Principal */}
-            <div className="flex-1 p-6 space-y-6">
+    <>
+      <div className="flex-1 p-6 space-y-6">
               {/* Header */}
               <div className="flex justify-between items-center">
                 <div>
@@ -480,9 +478,8 @@ export default function Academica() {
                   )}
                 </>
               )}
-            </div>
-          </div>
-        </div>
+      </div>
+
       {/* Sheet de Criação/Edição */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetContent className="sm:max-w-xl overflow-y-auto">
@@ -725,5 +722,6 @@ export default function Academica() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    );
+    </>
+  );
 }

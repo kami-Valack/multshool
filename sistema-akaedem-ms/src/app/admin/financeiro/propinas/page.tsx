@@ -207,9 +207,7 @@ export default function PropinasPage() {
   const taxaInadimplencia = estudantes.length > 0 ? ((emAtraso / estudantes.length) * 100).toFixed(1) : "0";
 
   return (
-    <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-<div className="p-6">
+    <div className="p-6">
               <div className="mb-6">
                 <h1 className="text-3xl font-bold tracking-tight">Gestão de Propinas</h1>
                 <p className="text-muted-foreground">Configure planos, acompanhe pagamentos e gere relatórios.</p>
@@ -645,8 +643,6 @@ export default function PropinasPage() {
                   </div>
                 </TabsContent>
               </Tabs>
-            </div>
-          </div>
-        </div>
-      );
+    </div>
+  );
 }

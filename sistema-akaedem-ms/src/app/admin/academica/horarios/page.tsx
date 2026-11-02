@@ -662,10 +662,7 @@ export default function HorariosPage() {
     </div>
   );
   return (
-    {/* <SiteHeader /> */}
-        <div className="flex flex-1 flex-col">
-          <div className="@container/main flex flex-1 flex-col gap-2">
-<div className="min-h-screen from-slate-50 to-slate-100 p-6">
+    <div className="min-h-screen from-slate-50 to-slate-100 p-6">
               <div>
                 <h1 className="text-4xl font-bold text-gray mb-2 flex items-center gap-3 ">
                   Gestão de Horários
@@ -1159,8 +1156,6 @@ export default function HorariosPage() {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-            </div>
-          </div>
-        </div>
-      );
+    </div>
+  );
 }
