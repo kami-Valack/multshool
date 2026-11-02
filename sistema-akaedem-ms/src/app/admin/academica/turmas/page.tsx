@@ -1138,7 +1138,6 @@ export default function Academica() {
                 </AlertDialogContent>
               </AlertDialog>
       </div>
-      </div>
     </>
   );
 }
