@@ -73,7 +73,6 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - .env
       - ./docker/env/laravel.env
     environment:
       APP_NAME: MS-Users-API
@@ -83,6 +82,11 @@ services:
       DB_DATABASE: ms-users-api
       DB_USERNAME: ${MYSQL_USER:-multshool}
       DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      JWT_SECRET: ${JWT_SECRET}
+      # Own inbound secret (others call users with this)
+      API_SECRET: ${USERS_API_SECRET}
+      USERS_API_SECRET: ${USERS_API_SECRET}
+      SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
     volumes:
       - ./ms-users-api-laravel:/var/www/html
       - ms_users_vendor:/var/www/html/vendor
@@ -106,7 +110,6 @@ services:
     ports:
       - "8001:8001"
     env_file:
-      - .env
       - ./docker/env/laravel.env
     environment:
       APP_NAME: MS-Student-API
@@ -116,6 +119,11 @@ services:
       DB_DATABASE: ms-student-api
       DB_USERNAME: ${MYSQL_USER:-multshool}
       DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      JWT_SECRET: ${JWT_SECRET}
+      # Own inbound secret
+      API_SECRET: ${STUDENT_API_SECRET}
+      STUDENT_API_SECRET: ${STUDENT_API_SECRET}
+      SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
     volumes:
       - ./ms-stundent-api-laravel-temp:/var/www/html
       - ms_student_vendor:/var/www/html/vendor
@@ -141,7 +149,6 @@ services:
     ports:
       - "8002:8002"
     env_file:
-      - .env
       - ./docker/env/laravel.env
     environment:
       APP_NAME: MS-Admin-System
@@ -151,6 +158,8 @@ services:
       DB_DATABASE: ms-admin-api
       DB_USERNAME: ${MYSQL_USER:-multshool}
       DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      JWT_SECRET: ${JWT_SECRET}
+      SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
     volumes:
       - ./ms-admin-system:/var/www/html
       - ms_admin_vendor:/var/www/html/vendor
@@ -176,7 +185,6 @@ services:
     ports:
       - "8003:8003"
     env_file:
-      - .env
       - ./docker/env/laravel.env
     environment:
       APP_NAME: MS-School-API
@@ -187,6 +195,12 @@ services:
       DB_DATABASE: ms-school-api
       DB_USERNAME: ${MYSQL_USER:-multshool}
       DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      JWT_SECRET: ${JWT_SECRET}
+      # Own inbound secret (admin/student call school with SCHOOL_API_SECRET)
+      API_SECRET: ${SCHOOL_API_SECRET}
+      SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
+      USERS_API_SECRET: ${USERS_API_SECRET}
+      STUDENT_API_SECRET: ${STUDENT_API_SECRET}
     volumes:
       - ./ms-shocoll-api:/var/www/html
       - ms_school_vendor:/var/www/html/vendor
@@ -210,7 +224,6 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     env_file:
-      - .env
       - ./docker/env/laravel.env
     environment:
       APP_NAME: MS-Student-API
@@ -220,6 +233,10 @@ services:
       DB_DATABASE: ms-student-api
       DB_USERNAME: ${MYSQL_USER:-multshool}
       DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      JWT_SECRET: ${JWT_SECRET}
+      API_SECRET: ${STUDENT_API_SECRET}
+      STUDENT_API_SECRET: ${STUDENT_API_SECRET}
+      SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
       SKIP_MIGRATE: "1"
     volumes:
       - ./ms-stundent-api-laravel-temp:/var/www/html
@@ -240,7 +257,6 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     env_file:
-      - .env
       - ./docker/env/laravel.env
     environment:
       APP_NAME: MS-School-API
@@ -250,6 +266,11 @@ services:
       DB_DATABASE: ms-school-api
       DB_USERNAME: ${MYSQL_USER:-multshool}
       DB_PASSWORD: ${MYSQL_PASSWORD:-multshool}
+      JWT_SECRET: ${JWT_SECRET}
+      API_SECRET: ${SCHOOL_API_SECRET}
+      SCHOOL_API_SECRET: ${SCHOOL_API_SECRET}
+      USERS_API_SECRET: ${USERS_API_SECRET}
+      STUDENT_API_SECRET: ${STUDENT_API_SECRET}
       SKIP_MIGRATE: "1"
     volumes:
       - ./ms-shocoll-api:/var/www/html
