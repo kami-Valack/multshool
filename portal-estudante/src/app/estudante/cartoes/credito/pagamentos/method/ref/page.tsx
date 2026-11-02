@@ -14,6 +14,16 @@ import {
   PaymentIntent,
   PaymentReference,
 } from "@/services/paymentService";
+import {
+  MobileChargeField,
+  isValidChargeMobile,
+} from "@/components/payments/MobileChargeField";
+import {
+  BILLING_MOBILE_STORAGE_KEY,
+  formatAngolaMobileDisplay,
+  normalizeAngolaMobile,
+} from "@/utils/angolaPhone";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Container = styled.div`
   display: flex;
@@ -90,6 +100,7 @@ export default function PaymentReferenceScreen() {
   const { navigateTo } = useNavigation();
   const searchParams = useSearchParams();
   const intentId = searchParams.get("intentId");
+  const { user } = useAuth();
 
   const [entidade, setEntidade] = useState("");
   const [referencia, setReferencia] = useState("");
@@ -97,12 +108,17 @@ export default function PaymentReferenceScreen() {
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mobileLocal, setMobileLocal] = useState("");
+  const [mobileError, setMobileError] = useState<string | null>(null);
+  const [chargeNotice, setChargeNotice] = useState<string | null>(null);
+  const [referenceReady, setReferenceReady] = useState(false);
 
   const applyReference = useCallback(
     (intent: PaymentIntent, ref: PaymentReference) => {
       setEntidade(ref.entidade || "");
       setReferencia(ref.nu_referencia || "");
       setAmount(ref.vl_referencia ?? intent.amount);
+      setReferenceReady(true);
     },
     []
   );
@@ -110,9 +126,14 @@ export default function PaymentReferenceScreen() {
   useEffect(() => {
     if (!intentId) return;
 
+    const stored = sessionStorage.getItem(BILLING_MOBILE_STORAGE_KEY(intentId));
+    if (stored && stored.startsWith("244")) {
+      setMobileLocal(stored.slice(3));
+    }
+
     let cancelled = false;
 
-    async function generate() {
+    async function loadExisting() {
       setLoading(true);
       setError(null);
       try {
@@ -121,20 +142,14 @@ export default function PaymentReferenceScreen() {
 
         if (intent.reference?.nu_referencia) {
           applyReference(intent, intent.reference);
-          return;
-        }
-
-        const { payment_intent, reference } =
-          await paymentService.issueReference(intentId);
-        if (!cancelled) {
-          applyReference(payment_intent, reference);
+          setChargeNotice(
+            "Referência já gerada. Se não recebeu a cobrança no telemóvel, pague manualmente com os dados abaixo."
+          );
         }
       } catch (e) {
         if (!cancelled) {
           setError(
-            e instanceof Error
-              ? e.message
-              : "Não foi possível gerar referência. Verifique a sessão FACIPAY."
+            e instanceof Error ? e.message : "Erro ao carregar pagamento"
           );
         }
       } finally {
@@ -142,11 +157,56 @@ export default function PaymentReferenceScreen() {
       }
     }
 
-    generate();
+    loadExisting();
     return () => {
       cancelled = true;
     };
   }, [intentId, applyReference]);
+
+  const handleGenerateReference = async () => {
+    if (!intentId) return;
+
+    const normalized =
+      normalizeAngolaMobile(mobileLocal) ||
+      sessionStorage.getItem(BILLING_MOBILE_STORAGE_KEY(intentId));
+
+    if (!normalized || !isValidChargeMobile(mobileLocal)) {
+      setMobileError(
+        "Indique o telemóvel onde quer receber a cobrança GPO (9 dígitos)."
+      );
+      return;
+    }
+
+    setMobileError(null);
+    setLoading(true);
+    setError(null);
+
+    try {
+      sessionStorage.setItem(BILLING_MOBILE_STORAGE_KEY(intentId), normalized);
+
+      const { payment_intent, reference, message, charge_sent } =
+        await paymentService.issueReference(intentId, {
+          mobile_phone: normalized,
+          recipient_name: user?.name,
+        });
+
+      applyReference(payment_intent, reference);
+      setChargeNotice(
+        message ||
+          (charge_sent
+            ? `Cobrança enviada para ${formatAngolaMobileDisplay(normalized)}.`
+            : "Referência gerada. Confirme o pagamento no telemóvel ou no Multicaixa.")
+      );
+    } catch (e) {
+      setError(
+        e instanceof Error
+          ? e.message
+          : "Não foi possível gerar referência. Verifique a sessão FACIPAY."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCheckPayment = async () => {
     if (!intentId) return;
@@ -190,55 +250,84 @@ export default function PaymentReferenceScreen() {
           <TopP>Pagamento por referência</TopP>
         </Top>
 
-        {loading && <Message>A gerar referência...</Message>}
+        {loading && !referenceReady && <Message>A processar...</Message>}
         {error && <Message>{error}</Message>}
+        {chargeNotice && referenceReady && (
+          <Message style={{ color: "#059669" }}>{chargeNotice}</Message>
+        )}
 
-        <Form>
-          <FormInn>
-            <Title>Entidade</Title>
-            <Input readOnly value={entidade} placeholder="—" />
-          </FormInn>
-          <FormInn>
-            <Title>Referência</Title>
-            <Input readOnly value={referencia} placeholder="—" />
-          </FormInn>
-          {amount != null && (
-            <FormInn style={{ marginTop: 12 }}>
-              <Title>Valor</Title>
-              <Input
-                readOnly
-                value={`${amount.toLocaleString("pt-AO")} Kz`}
-              />
-            </FormInn>
-          )}
-        </Form>
-
-        <ButtonGroup>
-          <Button
-            bgColor="primary"
-            textColor="#FFFFFF"
-            text={checking ? "A verificar..." : "Já efectuei o pagamento"}
-            hasBorder={true}
-            onClick={handleCheckPayment}
-            disabled={!referencia || loading || checking}
-          />
-          {process.env.NODE_ENV === "development" && (
-            <Button
-              bgColor="#FFFFFF"
-              textColor="#897BB0"
-              text="Simular pagamento (dev)"
-              hasBorder={true}
-              onClick={async () => {
-                try {
-                  await paymentService.simulatePaid(intentId);
-                  await handleCheckPayment();
-                } catch (e) {
-                  setError(e instanceof Error ? e.message : "Erro na simulação");
-                }
-              }}
+        {!referenceReady && (
+          <>
+            <MobileChargeField
+              value={mobileLocal}
+              onChange={setMobileLocal}
+              error={mobileError}
             />
-          )}
-        </ButtonGroup>
+            <ButtonGroup>
+              <Button
+                bgColor="primary"
+                textColor="#FFFFFF"
+                text={loading ? "A enviar..." : "Gerar referência e enviar cobrança"}
+                hasBorder={true}
+                onClick={handleGenerateReference}
+                disabled={loading || !isValidChargeMobile(mobileLocal)}
+              />
+            </ButtonGroup>
+          </>
+        )}
+
+        {referenceReady && (
+          <>
+            <Form>
+              <FormInn>
+                <Title>Entidade</Title>
+                <Input readOnly value={entidade} placeholder="—" />
+              </FormInn>
+              <FormInn>
+                <Title>Referência</Title>
+                <Input readOnly value={referencia} placeholder="—" />
+              </FormInn>
+              {amount != null && (
+                <FormInn style={{ marginTop: 12 }}>
+                  <Title>Valor</Title>
+                  <Input
+                    readOnly
+                    value={`${amount.toLocaleString("pt-AO")} Kz`}
+                  />
+                </FormInn>
+              )}
+            </Form>
+
+            <ButtonGroup>
+              <Button
+                bgColor="primary"
+                textColor="#FFFFFF"
+                text={checking ? "A verificar..." : "Já efectuei o pagamento"}
+                hasBorder={true}
+                onClick={handleCheckPayment}
+                disabled={!referencia || loading || checking}
+              />
+              {process.env.NODE_ENV === "development" && (
+                <Button
+                  bgColor="#FFFFFF"
+                  textColor="#897BB0"
+                  text="Simular pagamento (dev)"
+                  hasBorder={true}
+                  onClick={async () => {
+                    try {
+                      await paymentService.simulatePaid(intentId);
+                      await handleCheckPayment();
+                    } catch (e) {
+                      setError(
+                        e instanceof Error ? e.message : "Erro na simulação"
+                      );
+                    }
+                  }}
+                />
+              )}
+            </ButtonGroup>
+          </>
+        )}
 
         <BottomMenu />
       </Container>

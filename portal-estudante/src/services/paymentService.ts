@@ -68,16 +68,22 @@ class PaymentService {
     return response.payment_intent;
   }
 
-  async issueReference(intentId: string): Promise<{
+  async issueReference(
+    intentId: string,
+    payload: { mobile_phone: string; recipient_name?: string }
+  ): Promise<{
     payment_intent: PaymentIntent;
     reference: PaymentReference;
+    charge_sent?: boolean;
+    message?: string;
   }> {
     const response = await billingApiClient.post<
       ApiResponse & {
         payment_intent: PaymentIntent;
         reference: PaymentReference;
+        charge_sent?: boolean;
       }
-    >(`/payment-intents/${intentId}/reference`, {});
+    >(`/payment-intents/${intentId}/reference`, payload);
 
     if (response.status !== 'success' || !response.reference) {
       throw new Error(response.message || 'Erro ao gerar referência');
@@ -86,6 +92,8 @@ class PaymentService {
     return {
       payment_intent: response.payment_intent,
       reference: response.reference,
+      charge_sent: response.charge_sent,
+      message: response.message,
     };
   }
 

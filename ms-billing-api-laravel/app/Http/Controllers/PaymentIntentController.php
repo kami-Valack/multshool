@@ -195,6 +195,23 @@ class PaymentIntentController extends Controller
             ], 409);
         }
 
+        $validated = $request->validate([
+            'mobile_phone' => 'required|string|max:32',
+            'recipient_name' => 'nullable|string|max:255',
+        ]);
+
+        $mobile = FaciPayClient::normalizeAngolaMobile($validated['mobile_phone']);
+        if (!$mobile) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Número inválido. Use 9 dígitos (ex.: 923456789) ou 244923456789.',
+            ], 422);
+        }
+
+        $meta = $intent->metadata ?? [];
+        $recipientName = $validated['recipient_name']
+            ?? ($meta['student_name'] ?? 'Estudante');
+
         $description = $intent->description ?? 'Pagamento de propina';
         $amount = (float) $intent->amount;
 
@@ -211,6 +228,26 @@ class PaymentIntentController extends Controller
 
         $data = $faci['data'];
 
+        $chargeResult = null;
+        $chargeWarning = null;
+        $idFpReferencia = isset($data['idFpReferencia']) ? (int) $data['idFpReferencia'] : 0;
+
+        if ($idFpReferencia > 0) {
+            $chargeResult = $this->faciPayClient->sendCharge(
+                $mobile,
+                $recipientName,
+                $idFpReferencia
+            );
+            if (!$chargeResult['success']) {
+                $chargeWarning = $chargeResult['error'] ?? 'Não foi possível enviar a cobrança ao telemóvel.';
+                Log::warning('FACIPAY sendCharge failed', [
+                    'intent_id' => $intent->id,
+                    'mobile' => $mobile,
+                    'charge' => $chargeResult,
+                ]);
+            }
+        }
+
         $reference = PaymentReference::create([
             'payment_intent_id' => $intent->id,
             'provider' => 'facipay',
@@ -219,17 +256,34 @@ class PaymentIntentController extends Controller
             'entidade' => $data['entidade'] ?? null,
             'vl_referencia' => $data['vlReferencia'] ?? $amount,
             'tp_fp_referencia' => $data['tpFpReferencia'] ?? 'PER',
-            'raw_request' => ['dsReferencia' => $description, 'vlReferencia' => $amount],
-            'raw_response' => $data,
+            'raw_request' => [
+                'dsReferencia' => $description,
+                'vlReferencia' => $amount,
+                'dsTelemovelDestinatario' => $mobile,
+                'noDestinatario' => $recipientName,
+            ],
+            'raw_response' => [
+                'reference' => $data,
+                'charge' => $chargeResult['data'] ?? null,
+            ],
             'issued_at' => now(),
         ]);
 
         $intent->update([
             'status' => PaymentIntent::STATUS_AWAITING_PAYMENT,
+            'metadata' => array_merge($meta, [
+                'charge_mobile' => $mobile,
+                'charge_sent' => ($chargeResult['success'] ?? false),
+            ]),
         ]);
 
         return response()->json([
             'status' => 'success',
+            'message' => ($chargeResult['success'] ?? false)
+                ? 'Referência gerada e cobrança enviada para o telemóvel.'
+                : 'Referência gerada. '.$chargeWarning,
+            'charge_sent' => (bool) ($chargeResult['success'] ?? false),
+            'charge_warning' => $chargeWarning,
             'payment_intent' => $this->formatIntent($intent->fresh('latestReference')),
             'reference' => $this->formatReference($reference),
         ]);

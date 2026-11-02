@@ -153,6 +153,83 @@ class FaciPayClient
         ];
     }
 
+    /**
+     * Envia cobrança GPO para o telemóvel (Multicaixa Express / notificação FACIPAY).
+     *
+     * @return array{success: bool, data?: array, error?: string, status?: int}
+     */
+    public function sendCharge(
+        string $mobileDigits244,
+        string $recipientName,
+        int $idFpReferencia,
+        int $quantity = 1
+    ): array {
+        if ($this->isMock()) {
+            return [
+                'success' => true,
+                'data' => [
+                    'mock' => true,
+                    'dsTelemovelDestinatario' => $mobileDigits244,
+                    'idFpReferencia' => $idFpReferencia,
+                ],
+            ];
+        }
+
+        $baseUrl = config('facipay.base_url');
+        $apiKey = config('facipay.api_key');
+
+        if (!$baseUrl || !$apiKey) {
+            return ['success' => false, 'error' => 'FACI não configurado', 'status' => 500];
+        }
+
+        $body = [
+            'dsTelemovelDestinatario' => $mobileDigits244,
+            'noDestinatario' => $recipientName,
+            'referenciaIn' => json_encode([
+                ['idFpReferencia' => $idFpReferencia, 'nuQuantidade' => $quantity],
+            ]),
+        ];
+
+        $response = Http::withHeaders(['X-API-Key' => $apiKey])
+            ->acceptJson()
+            ->timeout(30)
+            ->post("{$baseUrl}/api/requester/", $body);
+
+        if (!$response->successful()) {
+            return [
+                'success' => false,
+                'error' => $response->json('message') ?? $response->body(),
+                'status' => $response->status(),
+                'data' => $response->json(),
+            ];
+        }
+
+        $payload = $response->json();
+        if (!is_array($payload)) {
+            $payload = [];
+        }
+
+        return [
+            'success' => true,
+            'data' => $this->unwrapGpoPayload($payload),
+        ];
+    }
+
+    public static function normalizeAngolaMobile(string $input): ?string
+    {
+        $digits = preg_replace('/\D+/', '', $input) ?? '';
+
+        if (strlen($digits) === 9 && str_starts_with($digits, '9')) {
+            return '244'.$digits;
+        }
+
+        if (strlen($digits) === 12 && str_starts_with($digits, '244')) {
+            return $digits;
+        }
+
+        return null;
+    }
+
     public function generateReceiptNumber(): string
     {
         return 'RC-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));

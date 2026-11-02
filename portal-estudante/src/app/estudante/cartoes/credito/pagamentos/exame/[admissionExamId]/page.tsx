@@ -11,6 +11,14 @@ import { useNavigation } from "@/hooks/navigation";
 import { paymentService, PaymentIntent } from "@/services/paymentService";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  MobileChargeField,
+  isValidChargeMobile,
+} from "@/components/payments/MobileChargeField";
+import {
+  BILLING_MOBILE_STORAGE_KEY,
+  normalizeAngolaMobile,
+} from "@/utils/angolaPhone";
 
 const Container = styled.div`
   width: 100%;
@@ -87,6 +95,8 @@ export default function PagamentoTaxaExame() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [mobileLocal, setMobileLocal] = useState("");
+  const [mobileError, setMobileError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -130,6 +140,15 @@ export default function PagamentoTaxaExame() {
 
   const handleContinue = async () => {
     if (!intent) return;
+    if (!isValidChargeMobile(mobileLocal)) {
+      setMobileError("Indique um telemóvel angolano válido (9 dígitos, começa por 9).");
+      return;
+    }
+    setMobileError(null);
+    const normalized = normalizeAngolaMobile(mobileLocal);
+    if (normalized) {
+      sessionStorage.setItem(BILLING_MOBILE_STORAGE_KEY(intent.id), normalized);
+    }
     setSubmitting(true);
     navigateTo(
       `/estudante/cartoes/credito/pagamentos/method?intentId=${intent.id}`
@@ -166,6 +185,14 @@ export default function PagamentoTaxaExame() {
           )}
         </DetailsP>
 
+        {!loading && !error && intent && (
+          <MobileChargeField
+            value={mobileLocal}
+            onChange={setMobileLocal}
+            error={mobileError}
+          />
+        )}
+
         <ButtonGroup>
           <Button
             bgColor="primary"
@@ -173,7 +200,9 @@ export default function PagamentoTaxaExame() {
             text={submitting ? "A processar..." : "Continuar"}
             hasBorder={true}
             onClick={handleContinue}
-            disabled={!intent || !!error || loading}
+            disabled={
+              !intent || !!error || loading || !isValidChargeMobile(mobileLocal)
+            }
           />
         </ButtonGroup>
 
