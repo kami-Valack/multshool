@@ -115,6 +115,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
     });
     
     Route::get('/courses/{id}/exam-fee-status', [\App\Http\Controllers\CourseController::class, 'examFeeStatus']);
+    Route::get('/exam-fees/overview', [\App\Http\Controllers\ExamFeeController::class, 'overview']);
 
     // Matrículas
     Route::apiResource('enrollments', \App\Http\Controllers\EnrollmentController::class)->only(['index', 'store']);

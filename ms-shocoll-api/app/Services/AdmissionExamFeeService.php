@@ -128,4 +128,85 @@ class AdmissionExamFeeService
 
         return $registration->load(['admissionExam.course']);
     }
+
+    /**
+     * Resumo de taxas de exame do estudante (pagas e por pagar).
+     *
+     * @return array{pending: array<int, array>, paid: array<int, array>, pending_count: int, paid_count: int}
+     */
+    public function overviewForStudent(string $studentId): array
+    {
+        $byExam = [];
+
+        $registrations = ExamRegistration::where('student_id', $studentId)
+            ->whereHas('admissionExam', function ($q) {
+                $q->where('exam_fee', '>', 0)->where('is_active', true);
+            })
+            ->with(['admissionExam.course'])
+            ->get();
+
+        foreach ($registrations as $registration) {
+            $exam = $registration->admissionExam;
+            if (!$exam) {
+                continue;
+            }
+            $byExam[$exam->id] = $this->mapOverviewItem($exam, (bool) $registration->fee_paid, $registration->fee_paid_at);
+        }
+
+        $pendingEnrollments = \App\Models\Enrollment::where('student_id', $studentId)
+            ->where('status', \App\Models\Enrollment::STATUS_PENDING)
+            ->with(['course', 'admissionExam'])
+            ->get();
+
+        foreach ($pendingEnrollments as $enrollment) {
+            $required = $this->requiredPaidExamsForCourse($enrollment->course_id);
+            if ($required->isEmpty()) {
+                continue;
+            }
+
+            $examId = $enrollment->admission_exam_id ?? ($required->count() === 1 ? $required->first()->id : null);
+            if (!$examId || isset($byExam[$examId])) {
+                continue;
+            }
+
+            if ($this->studentHasPaidExamFee($studentId, $examId)) {
+                continue;
+            }
+
+            $exam = $required->firstWhere('id', $examId) ?? AdmissionExam::with('course')->find($examId);
+            if ($exam) {
+                $byExam[$exam->id] = $this->mapOverviewItem($exam, false, null);
+            }
+        }
+
+        $pending = [];
+        $paid = [];
+        foreach ($byExam as $item) {
+            if ($item['fee_paid']) {
+                $paid[] = $item;
+            } else {
+                $pending[] = $item;
+            }
+        }
+
+        return [
+            'pending' => array_values($pending),
+            'paid' => array_values($paid),
+            'pending_count' => count($pending),
+            'paid_count' => count($paid),
+        ];
+    }
+
+    private function mapOverviewItem(AdmissionExam $exam, bool $feePaid, $feePaidAt): array
+    {
+        return [
+            'admission_exam_id' => $exam->id,
+            'course_id' => $exam->course_id,
+            'course_name' => $exam->course?->name ?? 'Curso',
+            'exam_name' => $exam->name,
+            'exam_fee' => (float) $exam->exam_fee,
+            'fee_paid' => $feePaid,
+            'fee_paid_at' => $feePaidAt?->toIso8601String(),
+        ];
+    }
 }

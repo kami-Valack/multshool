@@ -129,6 +129,14 @@ class PaymentIntentController extends Controller
             ], 400);
         }
 
+        $resolvedName = $studentName ?: ($student->email ?? 'Estudante');
+        $this->schoolExamClient->ensurePendingExamFee(
+            $student->id,
+            (string) ($student->email ?? 'estudante@multshool.ao'),
+            $resolvedName,
+            $validated['admission_exam_id']
+        );
+
         $existing = PaymentIntent::where('student_id', $student->id)
             ->where('payable_type', PaymentIntent::PAYABLE_EXAM_FEE)
             ->where('admission_exam_id', $validated['admission_exam_id'])
@@ -164,7 +172,7 @@ class PaymentIntentController extends Controller
             'metadata' => [
                 'exam' => $exam,
                 'student_email' => $student->email ?? null,
-                'student_name' => $studentName ?: ($student->email ?? 'Estudante'),
+                'student_name' => $resolvedName,
             ],
         ]);
 

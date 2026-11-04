@@ -12,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { studentService } from "@/services/studentService";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ExamFeesBanner from "@/components/ExamFeesBanner";
+import { useExamFeeGate } from "@/contexts/ExamFeeGateContext";
 
 // Tipos principais usados nas actividades
 interface Activity {
@@ -79,6 +81,7 @@ const ActivityCardWrapper = styled.div`
 
 export default function Home() {
   const { user } = useAuth();
+  const { refresh: refreshExamFees } = useExamFeeGate();
   const [activeSection, setActiveSection] = useState<MenuSection>("recentes");
   const [currentCardSlide, setCurrentCardSlide] = useState(0);
   const [itemWidth, setItemWidth] = useState(0);
@@ -161,6 +164,8 @@ export default function Home() {
           if (feesData.status === 'fulfilled') {
             setFees(feesData.value);
           }
+
+          await refreshExamFees();
         } catch (error) {
           console.error("Erro ao carregar dados:", error);
         } finally {
@@ -170,7 +175,7 @@ export default function Home() {
     };
 
     loadData();
-  }, [user, router]);
+  }, [user, router, refreshExamFees]);
 
   // Preparar dados do cartão de estudante
   const activeEnrollment = enrollments.find((e) => e.status === "approved");
@@ -413,6 +418,7 @@ export default function Home() {
       <Container>
         <Header />
         <Content>
+        <ExamFeesBanner />
         {/* Carrossel de cartões */}
         <CardSlideContainer
           ref={containerRef}

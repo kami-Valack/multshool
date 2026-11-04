@@ -8,6 +8,7 @@ import { useNavigation } from "@/hooks/navigation";
 import { useParams, useSearchParams } from "next/navigation";
 import BottomMenu from "@/components/ui/BottomMenu";
 import { paymentService, PaymentIntent } from "@/services/paymentService";
+import { useExamFeeGate } from "@/contexts/ExamFeeGateContext";
 
 const Container = styled.div`
   width: 100%;
@@ -92,6 +93,7 @@ export default function PaymentConfirmScreen() {
   const [intent, setIntent] = useState<PaymentIntent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { refresh: refreshExamFees } = useExamFeeGate();
 
   useEffect(() => {
     if (!intentId) {
@@ -101,12 +103,17 @@ export default function PaymentConfirmScreen() {
 
     paymentService
       .getPaymentIntent(intentId)
-      .then(setIntent)
+      .then(async (data) => {
+        setIntent(data);
+        if (data.payable_type === "exam_fee" || data.status === "paid") {
+          await refreshExamFees();
+        }
+      })
       .catch((e) =>
         setError(e instanceof Error ? e.message : "Erro ao carregar pagamento")
       )
       .finally(() => setLoading(false));
-  }, [intentId]);
+  }, [intentId, refreshExamFees]);
 
   if (!intentId) {
     return (

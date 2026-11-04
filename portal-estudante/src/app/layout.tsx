@@ -1,5 +1,6 @@
 import { StyledComponentsProvider } from "../providers/StyledComponentsProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ExamFeeGateProvider } from "@/contexts/ExamFeeGateContext";
 import DeviceDetector from "@/components/DeviceDetector";
 import { Poppins } from "next/font/google";
 import type { Metadata } from "next";
@@ -55,8 +56,10 @@ export default function RootLayout({
       <body>
         <StyledComponentsProvider>
           <AuthProvider>
-            {/* <GlobalStyle />  */}
-            <DeviceDetector maxMobileWidth={468}>{children}</DeviceDetector>
+            <ExamFeeGateProvider>
+              {/* <GlobalStyle />  */}
+              <DeviceDetector maxMobileWidth={468}>{children}</DeviceDetector>
+            </ExamFeeGateProvider>
           </AuthProvider>
         </StyledComponentsProvider>
       </body>

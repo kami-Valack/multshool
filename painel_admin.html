@@ -468,7 +468,7 @@
             </div>
             <div class="form-group">
                 <label for="api-url">URL da API</label>
-                <input type="text" id="api-url" value="https://paymente.reduaneamin.ct.ws/admin/api" required>
+                <input type="text" id="api-url" value="http://localhost:8002/api" required placeholder="http://SEU_HOST:8002/api">
             </div>
             <button type="submit" class="btn-primary" style="width: 100%; padding: 12px;">Entrar</button>
         </form>
@@ -594,7 +594,7 @@
     <script>
         // Estado da aplicação
         let authToken = localStorage.getItem('admin_token');
-        let apiUrl = localStorage.getItem('api_url') || 'https://paymente.reduaneamin.ct.ws/admin/api';
+        let apiUrl = localStorage.getItem('api_url') || 'http://localhost:8002/api';
         let currentUser = null;
         let currentRejectId = null;
 

@@ -38,6 +38,39 @@ class SchoolExamClient
     /**
      * @return array{success: bool, error?: string, status?: int}
      */
+    public function ensurePendingExamFee(
+        string $studentId,
+        string $studentEmail,
+        string $studentName,
+        string $admissionExamId
+    ): array {
+        $url = config('services.school_api.url').'/student/exam-registrations/ensure-pending-fee';
+        $secret = config('services.school_api.secret');
+
+        $response = Http::withHeaders(['X-API-Secret' => $secret])
+            ->acceptJson()
+            ->timeout(20)
+            ->post($url, [
+                'student_id' => $studentId,
+                'student_email' => $studentEmail,
+                'student_name' => $studentName,
+                'admission_exam_id' => $admissionExamId,
+            ]);
+
+        if (!$response->successful()) {
+            return [
+                'success' => false,
+                'error' => $response->json('message') ?? $response->body(),
+                'status' => $response->status(),
+            ];
+        }
+
+        return ['success' => true];
+    }
+
+    /**
+     * @return array{success: bool, error?: string, status?: int}
+     */
     public function confirmExamFeePayment(
         string $studentId,
         string $studentEmail,

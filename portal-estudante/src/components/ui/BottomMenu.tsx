@@ -6,6 +6,7 @@ import Multibot from "@/assets/icons/multiBot.png";
 import User from "@/assets/icons/User.png";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useExamFeeGate } from "@/contexts/ExamFeeGateContext";
 
 const MenuContainer = styled.div`
   position: fixed;
@@ -65,6 +66,8 @@ const MenuLabel = styled.span<{ $isActive?: boolean }>`
 export default function BottomMenu() {
   const pathname = usePathname();
   const router = useRouter();
+  const { hasPendingExamFees, pendingCount, isPathAllowedWhilePending } =
+    useExamFeeGate();
 
   const menuItems = [
     { label: "Início", icon: HomeSvg, route: "/estudante/dashboard" },
@@ -98,7 +101,26 @@ export default function BottomMenu() {
           <MenuItem
             key={item.label}
             $isActive={isActive}
-            onClick={() => router.push(item.route)}
+            style={
+              hasPendingExamFees && !isPathAllowedWhilePending(item.route)
+                ? { opacity: 0.35 }
+                : undefined
+            }
+            onClick={() => {
+              if (
+                hasPendingExamFees &&
+                !isPathAllowedWhilePending(item.route)
+              ) {
+                router.push("/estudante/dashboard");
+                return;
+              }
+              router.push(item.route);
+            }}
+            title={
+              hasPendingExamFees && !isPathAllowedWhilePending(item.route)
+                ? `Pague ${pendingCount} taxa(s) de exame para desbloquear`
+                : undefined
+            }
           >
             <MenuIconContainer $isActive={isActive}>
               <Image

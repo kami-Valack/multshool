@@ -228,9 +228,29 @@ export default function Welcome() {
         }
       }
       
-      // Redirecionar para a URL salva ou dashboard
-      const redirectUrl = getRedirectUrl();
-      
+      // Com taxas de exame por pagar, ir sempre ao dashboard (banner + gate)
+      let redirectUrl = getRedirectUrl();
+      try {
+        const { studentService } = await import('@/services/studentService');
+        const feesOverview = await studentService.getExamFeesOverview();
+        if (feesOverview.pending_count > 0) {
+          redirectUrl = "/estudante/dashboard";
+          if (feesOverview.pending_count === 1) {
+            showToast(
+              `Tem 1 taxa de exame por pagar. Regularize para continuar a usar a app.`,
+              "warning"
+            );
+          } else {
+            showToast(
+              `Tem ${feesOverview.pending_count} taxas de exame por pagar. Regularize para continuar a usar a app.`,
+              "warning"
+            );
+          }
+        }
+      } catch {
+        // segue com redirect normal
+      }
+
       // Limpar o sessionStorage após obter a URL
       if (typeof window !== 'undefined') {
         sessionStorage.removeItem('redirectAfterLogin');

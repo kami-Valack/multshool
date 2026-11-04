@@ -31,6 +31,23 @@ export interface ExamFeeStatus {
   exams: ExamFeeStatusExam[];
 }
 
+export interface ExamFeeOverviewItem {
+  admission_exam_id: string;
+  course_id: string;
+  course_name: string;
+  exam_name: string;
+  exam_fee: number;
+  fee_paid: boolean;
+  fee_paid_at?: string | null;
+}
+
+export interface ExamFeesOverview {
+  pending: ExamFeeOverviewItem[];
+  paid: ExamFeeOverviewItem[];
+  pending_count: number;
+  paid_count: number;
+}
+
 export interface Enrollment {
   id: string;
   student_id: string;
@@ -354,6 +371,18 @@ class StudentService {
     }
 
     throw new Error(response.message || 'Erro ao verificar taxa de exame');
+  }
+
+  async getExamFeesOverview(): Promise<ExamFeesOverview> {
+    const response = await studentApiClient.get<
+      ApiResponse & { overview: ExamFeesOverview }
+    >('/exam-fees/overview');
+
+    if (response.status === 'success' && response.overview) {
+      return response.overview;
+    }
+
+    throw new Error(response.message || 'Erro ao obter taxas de exame');
   }
 
   async createEnrollment(

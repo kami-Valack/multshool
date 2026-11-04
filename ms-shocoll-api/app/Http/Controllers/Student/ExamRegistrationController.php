@@ -116,6 +116,78 @@ class ExamRegistrationController extends Controller
         ], 201);
     }
 
+    public function examFeesOverview(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'student_id' => 'required|uuid',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $overview = app(AdmissionExamFeeService::class)->overviewForStudent(
+            $request->student_id
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'overview' => $overview,
+        ]);
+    }
+
+    /**
+     * Garante inscrição com taxa por pagar (ex.: ao iniciar pagamento no billing).
+     */
+    public function ensurePendingFee(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'student_id' => 'required|uuid',
+            'student_email' => 'required|email',
+            'student_name' => 'required|string',
+            'admission_exam_id' => 'required|uuid|exists:admission_exams,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro de validação',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $exam = AdmissionExam::findOrFail($request->admission_exam_id);
+        if (!$exam->is_active || !$exam->exam_fee || $exam->exam_fee <= 0) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Exame sem taxa obrigatória',
+            ], 422);
+        }
+
+        $registration = ExamRegistration::firstOrNew([
+            'admission_exam_id' => $request->admission_exam_id,
+            'student_id' => $request->student_id,
+        ]);
+
+        if (!$registration->exists) {
+            $registration->student_email = $request->student_email;
+            $registration->student_name = $request->student_name;
+            $registration->status = ExamRegistration::STATUS_REGISTERED;
+            $registration->fee_paid = false;
+            $registration->save();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'registration' => $registration->fresh()->load(['admissionExam.course']),
+            'fee_paid' => (bool) $registration->fee_paid,
+        ]);
+    }
+
     public function courseFeeStatus(Request $request, string $courseId): JsonResponse
     {
         $validator = Validator::make($request->all(), [
