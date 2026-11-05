@@ -51,7 +51,7 @@ interface Pagamento {
   estado: string;
   data: string;
   observacoes?: string;
-  origin?: "manual" | "exame" | "evento";
+  origin?: "manual" | "exame" | "evento" | "propina";
 }
 
 const paraISO = (value?: string | null): string => (value ? String(value).slice(0, 10) : "");
@@ -738,7 +738,7 @@ export default function Pagamentos() {
           )}
 
           <DialogFooter className="gap-2">
-            {selectedPagamento && selectedPagamento.origin !== "exame" && selectedPagamento.origin !== "evento" && (
+            {selectedPagamento && selectedPagamento.origin !== "exame" && selectedPagamento.origin !== "evento" && selectedPagamento.origin !== "propina" && (
               <Button variant="destructive" onClick={() => eliminarPagamento(selectedPagamento)}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Eliminar

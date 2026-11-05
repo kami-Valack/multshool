@@ -322,6 +322,30 @@ class FeeController extends Controller
     }
 
     /**
+     * Propinas de vários estudantes (escola, via API secret).
+     */
+    public function listByStudents(Request $request): JsonResponse
+    {
+        $validated = Validator::make($request->all(), [
+            'student_ids' => 'required|array|max:500',
+            'student_ids.*' => 'uuid',
+            'status' => 'nullable|in:pending,paid,overdue',
+        ])->validate();
+
+        $query = Fee::whereIn('student_id', $validated['student_ids']);
+        if (!empty($validated['status'])) {
+            $query->where('status', $validated['status']);
+        }
+
+        $fees = $query->orderBy('due_date')->get()->map(fn (Fee $fee) => $this->serializeFee($fee));
+
+        return response()->json([
+            'status' => 'success',
+            'fees' => $fees,
+        ]);
+    }
+
+    /**
      * Marcar propina como paga (billing / inter-serviço).
      */
     public function markPaid(Request $request, string $studentId, string $feeId): JsonResponse

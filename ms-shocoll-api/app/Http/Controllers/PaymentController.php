@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\SchoolOpsHelpers;
+use App\Models\Enrollment;
 use App\Models\ExamRegistration;
 use App\Models\FeeCharge;
 use App\Models\Payment;
 use App\Models\SchoolEventRegistration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
@@ -50,6 +53,99 @@ class PaymentController extends Controller
         } while (Payment::where('school_id', $schoolId)->where('receipt_number', $number)->exists());
 
         return $number;
+    }
+
+    /**
+     * Propinas geradas na matrícula e pagas (ou ainda em dívida) no portal do aluno.
+     */
+    private function onlineTuitionRows(string $schoolId, ?string $search, ?string $statusFilter)
+    {
+        $enrollments = Enrollment::query()
+            ->whereHas('course', fn ($q) => $q->where('school_id', $schoolId))
+            ->with('course:id,name')
+            ->get();
+
+        $byStudent = [];
+        foreach ($enrollments as $enrollment) {
+            $candidate = [
+                'name' => $enrollment->student_name ?: 'Estudante',
+                'course' => $enrollment->course?->name,
+                'approved' => $enrollment->status === Enrollment::STATUS_APPROVED,
+            ];
+            $current = $byStudent[$enrollment->student_id] ?? null;
+            if (!$current || ($candidate['approved'] && empty($current['approved']))) {
+                $byStudent[$enrollment->student_id] = $candidate;
+            }
+        }
+
+        if ($byStudent === []) {
+            return collect();
+        }
+
+        $baseUrl = rtrim((string) config('services.student_api.url', env('STUDENT_API_URL', 'http://localhost:8001/api')), '/');
+        $secret = (string) config('services.student_api.secret', env('STUDENT_API_SECRET', ''));
+        if ($secret === '') {
+            return collect();
+        }
+
+        $rows = collect();
+        foreach (array_chunk(array_keys($byStudent), 500) as $ids) {
+            try {
+                $response = Http::withHeaders(['X-API-Secret' => $secret])
+                    ->acceptJson()
+                    ->timeout(20)
+                    ->post($baseUrl.'/student/fees/by-students', ['student_ids' => $ids]);
+            } catch (\Throwable $e) {
+                Log::warning('Não foi possível ler propinas dos alunos', ['error' => $e->getMessage()]);
+                continue;
+            }
+
+            if (!$response->successful()) {
+                Log::warning('Student API recusou a lista de propinas', ['status' => $response->status()]);
+                continue;
+            }
+
+            foreach ($response->json('fees', []) as $fee) {
+                $feeStatus = (string) ($fee['status'] ?? 'pending');
+                if ($statusFilter === 'paid' && $feeStatus !== 'paid') {
+                    continue;
+                }
+                if ($statusFilter === 'pending' && $feeStatus === 'paid') {
+                    continue;
+                }
+
+                $student = $byStudent[$fee['student_id']] ?? ['name' => 'Estudante', 'course' => null];
+                $name = mb_strtolower($student['name']);
+                $ref = mb_strtolower((string) ($fee['external_payment_ref'] ?? ''));
+                $description = (string) ($fee['description'] ?? 'Propina');
+                if ($search && !str_contains($name, $search) && !str_contains($ref, $search) && !str_contains(mb_strtolower($description), $search)) {
+                    continue;
+                }
+
+                $notes = $description;
+                if ($feeStatus === 'overdue') {
+                    $notes = 'Em atraso — '.$description;
+                }
+
+                $rows->push([
+                    'id' => $fee['id'],
+                    'receipt_number' => $fee['external_payment_ref'] ?: ($feeStatus === 'paid' ? 'PROPINA' : '—'),
+                    'student_id' => $fee['student_id'],
+                    'student_name' => $student['name'],
+                    'course_name' => $student['course'],
+                    'class_name' => null,
+                    'type' => 'propina',
+                    'amount' => (float) ($fee['amount'] ?? 0),
+                    'method' => 'online',
+                    'status' => $feeStatus === 'paid' ? 'paid' : 'pending',
+                    'paid_at' => $feeStatus === 'paid' ? ($fee['updated_at'] ?? null) : ($fee['due_date'] ?? null),
+                    'notes' => $notes,
+                    'origin' => 'propina',
+                ]);
+            }
+        }
+
+        return $rows;
     }
 
     public function index(Request $request): JsonResponse
@@ -118,6 +214,17 @@ class PaymentController extends Controller
                     'origin' => 'exame',
                 ]);
             }
+        }
+
+        if ((!$request->filled('type') || $request->type === 'propina')
+            && (!$request->filled('method') || $request->method === 'online')
+            && (!$request->filled('status') || in_array($request->status, ['paid', 'pending'], true))
+        ) {
+            $extra = $extra->concat($this->onlineTuitionRows(
+                $schoolId,
+                $search,
+                $request->filled('status') ? (string) $request->status : null
+            ));
         }
 
         if ($includeOnline && (!$request->filled('type') || $request->type === 'evento')) {
