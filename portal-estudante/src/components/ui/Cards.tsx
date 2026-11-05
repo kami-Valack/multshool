@@ -2,7 +2,6 @@
 
 import styled from "styled-components";
 import { CreditCard as CreditCardType, CardData } from "@/types/contaMS";
-import { mockCardData } from "@/mocks/contaMS";
 import { formatBalance } from "@/utils/cardMS";
 import { getFirstAndLastName } from "@/utils/cutName";
 import { useRouter } from "next/navigation";
@@ -382,44 +381,38 @@ interface StudentCardProps {
 
 // Componente do cartão de crédito
 export function CreditCard({ cardData }: CreditCardProps) {
-  // Se não houver cardData, usar dados do usuário autenticado
-  const defaultCardData = cardData || mockCardData;
-  const { card } = defaultCardData;
-  
-  // Obter nome do usuário autenticado
-  let holderName = card.holderName;
-  if (typeof window !== 'undefined') {
+  const card = cardData?.card;
+  let holderName = card?.holderName || "Estudante";
+  if (typeof window !== "undefined") {
     try {
-      const userStr = localStorage.getItem('user');
+      const userStr = localStorage.getItem("user");
       if (userStr) {
         const user = JSON.parse(userStr);
-        if (user?.name) {
-          holderName = user.name;
-        }
+        if (user?.name) holderName = user.name;
       }
-    } catch (e) {
-      // Se falhar, usar o nome do cardData
+    } catch {
+      // nome fica o que já está
     }
   }
-  
+
   const displayName = getFirstAndLastName(holderName);
-  const formattedBalance = formatBalance(card.balance, card.currency);
+  const formattedBalance = formatBalance(card?.balance ?? 0, card?.currency || "AOA");
 
   return (
     <CardContainer>
       <CardHeader>
-        <SchoolName>{card.schoolName}</SchoolName>
+        <SchoolName>{card?.schoolName || "multischool"}</SchoolName>
         <ChipContainer>
-          <Chip $visible={card.hasChip} />
+          <Chip $visible={Boolean(card?.hasChip)} />
         </ChipContainer>
       </CardHeader>
 
-      <CardNumber>{card.cardNumber}</CardNumber>
+      <CardNumber>{card?.cardNumber || "—"}</CardNumber>
       <Balance>{formattedBalance}</Balance>
 
       <CardFooter>
         <HolderName>{displayName}</HolderName>
-        <Provider>{card.provider}</Provider>
+        <Provider>{card?.provider || ""}</Provider>
       </CardFooter>
     </CardContainer>
   );

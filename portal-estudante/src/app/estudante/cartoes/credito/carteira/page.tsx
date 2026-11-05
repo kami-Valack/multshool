@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Header from "@/components/ui/HeaderGeneral";
 import CreditCard from "@/components/ui/Cards";
 import BottomMenu from "@/components/ui/BottomMenu";
-import { mockCreditCard } from "@/mocks/contaMS";
 import { useNavigation } from "@/hooks/navigation";
 import Button from "@/components/ui/Button";
 
@@ -72,7 +71,7 @@ export default function InformacoesCard() {
           }}
         >
           <Text1>Saldo disponível</Text1>
-          <Saldo>{mockCreditCard.balance},00 kz</Saldo>
+          <Saldo>—</Saldo>
         </AvSaldo>
         <ButtonGroup>
           <Button

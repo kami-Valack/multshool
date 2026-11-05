@@ -9,7 +9,7 @@ import Header from "@/components/ui/HeaderWelcome";
 import { studentService } from "@/services/studentService";
 
 // Importar tipos e utils
-import { Institution, InstituicaoData } from "@/types/institutions";
+import { Institution } from "@/types/institutions";
 import { isDarkColor } from "@/utils/colorss";
 
 // Cores padrão para instituições (usadas quando não há cor definida)
@@ -27,102 +27,6 @@ const defaultColors = [
 // Função para gerar cor baseada no ID
 const getColorForInstitution = (id: string, index: number): string => {
   return defaultColors[index % defaultColors.length];
-};
-
-// Dados mockados com cores definidas (fallback)
-const instituicoesDataMock: Record<string, InstituicaoData> = {
-  "ensino-medio": {
-    title: "Instituições de Ensino Médio",
-    totalCount: 980,
-    institutions: [
-      {
-        id: "1",
-        name: "IMIL",
-        fullName: "Instituto Médio Industrial de Luanda (Makarenko)",
-        courses: 8,
-        location: "Luanda",
-        logo: "/assets/logos/imil.png",
-        color: "#E74C3C", // Vermelho
-        description: "Instituto focado em formação industrial",
-      },
-      {
-        id: "2",
-        name: "IMPAL",
-        fullName: "Instituto Médio Politécnico Alda Lara",
-        courses: 10,
-        location: "Luanda",
-        logo: "/assets/logos/impal.png",
-        color: "#3498DB", // Azul
-        description: "Instituto politécnico de referência",
-      },
-      {
-        id: "3",
-        name: "IMPTEL",
-        fullName: "Instituto Médio Politécnico de Tecnologias de Luanda",
-        courses: 7,
-        location: "Luanda",
-        logo: "/assets/logos/imptel.png",
-        color: "#E67E22", // Laranja
-        description: "Especializado em tecnologias",
-      },
-      {
-        id: "4",
-        name: "ITEL",
-        fullName: "Instituto de Telecomunicações",
-        courses: 7,
-        location: "Luanda",
-        logo: "/assets/logos/itel.png",
-        color: "#2ECC71", // Verde
-        description: "Instituto de telecomunicações",
-      },
-      {
-        id: "5",
-        name: "IMEL",
-        fullName: "Instituto Médio de Economia de Luanda",
-        courses: 7,
-        location: "Luanda",
-        logo: "/assets/logos/imel.png",
-        color: "#9B59B6", // Roxo
-        description: "Formação em economia e gestão",
-      },
-    ],
-  },
-  "ensino-superior": {
-    title: "Instituições de Ensino Superior",
-    totalCount: 230,
-    institutions: [
-      {
-        id: "1",
-        name: "UAN",
-        fullName: "Universidade Agostinho Neto",
-        courses: 45,
-        location: "Luanda",
-        logo: "/assets/logos/uan.png",
-        color: "#1ABC9C", // Turquesa
-        description: "Principal universidade pública de Angola",
-      },
-      {
-        id: "2",
-        name: "ISCTE",
-        fullName: "Instituto Universitário de Lisboa - Angola",
-        courses: 12,
-        location: "Luanda",
-        logo: "/assets/logos/iscte.png",
-        color: "#34495E", // Azul escuro
-        description: "Campus internacional do ISCTE",
-      },
-      {
-        id: "3",
-        name: "UCM",
-        fullName: "Universidade Católica de Moçambique",
-        courses: 18,
-        location: "Luanda",
-        logo: "/assets/logos/ucm.png",
-        color: "#F39C12", // Dourado
-        description: "Universidade católica de referência",
-      },
-    ],
-  },
 };
 
 // Styled Components
@@ -360,11 +264,7 @@ export default function InstituicoesPage() {
       } catch (err: any) {
         console.error("Erro ao carregar instituições:", err);
         setError(err.message || "Erro ao carregar instituições");
-        // Em caso de erro, usar dados mockados como fallback
-        const mockData = instituicoesDataMock[tipo];
-        if (mockData) {
-          setInstitutions(mockData.institutions);
-        }
+        setInstitutions([]);
       } finally {
         setIsLoading(false);
       }

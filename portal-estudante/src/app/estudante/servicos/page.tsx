@@ -325,56 +325,7 @@ export default function Servicos() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Mock de dados para candidaturas com logos
-  const candidaturasData: CandidaturaData[] = [
-    {
-      id: "1",
-      title: "Kwik invest: Bolsa de Estudos",
-      type: "bolsa",
-      status: "aprovada",
-      date: "15 Out 2024",
-      logo: "https://via.placeholder.com/80/5B4B7C/FFFFFF?text=K",
-      informacaoExtra:
-        "Dirija-se ao escritório da Kwik Invest na Rua Ho Chi Minh, Edifício Premium, 3º andar, para formalizar a sua documentação até 30 de Novembro de 2024.",
-      motivacao:
-        "Parabéns! O seu esforço e dedicação foram reconhecidos. Continue a perseguir os seus sonhos!",
-    },
-    {
-      id: "2",
-      title: "Unitel S.A - Dep. de Inovação",
-      type: "estagio",
-      status: "em_analise",
-      date: "20 Out 2024",
-      logo: "https://via.placeholder.com/80/00A859/FFFFFF?text=U",
-      informacaoExtra:
-        "A sua candidatura está em análise pela equipa de Recursos Humanos. Entraremos em contacto dentro de 5 dias úteis.",
-      motivacao:
-        "A paciência é uma virtude! Continue confiante no seu potencial.",
-    },
-    {
-      id: "3",
-      title: "Banco Sol - Crédito Estudantil",
-      type: "credito",
-      status: "pendente",
-      date: "25 Out 2024",
-      logo: "https://www.bancosol.ao/hubfs/Novo%20Projeto%20(21).jpg",
-      informacaoExtra:
-        "Aguardamos a submissão dos documentos complementares solicitados por email. Prazo: 15 dias.",
-      motivacao:
-        "Estamos quase lá! Complete a sua documentação para avançarmos.",
-    },
-    {
-      id: "4",
-      title: "Avança na Vida",
-      type: "bolsa",
-      status: "rejeitada",
-      date: "10 Out 2024",
-      logo: "https://via.placeholder.com/80/FF6B35/FFFFFF?text=A",
-      informacaoExtra:
-        "Infelizmente, não foi possível aprovar a sua candidatura neste momento devido ao número limitado de vagas. Para mais informações, contacte: info@avancaavida.ao",
-      motivacao:
-        "Não desista! Esta é apenas uma porta que se fecha para que outras melhores se abram. Continue a tentar!",
-    },
-  ];
+  const candidaturasData: CandidaturaData[] = [];
 
   const handleCandidaturaClick = (candidatura: CandidaturaData) => {
     setSelectedCandidatura(candidatura);

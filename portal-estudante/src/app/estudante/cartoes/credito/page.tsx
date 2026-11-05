@@ -7,7 +7,6 @@ import { useNavigation } from "@/hooks/navigation";
 import styled from "styled-components";
 import { useState } from "react";
 import MenuGrid, { MenuSectionSimple } from "@/components/ui/menuGrid";
-import { mockCreditCard } from "@/mocks/contaMS";
 import Image from "next/image";
 import Wallet from "@/assets/icons/wallet_primary.png";
 import BgCard from "@/assets/backgrounds/bg_welcome.jpeg";
@@ -174,7 +173,7 @@ export default function Consulta({}) {
               }}
             >
               <Text1>Saldo disponível</Text1>
-              <Saldo>{mockCreditCard.balance},00 kz</Saldo>
+              <Saldo>—</Saldo>
             </AvSaldo>
 
             <Creditos

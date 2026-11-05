@@ -5,14 +5,12 @@ import { useState, useEffect } from "react";
 import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
 import UserAvatar from "@/components/ui/Avatar";
-import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
 import { SimpleCard } from "@/components/ActivityCard";
-import { AlertModal } from "@/components/AlertModal";
-import Bg from "@/assets/backgrounds/candidato/bg_6.jpeg";
 import { studentService, Fee } from "@/services/studentService";
 import { useAuth } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { formatLocalDate, parseLocalDate } from "@/utils/dates";
 
 // Styled Components
 const Container = styled.div`
@@ -61,14 +59,6 @@ const Text2 = styled.p`
   color: ${(props) => props.theme.colors.foreground};
 `;
 
-const ButtonGroup = styled.div`
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 30px;
-`;
-
 const Pendentes = styled.div`
   width: 90%;
   height: auto;
@@ -95,7 +85,6 @@ const SectionContainer = styled.div`
 export default function Propinas() {
   const router = useRouter();
   const { user } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [fees, setFees] = useState<Fee[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -117,25 +106,14 @@ export default function Propinas() {
     loadFees();
   }, [user]);
 
-  const handlePage = () => {
-    setIsModalOpen(true);
-  };
-
-  // Handle modal confirm action
-  const handleConfirm = () => {
-    router.push(`propinas/adiantamento`);
-    setIsModalOpen(false); 
-  };
-
-  // Handle modal cancel or close action
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
-
-  // Converter fees da API para o formato esperado pelo componente
-  const propinasData = fees.map((fee) => {
-    const dueDate = new Date(fee.due_date);
-    const monthName = dueDate.toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' });
+  const propinasData = [...fees]
+    .sort(
+      (a, b) =>
+        parseLocalDate(a.due_date).getTime() - parseLocalDate(b.due_date).getTime()
+    )
+    .map((fee) => {
+    const dueDate = parseLocalDate(fee.due_date);
+    const monthName = formatLocalDate(fee.due_date);
     
     // Mapear status da API para o formato do front-end
     let status: "em_atraso" | "pagamento_adiado" | "pendente" = "pendente";
@@ -174,11 +152,6 @@ export default function Propinas() {
     );
   };
 
-  // Obter informações da instituição do estudante (se houver matrícula)
-  // TODO: buscar matrícula ativa se necessário
-  const institutionName = "Instituição";
-  const institutionLocation = ""; // TODO: buscar localização se necessário
-
   return (
     <ProtectedRoute>
       <Container>
@@ -189,26 +162,19 @@ export default function Propinas() {
         {user && (
           <Info>
             <Avatar>
-              <UserAvatar size={65} name={user.name} />
+              <UserAvatar size={65} name={user.name || "Estudante"} />
             </Avatar>
             <Texts>
-              <Text1>{user.name}</Text1>
+              <Text1>{user.name || "Estudante"}</Text1>
               <Text2>{user.student_id || user.email}</Text2>
             </Texts>
           </Info>
         )}
 
-        <ButtonGroup>
-          <Button
-            bgColor="background"
-            textColor="#6C5F8D"
-            text="Solicitação de adiantamento"
-            hasBorder={true}
-            onClick={handlePage}
-          />
-        </ButtonGroup>
-
         <Pendentes>
+          <p style={{ fontSize: 13, color: "#666", marginBottom: 8 }}>
+            Pode pagar qualquer mês, incluindo os que ainda não venceram.
+          </p>
           {isLoading ? (
             <div style={{ padding: "20px", textAlign: "center" }}>
               <p>Carregando propinas...</p>
@@ -225,12 +191,8 @@ export default function Propinas() {
                   <SectionTitle>Propinas Pendentes ({propinasPendentes.length})</SectionTitle>
                   {propinasPendentes.map((propina) => {
                     // Adicionar data de vencimento
-                    const dueDate = propina.fee.due_date 
-                      ? new Date(propina.fee.due_date).toLocaleDateString('pt-PT', { 
-                          day: '2-digit', 
-                          month: 'long', 
-                          year: 'numeric' 
-                        })
+                    const dueDate = propina.fee.due_date
+                      ? formatLocalDate(propina.fee.due_date)
                       : null;
                     const titleWithDate = dueDate 
                       ? `${propina.title} (Vence em ${dueDate})`
@@ -256,12 +218,8 @@ export default function Propinas() {
                   <SectionTitle>Propinas Pagas ({propinasPagas.length})</SectionTitle>
                   {propinasPagas.map((propina) => {
                     // Adicionar data de atualização se disponível (pode indicar quando foi paga)
-                    const updatedDate = propina.fee.updated_at 
-                      ? new Date(propina.fee.updated_at).toLocaleDateString('pt-PT', { 
-                          day: '2-digit', 
-                          month: 'long', 
-                          year: 'numeric' 
-                        })
+                    const updatedDate = propina.fee.updated_at
+                      ? formatLocalDate(propina.fee.updated_at)
                       : null;
                     const titleWithDate = updatedDate && propina.fee.status === 'paid'
                       ? `${propina.title} (Paga)`
@@ -284,23 +242,6 @@ export default function Propinas() {
           )}
         </Pendentes>
         <BottomMenu />
-        <AlertModal
-          isOpen={isModalOpen}
-          title="Não consegue pagar agora?"
-          message="Solicite o adiantamento da propina deste mês e mantenha o acesso às aulas."
-          imageUrl={Bg.src}
-          confirmText="Solicitar adiantamento"
-          confirmButtonProps={{
-            bgColor: "primary",
-            textColor: "#FFFFFF",
-            hasBorder: false,
-          }}
-          variant="image"
-          cancelText="Cancelar"
-          showCancelButton={true}
-          onConfirm={handleConfirm}
-          onClose={handleClose}
-        />
       </Container>
     </ProtectedRoute>
   );

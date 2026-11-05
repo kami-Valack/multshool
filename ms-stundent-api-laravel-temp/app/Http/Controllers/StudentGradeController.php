@@ -9,6 +9,20 @@ use Illuminate\Http\Request;
 
 class StudentGradeController extends Controller
 {
+    public function index(Request $request): JsonResponse
+    {
+        $student = $request->user();
+        $grades = Grade::where('student_id', $student->id)
+            ->orderBy('year', 'desc')
+            ->orderBy('semester', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'grades' => $grades,
+        ]);
+    }
+
     /**
      * Get grades for a specific student by student ID (for API Secret access)
      */

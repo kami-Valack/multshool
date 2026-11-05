@@ -1,52 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "@/components/ui/HeaderGeneral";
 import BottomMenu from "@/components/ui/BottomMenu";
-
-// Mock data - simulando dados que viriam da BD
-const mockGradesData = [
-  {
-    id: 1,
-    date: "12/09",
-    subject: "CDI I - Cálculo Difer. e Int...",
-    grades: {
-      pp1: "12v",
-      pp2: "13v",
-      exn: "5v",
-      er: "15v",
-    },
-    status: "APROVADO",
-    statusColor: "#4CAF50",
-  },
-  {
-    id: 2,
-    date: "11/09",
-    subject: "IEF - Introd. à Eng. Inform...",
-    grades: {
-      pp1: "12v",
-      pp2: "13v",
-      exn: "5v",
-      er: "----",
-    },
-    status: "EXAME DE RECURSO",
-    statusColor: "#FF9800",
-  },
-  {
-    id: 3,
-    date: "10/09",
-    subject: "Programação I",
-    grades: {
-      pp1: "12v",
-      pp2: "13v",
-      exn: "5v",
-      er: "5v",
-    },
-    status: "REPROVADO",
-    statusColor: "#F44336",
-  },
-];
+import { Grade, studentService } from "@/services/studentService";
 
 // Styled Components
 const Top = styled.div`
@@ -195,33 +153,11 @@ const StatusBadge = styled.div<{ $color: string }>`
 
 
 export default function NotasPage() {
-  const [gradesData, setGradesData] = useState(mockGradesData);
-  const [sortBy, setSortBy] = useState<"date" | "subject">("date");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [gradesData, setGradesData] = useState<Grade[]>([]);
 
-  const handleSort = () => {
-    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-  };
-
-  const handleFilterChange = (filter: "date" | "subject") => {
-    setSortBy(filter);
-  };
-
-  const sortedGrades = [...gradesData].sort((a, b) => {
-    if (sortBy === "date") {
-      const [dayA, monthA] = a.date.split("/").map(Number);
-      const [dayB, monthB] = b.date.split("/").map(Number);
-      const dateA = new Date(2024, monthA - 1, dayA);
-      const dateB = new Date(2024, monthB - 1, dayB);
-      return sortOrder === "asc"
-        ? dateA.getTime() - dateB.getTime()
-        : dateB.getTime() - dateA.getTime();
-    } else {
-      return sortOrder === "asc"
-        ? a.subject.localeCompare(b.subject)
-        : b.subject.localeCompare(a.subject);
-    }
-  });
+  useEffect(() => {
+    studentService.getGrades().then(setGradesData).catch(() => setGradesData([]));
+  }, []);
 
   return (
     <>
@@ -229,41 +165,26 @@ export default function NotasPage() {
         <Header variant="withBack" title="Curso" />
       </Top>
       <Container>
-      
-        {/* Content */}
         <Content>
+          {gradesData.length === 0 && (
+            <CardTitle style={{ padding: 24 }}>Ainda não há dados</CardTitle>
+          )}
           {gradesData.map((grade) => (
             <GradeCard key={grade.id}>
               <CardHeader>
                 <div>
-                  <CardDate>{grade.date}</CardDate>
+                  <CardDate>
+                    {grade.year} · {grade.semester}º semestre
+                  </CardDate>
                   <CardTitle>{grade.subject}</CardTitle>
                 </div>
-                <MoreButton>{/* <MoreVertical size={20} /> */}</MoreButton>
               </CardHeader>
-
               <GradesGrid>
                 <GradeItem>
-                  <GradeLabel>PP1</GradeLabel>
-                  <GradeValue>{grade.grades.pp1}</GradeValue>
-                </GradeItem>
-                <GradeItem>
-                  <GradeLabel>PP2</GradeLabel>
-                  <GradeValue>{grade.grades.pp2}</GradeValue>
-                </GradeItem>
-                <GradeItem>
-                  <GradeLabel>EXN</GradeLabel>
-                  <GradeValue>{grade.grades.exn}</GradeValue>
-                </GradeItem>
-                <GradeItem>
-                  <GradeLabel>ER</GradeLabel>
-                  <GradeValue>{grade.grades.er}</GradeValue>
+                  <GradeLabel>Nota</GradeLabel>
+                  <GradeValue>{grade.grade}</GradeValue>
                 </GradeItem>
               </GradesGrid>
-
-              <StatusBadge $color={grade.statusColor}>
-                Situação: {grade.status}
-              </StatusBadge>
             </GradeCard>
           ))}
         </Content>

@@ -4,11 +4,10 @@ import styled from "styled-components";
 import { useState } from "react";
 import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
-import { getEnrollmentDetails } from "@/helper/findStudent";
-const enrollment = getEnrollmentDetails("enr-1");
-import { mockStudents } from "@/mocks/student";
-import Image from "next/image";
+import { useEffect } from "react";
 import Button from "@/components/ui/Button";
+import { useAuth } from "@/contexts/AuthContext";
+import { Enrollment, studentService } from "@/services/studentService";
 import { useRouter } from "next/navigation";
 import { AlertModal } from "@/components/AlertModal";
 
@@ -140,12 +139,22 @@ const ContinueButton = styled.div`
 `;
 
 export default function FormAdiantamento() {
-  const student = mockStudents.find((s) => s.id === "stu-1");
+  const { user } = useAuth();
+  const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [justification, setJustification] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("Agosto");
   const [commitment, setCommitment] = useState(false);
   const router = useRouter();
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+
+  useEffect(() => {
+    studentService
+      .getEnrollments()
+      .then((list) =>
+        setEnrollment(list.find((e) => e.status === "approved") || list[0] || null)
+      )
+      .catch(() => setEnrollment(null));
+  }, []);
 
   const handleConfirmAlert = () => {
     setIsAlertOpen(true);
@@ -172,26 +181,15 @@ export default function FormAdiantamento() {
     setCommitment(e.target.checked);
   };
 
-  if (enrollment) {
-    return (
+  return (
       <Container>
         <Top>
           <Header variant="withBack" title="Reportar erro" />
         </Top>
 
         <StudentInfo>
-          <Photo>
-            {student?.profilePhoto && (
-              <Image
-                src={student.profilePhoto}
-                alt={student.fullName}
-                fill
-                style={{ objectFit: "cover", borderRadius: "50%" }}
-              />
-            )}
-          </Photo>
-          <Nome>{student?.fullName}</Nome>
-          <Class>ano - {enrollment.course?.name}</Class>
+          <Nome>{user?.name || "Estudante"}</Nome>
+          <Class>{enrollment?.course?.name || "Sem curso"}</Class>
         </StudentInfo>
 
         <FormSection>
@@ -227,7 +225,5 @@ export default function FormAdiantamento() {
           />
         )}
       </Container>
-    );
-  }
-  return null;
+  );
 }

@@ -207,35 +207,7 @@ interface TransferData {
 }
 
 // Mock Dados
-const transferData: TransferData[] = [
-  {
-    id: "1",
-    beneficiary: "Maria João",
-    accountNumber: "AO06 0040 0000 1234 5678 9012",
-    date: "2024-10-25T14:22:10",
-    status: "confirmado",
-    amount: "15.000,00 kz",
-    type: "instantânea",
-  },
-  {
-    id: "2",
-    beneficiary: "João Pedro",
-    accountNumber: "AO06 0030 0000 9876 5432 1010",
-    date: "2024-10-22T09:10:54",
-    status: "pendente",
-    amount: "7.500,00 kz",
-    type: "normal",
-  },
-  {
-    id: "3",
-    beneficiary: "Empresa XPTO Serviços",
-    accountNumber: "AO06 0010 0000 2222 3333 4444",
-    date: "2024-10-20T19:05:32",
-    status: "falhado",
-    amount: "25.000,00 kz",
-    type: "instantânea",
-  },
-];
+const transferData: TransferData[] = [];
 
 export default function PagamentoDetalhe() {
   const { navigateTo } = useNavigation();
@@ -291,12 +263,13 @@ export default function PagamentoDetalhe() {
           </ProfileImage>
 
           <CreditLabel>Saldo disponível:</CreditLabel>
-          <CreditAmount>50.000,00 kz</CreditAmount>
+          <CreditAmount>—</CreditAmount>
         </CreditCard>
 
         <SectionTitle>Últimas transferências</SectionTitle>
 
         <CreditsList>
+          {transferData.length === 0 && <SectionTitle>Ainda não há dados</SectionTitle>}
           {transferData.map((t) => (
             <TransferCard
               key={t.id}

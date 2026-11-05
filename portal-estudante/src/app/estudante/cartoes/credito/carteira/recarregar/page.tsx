@@ -11,21 +11,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getFirstAndLastName } from "@/utils/cutName";
 
 // Mock de dados dos bancos
-const banksMock = [
-  { id: 1, name: "Express", color: "#ff8c42" },
-  { id: 2, name: "BAI", color: "#2d5a27" },
-  { id: 3, name: "BFA", color: "#1e88e5" },
-  { id: 4, name: "Atlântico", color: "#d32f2f" },
-];
+const banksMock: { id: number; name: string; color: string }[] = [];
 
-// Mock de referência ativa (simula dados da base de dados)
-// Se hasActiveReference for true, o usuário já tem uma referência ativa
 const activeReferenceMock = {
-  hasActiveReference: true, // Mude para false para testar sem referência ativa
-  entity: "00140",
-  reference: "941 767 307 1",
-  amount: "15.000",
-  expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 horas a partir de agora
+  hasActiveReference: false,
+  entity: "",
+  reference: "",
+  amount: "",
+  expiresAt: "",
 };
 
 const Container = styled.div`

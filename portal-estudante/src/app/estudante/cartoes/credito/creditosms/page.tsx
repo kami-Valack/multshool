@@ -342,61 +342,10 @@ export default function PagamentoDetalhe() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   //Dados mockados
-  const creditsData: CreditData[] = [
-    {
-      id: "1",
-      title: "Kwik Pagamentos Instantâneos",
-      date: "01.05.2024",
-      status: "confirmado",
-      amount: "15.000,00 kz",
-      deadline: "15 de Junho de 2024",
-      institution: "Kwik Pagamentos Instantâneos",
-      interestRate: "5%",
-      totalWithInterest: "15.750,00 kz",
-    },
-    {
-      id: "2",
-      title: "Kwik Pagamentos Instantâneos",
-      date: "15.04.2024",
-      status: "expirado",
-      amount: "10.000,00 kz",
-      deadline: "15 de Maio de 2024",
-      institution: "Kwik Pagamentos Instantâneos",
-      interestRate: "5%",
-      totalWithInterest: "10.500,00 kz",
-    },
-    {
-      id: "3",
-      title: "Banco BFA",
-      date: "20.03.2024",
-      status: "inadimplente",
-      amount: "25.000,00 kz",
-      deadline: "20 de Abril de 2024",
-      institution: "Banco de Fomento Angola",
-      interestRate: "8%",
-      totalWithInterest: "27.000,00 kz",
-    },
-    {
-      id: "4",
-      title: "Banco BAI S.A",
-      date: "10.03.2024",
-      status: "pendente",
-      amount: "20.000,00 kz",
-      deadline: "10 de Abril de 2024",
-      institution: "Banco Angolano de Investimentos",
-      interestRate: "6%",
-      totalWithInterest: "21.200,00 kz",
-    },
-  ];
+  const creditsData: CreditData[] = [];
 
   const totalCredits = getTotalCredits(creditsData);
-  
-  // Último crédito feito (mock)
-  const lastCredit = {
-    date: "2024-08-22T10:44:50",
-    amount: "20.000,00 kz",
-    deadline: "17 de Setembro de 2024",
-  };
+  const lastCredit = creditsData[0];
 
   const handleCreditClick = (credit: CreditData) => {
     setSelectedCredit(credit);
@@ -468,17 +417,17 @@ export default function PagamentoDetalhe() {
           <CreditAmount>{formatKz(totalCredits)}</CreditAmount>
 
           <LastCreditInfo>
-            Último crédito feito em: <b>{formatDate(lastCredit.date)}</b>
+            Último crédito feito em: <b>{lastCredit ? formatDate(lastCredit.date) : "Ainda não há dados"}</b>
           </LastCreditInfo>
 
           <InfoRow>
             <InfoLabel>Prazo</InfoLabel>
-            <InfoValue>{lastCredit.deadline}</InfoValue>
+            <InfoValue>{lastCredit?.deadline || "—"}</InfoValue>
           </InfoRow>
 
           <InfoRow>
             <InfoLabel>Valor</InfoLabel>
-            <InfoValue>{lastCredit.amount}</InfoValue>
+            <InfoValue>{lastCredit?.amount || "—"}</InfoValue>
           </InfoRow>
 
           <InfoRow>

@@ -1,19 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import Arrow from "@/assets/icons/arrow_bt.svg";
-import Image from "next/image";
 
-// --- Mocked Data ---
-const mockedEnrollment = {
-  student: { fullName: "João Silva" },
-  course: { name: "Engenharia Informática" },
-  year: "2025/26",
-  semester: "VIº",
-  classroom: "BAA3 - 2º andar",
-  group: "EINF-VI",
-  period: "Manhã",
+export type EnrollmentCardInfo = {
+  studentName?: string | null;
+  courseName?: string | null;
+  year?: string | null;
+  studentNumber?: string | null;
+  status?: string | null;
 };
 
 // -----------------------------
@@ -68,36 +63,28 @@ const CompactValue = styled.span<{ color?: "primary" | "success" | "default" }>`
 // -----------------------------
 export function ConfirmacaoCardCompacto({
   variant = "default",
+  info,
 }: {
   variant?: "white" | "default";
+  info?: EnrollmentCardInfo;
 }) {
-  const enrollment = mockedEnrollment; // usando dados mockados
-
   return (
     <CompactCardContainer variant={variant}>
       <CompactRow>
+        <CompactLabel>Curso</CompactLabel>
+        <CompactValue>{info?.courseName || "Sem curso"}</CompactValue>
+      </CompactRow>
+      <CompactRow>
+        <CompactLabel>Nº de estudante</CompactLabel>
+        <CompactValue>{info?.studentNumber || "—"}</CompactValue>
+      </CompactRow>
+      <CompactRow>
         <CompactLabel>Ano lectivo</CompactLabel>
-        <CompactValue>{enrollment.year}</CompactValue>
+        <CompactValue>{info?.year || "—"}</CompactValue>
       </CompactRow>
-
       <CompactRow>
-        <CompactLabel>Semestre</CompactLabel>
-        <CompactValue>{enrollment.semester}</CompactValue>
-      </CompactRow>
-
-      <CompactRow>
-        <CompactLabel>Sala</CompactLabel>
-        <CompactValue>{enrollment.classroom}</CompactValue>
-      </CompactRow>
-
-      <CompactRow>
-        <CompactLabel>Turma</CompactLabel>
-        <CompactValue color="success">{enrollment.group}</CompactValue>
-      </CompactRow>
-
-      <CompactRow>
-        <CompactLabel>Período</CompactLabel>
-        <CompactValue>{enrollment.period}</CompactValue>
+        <CompactLabel>Estado</CompactLabel>
+        <CompactValue color="success">{info?.status || "—"}</CompactValue>
       </CompactRow>
     </CompactCardContainer>
   );
@@ -106,69 +93,28 @@ export function ConfirmacaoCardCompacto({
 // -----------------------------
 // Full Card (original) - mockado
 // -----------------------------
-export default function ConfirmacaoCard() {
-  const enrollment = mockedEnrollment;
-  const [isOpen, setIsOpen] = useState(false);
-  const [periodo, setPeriodo] = useState(enrollment.period);
-
-  const toggleDropdown = () => setIsOpen(!isOpen);
-  const handleSelect = (value: string) => {
-    setPeriodo(value);
-    setIsOpen(false);
-  };
-
+export default function ConfirmacaoCard({ info }: { info?: EnrollmentCardInfo }) {
   return (
     <CardContainer>
       <Row>
         <Label>Nome</Label>
-        <Value bold>{enrollment.student.fullName}</Value>
+        <Value bold>{info?.studentName || "—"}</Value>
       </Row>
-
-      <Row>
-        <Label>Ano lectivo</Label>
-        <Value bold>{enrollment.year}</Value>
-      </Row>
-
-      <Row>
-        <Label>Semestre</Label>
-        <Value bold>{enrollment.semester}</Value>
-      </Row>
-
-      <Row>
-        <Label>Ano académico</Label>
-        <Value bold>3º</Value>
-      </Row>
-
-      <Row>
-        <Label>Período</Label>
-        <Value bold onClick={toggleDropdown}>
-          {periodo} <Image src={Arrow} width={10} height={10} alt="" />
-          {isOpen && (
-            <Dropdown>
-              <DropdownItem onClick={() => handleSelect("Manhã")}>
-                Manhã
-              </DropdownItem>
-              <DropdownItem onClick={() => handleSelect("Tarde")}>
-                Tarde
-              </DropdownItem>
-              <DropdownItem onClick={() => handleSelect("Noite")}>
-                Noite
-              </DropdownItem>
-            </Dropdown>
-          )}
-        </Value>
-      </Row>
-
-      <Row>
-        <Label>Turma</Label>
-        <Value bold style={{ color: "green" }}>
-          {enrollment.group}
-        </Value>
-      </Row>
-
       <Row>
         <Label>Curso</Label>
-        <Value bold>{enrollment.course.name}</Value>
+        <Value bold>{info?.courseName || "Sem curso"}</Value>
+      </Row>
+      <Row>
+        <Label>Nº de estudante</Label>
+        <Value bold>{info?.studentNumber || "—"}</Value>
+      </Row>
+      <Row>
+        <Label>Ano lectivo</Label>
+        <Value bold>{info?.year || "—"}</Value>
+      </Row>
+      <Row>
+        <Label>Estado</Label>
+        <Value bold>{info?.status || "—"}</Value>
       </Row>
     </CardContainer>
   );

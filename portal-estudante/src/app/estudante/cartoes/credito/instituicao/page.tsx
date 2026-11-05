@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
-import { mockInstitutions } from "@/mocks/institutions";
+import { studentService } from "@/services/studentService";
 import UserAvatar from "@/components/ui/Avatar";
 import PaymentCard from "@/components/ui/CardsLista";
 import Confirmacao from "@/assets/icons/cardsList/confirmacao.png";
@@ -88,8 +89,23 @@ const Row = styled.div`
 `;
 
 export default function Instituicao() {
-  // exemplo: pega a primeira instituição
-  const institution = mockInstitutions[0];
+  const [name, setName] = useState("Sem instituição");
+  const [detail, setDetail] = useState("");
+
+  useEffect(() => {
+    studentService
+      .getEnrollments()
+      .then(async (enrollments) => {
+        const active =
+          enrollments.find((e) => e.status === "approved") || enrollments[0];
+        const institutionId = active?.course?.institution_id;
+        if (!institutionId) return;
+        const institution = await studentService.getInstitution(institutionId, false);
+        setName(institution?.name || "Sem instituição");
+        setDetail(institution?.address || institution?.type || "");
+      })
+      .catch(() => undefined);
+  }, []);
 
   return (
     <Container>
@@ -99,11 +115,11 @@ export default function Instituicao() {
 
       <Info>
         <Avatar>
-          <UserAvatar size={65} name={institution?.name} />
+          <UserAvatar size={65} name={name} />
         </Avatar>
         <Texts>
-          <Text1>{institution.fullName}</Text1>
-          <Text2>{institution.location}</Text2>
+          <Text1>{name}</Text1>
+          <Text2>{detail || "Ainda não há dados"}</Text2>
         </Texts>
       </Info>
       <ListaP>

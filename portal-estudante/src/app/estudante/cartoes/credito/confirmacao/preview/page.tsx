@@ -4,14 +4,12 @@ import styled from "styled-components";
 import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
 import BackgroundVectors from "@/components/Bg_vectors";
-import { mockStudents } from "@/mocks/student";
-import Image from "next/image";
-import { getEnrollmentDetails } from "@/helper/findStudent";
+import { useEffect, useState } from "react";
 import { ConfirmacaoCardCompacto } from "@/components/ConfirmacaoCard";
 import Button from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
-
-const enrollment = getEnrollmentDetails("enr-1");
+import { useAuth } from "@/contexts/AuthContext";
+import { Enrollment, studentService } from "@/services/studentService";
 
 // Styled Components
 const Container = styled.div`
@@ -75,15 +73,25 @@ const ButtonGroup = styled.div`
 `;
 
 export default function Preview() {
-  const student = mockStudents.find((s) => s.id === "stu-1");
+  const { user } = useAuth();
+  const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const router = useRouter();
+  const displayName = user?.name?.trim() || "Estudante";
+
+  useEffect(() => {
+    studentService
+      .getEnrollments()
+      .then((list) =>
+        setEnrollment(list.find((e) => e.status === "approved") || list[0] || null)
+      )
+      .catch(() => setEnrollment(null));
+  }, []);
 
   const handlePage = () => {
     router.push(`/estudante/cartoes/credito/instituicao`);
   };
 
-  if (enrollment) {
-    return (
+  return (
       <>
         <BackgroundVectors>
           <Container>
@@ -92,21 +100,21 @@ export default function Preview() {
             </Top>
 
             <StudentInfo>
-              <Photo>
-                {student?.profilePhoto && (
-                  <Image
-                    src={student.profilePhoto}
-                    alt={student.fullName}
-                    fill
-                    style={{ objectFit: "cover", borderRadius: "50%" }}
-                  />
-                )}
-              </Photo>
-              <Nome>{student?.fullName}</Nome>
-              <Class>ano -{enrollment.course?.name}</Class>
+              <Nome>{displayName}</Nome>
+              <Class>{enrollment?.course?.name || "Sem curso"}</Class>
             </StudentInfo>
             <Card>
-              <ConfirmacaoCardCompacto />
+              <ConfirmacaoCardCompacto
+                info={{
+                  studentName: displayName,
+                  courseName: enrollment?.course?.name,
+                  studentNumber: user?.student_id,
+                  year: enrollment?.created_at
+                    ? String(new Date(enrollment.created_at).getFullYear())
+                    : undefined,
+                  status: enrollment?.status || "sem matrícula",
+                }}
+              />
             </Card>
             <ButtonGroup>
               <Button
@@ -128,6 +136,5 @@ export default function Preview() {
           <BottomMenu />
         </BackgroundVectors>
       </>
-    );
-  }
+  );
 }

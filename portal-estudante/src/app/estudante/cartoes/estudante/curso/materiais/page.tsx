@@ -6,59 +6,13 @@ import Header from '@/components/ui/HeaderGeneral';
 import BottomMenu from '@/components/ui/BottomMenu';
 
 // Mock data - simulando dados que viriam da BD
-const mockMaterialsData = [
-  {
-    id: 1,
-    subject: "CDI I - Cálculo Difer. e Int...",
-    chapter: "Capítulo I : Funções",
-    color: "#7B68A6",
-    materials: [
-      { id: 1, name: "Slides - Introdução às Funções.pdf", type: "pdf", size: "2.5 MB", downloads: 45, date: "12/09" },
-      { id: 2, name: "Exercícios Resolvidos.pdf", type: "pdf", size: "1.8 MB", downloads: 32, date: "12/09" },
-      { id: 3, name: "Lista de Exercícios 01.docx", type: "doc", size: "456 KB", downloads: 28, date: "10/09" }
-    ]
-  },
-  {
-    id: 2,
-    subject: "IEF - Introd. à Eng. Inform...",
-    chapter: "Capítulo I : Sistema binário",
-    color: "#4A90E2",
-    materials: [
-      { id: 4, name: "Apostila Sistema Binário.pdf", type: "pdf", size: "3.2 MB", downloads: 52, date: "11/09" },
-      { id: 5, name: "Exercícios Práticos.pdf", type: "pdf", size: "890 KB", downloads: 41, date: "11/09" }
-    ]
-  },
-  {
-    id: 3,
-    subject: "Programação I",
-    chapter: "Capítulo I : Introd. à ling. C",
-    color: "#F5A623",
-    materials: [
-      { id: 6, name: "Manual C - Básico.pdf", type: "pdf", size: "4.1 MB", downloads: 67, date: "10/09" },
-      { id: 7, name: "Códigos de Exemplo.zip", type: "zip", size: "1.2 MB", downloads: 58, date: "10/09" },
-      { id: 8, name: "Guia de Instalação IDE.pdf", type: "pdf", size: "2.3 MB", downloads: 49, date: "09/09" }
-    ]
-  },
-  {
-    id: 4,
-    subject: "Álgebra Linear",
-    chapter: "Capítulo II : Matrizes",
-    color: "#E74C3C",
-    materials: [
-      { id: 9, name: "Teoria de Matrizes.pdf", type: "pdf", size: "2.8 MB", downloads: 38, date: "08/09" },
-      { id: 10, name: "Exercícios Matrizes.pdf", type: "pdf", size: "1.5 MB", downloads: 35, date: "08/09" }
-    ]
-  },
-  {
-    id: 5,
-    subject: "Física I",
-    chapter: "Capítulo I : Cinemática",
-    color: "#27AE60",
-    materials: [
-      { id: 11, name: "Apostila de Cinemática.pdf", type: "pdf", size: "3.8 MB", downloads: 44, date: "07/09" }
-    ]
-  }
-];
+const mockMaterialsData: {
+  id: number;
+  subject: string;
+  chapter: string;
+  color: string;
+  materials: { id: number; name: string; type: string; size: string; downloads: number; date: string }[];
+}[] = [];
 
 // Styled Components
 const Top = styled.div`
@@ -506,8 +460,7 @@ export default function MateriaisPage() {
         {filteredSubjects.length === 0 ? (
           <EmptyState>
             {/* <FileText size={56} color="#DDD" style={{ marginBottom: '16px' }} /> */}
-            <p style={{ fontSize: '16px', fontWeight: '500', marginBottom: '8px' }}>Nenhum material encontrado</p>
-            <p style={{ fontSize: '14px' }}>Tente buscar por outro termo</p>
+            <p style={{ fontSize: '16px', fontWeight: '500', marginBottom: '8px' }}>Ainda não há dados</p>
           </EmptyState>
         ) : (
           filteredSubjects.map((subject) => (

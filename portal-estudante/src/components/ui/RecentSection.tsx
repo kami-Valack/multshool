@@ -9,11 +9,21 @@ import { theme } from "@/styles/theme";
 export type SectionType = "recentes" | "pendencias" | "movimentos";
 export type CardType = "credit" | "student";
 
+interface RecentItem {
+  title: string;
+  date: string;
+  amount?: string;
+  isPositive?: boolean;
+  status?: string;
+  statusColor?: string;
+}
+
 interface RecentSectionProps {
   variant?: SectionType;
   activeCard?: CardType;
   showHeader?: boolean;
   title?: string;
+  items?: RecentItem[];
 }
 
 const Section = styled.div`
@@ -128,50 +138,16 @@ const TransactionStatus = styled.div<{ $statusColor?: string }>`
   }};
 `;
 
-// Dados
-const creditRecentesData = [
-  { title: "Propina Junho", date: "06.06.2024", amount: "-54.600,50 kz", isPositive: false },
-  { title: "Propina Julho", date: "05.07.2024", amount: "-54.600,50 kz", isPositive: false },
-  { title: "Bônus plataforma", date: "06.06.2024", amount: "+10.900,50 kz", isPositive: true },
-  { title: "Pag. Estágio", date: "06.06.2024", amount: "+45.600,50 kz", isPositive: true },
-  { title: "Propina Maio", date: "01.05.2024", amount: "-54.600,50 kz", isPositive: false },
-];
-
-const creditPendenciasData = [
-  { title: "Crédito bancário", date: "Externo", status: "200.000,00 kz", statusColor: "warning" },
-  { title: "Declaração C/ Notas", date: "Irregularidade", status: "0 kz", statusColor: "success" },
-  { title: "Solicitação de adiamento...", date: "Secretaria", status: "Rejeitada", statusColor: "error" },
-  { title: "Declaração C/ Notas", date: "Secretaria", status: "Irregularidade", statusColor: "error" },
-  { title: "Candidatura Bolsa", date: "Externo", status: "Em falta", statusColor: "warning" },
-];
-
-const movimentosData = [...creditRecentesData, ...creditRecentesData];
-
-const studentRecentesData = [
-  { title: "Biblioteca", date: "05.07.2024 às 12:45:50", amount: "há 1h", isPositive: true },
-  { title: "Refeitório", date: "05.07.2024 às 10:10:05", amount: "há 2h", isPositive: true },
-  { title: "LABPRO P2-01", date: "05.07.2024 às 09:05:07", amount: "há 4h", isPositive: true },
-];
-
-const studentPendenciasData = [
-  { title: "Recurso - Estrutura de dados", date: "Secretaria", status: "Pendente", statusColor: "warning" },
-  { title: "Entrega de TCC", date: "Coordenação", status: "Em atraso", statusColor: "error" },
-];
-
 export default function RecentSection({
   variant = "recentes",
-  activeCard = "credit",
+  activeCard: _activeCard = "credit",
   showHeader = true,
   title,
+  items,
 }: RecentSectionProps) {
   const isRecentes = variant === "recentes";
   const isMovimentos = variant === "movimentos";
-  const isStudentCard = activeCard === "student";
-
-  let data;
-  if (isMovimentos) data = movimentosData;
-  else if (isRecentes) data = isStudentCard ? studentRecentesData : creditRecentesData;
-  else data = isStudentCard ? studentPendenciasData : creditPendenciasData;
+  const data = items || [];
 
   const sectionTitle = title || (isMovimentos ? "Movimentos" : isRecentes ? "Recentes" : "Pendências");
   const icon = isRecentes || isMovimentos ? Money : Pause;
@@ -195,6 +171,9 @@ export default function RecentSection({
       )}
 
       <TransactionList $isMovimentos={isMovimentos}>
+        {data.length === 0 && (
+          <TransactionDate style={{ padding: 16 }}>Ainda não há dados</TransactionDate>
+        )}
         {data.map((item, index) => (
           <TransactionItem key={index}>
             <TransactionIcon>

@@ -14,6 +14,7 @@ import { studentService } from "@/services/studentService";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ExamFeesBanner from "@/components/ExamFeesBanner";
 import { useExamFeeGate } from "@/contexts/ExamFeeGateContext";
+import { parseLocalDate } from "@/utils/dates";
 
 // Tipos principais usados nas actividades
 interface Activity {
@@ -181,8 +182,13 @@ export default function Home() {
   const activeEnrollment = enrollments.find((e) => e.status === "approved");
 
   // Converter propinas/fees para o formato esperado
-  const propinasData = fees.map((fee) => {
-    const dueDate = new Date(fee.due_date);
+  const propinasData = [...fees]
+    .sort(
+      (a, b) =>
+        parseLocalDate(a.due_date).getTime() - parseLocalDate(b.due_date).getTime()
+    )
+    .map((fee) => {
+    const dueDate = parseLocalDate(fee.due_date);
     const now = new Date();
     const isOverdue = fee.status === 'overdue' || (dueDate < now && fee.status === 'pending');
     
@@ -195,7 +201,7 @@ export default function Home() {
 
     return {
       id: fee.id,
-      title: fee.description || `Propina - ${new Date(fee.due_date).toLocaleDateString('pt-PT', { month: 'long' })}`,
+      title: fee.description || `Propina - ${dueDate.toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' })}`,
       status,
       amount: `${fee.amount.toLocaleString('pt-PT')} kz`,
       fee: fee, // Manter referência ao objeto original
@@ -250,11 +256,11 @@ export default function Home() {
       .filter((fee) => fee.status === 'pending' || fee.status === 'overdue')
       .sort(
         (a, b) =>
-          new Date(a.due_date).getTime() - new Date(b.due_date).getTime()
+          parseLocalDate(a.due_date).getTime() - parseLocalDate(b.due_date).getTime()
       )
       .slice(0, 5)
       .map((fee) => {
-        const dueDate = new Date(fee.due_date);
+        const dueDate = parseLocalDate(fee.due_date);
         const isOverdue = fee.status === 'overdue' || (dueDate < new Date() && fee.status === 'pending');
         
         return {
@@ -380,12 +386,21 @@ export default function Home() {
   };
 
   // ---- Handlers de clique ----
-  const handlePropinasClick = (propina: any) => {
-    console.log("Propina clicked:", propina);
+  const handlePropinasClick = (propina: { id: string; status: string }) => {
+    if (propina.status === "pagamento_adiado") return;
+    router.push(`/estudante/cartoes/credito/pagamentos/${propina.id}`);
   };
 
   const handleActivityClick = (activity: Activity) => {
-    router.push(`/candidato/cartoes/credito/${activity.id}`);
+    if (activeCardType === "credit") {
+      router.push(`/estudante/cartoes/credito/pagamentos/${activity.id}`);
+      return;
+    }
+    if (activity.icon === "grade") {
+      router.push("/estudante/cartoes/estudante/curso/notas");
+      return;
+    }
+    router.push("/estudante/cartoes/estudante/curso/calendarios");
   };
 
   const handleSectionChange = (section: MenuSection) => {
@@ -406,12 +421,12 @@ export default function Home() {
 
   const studentCardData = user
     ? {
-        studentName: user.name,
+        studentName: user.name || "Estudante",
         course: activeEnrollment?.course?.name || "Sem curso",
-        studentNumber: user.student_id || "",
-        class: activeEnrollment?.course?.name || "",
-        institutionName: activeEnrollment?.course?.institution_id || "",
-        institutionFullName: activeEnrollment?.course?.name || "",
+        studentNumber: user.student_id || "—",
+        class: "—",
+        institutionName: "Escola",
+        institutionFullName: activeEnrollment?.course?.name || "Sem instituição",
         institutionColor: "#6C5F8D",
       }
     : null;

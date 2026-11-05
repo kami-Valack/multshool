@@ -325,7 +325,7 @@ export default function Calendarios() {
 
             {formattedEvents.length === 0 ? (
               <EmptyMessage>
-                Nenhum evento agendado no momento.
+                Ainda não há dados
               </EmptyMessage>
             ) : (
               <CalendarList>

@@ -80,15 +80,15 @@ export default function ExameAcessoPage() {
         <Header variant="with-back" onBack={handleBackClick} />
 
         <HeroCard
-          title="Curso Preparatório ISPTEC IV"
-          subtitle="O teu sucesso no exame de acesso e na tua jornada académica."
+          title="Curso preparatório"
+          subtitle="Ainda não há dados"
           imageUrl={Bg.src}
         />
         
         <DescriptionCard>
           <DescriptionTitle>Descrição</DescriptionTitle>
           <DescriptionText>
-            4a edição do curso preparatório ao exame de acesso às faculdades do ISPTEC para o ano lectivo 2025/2026.
+            Ainda não há dados
           </DescriptionText>
         </DescriptionCard>
 

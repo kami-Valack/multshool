@@ -208,7 +208,7 @@ export default function PaymentQRScreen() {
     null
   );
 
-  const initialBalance = 50000; // 50.000 Kz
+  const initialBalance = 0;
 
   // ✅ PARSER ROBUSTO - REMOVE TUDO QUE NÃO É DÍGITO
   function parseAmountToNumber(value: string): number {

@@ -2,9 +2,6 @@
 import React from "react";
 import styled from "styled-components";
 import UserAvatar from "@/components/ui/Avatar";
-import { mockStudents } from "@/mocks/student";
-import { mockEnrollments } from "@/mocks/inscricao";
-import { mockExamResults } from "@/mocks/exam";
 import { formatDate } from "@/utils/formatDate";
 import { Header } from "@/components/candidato/Header";
 import { useRouter } from "next/navigation";
@@ -112,87 +109,15 @@ const AccessButton = styled.div`
 
 // Component
 const ExamResultScreen: React.FC = () => {
-  const student = mockStudents.find((s) => s.id === "stu-1");
-  const inscricao = mockEnrollments.find((e) => e.studentId === student?.id);
-  const examResult = mockExamResults.find((ex) => ex.studentId === student?.id);
   const router = useRouter();
   const handleBackClick = () => {
     router.back();
   };
 
-  const handleClickDashboard = () => {
-    router.push("/estudante/dashboard");
-  };
-
-  const handleClickDocuments = () => {
-    router.push("documentos");
-  };
-
-  if (!student || !inscricao || !examResult) {
-    return <p>Dados do estudante não encontrados</p>;
-  }
   return (
     <Container>
       <Header variant="with-back" onBack={handleBackClick} />
-
-      <ProfileCard>
-        <ProfileImage>
-          <UserAvatar size={80} name={student.fullName} />
-        </ProfileImage>
-        <StudentName>{student.fullName}</StudentName>
-        <StatusContainer>
-          <StatusLabel>Estado:</StatusLabel>
-          <StatusValue
-            style={{ color: examResult.approved ? "#10b981" : "#ef4444" }}
-          >
-            {examResult.approved ? "Aprovado" : "Reprovado"}
-          </StatusValue>
-        </StatusContainer>
-      </ProfileCard>
-
-      <DetailsCard>
-        <DetailRow>
-          <DetailLabel>Data</DetailLabel>
-          <DetailValue>{formatDate(examResult.date)}</DetailValue>
-        </DetailRow>
-        <DetailRow>
-          <DetailLabel>Instituição</DetailLabel>
-          <DetailValue>{inscricao.institution}</DetailValue>
-        </DetailRow>
-        <DetailRow>
-          <DetailLabel>Faculdade</DetailLabel>
-          <DetailValue>{inscricao.faculdade}</DetailValue>
-        </DetailRow>
-        <DetailRow>
-          <DetailLabel>Curso</DetailLabel>
-          <DetailValue>{inscricao.course}</DetailValue>
-        </DetailRow>
-        <DetailRow>
-          <DetailLabel>Período</DetailLabel>
-          <DetailValue>{inscricao.period}</DetailValue>
-        </DetailRow>
-        <DetailRow>
-          <DetailLabel>Nota</DetailLabel>
-          <DetailValue isGrade>{examResult.notaexame} Valores</DetailValue>
-        </DetailRow>
-      </DetailsCard>
-
-      <AccessButton>
-        <Button
-          bgColor="background"
-          textColor="#6C5F8D"
-          text="Os meus documentos"
-          hasBorder={true}
-          onClick={handleClickDocuments}
-        />
-        <Button
-          bgColor="#6C5F8D"
-          textColor="#FFFFFF"
-          text="Aceder ao dashboard"
-          hasBorder={true}
-          onClick={handleClickDashboard}
-        />
-      </AccessButton>
+      <p style={{ padding: 24 }}>Ainda não há dados</p>
     </Container>
   );
 };

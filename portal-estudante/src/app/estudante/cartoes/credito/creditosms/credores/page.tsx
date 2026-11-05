@@ -417,29 +417,7 @@ const OkButton = styled.button`
 `;
 
 // Dados mockados
-const credoresMock: Credor[] = [
-  {
-    id: "1",
-    nome: "Banco Sol",
-    valorMaximo: "AKZ 20.000",
-    logo: "https://www.bancosol.ao/hubfs/Novo%20Projeto%20(21).jpg",
-    cor: "#FFE8E8",
-  },
-  {
-    id: "2",
-    nome: "BAI",
-    valorMaximo: "AKZ 50.000",
-    logo: "https://www.scoe.co/wp-content/uploads/2017/02/BAI.png",
-    cor: "#E8F0FF",
-  },
-  {
-    id: "3",
-    nome: "Atlântico",
-    valorMaximo: "AKZ 35.500",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8TFVY9dSJv4PPdu8e81W1YLIcpO4PKvcXnA&s",
-    cor: "#E8FFF0",
-  },
-];
+const credoresMock: Credor[] = [];
 
 // Dados mockados
 const getCredorDetails = (credorId: string, userName: string = "Estudante", studentId: string = "") => {

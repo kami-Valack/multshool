@@ -176,17 +176,17 @@ interface CandidateData {
 export default function CandidateDetailsScreen() {
   // Dados mockados - substituir pela chamada da API
   const candidateData: CandidateData = {
-    name: "Nome indefinido",
-    course: "Curso selecionado | Faculdade Faculdade",
-    profileImage: undefined, // Substitua por URL da imagem se disponível
+    name: "Ainda não há dados",
+    course: "Sem curso",
+    profileImage: undefined,
     examDetails: {
-      date: "03 de Agosto de 2025",
-      institution: "ISPTEC",
-      faculty: "Engenharia e Tecnologia",
-      room: "BA22",
-      period: "Manhã",
-      schedule: "08h:00 às 10h:30",
-      phone: "999 999 999",
+      date: "—",
+      institution: "—",
+      faculty: "—",
+      room: "—",
+      period: "—",
+      schedule: "—",
+      phone: "—",
     },
   };
 

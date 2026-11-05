@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
 import BackgroundVectors from "@/components/Bg_vectors";
-import Image from "next/image";
-import { mockStudents } from "@/mocks/student";
 import ConfirmacaoCard from "@/components/ConfirmacaoCard";
+import { useAuth } from "@/contexts/AuthContext";
+import { Enrollment, studentService } from "@/services/studentService";
 import RecentSection from "@/components/ui/RecentSection";
 import Button from "@/components/ui/Button";
 import { AlertModal } from "@/components/AlertModal";
@@ -84,9 +84,30 @@ const ButtonGroup = styled.div`
 `;
 
 export default function Instituicao() {
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
-  const student = mockStudents.find((s) => s.id === "stu-1");
+  const [enrollment, setEnrollment] = useState<Enrollment | null>(null);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const displayName = user?.name?.trim() || "Estudante";
+
+  useEffect(() => {
+    studentService
+      .getEnrollments()
+      .then((list) =>
+        setEnrollment(list.find((e) => e.status === "approved") || list[0] || null)
+      )
+      .catch(() => setEnrollment(null));
+  }, []);
+
+  const cardInfo = {
+    studentName: displayName,
+    courseName: enrollment?.course?.name,
+    studentNumber: user?.student_id,
+    year: enrollment?.created_at
+      ? String(new Date(enrollment.created_at).getFullYear())
+      : undefined,
+    status: enrollment?.status || "sem matrícula",
+  };
   const router = useRouter();
 
   const handleConfirmAlert = () => {
@@ -95,34 +116,6 @@ export default function Instituicao() {
   const handleCloseAlert = () => {
     setIsAlertOpen(false);
   };
-
-  // Dados específicos para a confirmação de pagamento (TO REMOVE/USAR MOCKS)
-  const confirmacaoData = [
-    {
-      title: "Folhas de prova",
-      date: "05.07.2025",
-      amount: "12.600,50 kz",
-      isPositive: false,
-    },
-    {
-      title: "Cartão de estudante",
-      date: "06.06.2025",
-      amount: "54.600,50 kz",
-      isPositive: false,
-    },
-    {
-      title: "Propina Outubro",
-      date: "06.06.2025",
-      amount: "10.900,50 kz",
-      isPositive: true,
-    },
-    {
-      title: "Confirmação",
-      date: "01.05.2025",
-      amount: "54.600,50 kz",
-      isPositive: true,
-    },
-  ];
 
   const handleContinue = () => {
     if (currentStep === 1) {
@@ -157,18 +150,7 @@ export default function Instituicao() {
             // Etapa 1: Dados do estudante e seleções
             <>
             {/* CRIAR COMPONENTE - REDUNDANTE!!! */}
-              <Photo>
-                {student?.profilePhoto && (
-                  <Image
-                    src={student.profilePhoto}
-                    alt={student.fullName}
-                    fill
-                    style={{ objectFit: "cover", borderRadius: "5px" }}
-                  />
-                )}
-              </Photo>
-
-              <ConfirmacaoCard />
+              <ConfirmacaoCard info={cardInfo} />
 
               <ButtonGroup>
                 <Button
@@ -182,19 +164,10 @@ export default function Instituicao() {
           ) : (
             // Etapa 2: Resumo de pagamentos e confirmação final
             <>
-              <Photo>
-                {student?.profilePhoto && (
-                  <Image
-                    src={student.profilePhoto}
-                    alt={student.fullName}
-                    fill
-                    style={{ objectFit: "cover", borderRadius: "5px" }}
-                  />
-                )}
-              </Photo>
-
-              <StudentName>{student?.fullName}</StudentName>
-              <StudentInfo>Confirmação Ano Lectivo 2025/26</StudentInfo>
+              <StudentName>{displayName}</StudentName>
+              <StudentInfo>
+                {enrollment?.course?.name || "Sem curso"}
+              </StudentInfo>
 
               <RecentSection
                 variant="movimentos"
@@ -204,7 +177,7 @@ export default function Instituicao() {
 
               <Total>
                 Total:
-                <TotalValue>35.000,00 kz</TotalValue>
+                <TotalValue>—</TotalValue>
               </Total>
 
               <ButtonGroup>
@@ -225,7 +198,7 @@ export default function Instituicao() {
           <AlertModal
             isOpen={isAlertOpen}
             title="Confirmação feita com sucesso!"
-            message="Bem-vindo ao ano lectivo 2025/26"
+            message="A confirmação foi registada neste dispositivo."
             onClose={handleCloseAlert}
             onConfirm={() => {
               handleCloseAlert();

@@ -322,7 +322,7 @@ export default function HorariosPage() {
             </div>
           ) : scheduleData.length === 0 ? (
             <div style={{ padding: '20px', textAlign: 'center', color: '#7b7b8e' }}>
-              Nenhum horário disponível no momento.
+              Ainda não há dados
             </div>
           ) : (
             scheduleData.map((daySchedule) => (

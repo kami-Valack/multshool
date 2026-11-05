@@ -93,7 +93,7 @@ const Texto = styled.div`
 `;
 
 export default function Preview() {
-  const { user, refreshUser } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -134,8 +134,13 @@ export default function Preview() {
     return null;
   }
 
-  const activeEnrollment = enrollments.find((e) => e.status === "approved");
+  const activeEnrollment =
+    enrollments.find((e) => e.status === "approved") || enrollments[0];
   const courseName = activeEnrollment?.course?.name || "Sem curso";
+  const year = activeEnrollment?.created_at
+    ? String(new Date(activeEnrollment.created_at).getFullYear())
+    : undefined;
+  const displayName = user.name?.trim() || "Estudante";
 
   return (
     <ProtectedRoute>
@@ -161,17 +166,26 @@ export default function Preview() {
                 fontWeight: "bold",
               }}
             >
-              {user.name.charAt(0).toUpperCase()}
+              {displayName.charAt(0).toUpperCase()}
             </div>
           </Photo>
-          <Nome>{user.name}</Nome>
+          <Nome>{displayName}</Nome>
           <Class>
             {user.student_id && `Nº ${user.student_id}`} - {courseName}
           </Class>
         </StudentInfo>
 
         <Card>
-          <ConfirmacaoCardCompacto variant="white" />
+          <ConfirmacaoCardCompacto
+            variant="white"
+            info={{
+              studentName: displayName,
+              courseName,
+              studentNumber: user.student_id,
+              year,
+              status: activeEnrollment?.status || "sem matrícula",
+            }}
+          />
           {/* QR Code abaixo do card */}
           <QRContainer>
             <QRCode

@@ -66,43 +66,10 @@ export default function MateriaisPreparatorioPage() {
 
   // Dados mock - em produção virão da API
   const mockData: MateriaisData = {
-    courseName: "Exames passados (2019 - 2024)",
-    description: "O teu sucesso no exame de acesso e na tua jornada académica.",
+    courseName: "Ainda não há dados",
+    description: "Ainda não há dados",
     availableCount: 4,
-    materials: [
-      {
-        id: "1",
-        title: "ENGTECA - Exame de acesso 2024",
-        subject: "2024",
-        icon: "book",
-        fileUrl: "/materials/matematica-1.pdf",
-        createdAt: "2025-09-01T10:00:00Z",
-      },
-      {
-        id: "2",
-        title: "ENGTECA - Exame de acesso 2023",
-        subject: "2023",
-        icon: "science",
-        fileUrl: "/materials/fisica-geral.pdf",
-        createdAt: "2025-09-07T10:00:00Z",
-      },
-      {
-        id: "3",
-        title: "ENGTECA - Exame de acesso 2022",
-        subject: "Programação",
-        icon: "code",
-        fileUrl: "/materials/algoritmo.pdf",
-        createdAt: "2025-08-20T10:00:00Z",
-      },
-      {
-        id: "4",
-        title: "ENGTECA - Exame de acesso 2021",
-        subject: "Matemática",
-        icon: "book",
-        fileUrl: "/materials/matematica-2.pdf",
-        createdAt: "2025-09-01T10:00:00Z",
-      },
-    ],
+    materials: [],
   };
 
   // Função para ordenar materiais

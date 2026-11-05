@@ -6,42 +6,9 @@ import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
 import UserAvatar from "@/components/ui/Avatar";
 import RecentSection from "@/components/ui/RecentSection";
-import { mockStudents } from "@/mocks/student";
-import { usePDFGenerator, Transaction } from "@/services/pdfService";
-
-// Dados dos movimentos - idealmente viriam de uma API ou context
-const movimentosData: Transaction[] = [
-  {
-    title: "Propina Julho",
-    date: "05.07.2024",
-    amount: "-54.600,50 kz",
-    isPositive: false,
-  },
-  {
-    title: "Propina Junho",
-    date: "06.06.2024",
-    amount: "-54.600,50 kz",
-    isPositive: false,
-  },
-  {
-    title: "Bônus plataforma",
-    date: "06.06.2024",
-    amount: "+10.900,50 kz",
-    isPositive: true,
-  },
-  {
-    title: "Pag. Estágio",
-    date: "06.06.2024",
-    amount: "+45.600,50 kz",
-    isPositive: true,
-  },
-  {
-    title: "Propina Maio",
-    date: "01.05.2024",
-    amount: "-54.600,50 kz",
-    isPositive: false,
-  },
-];
+import { usePDFGenerator } from "@/services/pdfService";
+import { useAuth } from "@/contexts/AuthContext";
+import { useMovimentos } from "@/hooks/useMovimentos";
 
 // Styled Components
 const Container = styled.div`
@@ -163,11 +130,9 @@ export default function Movimentos() {
   } | null>(null);
 
   const { generateExtract, downloadTextOnly } = usePDFGenerator();
-  const student = mockStudents.find((s) => s.id === "stu-1");
-
-  if (!student) {
-    return <p>Dados do estudante não encontrados</p>;
-  }
+  const { user } = useAuth();
+  const { movimentos } = useMovimentos();
+  const displayName = user?.name?.trim() || "Estudante";
 
   const handleGenerateExtract = async () => {
     if (isGenerating) return;
@@ -180,10 +145,10 @@ export default function Movimentos() {
 
       const result = await generateExtract(
         {
-          fullName: student.fullName,
+          fullName: displayName,
           accountType: "Conta Multischool",
         },
-        movimentosData
+        movimentos
       );
 
       if (result.success) {
@@ -198,10 +163,10 @@ export default function Movimentos() {
         // Tentar método alternativo
         const textResult = downloadTextOnly(
           {
-            fullName: student.fullName,
+            fullName: displayName,
             accountType: "Conta Multischool",
           },
-          movimentosData
+          movimentos
         );
 
         if (textResult.success) {
@@ -240,10 +205,10 @@ export default function Movimentos() {
 
         <Info>
           <Avatar>
-            <UserAvatar size={45} name={student?.fullName} />
+            <UserAvatar size={45} name={displayName} />
           </Avatar>
           <Texts>
-            <Text1>{student.fullName}</Text1>
+            <Text1>{displayName}</Text1>
             <Text2>Conta Multischool</Text2>
           </Texts>
           <ExtractButton
@@ -256,7 +221,7 @@ export default function Movimentos() {
           </ExtractButton>
         </Info>
 
-        <RecentSection variant="movimentos" />
+        <RecentSection variant="movimentos" items={movimentos} />
         <BottomMenu />
       </Container>
 

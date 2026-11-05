@@ -66,51 +66,10 @@ export default function MateriaisPreparatorioPage() {
 
   // Dados mock - em produção virão da API
   const mockData: MateriaisData = {
-    courseName: "Materiais - Preparatório",
-    description: "O teu sucesso no exame de acesso e na tua jornada académica.",
-    availableCount: 5,
-    materials: [
-      {
-        id: "1",
-        title: "Matemática",
-        subject: "Matemática",
-        icon: "book",
-        fileUrl: "/materials/matematica-1.pdf",
-        createdAt: "2025-09-01T10:00:00Z",
-      },
-      {
-        id: "2",
-        title: "Física Geral",
-        subject: "Física",
-        icon: "science",
-        fileUrl: "/materials/fisica-geral.pdf",
-        createdAt: "2025-09-07T10:00:00Z",
-      },
-      {
-        id: "3",
-        title: "Algoritmo",
-        subject: "Programação",
-        icon: "code",
-        fileUrl: "/materials/algoritmo.pdf",
-        createdAt: "2025-08-20T10:00:00Z",
-      },
-      {
-        id: "4",
-        title: "Matemática Avançada",
-        subject: "Matemática",
-        icon: "book",
-        fileUrl: "/materials/matematica-2.pdf",
-        createdAt: "2025-09-01T10:00:00Z",
-      },
-      {
-        id: "5",
-        title: "Cálculo I",
-        subject: "Matemática",
-        icon: "book",
-        fileUrl: "/materials/matematica-3.pdf",
-         createdAt: "2025-09-05T10:00:00Z",
-      },
-    ],
+    courseName: "Ainda não há dados",
+    description: "Ainda não há dados",
+    availableCount: 0,
+    materials: [],
   };
 
   // Função para ordenar materiais

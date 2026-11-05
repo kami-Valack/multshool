@@ -92,89 +92,9 @@ const serviceConfigs: Record<ServiceType, ServiceConfig> = {
 
 // Dados mockados por tipo
 const credoresMockData: Record<ServiceType, Credor[]> = {
-  bolsas: [
-    {
-      id: "1",
-      nome: "Kwik invest: Bolsa est...",
-      valorMaximo: "10/10/24",
-      logo: "https://via.placeholder.com/60/5B4B7C/FFFFFF?text=K",
-      cor: "#5B4B7C",
-    },
-    {
-      id: "2",
-      nome: "Avança na Vida",
-      valorMaximo: "12/09/24",
-      logo: "https://via.placeholder.com/60/FF6B35/FFFFFF?text=A",
-      cor: "#FF6B35",
-    },
-    {
-      id: "3",
-      nome: "Yango investmento",
-      valorMaximo: "10/09/24",
-      logo: "https://via.placeholder.com/60/E63946/FFFFFF?text=Y",
-      cor: "#E63946",
-    },
-    {
-      id: "4",
-      nome: "Bolsa de Valor Angola",
-      valorMaximo: "10/09/24",
-      logo: "https://via.placeholder.com/60/0066CC/FFFFFF?text=BV",
-      cor: "#0066CC",
-    },
-    {
-      id: "5",
-      nome: "Negócio Fácil",
-      valorMaximo: "05/09/24",
-      logo: "https://via.placeholder.com/60/FF9900/FFFFFF?text=NF",
-      cor: "#FF9900",
-    },
-  ],
-  creditos: [
-    {
-      id: "1",
-      nome: "Banco Sol",
-      valorMaximo: "AKZ 20.000",
-      logo: "https://www.bancosol.ao/hubfs/Novo%20Projeto%20(21).jpg",
-      cor: "#FFE8E8",
-    },
-    {
-      id: "2",
-      nome: "BAI",
-      valorMaximo: "AKZ 50.000",
-      logo: "https://www.scoe.co/wp-content/uploads/2017/02/BAI.png",
-      cor: "#E8F0FF",
-    },
-    {
-      id: "3",
-      nome: "Atlântico",
-      valorMaximo: "AKZ 35.500",
-      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8TFVY9dSJv4PPdu8e81W1YLIcpO4PKvcXnA&s",
-      cor: "#E8FFF0",
-    },
-  ],
-  estagios: [
-    {
-      id: "1",
-      nome: "Unitel S.A - Dep. de Inovação",
-      valorMaximo: "10/11/24",
-      logo: "https://via.placeholder.com/60/00A859/FFFFFF?text=U",
-      cor: "#E8FFF0",
-    },
-    {
-      id: "2",
-      nome: "Microsoft Angola",
-      valorMaximo: "15/10/24",
-      logo: "https://via.placeholder.com/60/0078D4/FFFFFF?text=MS",
-      cor: "#E8F4FF",
-    },
-    {
-      id: "3",
-      nome: "Banco BAI",
-      valorMaximo: "20/09/24",
-      logo: "https://via.placeholder.com/60/003D7A/FFFFFF?text=BAI",
-      cor: "#E8F0FF",
-    },
-  ],
+  bolsas: [],
+  creditos: [],
+  estagios: [],
 };
 
 // Dados mockados de detalhes
@@ -562,7 +482,9 @@ export default function PagamentoDetalhe() {
                 </ListItem>
               ))
             ) : (
-              <NoResults>Nenhum resultado encontrado</NoResults>
+              <NoResults>
+                {searchQuery ? "Nenhum resultado encontrado" : "Ainda não há dados"}
+              </NoResults>
             )}
           </ListContainer>
 

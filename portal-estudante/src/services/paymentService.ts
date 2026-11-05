@@ -44,6 +44,18 @@ export type PaymentStatusResponse = {
 };
 
 class PaymentService {
+  async listPaymentIntents(): Promise<PaymentIntent[]> {
+    const response = await billingApiClient.get<
+      ApiResponse & { payment_intents: PaymentIntent[] }
+    >('/payment-intents');
+
+    if (response.status !== 'success') {
+      throw new Error(response.message || 'Erro ao listar pagamentos');
+    }
+
+    return response.payment_intents || [];
+  }
+
   async createPaymentIntent(input: CreatePaymentIntentInput): Promise<PaymentIntent> {
     const response = await billingApiClient.post<
       ApiResponse & { payment_intent: PaymentIntent }

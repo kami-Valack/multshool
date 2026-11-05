@@ -124,6 +124,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
     Route::apiResource('exam-registrations', \App\Http\Controllers\ExamRegistrationController::class)->only(['index', 'store']);
 
     // Propinas/Fees
+    Route::get('/grades', [\App\Http\Controllers\StudentGradeController::class, 'index']);
     Route::get('/fees', [\App\Http\Controllers\FeeController::class, 'index']);
     Route::get('/fees/{id}', [\App\Http\Controllers\FeeController::class, 'show']);
 

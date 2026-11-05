@@ -423,61 +423,9 @@ const getTimeAgo = (dateString: string) => {
 };
 
 // Data
-const courses: Course[] = [
-  {
-    id: "1",
-    name: "Engenharias e Tecnologias",
-    subtitle: "ISPTEC - 2025",
-    topics: 12,
-    views: 50,
-    description:
-      "Tópicos oficiais para o exame de acesso a Faculdade de Engenharias e Tecnologias do ISPTEC.",
-    createdAt: "2024-08-31",
-    imageUrl: "/assets/backgrounds/candidato/bg_1.png",
-  },
-  {
-    id: "2",
-    name: "Economia",
-    subtitle: "ISPTEC - 2025",
-    topics: 15,
-    views: 150,
-    description:
-      "Tópicos oficiais para o exame de acesso a Faculdade de Economia do ISPTEC.",
-    createdAt: "2024-08-25",
-    imageUrl: "/assets/backgrounds/candidato/bg_1.png",
-  },
-  {
-    id: "3",
-    name: "Geociências",
-    subtitle: "ISPTEC - 2025",
-    topics: 10,
-    views: 90,
-    description:
-      "Tópicos oficiais para o exame de acesso a Faculdade de Geociências do ISPTEC.",
-    createdAt: "2024-08-20",
-    imageUrl: "/assets/backgrounds/candidato/bg_1.png",
-  },
-];
+const courses: Course[] = [];
 
-const subjects: Subject[] = [
-  {
-    name: "Matemática",
-    topics: ["Funções", "Derivadas", "Integrais", "Limites e Continuidade"],
-  },
-  {
-    name: "Física Geral",
-    topics: [
-      "Movimento Rectilíneo Uniforme",
-      "Movimento Rectilíneo Uniformemente Variado",
-      "Leis de Newton",
-      "Lançamentos",
-    ],
-  },
-  {
-    name: "Algoritmos",
-    topics: ["Estruturas de repetição", "Variáveis", "Matriz"],
-  },
-];
+const subjects: Subject[] = [];
 
 // Components
 const CourseCardComponent: React.FC<{

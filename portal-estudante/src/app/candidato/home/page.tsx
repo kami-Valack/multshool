@@ -80,32 +80,7 @@ export default function ExameAcessoPage() {
 
   // Dados mock - em produção virão da API
   const mockData: ExameAcessoData = {
-    activities: [
-      {
-        id: "1",
-        title: "Exame de Acesso",
-        institution: "ISPTEC",
-        status: "pendente",
-        date: "02/08",
-        icon: "exam",
-      },
-      {
-        id: "2",
-        title: "Curso Preparatório",
-        institution: "ISPTEC",
-        status: "em_curso",
-        date: "30/07",
-        icon: "course",
-      },
-      {
-        id: "3",
-        title: "Curso Preparatório",
-        institution: "ISPTEC",
-        status: "em_curso",
-        date: "30/07",
-        icon: "course",
-      },
-    ],
+    activities: [],
   };
 
   const handleBackClick = () => {

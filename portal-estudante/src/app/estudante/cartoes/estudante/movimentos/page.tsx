@@ -11,38 +11,7 @@ import { Transaction } from "@/services/pdfService";
 // ======================
 //  DADOS MOCKADOS
 // ======================
-const movimentosData: Transaction[] = [
-  {
-    title: "Biblioteca — acesso",
-    date: "Há 12 min",
-    amount: "",
-    isPositive: true,
-  },
-  {
-    title: "Cantina — almoço",
-    date: "Hoje às 12:40",
-    amount: "-1.250 kz",
-    isPositive: false,
-  },
-  {
-    title: "Entrada no Campus",
-    date: "Hoje às 07:58",
-    amount: "",
-    isPositive: true,
-  },
-  {
-    title: "Laboratório de Informática — check-in",
-    date: "Ontem às 16:32",
-    amount: "",
-    isPositive: true,
-  },
-  {
-    title: "Biblioteca — devolução de livro",
-    date: "Ontem às 15:12",
-    amount: "",
-    isPositive: true,
-  },
-];
+const movimentosData: Transaction[] = [];
 
 // ======================
 //  COMPONENTE RECENTSECTION AQUI MESMO
@@ -98,13 +67,17 @@ export default function Movimentos() {
           </Avatar>
 
           <Texts>
-            <Text1>{user.name}</Text1>
+            <Text1>{user.name || "Estudante"}</Text1>
             <Text2>Conta Multischool</Text2>
           </Texts>
         </Info>
 
         {/* ✅ AGORA O COMPONENTE ESTÁ AQUI, SEM ERRO, SEM IMPORTAR NADA */}
-        <RecentSection data={movimentosData} />
+        {movimentosData.length === 0 ? (
+          <p style={{ padding: 24 }}>Ainda não há dados</p>
+        ) : (
+          <RecentSection data={movimentosData} />
+        )}
 
         <BottomMenu />
       </Container>
