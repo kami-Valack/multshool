@@ -13,13 +13,13 @@ class StudentGradeController extends Controller
     {
         $student = $request->user();
         $grades = Grade::where('student_id', $student->id)
-            ->orderBy('year', 'desc')
-            ->orderBy('semester', 'desc')
+            ->orderByDesc('updated_at')
+            ->orderByDesc('year')
             ->get();
 
         return response()->json([
             'status' => 'success',
-            'grades' => $grades,
+            'grades' => $grades->map(fn (Grade $grade) => $this->serialize($grade))->values(),
         ]);
     }
 
@@ -33,8 +33,8 @@ class StudentGradeController extends Controller
             ->firstOrFail();
         
         $grades = Grade::where('student_id', $student->id)
-            ->orderBy('year', 'desc')
-            ->orderBy('semester', 'desc')
+            ->orderByDesc('updated_at')
+            ->orderByDesc('year')
             ->get();
         
         return response()->json([
@@ -45,8 +45,26 @@ class StudentGradeController extends Controller
                 'name' => $student->name,
                 'email' => $student->email,
             ],
-            'grades' => $grades,
+            'grades' => $grades->map(fn (Grade $grade) => $this->serialize($grade))->values(),
         ]);
+    }
+
+    private function serialize(Grade $grade): array
+    {
+        $subject = $grade->course_name;
+
+        return [
+            'id' => $grade->id,
+            'student_id' => $grade->student_id,
+            'course_id' => $grade->course_id,
+            'course_name' => $grade->course_name,
+            'subject' => $subject,
+            'grade' => (float) $grade->grade,
+            'year' => (int) $grade->year,
+            'semester' => $grade->semester,
+            'created_at' => $grade->created_at,
+            'updated_at' => $grade->updated_at,
+        ];
     }
 }
 

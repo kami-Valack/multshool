@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import BottomMenu from "@/components/ui/BottomMenu";
 import Header from "@/components/ui/HeaderGeneral";
 import PaymentCard from "@/components/ui/CardsLista";
 import { SimpleCard } from "@/components/ActivityCard";
 import { useRouter } from "next/navigation";
+import { studentService, type Grade } from "@/services/studentService";
 
 // Styled Components
 const Container = styled.div`
@@ -58,33 +60,11 @@ const Pendentes = styled.div`
 
 export default function Curso() {
   const router = useRouter();
+  const [grades, setGrades] = useState<Grade[]>([]);
 
-  // ---- Mock de dados para testes ----
-  const propinasData = [
-    {
-      id: "1",
-      title: "Algoritmos e Lógica",
-      status: "publicada" as const,
-      amount: "7 valores",
-    },
-    {
-      id: "2",
-      title: "Matemática Discreta",
-      status: "publicada" as const,
-      amount: "16 valores",
-    },
-    {
-      id: "3",
-      title: "Fundamentos de Programação",
-      status: "publicada" as const,
-      amount: "18 valores",
-    },
-  ];
-
-  // Função de clique nas propinas
-  const handlePropinasClick = (propina: (typeof propinasData)[number]) => {
-    router.push(`curso/notas`);
-  };
+  useEffect(() => {
+    studentService.getGrades().then(setGrades).catch(() => setGrades([]));
+  }, []);
 
   return (
     <Container>
@@ -199,16 +179,22 @@ export default function Curso() {
       <Pendentes>
         <Title>Recentes</Title>
 
-        {propinasData.map((propina) => (
-          <div key={propina.id} style={{ marginBottom: "12px" }}>
-            <SimpleCard
-              title={propina.title}
-              status={propina.status}
-              amount={propina.amount}
-              onClick={() => handlePropinasClick(propina)}
-            />
-          </div>
-        ))}
+        {grades.length === 0 ? (
+          <p style={{ marginTop: 12, color: "#7b7b8e", fontSize: 14 }}>
+            Ainda não há dados
+          </p>
+        ) : (
+          grades.slice(0, 5).map((grade) => (
+            <div key={grade.id} style={{ marginBottom: "12px" }}>
+              <SimpleCard
+                title={grade.subject || grade.course_name || "Disciplina"}
+                status="publicada"
+                amount={`${grade.grade} valores`}
+                onClick={() => router.push("curso/notas")}
+              />
+            </div>
+          ))
+        )}
       </Pendentes>
 
       <BottomMenu />

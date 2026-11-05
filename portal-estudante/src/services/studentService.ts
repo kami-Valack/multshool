@@ -162,10 +162,11 @@ export interface Grade {
   id: string;
   student_id: string;
   course_id: string;
+  course_name?: string;
   subject: string;
   grade: number;
   year: number;
-  semester: number;
+  semester: number | string;
   created_at: string;
   updated_at: string;
 }
