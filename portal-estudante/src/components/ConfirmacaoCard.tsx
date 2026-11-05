@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 export type EnrollmentCardInfo = {
   studentName?: string | null;
+  institutionName?: string | null;
   courseName?: string | null;
   year?: string | null;
   studentNumber?: string | null;
@@ -71,6 +72,10 @@ export function ConfirmacaoCardCompacto({
   return (
     <CompactCardContainer variant={variant}>
       <CompactRow>
+        <CompactLabel>Instituição</CompactLabel>
+        <CompactValue>{info?.institutionName || "—"}</CompactValue>
+      </CompactRow>
+      <CompactRow>
         <CompactLabel>Curso</CompactLabel>
         <CompactValue>{info?.courseName || "Sem curso"}</CompactValue>
       </CompactRow>
@@ -99,6 +104,10 @@ export default function ConfirmacaoCard({ info }: { info?: EnrollmentCardInfo })
       <Row>
         <Label>Nome</Label>
         <Value bold>{info?.studentName || "—"}</Value>
+      </Row>
+      <Row>
+        <Label>Instituição</Label>
+        <Value bold>{info?.institutionName || "—"}</Value>
       </Row>
       <Row>
         <Label>Curso</Label>

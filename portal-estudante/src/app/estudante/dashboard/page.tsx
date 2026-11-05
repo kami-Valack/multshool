@@ -424,9 +424,9 @@ export default function Home() {
         studentName: user.name || "Estudante",
         course: activeEnrollment?.course?.name || "Sem curso",
         studentNumber: user.student_id || "—",
-        class: "—",
-        institutionName: "Escola",
-        institutionFullName: activeEnrollment?.course?.name || "Sem instituição",
+        class: activeEnrollment?.class_name || activeEnrollment?.class || "—",
+        institutionName: activeEnrollment?.course?.school?.acronym || "",
+        institutionFullName: activeEnrollment?.course?.school?.name || "",
         institutionColor: "#6C5F8D",
       }
     : null;

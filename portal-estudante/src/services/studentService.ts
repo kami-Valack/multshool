@@ -55,10 +55,20 @@ export interface Enrollment {
   status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   updated_at: string;
+  class?: string;
+  class_id?: string;
+  class_name?: string;
   course?: {
     id: string;
     name: string;
-    institution_id: string;
+    school_id?: string;
+    institution_id?: string;
+    school?: {
+      id: string;
+      name: string;
+      acronym?: string | null;
+      institution_type?: string | null;
+    } | null;
   };
   admission_exam?: {
     id: string;

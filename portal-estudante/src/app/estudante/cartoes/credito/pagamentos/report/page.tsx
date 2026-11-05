@@ -189,7 +189,11 @@ export default function FormAdiantamento() {
 
         <StudentInfo>
           <Nome>{user?.name || "Estudante"}</Nome>
-          <Class>{enrollment?.course?.name || "Sem curso"}</Class>
+          <Class>
+            {[enrollment?.course?.school?.name, enrollment?.course?.name]
+              .filter(Boolean)
+              .join(" · ") || "Sem curso"}
+          </Class>
         </StudentInfo>
 
         <FormSection>

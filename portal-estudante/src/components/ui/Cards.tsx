@@ -117,12 +117,12 @@ const Provider = styled.div`
 const StudentCardContainer = styled.div<{ $bgColor: string }>`
   background: ${(props) => props.$bgColor};
   border-radius: 16px;
-  padding: 15px 20px;
+  padding: 15px 20px 72px;
   color: white;
   margin-bottom: 20px;
   position: relative;
   overflow: hidden;
-  min-height: 175px;
+  min-height: 230px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 `;
 
@@ -435,11 +435,17 @@ export function StudentCard({ studentData }: StudentCardProps) {
       <StudentCardHeader>
         <InstitutionLogo $logo={studentData.institutionLogo}>
           {!studentData.institutionLogo &&
-            studentData.institutionName.substring(0, 2).toUpperCase()}
+            (studentData.institutionName || studentData.institutionFullName || "ES")
+              .substring(0, 2)
+              .toUpperCase()}
         </InstitutionLogo>
         <InstitutionInfo>
           <InstitutionFullName>
-            {studentData.institutionFullName} - {studentData.institutionName}
+            {studentData.institutionFullName}
+            {studentData.institutionName &&
+            studentData.institutionName !== studentData.institutionFullName
+              ? ` · ${studentData.institutionName}`
+              : ""}
           </InstitutionFullName>
         </InstitutionInfo>
       </StudentCardHeader>

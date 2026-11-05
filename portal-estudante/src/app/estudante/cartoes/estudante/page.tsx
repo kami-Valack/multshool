@@ -159,9 +159,9 @@ export default function DashboardCEstudante() {
         studentName: user.name,
         course: activeEnrollment?.course?.name || "Sem curso",
         studentNumber: user.student_id || "",
-        class: activeEnrollment?.course?.name || "",
-        institutionName: activeEnrollment?.course?.institution_id || "",
-        institutionFullName: activeEnrollment?.course?.name || "",
+        class: activeEnrollment?.class_name || activeEnrollment?.class || "—",
+        institutionName: activeEnrollment?.course?.school?.acronym || "",
+        institutionFullName: activeEnrollment?.course?.school?.name || "",
         institutionColor: "#6C5F8D",
       }
     : null;

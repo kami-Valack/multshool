@@ -101,12 +101,17 @@ export default function Preview() {
 
             <StudentInfo>
               <Nome>{displayName}</Nome>
-              <Class>{enrollment?.course?.name || "Sem curso"}</Class>
+              <Class>
+                {[enrollment?.course?.school?.name, enrollment?.course?.name]
+                  .filter(Boolean)
+                  .join(" · ") || "Sem curso"}
+              </Class>
             </StudentInfo>
             <Card>
               <ConfirmacaoCardCompacto
                 info={{
                   studentName: displayName,
+                  institutionName: enrollment?.course?.school?.name,
                   courseName: enrollment?.course?.name,
                   studentNumber: user?.student_id,
                   year: enrollment?.created_at

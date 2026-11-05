@@ -101,6 +101,7 @@ export default function Instituicao() {
 
   const cardInfo = {
     studentName: displayName,
+    institutionName: enrollment?.course?.school?.name,
     courseName: enrollment?.course?.name,
     studentNumber: user?.student_id,
     year: enrollment?.created_at
@@ -166,7 +167,9 @@ export default function Instituicao() {
             <>
               <StudentName>{displayName}</StudentName>
               <StudentInfo>
-                {enrollment?.course?.name || "Sem curso"}
+                {[enrollment?.course?.school?.name, enrollment?.course?.name]
+                  .filter(Boolean)
+                  .join(" · ") || "Sem curso"}
               </StudentInfo>
 
               <RecentSection

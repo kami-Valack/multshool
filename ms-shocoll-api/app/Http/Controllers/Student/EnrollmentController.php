@@ -31,7 +31,7 @@ class EnrollmentController extends Controller
         }
 
         $query = Enrollment::where('student_id', $request->student_id)
-            ->with(['course', 'admissionExam']);
+            ->with(['course.school', 'admissionExam']);
 
         if ($request->has('status')) {
             $query->where('status', $request->status);
@@ -47,6 +47,18 @@ class EnrollmentController extends Controller
                 ->first();
             
             $enrollmentData = $enrollment->toArray();
+
+            if ($enrollment->course) {
+                $school = $enrollment->course->school;
+                $enrollmentData['course']['school'] = $school ? [
+                    'id' => $school->id,
+                    'name' => $school->name,
+                    'acronym' => $school->acronym,
+                    'institution_type' => $school->institution_type,
+                ] : null;
+                $enrollmentData['course']['institution_id'] = $school?->id
+                    ?? $enrollment->course->school_id;
+            }
             
             if ($classStudent && $classStudent->class) {
                 $enrollmentData['class_id'] = $classStudent->class_id;

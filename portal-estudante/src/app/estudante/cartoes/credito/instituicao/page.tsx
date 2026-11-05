@@ -89,7 +89,7 @@ const Row = styled.div`
 `;
 
 export default function Instituicao() {
-  const [name, setName] = useState("Sem instituição");
+  const [name, setName] = useState("");
   const [detail, setDetail] = useState("");
 
   useEffect(() => {
@@ -98,11 +98,23 @@ export default function Instituicao() {
       .then(async (enrollments) => {
         const active =
           enrollments.find((e) => e.status === "approved") || enrollments[0];
-        const institutionId = active?.course?.institution_id;
-        if (!institutionId) return;
+        const school = active?.course?.school;
+        const courseName = active?.course?.name || "";
+        if (school?.name) {
+          setName(school.name);
+          setDetail(courseName);
+          return;
+        }
+        const institutionId =
+          active?.course?.institution_id || active?.course?.school_id || school?.id;
+        if (!institutionId) {
+          setName("");
+          setDetail(courseName);
+          return;
+        }
         const institution = await studentService.getInstitution(institutionId, false);
-        setName(institution?.name || "Sem instituição");
-        setDetail(institution?.address || institution?.type || "");
+        setName(institution?.name || "");
+        setDetail(courseName || institution?.address || institution?.type || "");
       })
       .catch(() => undefined);
   }, []);

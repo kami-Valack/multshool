@@ -180,6 +180,7 @@ export default function Preview() {
             variant="white"
             info={{
               studentName: displayName,
+              institutionName: activeEnrollment?.course?.school?.name,
               courseName,
               studentNumber: user.student_id,
               year,
