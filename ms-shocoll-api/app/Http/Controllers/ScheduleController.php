@@ -119,7 +119,7 @@ class ScheduleController extends Controller
         ]);
         
         $query = Schedule::query()
-            ->with(['course', 'subject', 'class'])
+            ->with(['course', 'subject', 'class', 'teacher'])
             ->where('is_active', true);
         
         // Se não especificar tipo, retornar tanto aulas quanto exames
@@ -222,6 +222,10 @@ class ScheduleController extends Controller
                     'code' => $schedule->subject->code,
                 ] : null,
                 'teacher_id' => $schedule->teacher_id,
+                'teacher' => $schedule->teacher ? [
+                    'id' => $schedule->teacher->id,
+                    'name' => $schedule->teacher->name,
+                ] : null,
                 'day_of_week' => $schedule->day_of_week,
                 'day_of_week_portuguese' => $schedule->day_of_week_portuguese ?? null,
                 'start_time' => $schedule->start_time ? $schedule->start_time->format('H:i') : null,

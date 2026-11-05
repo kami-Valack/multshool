@@ -95,6 +95,14 @@ class Schedule extends Model
     }
 
     /**
+     * Docente atribuído à aula.
+     */
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+    /**
      * Get day of week in Portuguese.
      */
     public function getDayOfWeekPortugueseAttribute(): ?string

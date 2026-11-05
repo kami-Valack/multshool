@@ -33,9 +33,19 @@ interface ScheduleFromAPI {
   day_of_week: string;
   room?: string;
   teacher_id?: string;
+  teacher?: {
+    id: string;
+    name: string;
+  } | null;
   course?: {
     name: string;
   };
+}
+
+interface SubjectGroup {
+  name: string;
+  professor: string;
+  lessons: { id: string; when: string; room: string }[];
 }
 
 // Interface para os dados formatados da UI
@@ -202,6 +212,7 @@ const LocationIcon = () => (
 
 export default function HorariosPage() {
   const [scheduleData, setScheduleData] = useState<DaySchedule[]>([]);
+  const [subjects, setSubjects] = useState<SubjectGroup[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -211,11 +222,31 @@ export default function HorariosPage() {
         const schedules = await studentService.getSchedules();
         
         if (schedules.length === 0) {
-          // Se não houver horários, retornar array vazio
           setScheduleData([]);
+          setSubjects([]);
           setLoading(false);
           return;
         }
+
+        const teacherName = (schedule: ScheduleFromAPI) =>
+          schedule.teacher?.name || "Professor não atribuído";
+
+        const bySubject = new Map<string, SubjectGroup>();
+        schedules.forEach((schedule: ScheduleFromAPI) => {
+          const name = schedule.subject?.name || "Disciplina não informada";
+          const current = bySubject.get(name) || {
+            name,
+            professor: teacherName(schedule),
+            lessons: [],
+          };
+          current.lessons.push({
+            id: schedule.id,
+            when: `${mapDayToPortuguese(schedule.day_of_week)} · ${schedule.start_time || ""}–${schedule.end_time || ""}`,
+            room: schedule.room ? `Sala: ${schedule.room}` : "Sala não informada",
+          });
+          bySubject.set(name, current);
+        });
+        setSubjects(Array.from(bySubject.values()));
 
         // Agrupar horários por dia da semana
         const schedulesByDay: Record<string, ScheduleFromAPI[]> = {};
@@ -271,7 +302,7 @@ export default function HorariosPage() {
                 title: schedule.subject?.name || 'Disciplina não informada',
                 subtitle: schedule.subject?.code ? `Código: ${schedule.subject.code}` : schedule.course?.name || '',
                 location: schedule.room ? `Sala: ${schedule.room}` : 'Sala não informada',
-                professor: schedule.teacher_id ? `Professor ID: ${schedule.teacher_id}` : 'Professor não atribuído',
+                professor: teacherName(schedule),
                 isActive,
               };
             }),
@@ -298,6 +329,7 @@ export default function HorariosPage() {
         console.error('Erro ao carregar horários:', error);
         // Em caso de erro, retornar array vazio
         setScheduleData([]);
+        setSubjects([]);
       } finally {
         setLoading(false);
       }
@@ -325,7 +357,38 @@ export default function HorariosPage() {
               Ainda não há dados
             </div>
           ) : (
-            scheduleData.map((daySchedule) => (
+            <>
+            {subjects.length > 0 && (
+              <DaySection>
+                <DayHeader>
+                  <DayTitle>Disciplinas</DayTitle>
+                </DayHeader>
+                <ClassesContainer>
+                  {subjects.map((subject) => (
+                    <ClassCard key={subject.name} $isActive={false}>
+                      <ClassTitle>{subject.name}</ClassTitle>
+                      <ProfessorRow>
+                        <ProfessorAvatar $isActive={false}>
+                          {subject.professor
+                            .split(" ")
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .map((n) => n[0])
+                            .join("")}
+                        </ProfessorAvatar>
+                        <span>{subject.professor}</span>
+                      </ProfessorRow>
+                      {subject.lessons.map((lesson) => (
+                        <ClassSubtitle key={lesson.id} $isActive={false}>
+                          {lesson.when} · {lesson.room}
+                        </ClassSubtitle>
+                      ))}
+                    </ClassCard>
+                  ))}
+                </ClassesContainer>
+              </DaySection>
+            )}
+            {scheduleData.map((daySchedule) => (
             <DaySection key={daySchedule.id}>
               <DayHeader>
                 <DayTitle>{daySchedule.day}</DayTitle>
@@ -368,7 +431,8 @@ export default function HorariosPage() {
                 ))}
               </ClassesContainer>
             </DaySection>
-            ))
+            ))}
+            </>
           )}
         </Content>
 

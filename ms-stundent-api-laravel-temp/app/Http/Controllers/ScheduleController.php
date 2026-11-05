@@ -253,9 +253,9 @@ class ScheduleController extends Controller
                 }
             }
             
-            // Buscar horários por course_id (sempre buscar, não apenas como fallback)
-            // Isso é importante para exames que podem não estar vinculados a uma turma específica
-            if (!empty($courseIds)) {
+            // Aulas com turma ficam só nessa turma. Exames continuam por curso.
+            $hasClassFilter = !empty($classNames) || !empty($classIds);
+            if (!empty($courseIds) && ($scheduleType === 'exam' || !$hasClassFilter)) {
                 foreach ($courseIds as $courseId) {
                     try {
                         Log::info('Buscando horários por course_id', [
