@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\SchoolOpsHelpers;
+use App\Models\ExamRegistration;
 use App\Models\FeeCharge;
 use App\Models\Payment;
+use App\Models\SchoolEventRegistration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -75,9 +77,86 @@ class PaymentController extends Controller
             $query->whereDate('paid_at', '<=', $request->to);
         }
 
+        $manual = $query->orderBy('paid_at', 'desc')->orderBy('created_at', 'desc')->get()
+            ->map(function (Payment $payment) {
+                $row = $payment->toArray();
+                $row['origin'] = 'manual';
+
+                return $row;
+            });
+
+        $schoolId = $request->user()->id;
+        $extra = collect();
+        $includeOnline = !$request->filled('status') || $request->status === 'paid';
+        $search = $request->filled('search') ? mb_strtolower((string) $request->search) : null;
+
+        if ($includeOnline && (!$request->filled('type') || $request->type === 'exame')) {
+            $exams = ExamRegistration::where('fee_paid', true)
+                ->whereHas('admissionExam.course', fn ($q) => $q->where('school_id', $schoolId))
+                ->with('admissionExam.course')
+                ->get();
+
+            foreach ($exams as $registration) {
+                $name = mb_strtolower($registration->student_name ?: '');
+                $ref = mb_strtolower($registration->payment_reference ?: '');
+                if ($search && !str_contains($name, $search) && !str_contains($ref, $search)) {
+                    continue;
+                }
+                $extra->push([
+                    'id' => $registration->id,
+                    'receipt_number' => $registration->payment_reference ?: 'EXAME',
+                    'student_id' => $registration->student_id,
+                    'student_name' => $registration->student_name ?: 'Estudante',
+                    'course_name' => $registration->admissionExam?->course?->name,
+                    'class_name' => null,
+                    'type' => 'exame',
+                    'amount' => (float) ($registration->admissionExam?->exam_fee ?? 0),
+                    'method' => 'online',
+                    'status' => 'paid',
+                    'paid_at' => $registration->fee_paid_at,
+                    'notes' => $registration->admissionExam?->name,
+                    'origin' => 'exame',
+                ]);
+            }
+        }
+
+        if ($includeOnline && (!$request->filled('type') || $request->type === 'evento')) {
+            $eventPayments = SchoolEventRegistration::where('status', SchoolEventRegistration::STATUS_PAID)
+                ->whereHas('event', fn ($q) => $q->where('school_id', $schoolId))
+                ->with('event')
+                ->get();
+
+            foreach ($eventPayments as $registration) {
+                $name = mb_strtolower($registration->student_name ?: '');
+                $ref = mb_strtolower($registration->payment_reference ?: '');
+                if ($search && !str_contains($name, $search) && !str_contains($ref, $search)) {
+                    continue;
+                }
+                $extra->push([
+                    'id' => $registration->id,
+                    'receipt_number' => $registration->payment_reference ?: 'EVENTO',
+                    'student_id' => $registration->student_id,
+                    'student_name' => $registration->student_name ?: 'Estudante',
+                    'course_name' => null,
+                    'class_name' => null,
+                    'type' => 'evento',
+                    'amount' => (float) ($registration->event?->price ?? 0),
+                    'method' => 'online',
+                    'status' => 'paid',
+                    'paid_at' => $registration->paid_at,
+                    'notes' => $registration->event?->title,
+                    'origin' => 'evento',
+                ]);
+            }
+        }
+
+        $payments = $manual->concat($extra)->sortByDesc(function ($row) {
+            return $row['paid_at'] ?? $row['created_at'] ?? null;
+        })->values();
+
         return response()->json([
             'status' => 'success',
-            'payments' => $query->orderBy('paid_at', 'desc')->orderBy('created_at', 'desc')->get(),
+            'payments' => $payments,
         ]);
     }
 

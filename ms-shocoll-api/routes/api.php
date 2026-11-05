@@ -120,6 +120,7 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class, 'role:school'])-
 
     // Comunicação e configurações
     Route::apiResource('announcements', \App\Http\Controllers\AnnouncementController::class);
+    Route::apiResource('events', \App\Http\Controllers\SchoolEventController::class)->except(['show']);
     Route::get('activity-logs', [\App\Http\Controllers\ActivityLogController::class, 'index']);
     Route::apiResource('permission-profiles', \App\Http\Controllers\PermissionProfileController::class);
     });
@@ -145,5 +146,9 @@ Route::middleware([\App\Http\Middleware\AuthenticateApiSecret::class])->prefix('
     Route::post('/exam-registrations/confirm-fee-payment', [\App\Http\Controllers\Student\ExamRegistrationController::class, 'confirmFeePayment']);
     // Horários do estudante - busca por class_id das matrículas
     Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'indexForStudent']);
+    Route::get('/events', [\App\Http\Controllers\Student\StudentEventController::class, 'index']);
+    Route::get('/events/{id}', [\App\Http\Controllers\Student\StudentEventController::class, 'show']);
+    Route::post('/events/{id}/register', [\App\Http\Controllers\Student\StudentEventController::class, 'register']);
+    Route::post('/events/{id}/confirm-payment', [\App\Http\Controllers\Student\StudentEventController::class, 'confirmPayment']);
 });
 

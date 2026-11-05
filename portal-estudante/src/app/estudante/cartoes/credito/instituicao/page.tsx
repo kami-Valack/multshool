@@ -134,7 +134,7 @@ export default function Instituicao() {
           <PaymentCard
             icon={Taxas.src}
             title="Eventos"
-            link="pagamentos/method"
+            link="/estudante/cartoes/credito/pagamentos/eventos"
           />
         </Row>
         <Row>

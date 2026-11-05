@@ -9,7 +9,7 @@ import Unicon from "@/assets/icons/cardsList/University.png";
 import Transfer from "@/assets/icons/cardsList/transferencias.png";
 import { SimpleCard } from "@/components/ActivityCard";
 import { useRouter } from "next/navigation";
-import { studentService, Fee } from "@/services/studentService";
+import { studentService, Fee, ExamFeeOverviewItem } from "@/services/studentService";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatLocalDate, parseLocalDate } from "@/utils/dates";
 
@@ -58,22 +58,25 @@ export default function Pagamentos() {
   const router = useRouter();
   const { user } = useAuth();
   const [fees, setFees] = useState<Fee[]>([]);
+  const [exams, setExams] = useState<ExamFeeOverviewItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
-    studentService
-      .getFees()
-      .then((data) =>
+    Promise.all([
+      studentService.getFees().catch(() => [] as Fee[]),
+      studentService.getExamFeesOverview().catch(() => null),
+    ])
+      .then(([data, overview]) => {
         setFees(
           [...data].sort(
             (a, b) =>
               parseLocalDate(a.due_date).getTime() -
               parseLocalDate(b.due_date).getTime()
           )
-        )
-      )
-      .catch(() => setFees([]))
+        );
+        setExams([...(overview?.pending || []), ...(overview?.paid || [])]);
+      })
       .finally(() => setLoading(false));
   }, [user]);
 
@@ -97,8 +100,13 @@ export default function Pagamentos() {
           />
           <PaymentCard
             icon={Transfer.src}
-            title="Transferências"
-            link="pagamentos/transferencias"
+            title="Histórico"
+            link="/estudante/cartoes/credito/pagamentos/historico"
+          />
+          <PaymentCard
+            icon={Unicon.src}
+            title="Eventos"
+            link="/estudante/cartoes/credito/pagamentos/eventos"
           />
         </Row>
       </ListaP>
@@ -126,6 +134,23 @@ export default function Pagamentos() {
             </div>
           );
         })}
+        <Title style={{ marginTop: 24 }}>Taxas de exame</Title>
+        {!loading && exams.length === 0 && <p>Ainda não há taxas de exame.</p>}
+        {exams.map((exam) => (
+          <div key={exam.admission_exam_id} style={{ marginBottom: "12px" }}>
+            <SimpleCard
+              title={`${exam.exam_name} · ${exam.course_name}`}
+              status={exam.fee_paid ? "pagamento_adiado" : "pendente"}
+              amount={`${Number(exam.exam_fee).toLocaleString("pt-PT")} kz`}
+              onClick={() => {
+                if (exam.fee_paid) return;
+                router.push(
+                  `/estudante/cartoes/credito/pagamentos/exame/${exam.admission_exam_id}?courseId=${exam.course_id}`
+                );
+              }}
+            />
+          </div>
+        ))}
       </Pendentes>
 
       <BottomMenu />

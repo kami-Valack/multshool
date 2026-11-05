@@ -51,6 +51,7 @@ interface Pagamento {
   estado: string;
   data: string;
   observacoes?: string;
+  origin?: "manual" | "exame" | "evento";
 }
 
 const paraISO = (value?: string | null): string => (value ? String(value).slice(0, 10) : "");
@@ -90,6 +91,7 @@ const mapPagamento = (p: Payment): Pagamento => ({
   estado: mapEstado(p.status),
   data: paraISO(p.paid_at),
   observacoes: p.notes || undefined,
+  origin: p.origin || "manual",
 });
 
 const tipoDeCobranca = (kind: FeeCharge["kind"]): TipoPagamento => (kind === "tuition" ? "propina" : "outro");
@@ -318,6 +320,7 @@ export default function Pagamentos() {
     const labels: Record<string, string> = {
       propina: "Propina",
       exame: "Exame",
+      evento: "Evento",
       declaracao: "Declaração",
       outro: "Outro",
     };
@@ -426,6 +429,7 @@ export default function Pagamentos() {
                   <SelectItem value="todos">Todos os tipos</SelectItem>
                   <SelectItem value="propina">Propina</SelectItem>
                   <SelectItem value="exame">Exame</SelectItem>
+                  <SelectItem value="evento">Evento</SelectItem>
                   <SelectItem value="declaracao">Declaração</SelectItem>
                   <SelectItem value="outro">Outro</SelectItem>
                 </SelectContent>
@@ -734,7 +738,7 @@ export default function Pagamentos() {
           )}
 
           <DialogFooter className="gap-2">
-            {selectedPagamento && (
+            {selectedPagamento && selectedPagamento.origin !== "exame" && selectedPagamento.origin !== "evento" && (
               <Button variant="destructive" onClick={() => eliminarPagamento(selectedPagamento)}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Eliminar

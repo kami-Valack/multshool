@@ -144,6 +144,12 @@ export const API_ENDPOINTS = {
   },
 
   // Comunicação
+  EVENTS: {
+    LIST: '/events',
+    CREATE: '/events',
+    UPDATE: (id: string) => `/events/${id}`,
+    DELETE: (id: string) => `/events/${id}`,
+  },
   ANNOUNCEMENTS: {
     LIST: '/announcements',
     CREATE: '/announcements',

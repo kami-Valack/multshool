@@ -130,6 +130,8 @@ Route::middleware([\App\Http\Middleware\AuthenticateApi::class])->group(function
 
     // Horários do estudante
     Route::get('/schedules', [\App\Http\Controllers\ScheduleController::class, 'index']);
+    Route::get('/events', [\App\Http\Controllers\StudentEventController::class, 'index']);
+    Route::post('/events/{id}/register', [\App\Http\Controllers\StudentEventController::class, 'register']);
 
     // TODO: Adicionar rotas para:
     // - GET /api/grades

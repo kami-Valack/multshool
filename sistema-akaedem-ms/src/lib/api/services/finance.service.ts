@@ -57,6 +57,7 @@ export type Payment = {
   status: 'paid' | 'pending' | 'failed' | 'refunded';
   paid_at: string;
   notes?: string | null;
+  origin?: 'manual' | 'exame' | 'evento';
 };
 
 export type Invoice = {

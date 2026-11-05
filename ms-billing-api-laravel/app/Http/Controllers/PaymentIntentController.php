@@ -6,6 +6,7 @@ use App\Models\PaymentIntent;
 use App\Models\PaymentReference;
 use App\Services\FaciPayClient;
 use App\Services\PaymentCompletionService;
+use App\Services\SchoolEventClient;
 use App\Services\SchoolExamClient;
 use App\Services\StudentFeeClient;
 use Illuminate\Http\JsonResponse;
@@ -17,6 +18,7 @@ class PaymentIntentController extends Controller
     public function __construct(
         private readonly StudentFeeClient $studentFeeClient,
         private readonly SchoolExamClient $schoolExamClient,
+        private readonly SchoolEventClient $schoolEventClient,
         private readonly FaciPayClient $faciPayClient,
         private readonly PaymentCompletionService $completionService,
     ) {
@@ -40,8 +42,9 @@ class PaymentIntentController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'fee_id' => 'nullable|uuid|required_without:admission_exam_id',
-            'admission_exam_id' => 'nullable|uuid|required_without:fee_id',
+            'fee_id' => 'nullable|uuid|required_without_all:admission_exam_id,event_id',
+            'admission_exam_id' => 'nullable|uuid|required_without_all:fee_id,event_id',
+            'event_id' => 'nullable|uuid|required_without_all:fee_id,admission_exam_id',
             'course_id' => 'nullable|uuid',
             'student_name' => 'nullable|string|max:255',
         ]);
@@ -51,6 +54,10 @@ class PaymentIntentController extends Controller
 
         if (!empty($validated['admission_exam_id'])) {
             return $this->createExamFeeIntent($student, $validated, $request->input('student_name'));
+        }
+
+        if (!empty($validated['event_id'])) {
+            return $this->createEventIntent($student, $validated, $request->input('student_name'));
         }
 
         $feeResult = $this->studentFeeClient->getFeeForStudent($token, $validated['fee_id']);
@@ -171,6 +178,73 @@ class PaymentIntentController extends Controller
             'currency' => 'AOA',
             'metadata' => [
                 'exam' => $exam,
+                'student_email' => $student->email ?? null,
+                'student_name' => $resolvedName,
+            ],
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'payment_intent' => $this->formatIntent($intent),
+        ], 201);
+    }
+
+    private function createEventIntent(object $student, array $validated, ?string $studentName = null): JsonResponse
+    {
+        $eventResult = $this->schoolEventClient->getEvent($validated['event_id']);
+        if (!$eventResult['success']) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $eventResult['error'] ?? 'Evento inválido',
+            ], $eventResult['status'] ?? 400);
+        }
+
+        $event = $eventResult['event'];
+        $amount = (float) ($event['price'] ?? 0);
+        if ($amount <= 0) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Este evento é gratuito. Inscreva-se sem pagamento.',
+            ], 422);
+        }
+
+        $existing = PaymentIntent::where('student_id', $student->id)
+            ->where('payable_type', PaymentIntent::PAYABLE_EVENT)
+            ->where('event_id', $validated['event_id'])
+            ->whereIn('status', [
+                PaymentIntent::STATUS_DRAFT,
+                PaymentIntent::STATUS_REFERENCE_ISSUED,
+                PaymentIntent::STATUS_AWAITING_PAYMENT,
+                PaymentIntent::STATUS_PAID,
+            ])
+            ->latest('created_at')
+            ->first();
+
+        if ($existing && $existing->status === PaymentIntent::STATUS_PAID) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Este evento já está pago',
+            ], 409);
+        }
+
+        if ($existing) {
+            return response()->json([
+                'status' => 'success',
+                'payment_intent' => $this->formatIntent($existing->load('latestReference')),
+            ]);
+        }
+
+        $resolvedName = $studentName ?: ($student->email ?? 'Estudante');
+        $intent = PaymentIntent::create([
+            'student_id' => $student->id,
+            'payable_type' => PaymentIntent::PAYABLE_EVENT,
+            'event_id' => $validated['event_id'],
+            'amount' => $amount,
+            'description' => 'Evento: '.($event['title'] ?? 'Evento'),
+            'status' => PaymentIntent::STATUS_DRAFT,
+            'currency' => 'AOA',
+            'metadata' => [
+                'event' => $event,
                 'student_email' => $student->email ?? null,
                 'student_name' => $resolvedName,
             ],
@@ -383,6 +457,7 @@ class PaymentIntentController extends Controller
             'fee_id' => $intent->fee_id,
             'admission_exam_id' => $intent->admission_exam_id,
             'course_id' => $intent->course_id,
+            'event_id' => $intent->event_id,
             'amount' => (float) $intent->amount,
             'currency' => $intent->currency,
             'description' => $intent->description,

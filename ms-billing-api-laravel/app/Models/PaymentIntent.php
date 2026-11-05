@@ -16,6 +16,7 @@ class PaymentIntent extends Model
 
     public const PAYABLE_FEE = 'fee';
     public const PAYABLE_EXAM_FEE = 'exam_fee';
+    public const PAYABLE_EVENT = 'event';
 
     protected $fillable = [
         'id',
@@ -24,6 +25,7 @@ class PaymentIntent extends Model
         'fee_id',
         'admission_exam_id',
         'course_id',
+        'event_id',
         'amount',
         'currency',
         'description',

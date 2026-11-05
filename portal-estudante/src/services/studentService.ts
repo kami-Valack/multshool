@@ -145,6 +145,19 @@ export interface ExamRegistration {
   };
 }
 
+export interface SchoolEvent {
+  id: string;
+  title: string;
+  description?: string | null;
+  location?: string | null;
+  starts_at?: string | null;
+  ends_at?: string | null;
+  price: number;
+  is_free: boolean;
+  registered: boolean;
+  paid: boolean;
+}
+
 export interface Grade {
   id: string;
   student_id: string;
@@ -451,6 +464,21 @@ class StudentService {
     }
 
     throw new Error(response.message || 'Erro ao inscrever-se no exame');
+  }
+
+  async getEvents(): Promise<SchoolEvent[]> {
+    const response = await studentApiClient.get<ApiResponse & { events: SchoolEvent[] }>('/events');
+    if (response.status === 'success' && response.events) {
+      return response.events;
+    }
+    return [];
+  }
+
+  async registerForEvent(eventId: string): Promise<void> {
+    const response = await studentApiClient.post<ApiResponse>(`/events/${eventId}/register`, {});
+    if (response.status !== 'success') {
+      throw new Error(response.message || 'Erro ao inscrever no evento');
+    }
   }
 
   // Notas (Grades) - se disponível via API

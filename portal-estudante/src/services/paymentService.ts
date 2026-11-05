@@ -17,15 +17,17 @@ export type CreatePaymentIntentInput =
       admission_exam_id: string;
       course_id: string;
       student_name?: string;
-    };
+    }
+  | { event_id: string; student_name?: string };
 
 export type PaymentIntent = {
   id: string;
   student_id: string;
-  payable_type?: 'fee' | 'exam_fee';
+  payable_type?: 'fee' | 'exam_fee' | 'event';
   fee_id?: string | null;
   admission_exam_id?: string | null;
   course_id?: string | null;
+  event_id?: string | null;
   amount: number;
   currency: string;
   description?: string | null;

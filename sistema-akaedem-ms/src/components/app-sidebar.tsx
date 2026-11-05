@@ -55,6 +55,10 @@ const data = {
           title: "Horários",
           url: "/admin/academica/horarios",
         },
+        {
+          title: "Eventos",
+          url: "/admin/academica/eventos",
+        },
         // {
         //   title: "Presenças",
         //   url: "#",

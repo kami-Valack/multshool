@@ -11,6 +11,7 @@ class PaymentCompletionService
     public function __construct(
         private readonly StudentFeeClient $studentFeeClient,
         private readonly SchoolExamClient $schoolExamClient,
+        private readonly SchoolEventClient $schoolEventClient,
         private readonly FaciPayClient $faciPayClient,
     ) {
     }
@@ -38,6 +39,14 @@ class PaymentCompletionService
                     (string) ($meta['student_email'] ?? ''),
                     (string) ($meta['student_name'] ?? 'Estudante'),
                     (string) $intent->admission_exam_id,
+                    $reference?->nu_referencia
+                );
+            } elseif ($intent->payable_type === PaymentIntent::PAYABLE_EVENT) {
+                $result = $this->schoolEventClient->confirmPayment(
+                    (string) $intent->event_id,
+                    $intent->student_id,
+                    (string) ($meta['student_email'] ?? ''),
+                    (string) ($meta['student_name'] ?? 'Estudante'),
                     $reference?->nu_referencia
                 );
             } else {
