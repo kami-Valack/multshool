@@ -39,6 +39,10 @@ export function isPathAllowedWhilePending(path: string): boolean {
   if (p.startsWith("/curso/")) return true;
   if (p.startsWith("/instituicoes")) return true;
   if (p.startsWith("/estudante/cartoes/credito/pagamentos")) return true;
+  if (p.startsWith("/estudante/cartoes/credito/propinas")) return true;
+  if (p.startsWith("/estudante/cartoes/credito/movimentos")) return true;
+  if (p.startsWith("/estudante/cartoes/estudante")) return true;
+  if (p.startsWith("/estudante/perfil")) return true;
   if (p.startsWith("/candidato/documentos")) return true;
   if (p === "/login" || p === "/registo") return true;
   return false;

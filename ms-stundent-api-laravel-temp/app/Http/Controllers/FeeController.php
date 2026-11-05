@@ -63,7 +63,7 @@ class FeeController extends Controller
 
             // Buscar todas as propinas do estudante
             $fees = Fee::where('student_id', $student->id)
-                ->orderBy('due_date', 'desc')
+                ->orderBy('due_date', 'asc')
                 ->get();
 
             Log::info('Propinas encontradas', [
@@ -92,7 +92,7 @@ class FeeController extends Controller
             
             // Buscar fees novamente após criação
             $fees = Fee::where('student_id', $student->id)
-                ->orderBy('due_date', 'desc')
+                ->orderBy('due_date', 'asc')
                 ->get();
             
             Log::info('Fees após tentativa de criação automática', [
@@ -119,7 +119,7 @@ class FeeController extends Controller
 
             // Recarregar para ter os status atualizados
             $fees = Fee::where('student_id', $student->id)
-                ->orderBy('due_date', 'desc')
+                ->orderBy('due_date', 'asc')
                 ->get();
 
             // Calcular total de meses de propina baseado na duração do curso

@@ -246,8 +246,12 @@ export default function Home() {
 
   // Atividades do cartão de crédito (propinas pendentes)
   const creditActivitiesData: ExameAcessoData = {
-    activities: fees
+    activities: [...fees]
       .filter((fee) => fee.status === 'pending' || fee.status === 'overdue')
+      .sort(
+        (a, b) =>
+          new Date(a.due_date).getTime() - new Date(b.due_date).getTime()
+      )
       .slice(0, 5)
       .map((fee) => {
         const dueDate = new Date(fee.due_date);

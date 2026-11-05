@@ -84,18 +84,12 @@ const LinkBtn = styled.button`
   padding: 0;
 `;
 
-const PaidSection = styled.div`
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-`;
-
 export default function ExamFeesBanner() {
   const router = useRouter();
-  const { pending, paid, pendingCount, paidCount, hasPendingExamFees, loading } =
+  const { pending, pendingCount, paidCount, hasPendingExamFees, loading } =
     useExamFeeGate();
 
-  if (loading || (!hasPendingExamFees && paidCount === 0)) {
+  if (loading || !hasPendingExamFees) {
     return null;
   }
 
@@ -133,27 +127,13 @@ export default function ExamFeesBanner() {
         </List>
       )}
 
-      {hasPendingExamFees && (
-        <Hint>
-          Enquanto houver taxas por pagar, a app fica limitada ao pagamento e a
-          candidatar-se a mais cursos.{" "}
-          <LinkBtn type="button" onClick={() => router.push("/instituicoes/superior")}>
-            Ver cursos
-          </LinkBtn>
-        </Hint>
-      )}
-
-      {!hasPendingExamFees && paid.length > 0 && (
-        <PaidSection>
-          <ItemMeta>
-            Últimos pagos:{" "}
-            {paid
-              .slice(0, 3)
-              .map((p) => p.exam_name)
-              .join(", ")}
-          </ItemMeta>
-        </PaidSection>
-      )}
+      <Hint>
+        Enquanto houver taxas por pagar, a app fica limitada ao pagamento e a
+        candidatar-se a mais cursos.{" "}
+        <LinkBtn type="button" onClick={() => router.push("/instituicoes/superior")}>
+          Ver cursos
+        </LinkBtn>
+      </Hint>
     </Banner>
   );
 }

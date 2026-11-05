@@ -1,0 +1,9 @@
+cd ~/multshool
+git fetch origin
+git reset --hard origin/main
+
+git log -1 --oneline   # deve ser 0218605 ou mais recente
+
+docker compose exec ms-school php artisan migrate --force
+docker compose exec ms-billing php artisan migrate --force
+docker compose up -d ms-billing ms-student ms-school

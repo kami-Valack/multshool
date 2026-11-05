@@ -507,9 +507,10 @@ class EnrollmentManagementController extends Controller
                 ]);
             }
             
-            // Criar propinas para cada mês do curso
+            // Criar propinas a partir do mês da aprovação (não do mês seguinte,
+            // senão uma matrícula em Novembro só mostra 2027 no topo da lista).
             $fees = [];
-            $startDate = now(); // Data de início (data de aprovação)
+            $startMonth = now()->startOfMonth();
             
             // Array de nomes de meses em português
             $monthNames = [
@@ -518,9 +519,8 @@ class EnrollmentManagementController extends Controller
                 9 => 'Setembro', 10 => 'Outubro', 11 => 'Novembro', 12 => 'Dezembro'
             ];
             
-            for ($month = 1; $month <= $durationMonths; $month++) {
-                // Calcular data de vencimento (primeiro dia do mês seguinte)
-                $dueDate = $startDate->copy()->addMonths($month)->startOfMonth();
+            for ($month = 0; $month < $durationMonths; $month++) {
+                $dueDate = $startMonth->copy()->addMonths($month);
                 
                 // Nome do mês em português
                 $monthNumber = (int) $dueDate->format('n');

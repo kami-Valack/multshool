@@ -69,14 +69,18 @@ const MenuContent = styled.div`
   gap: 12px;
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: calc(100% - 32px);
   padding: 12px 18px;
   margin: 0 16px;
   background: ${(props) => props.theme.colors.background_2};
+  border: none;
   border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
 
   .left {
     display: flex;
@@ -111,31 +115,27 @@ const LogoutButton = styled.button`
 `;
 
 const menuItems = [
-  { icon: Consultas, label: "Consultas", id: "consultas" },
-  { icon: Transfers, label: "Transferências", id: "transferencias" },
-  { icon: Mensalidades, label: "Mensalidades", id: "mensalidades" },
-  { icon: Pagamentos, label: "Pagamentos", id: "pagamentos" },
-  { icon: Educacional, label: "Educacional", id: "educacional" },
-  { icon: Definicoes, label: "Definições", id: "definicoes" },
+  { icon: Consultas, label: "Consultas", id: "consultas", href: "/estudante/cartoes/credito/movimentos" },
+  { icon: Transfers, label: "Transferências", id: "transferencias", href: "/estudante/cartoes/credito/pagamentos/transferencias" },
+  { icon: Mensalidades, label: "Mensalidades", id: "mensalidades", href: "/estudante/cartoes/credito/propinas" },
+  { icon: Pagamentos, label: "Pagamentos", id: "pagamentos", href: "/estudante/cartoes/credito/pagamentos" },
+  { icon: Educacional, label: "Educacional", id: "educacional", href: "/estudante/cartoes/estudante/curso" },
+  { icon: Definicoes, label: "Definições", id: "definicoes", href: "/estudante/perfil" },
 ];
 
 export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
   const router = useRouter();
   const { logout, isAuthenticated } = useAuth();
 
-  const handleItemClick = (itemId: string) => {
-    // Verificar autenticação antes de processar clique
+  const handleItemClick = (href: string) => {
     if (!isAuthenticated) {
       router.push("/login");
       onClose();
       return;
     }
 
-    console.log(`Clicou em: ${itemId}`);
     onClose();
-    
-    // Redirecionar para as rotas apropriadas baseado no item clicado
-    // Por enquanto, apenas fechar o menu pois as rotas ainda não estão implementadas
+    router.push(href);
   };
 
   const handleLogout = async () => {
@@ -164,7 +164,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
 
           <MenuContent>
             {menuItems.map((item) => (
-              <MenuItem key={item.id} onClick={() => handleItemClick(item.id)}>
+              <MenuItem key={item.id} type="button" onClick={() => handleItemClick(item.href)}>
                 <div className="left">
                   <Image
                     src={item.icon}
